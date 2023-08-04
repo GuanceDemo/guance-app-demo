@@ -11,9 +11,9 @@
 | **名词** | **含义**  |
 | --- | --- |
 |  Native |  这里指 Guance Demo 原生界面对应的数据处理|
-|  Webview | 应用加载 html 使用的组建 |
-|  Guance Demo Webview | 应用加载 html 使用的组建 |
-|  Guance Demo API |  Demo http |
+|  Webview | 应用加载 html 使用的组件 |
+|  Guance Demo Webview | 应用加载 html 使用的组件 |
+|  Guance Demo API |  Demo API http 请求 |
 |  Guance Mobile SDK | 观测云 Android iOS 移动端 SDK |
 |  Guance JS SDK | 观测云 Web 监测 SDK |
 |  JS Bridge | 指原生应用与 Webview 进行通信通道，观测云移动端 SDK 在 App 中 Webview 数据追踪通过 `Guance JS SDK` `JSBridge` 发送给 `Guance Mobile SDK` |
@@ -133,7 +133,7 @@ GuanceDemo Datakit 地址和 Demo  api 地址可以随意变更，第一次使�
 ![](guance_mobile_demo_set_from_clipboard.gif)  
 
 ### 故障排查
-在「编辑 Demo 」配置页面，你可以对 App 访问进行“地址检测”，你可以在登录页面和主页的「我的」页面找到「编辑 Demo 配置」的入口。
+在「编辑 Demo 」配置页面，你可以对 App 访问进行“地址检测”，你可以在「登录页面」和主界面的「我的」页面找到「编辑 Demo 配置」的入口。
  
 
 
