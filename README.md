@@ -1,4 +1,4 @@
 # guance-app-demo
 * [Server](./src/server)
-* [Android](./src/android)
-* [iOS](./src/ios)
+* [Android](./src/android/demo)
+* [iOS](./src/ios/demo)
