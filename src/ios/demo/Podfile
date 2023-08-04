@@ -1,0 +1,28 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'GuanceDemo' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  
+  use_modular_headers!
+  pod 'SnapKit', '~> 5.6.0'
+  pod 'SDWebImage'
+  pod 'MBProgressHUD', '~> 1.2.0'
+  pod 'FTMobileSDK', '1.4.5-alpha.1'
+  pod 'Toast-Swift', '~> 5.0.1'
+end
+
+target 'GuanceExtension' do
+  use_modular_headers!
+  pod 'FTMobileSDK/Extension', '1.4.5-alpha.1'
+end
+#解决找不到静态库 libarclite_iphonesimulator.a/libarclite_iphoneos.a 问题
+post_install do |installer|
+   installer.generated_projects.each do |project|
+    project.targets.each do |target|
+        target.build_configurations.each do |config|
+            config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
+         end
+    end
+  end
+end
