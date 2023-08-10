@@ -619,7 +619,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG SDK_APP_ID";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -628,7 +627,7 @@
 		};
 		171433F02A6551FE0040F092 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 464713DFF9B3B89BBDBD6076 /* Pods-GuanceDemo.release.xcconfig */;
+			baseConfigurationReference = 17A67EB82A83B3CB00DCB88D /* Config-Demo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -797,7 +796,7 @@
 				DEVELOPMENT_TEAM = RRLM22BB37;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"Pre=1",
+					"PRE=1",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GuanceDemo/Info.plist;
@@ -812,11 +811,11 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xcc -fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/SnapKit/SnapKit.modulemap\" -Xcc -fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/Toast-Swift/Toast_Swift.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/FTMobileSDK/FTMobileSDK-0e74e980.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MBProgressHUD/MBProgressHUD.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/SDWebImage/SDWebImage.modulemap\" -D PRE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.guance.GuanceDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG SDK_APP_ID";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
