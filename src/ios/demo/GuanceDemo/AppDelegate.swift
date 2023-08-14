@@ -23,9 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 //      示例：多环境配置参数使用
-//        let info = Bundle.main.infoDictionary!
-//        let appid:String = info["SDK_APP_ID"] as! String
-//        let env:String  = info["SDK_ENV"] as! String
+        let info = Bundle.main.infoDictionary!
+        let env:String  = info["SDK_ENV"] as! String
+//      let appid:String = info["SDK_APP_ID"] as! String
 //        print("SDK_APP_ID:\(appid)")
 //        print("SDK_ENV:\(env)")
         let dynamicTag:String? = UserDefaults.standard.value(forKey: "DYNAMIC_TAG") as? String
@@ -33,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         config.enableSDKDebugLog = true
         config.groupIdentifiers = [GroupIdentifier]
         config.globalContext = ["gc_custom_key":STATIC_TAG]
+        config.env = env
         FTMobileAgent.start(withConfigOptions: config)
         let rum = FTRumConfig(appid:UserDefaults.rumAppid )
         rum.enableTrackAppANR = true
