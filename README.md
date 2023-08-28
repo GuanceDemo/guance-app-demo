@@ -136,7 +136,7 @@ GuanceDemo Datakit 地址和 Demo  api 地址可以随意变更，第一次使�
 #### 剪切板导入
 服务端部署完毕后，可以通过访问 `http://{demo_api_url}/improt_helper` 页面，进行快速配置导入。配置可以通过桌面端访问 improt_helper 页，然后用手机扫码获取，又或者从手机上访问 improt_helper 页，点击“复制文本”获取配置。
 
-![](guance_mobile_demo_set_from_clipboard.gif)  
+![](./src/server/guance_mobile_demo_set_from_clipboard.gif)  
 
 ### 故障排查
 在「编辑 Demo 」配置页面，你可以对 App 访问进行“地址检测”，你可以在「登录页面」和主界面的「我的」页面找到「编辑 Demo 配置」的入口。
