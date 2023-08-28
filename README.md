@@ -122,7 +122,7 @@ curl -X POST '<dca_address>/v1/rum/sourcemap?app_id=gc_app_ios-demo&env=prod&ver
 	* 内部人员需提交[内测申请](https://confluence.jiagouyun.com/pages/viewpage.action?pageId=68715410)
 	* 外部人员需自行源码打包安装
 
-![](guance_mobile_demo.gif)
+![]([guance_mobile_demo.gif](https://github.com/GuanceDemo/guance-app-demo/blob/master/src/server/guance_mobile_demo.gif))
 
 ## GuanceDemo App 使用说明
 GuanceDemo Datakit 地址和 Demo  api 地址可以随意变更，第一次使用必须要先进行
