@@ -113,7 +113,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
             do{
                 let userAccount = nametf.text!
                 let userPassword = passwordtf.text!
-                MBProgressHUD.showAdded(to: self.view, animated: true)
+                let _ = MBProgressHUD.showAdded(to: self.view, animated: true)
                 let success = try await UserManager.shared().login(userName: userAccount, password:userPassword)
                 UserDefaults.userAccount = userAccount
                 UserDefaults.userPassword = userPassword
@@ -121,7 +121,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
             } catch {
                 self.view.makeToast(error.localizedDescription,position: .center)
             }
-            MBProgressHUD.hide(for: self.view, animated: true)
+            let _ = MBProgressHUD.hide(for: self.view, animated: true)
         }
     }
     

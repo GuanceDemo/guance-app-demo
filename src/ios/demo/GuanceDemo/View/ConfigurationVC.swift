@@ -208,7 +208,7 @@ class ConfigurationVC: UIViewController,UITextFieldDelegate {
 
         Task(priority: .medium) {
             do{
-                MBProgressHUD.showAdded(to: self.view, animated: true)
+                let _ = MBProgressHUD.showAdded(to: self.view, animated: true)
                 if datakit {
                     let _ = try await NetworkEngine().datakitConnect(url: datakittf.text!)
                 }else{
@@ -223,7 +223,7 @@ class ConfigurationVC: UIViewController,UITextFieldDelegate {
                 complete?(false)
                 FTLogError("\(url) connected failure.")
             }
-            MBProgressHUD.hide(for: self.view, animated: true)
+            let _ = MBProgressHUD.hide(for: self.view, animated: true)
         }
     }
     func resignTF(){
