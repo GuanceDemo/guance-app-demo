@@ -40,8 +40,8 @@
 		17B907B72A666B410026E51A /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B907B62A666B410026E51A /* UserManager.swift */; };
 		17B907B92A6686E90026E51A /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B907B82A6686E90026E51A /* HomeTabBarController.swift */; };
 		17B907BB2A6688490026E51A /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B907BA2A6688490026E51A /* ListViewController.swift */; };
-		63A9D348654744B491043E43 /* libPods-GuanceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DAF168223AC54461737B2DF /* libPods-GuanceExtension.a */; };
-		B2A08A14B2F21E7998D21B4F /* libPods-GuanceDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 82F8D2DBAD2C85D286728C5B /* libPods-GuanceDemo.a */; };
+		2D2B668EA2ADA62E580061E0 /* libPods-GuanceDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E526B42F97ECAA968904FA /* libPods-GuanceDemo.a */; };
+		F6434B1E97AA72B332CC8071 /* libPods-GuanceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C88494A24726B1B797179A0A /* libPods-GuanceExtension.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,13 +108,13 @@
 		17B907B62A666B410026E51A /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		17B907B82A6686E90026E51A /* HomeTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarController.swift; sourceTree = "<group>"; };
 		17B907BA2A6688490026E51A /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
-		2DAF168223AC54461737B2DF /* libPods-GuanceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GuanceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E6B12E17B4BB8B6A4A70B90 /* Pods-GuanceDemo.pre.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuanceDemo.pre.xcconfig"; path = "Target Support Files/Pods-GuanceDemo/Pods-GuanceDemo.pre.xcconfig"; sourceTree = "<group>"; };
 		464713DFF9B3B89BBDBD6076 /* Pods-GuanceDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuanceDemo.release.xcconfig"; path = "Target Support Files/Pods-GuanceDemo/Pods-GuanceDemo.release.xcconfig"; sourceTree = "<group>"; };
+		52E526B42F97ECAA968904FA /* libPods-GuanceDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GuanceDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D6E269A8E35A957ABBFD9EA /* Pods-GuanceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuanceExtension.debug.xcconfig"; path = "Target Support Files/Pods-GuanceExtension/Pods-GuanceExtension.debug.xcconfig"; sourceTree = "<group>"; };
-		82F8D2DBAD2C85D286728C5B /* libPods-GuanceDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GuanceDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E9013E70BA24FA76B7D5847 /* Pods-WidgetDemoExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WidgetDemoExtension.debug.xcconfig"; path = "Target Support Files/Pods-WidgetDemoExtension/Pods-WidgetDemoExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		C74E5F8C527BD07BC37B8A83 /* Pods_WidgetDemoExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WidgetDemoExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C88494A24726B1B797179A0A /* libPods-GuanceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GuanceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC17F54327DB1D08CD01B5CB /* Pods-GuanceExtension.pre.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuanceExtension.pre.xcconfig"; path = "Target Support Files/Pods-GuanceExtension/Pods-GuanceExtension.pre.xcconfig"; sourceTree = "<group>"; };
 		D41F34A7D798D8CF6EF9F736 /* Pods-GuanceDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuanceDemo.debug.xcconfig"; path = "Target Support Files/Pods-GuanceDemo/Pods-GuanceDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -124,7 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B2A08A14B2F21E7998D21B4F /* libPods-GuanceDemo.a in Frameworks */,
+				2D2B668EA2ADA62E580061E0 /* libPods-GuanceDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,7 +134,7 @@
 			files = (
 				171445712A693CEC00376B7A /* SwiftUI.framework in Frameworks */,
 				171445702A693CEC00376B7A /* WidgetKit.framework in Frameworks */,
-				63A9D348654744B491043E43 /* libPods-GuanceExtension.a in Frameworks */,
+				F6434B1E97AA72B332CC8071 /* libPods-GuanceExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,8 +253,8 @@
 				173B33642A692D11003A4ADE /* WidgetKit.framework */,
 				173B33662A692D11003A4ADE /* SwiftUI.framework */,
 				C74E5F8C527BD07BC37B8A83 /* Pods_WidgetDemoExtension.framework */,
-				82F8D2DBAD2C85D286728C5B /* libPods-GuanceDemo.a */,
-				2DAF168223AC54461737B2DF /* libPods-GuanceExtension.a */,
+				52E526B42F97ECAA968904FA /* libPods-GuanceDemo.a */,
+				C88494A24726B1B797179A0A /* libPods-GuanceExtension.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

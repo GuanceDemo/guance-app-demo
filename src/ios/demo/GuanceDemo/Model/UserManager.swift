@@ -34,7 +34,7 @@ class UserManager {
             if let info = newValue {
                 FTMobileAgent.sharedInstance().bindUser(withUserID: "user_1", userName: info.username, userEmail: info.email)
             }else{
-                FTMobileAgent.sharedInstance().logout()
+                FTMobileAgent.sharedInstance().unbindUser()
                 UserDefaults.userInfo = nil
             }
         }
