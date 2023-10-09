@@ -56,7 +56,9 @@ class WebViewController: UIViewController,WKNavigationDelegate,WKUIDelegate {
         self.present(alert, animated: true)
     }
   
-   
+    deinit {
+        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
+    }
 
     /*
     // MARK: - Navigation
