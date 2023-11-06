@@ -15,12 +15,14 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     lazy var tableView:UITableView = {
         let width = self.view.bounds.width
         let height = self.view.bounds.height
-        let top = self.navigationController?.navigationBar.frame.maxY ?? 0
-        let table = UITableView.init(frame: CGRect(x: 0, y: top, width: width, height: height-top))
+        let table = UITableView.init(frame: CGRect(x: 0, y: 0, width: width, height: height))
         table.delegate = self
         table.dataSource = self
         table.tableHeaderView = getTableHeaderView()
         table.tableFooterView = getTableFooterView()
+        if #available(iOS 15.0, *) {
+            table.sectionHeaderTopPadding = 0
+        }
         table.register(UITableViewCell.self, forCellReuseIdentifier: "mineTableViewCell")
         table.rowHeight = 45
         return table
@@ -48,11 +50,15 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
    @objc func refreshData() {
        Task(priority: .medium) {
-           let success = try await  UserManager.shared().loadUserInfo()
-           if success {
-               self.tableView.reloadData()
+           do {
+               let success = try await UserManager.shared().loadUserInfo()
+               if success {
+                   self.tableView.reloadData()
+               }
+               self.refreshControl.endRefreshing()
+           } catch {
+               self.refreshControl.endRefreshing()
            }
-           self.refreshControl.endRefreshing()
        }
     }
     
@@ -118,7 +124,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         return 5
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 57;
+        return 57
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: "mineTableViewCell")

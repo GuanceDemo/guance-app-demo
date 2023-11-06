@@ -12,8 +12,7 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     lazy var tableView:UITableView = {
         let width = self.view.bounds.width
         let height = self.view.bounds.height
-        let top = self.navigationController?.navigationBar.frame.maxY ?? 0
-        let table = UITableView.init(frame: CGRect(x: 0, y: top, width: width, height: height-top))
+        let table = UITableView.init(frame: CGRect(x: 0, y: 0, width: width, height: height))
         table.delegate = self
         table.dataSource = self
         table.register(UITableViewCell.self, forCellReuseIdentifier: "listTableViewCell")
