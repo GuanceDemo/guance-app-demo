@@ -14,6 +14,8 @@ FT_APP_ID="YOUR_APP_ID"
 FT_DEA_ADDRESS="YOUR_DEA_ADDRESS"
 # 环境字段。属性值：prod/gray/pre/common/local。需要与 SDK 设置一致
 FT_ENV="common"
+# 配置文件 datakit.conf 中 dataway 的 token
+FT_TOKEN="YOUR_DATAWAY_TOKEN"
 #
 # 脚本默认配置的版本格式为CFBundleShortVersionString,如果你修改默认的版本格式, 请设置此变量。注意：需要确保在此填写的与SDK设置的一致。
 # FT_VERSION=""
@@ -60,18 +62,19 @@ function dSYMUpload(){
     P_RUM_APP_ID="$2"
     P_APP_VERSION="$3"
     P_APP_ENV="$4"
-    P_BSYMBOL_ZIP_FILE="$5"
+    P_TOKEN="$5"
+    P_BSYMBOL_ZIP_FILE="$6"
     
     #
     P_BSYMBOL_ZIP_FILE_NAME=${P_BSYMBOL_ZIP_FILE##*/}
     P_BSYMBOL_ZIP_FILE_NAME=${P_BSYMBOL_ZIP_FILE_NAME//&/_}
     P_BSYMBOL_ZIP_FILE_NAME="${P_BSYMBOL_ZIP_FILE_NAME// /_}"
     echo "P_BSYMBOL_ZIP_FILE_NAME: ${P_BSYMBOL_ZIP_FILE_NAME}"
-    DSYM_UPLOAD_URL="${P_SDK_URL}/v1/rum/sourcemap?app_id=${P_RUM_APP_ID}&env=${P_APP_ENV}&version=${P_APP_VERSION}&platform=ios"
+    DSYM_UPLOAD_URL="${P_SDK_URL}/v1/sourcemap?app_id=${P_RUM_APP_ID}&env=${P_APP_ENV}&version=${P_APP_VERSION}&platform=ios&token=${P_TOKEN}"
     echo "dSYM upload url: ${DSYM_UPLOAD_URL}"
     
     echo "-----------------------------"
-    STATUS=$(curl -X POST "${DSYM_UPLOAD_URL}"  -F "file=@${P_BSYMBOL_ZIP_FILE}" -H "Content-Type: multipart/form-data")
+    STATUS=$(curl -X PUT "${DSYM_UPLOAD_URL}"  -F "file=@${P_BSYMBOL_ZIP_FILE}" -H "Content-Type: multipart/form-data")
     echo "-----------------------------"
     
     UPLOAD_RESULT="FAILTURE"
@@ -79,7 +82,7 @@ function dSYMUpload(){
     
     if [ ! "${STATUS}" ]; then
     echo "Error: Failed to upload the zip archive file."
-    elif [[ "${STATUS}" == *"{\"code\":200"* ]]; then
+    elif [[ "${STATUS}" == *"\"success\":true"* ]]; then
     echo "Success to upload the dSYM for the app [${P_APP_ENV} ${P_APP_VERSION}]"
     UPLOAD_RESULT="SUCCESS"
     else
@@ -110,8 +113,9 @@ function run() {
     
     CONFIG_APP_VERSION="$3"
     CONFIG_APP_ENV="$4"
-    CONFIG_DSYM_SOURCE_DIR="$5"
-    CONFIG_DSYM_DEST_DIR="$6"
+    CONFIG_TOKEN="$5"
+    CONFIG_DSYM_SOURCE_DIR="$6"
+    CONFIG_DSYM_DEST_DIR="$7"
 
     # 检查必须参数是否设置
     if [ ! "${CONFIG_APP_ID}" ]; then
@@ -128,6 +132,9 @@ function run() {
     
     if [ ! "${CONFIG_APP_ENV}" ]; then
     exitWithMessage "Error: SDK Env not defined." 0
+    fi
+        if [ ! "${CONFIG_TOKEN}" ]; then
+    exitWithMessage "Error: Dataway Token not defined." 0
     fi
     
     if [ ! -e "${CONFIG_DSYM_SOURCE_DIR}" ]; then
@@ -168,7 +175,7 @@ function run() {
     zip -r -q $DSYM_SYMBOL_ZIP_FILE *
     popd
     # 上传
-    dSYMUpload $CONFIG_SDK_URL $CONFIG_APP_ID $CONFIG_APP_VERSION $CONFIG_APP_ENV $DSYM_SYMBOL_ZIP_FILE
+    dSYMUpload $CONFIG_SDK_URL $CONFIG_APP_ID $CONFIG_APP_VERSION $CONFIG_APP_ENV $CONFIG_TOKEN $DSYM_SYMBOL_ZIP_FILE
     fi
     
     if [ $RET = "F" ]; then
@@ -218,7 +225,7 @@ function runInXcode(){
     echo "Version: ${FT_APP_VERSION}"
     
     echo "RUM App ID: ${FT_APP_ID}"
-    
+    echo "Dataway Token: ${FT_TOKEN}"
     echo "--------------------------------"
     echo "Check the arguments ..."
     
@@ -260,7 +267,7 @@ function runInXcode(){
     fi
     done
     #
-    run ${FT_DEA_ADDRESS} ${FT_APP_ID} ${FT_APP_VERSION} ${FT_ENV} ${DWARF_DSYM_FOLDER_PATH} ${BUILD_DIR}/SymbolTemp
+    run ${FT_DEA_ADDRESS} ${FT_APP_ID} ${FT_APP_VERSION} ${FT_ENV} ${FT_TOKEN} ${DWARF_DSYM_FOLDER_PATH} ${BUILD_DIR}/SymbolTemp
 }
 # 根据Xcode的环境变量判断是否处于Xcode环境
 INFO_PLIST_FILE="${INFOPLIST_FILE}"
@@ -273,16 +280,17 @@ fi
 if [ $BuildInXcode = "T" ]; then
 runInXcode
 else
-echo "\nUsage: dSYMUpload.sh <sdk_url> <rum_app_id> <app_version> <app_env> <dSYMBOL_src_dir> <dSYMBOL_dest_dir>\n"
+echo "\nUsage: dSYMUpload.sh <sdk_url> <rum_app_id> <app_version> <app_env> <token> <dSYMBOL_src_dir> <dSYMBOL_dest_dir>\n"
 
 # 你可以在此处直接设置 URL、RUM_APP_ID 、APP_VERSION、 APP_ENV、DSYM_FOLDER_PATH，排除不常变参数的输入
 FT_SDK_URL="$1"
 FT_RUM_APP_ID="$2"
 FT_APP_VERSION="$3"
 FT_APP_ENV="$4"
-DWARF_DSYM_FOLDER_PATH="$5"
+FT_DATAWAY_TOKEN="$5"
+DWARF_DSYM_FOLDER_PATH="$6"
 #需要一个空的文件夹,如果不进行设置就默认为 ${DWARF_DSYM_FOLDER_PATH}/SymbolTemp
-SYMBOL_OUTPUT_PATH="$6"
+SYMBOL_OUTPUT_PATH="$7"
 
-run ${FT_SDK_URL} ${FT_RUM_APP_ID} ${FT_APP_VERSION} ${FT_APP_ENV} ${DWARF_DSYM_FOLDER_PATH} ${SYMBOL_OUTPUT_PATH}
+run ${FT_SDK_URL} ${FT_RUM_APP_ID} ${FT_APP_VERSION} ${FT_APP_ENV} ${FT_DATAWAY_TOKEN} ${DWARF_DSYM_FOLDER_PATH} ${SYMBOL_OUTPUT_PATH}
 fi
