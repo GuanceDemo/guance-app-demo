@@ -10,5 +10,6 @@
 #include "Pods/Target Support Files/Pods-GuanceDemo/Pods-GuanceDemo.release.xcconfig"
 
 SDK_APP_ID = "app_id_prod"
-SDK_DEA_ADDRESS = http:\$()\xxxxxxxx:9529
+SDK_DATAKIT_ADDRESS = http:\$()\xxxxxxxx:9529
 SDK_ENV = prod
+SDK_DATAWAY_TOKEN = token

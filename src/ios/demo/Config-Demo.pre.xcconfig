@@ -10,5 +10,6 @@
 #include "Pods/Target Support Files/Pods-GuanceDemo/Pods-GuanceDemo.pre.xcconfig"
 
 SDK_APP_ID = "app_id_pre"
-SDK_DEA_ADDRESS = http:\$()\xxxxxxxx:9529
+SDK_DATAKIT_ADDRESS = http:\$()\xxxxxxxx:9529
 SDK_ENV = pre
+SDK_DATAWAY_TOKEN = token
