@@ -10,8 +10,8 @@
 #
 # #
 FT_APP_ID="YOUR_APP_ID"
-#dea_address
-FT_DEA_ADDRESS="YOUR_DEA_ADDRESS"
+#datakit_address
+FT_DATAKIT_ADDRESS="YOUR_DATAKIT_ADDRESS"
 # 环境字段。属性值：prod/gray/pre/common/local。需要与 SDK 设置一致
 FT_ENV="common"
 # 配置文件 datakit.conf 中 dataway 的 token
@@ -40,7 +40,7 @@ UPLOAD_ARCHIVE_ONLY=1
 #
 # #命令行下输入应用基本信息, .dSYM文件的父目录路径, 输出文件目录即可
 #
-# sh dSYMUpload.sh <sdk_url> <rum_app_id> <app_version> <app_env> <bSYMBOL_src_dir> <bSYMBOL_dest_dir>
+# sh  dSYMUpload.sh <sdk_url> <rum_app_id> <app_version> <app_env> <dataway_token> <dSYMBOL_src_dir> <dSYMBOL_dest_dir>
 #
 #
 
@@ -267,7 +267,7 @@ function runInXcode(){
     fi
     done
     #
-    run ${FT_DEA_ADDRESS} ${FT_APP_ID} ${FT_APP_VERSION} ${FT_ENV} ${FT_TOKEN} ${DWARF_DSYM_FOLDER_PATH} ${BUILD_DIR}/SymbolTemp
+    run ${FT_DATAKIT_ADDRESS} ${FT_APP_ID} ${FT_APP_VERSION} ${FT_ENV} ${FT_TOKEN} ${DWARF_DSYM_FOLDER_PATH} ${BUILD_DIR}/SymbolTemp
 }
 # 根据Xcode的环境变量判断是否处于Xcode环境
 INFO_PLIST_FILE="${INFOPLIST_FILE}"
@@ -280,17 +280,17 @@ fi
 if [ $BuildInXcode = "T" ]; then
 runInXcode
 else
-echo "\nUsage: dSYMUpload.sh <sdk_url> <rum_app_id> <app_version> <app_env> <token> <dSYMBOL_src_dir> <dSYMBOL_dest_dir>\n"
+echo "\nUsage: dSYMUpload.sh <sdk_url> <rum_app_id> <app_version> <app_env> <dataway_token> <dSYMBOL_src_dir> <dSYMBOL_dest_dir>\n"
 
-# 你可以在此处直接设置 URL、RUM_APP_ID 、APP_VERSION、 APP_ENV、DSYM_FOLDER_PATH，排除不常变参数的输入
-FT_SDK_URL="$1"
-FT_RUM_APP_ID="$2"
-FT_APP_VERSION="$3"
-FT_APP_ENV="$4"
-FT_DATAWAY_TOKEN="$5"
+# 你可以在此处直接设置 DATAKIT_ADDRESS、RUM_APP_ID 、APP_VERSION、 APP_ENV、DATAWAY_TOKEN、DSYM_FOLDER_PATH，排除不常变参数的输入
+FT_I_DATAKIT_ADDRESS="$1"
+FT_I_RUM_APP_ID="$2"
+FT_I_APP_VERSION="$3"
+FT_I_APP_ENV="$4"
+FT_I_DATAWAY_TOKEN="$5"
 DWARF_DSYM_FOLDER_PATH="$6"
 #需要一个空的文件夹,如果不进行设置就默认为 ${DWARF_DSYM_FOLDER_PATH}/SymbolTemp
 SYMBOL_OUTPUT_PATH="$7"
 
-run ${FT_SDK_URL} ${FT_RUM_APP_ID} ${FT_APP_VERSION} ${FT_APP_ENV} ${FT_DATAWAY_TOKEN} ${DWARF_DSYM_FOLDER_PATH} ${SYMBOL_OUTPUT_PATH}
+run ${FT_I_DATAKIT_ADDRESS} ${FT_I_RUM_APP_ID} ${FT_I_APP_VERSION} ${FT_I_APP_ENV} ${FT_I_DATAWAY_TOKEN} ${DWARF_DSYM_FOLDER_PATH} ${SYMBOL_OUTPUT_PATH}
 fi
