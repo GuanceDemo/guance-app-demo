@@ -38,6 +38,8 @@ abstract class BaseData(private val returnResult: ReturnResult) {
                     val json = JSONObject(returnResult.result)
                     if (code == HttpURLConnection.HTTP_OK) {
                         onHttpOk(json)
+                        FTLogger.getInstance()
+                            .logBackground("$json", Status.INFO)
                     } else {
                         when (code) {
                             ERROR_CODE_NET_WORK_NO_AVAILABLE -> {
