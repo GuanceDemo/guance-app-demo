@@ -36,6 +36,8 @@
 		171445A42A6E545E00376B7A /* ConnectStatusBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171445A32A6E545E00376B7A /* ConnectStatusBtn.swift */; };
 		17355D332A73B8E00022181E /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17355D322A73B8E00022181E /* ColorExtension.swift */; };
 		173B337B2A692FA2003A4ADE /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B337A2A692FA2003A4ADE /* UserInfo.swift */; };
+		174CB0762B51573400A4F9C5 /* CrashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174CB0752B51573400A4F9C5 /* CrashViewController.swift */; };
+		174CB07A2B54D22900A4F9C5 /* Crasher.mm in Sources */ = {isa = PBXBuildFile; fileRef = 174CB0792B54D22900A4F9C5 /* Crasher.mm */; };
 		17B907B42A66560D0026E51A /* DesignableUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B907B32A66560D0026E51A /* DesignableUITextField.swift */; };
 		17B907B72A666B410026E51A /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B907B62A666B410026E51A /* UserManager.swift */; };
 		17B907B92A6686E90026E51A /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B907B82A6686E90026E51A /* HomeTabBarController.swift */; };
@@ -101,6 +103,10 @@
 		173B337A2A692FA2003A4ADE /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		173B337D2A693039003A4ADE /* ModelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelData.swift; sourceTree = "<group>"; };
 		173B33812A693422003A4ADE /* GuanceDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GuanceDemo.entitlements; sourceTree = "<group>"; };
+		174CB0752B51573400A4F9C5 /* CrashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashViewController.swift; sourceTree = "<group>"; };
+		174CB0772B54D22800A4F9C5 /* GuanceDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GuanceDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		174CB0782B54D22900A4F9C5 /* Crasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crasher.h; sourceTree = "<group>"; };
+		174CB0792B54D22900A4F9C5 /* Crasher.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Crasher.mm; sourceTree = "<group>"; };
 		17A67EB72A83A37B00DCB88D /* Config-Demo.develop.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-Demo.develop.xcconfig"; sourceTree = "<group>"; };
 		17A67EB82A83B3CB00DCB88D /* Config-Demo.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		17A67EB92A8481D700DCB88D /* Config-Demo.pre.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-Demo.pre.xcconfig"; sourceTree = "<group>"; };
@@ -193,6 +199,10 @@
 				171432432A691E0E00125AFE /* LongTaskViewController.swift */,
 				1714459D2A6A301100376B7A /* NativeViewController.swift */,
 				1714459F2A6A53D100376B7A /* ConfigurationVC.swift */,
+				174CB0752B51573400A4F9C5 /* CrashViewController.swift */,
+				174CB0782B54D22900A4F9C5 /* Crasher.h */,
+				174CB0792B54D22900A4F9C5 /* Crasher.mm */,
+				174CB0772B54D22800A4F9C5 /* GuanceDemo-Bridging-Header.h */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -312,6 +322,7 @@
 				TargetAttributes = {
 					171433D92A6551FD0040F092 = {
 						CreatedOnToolsVersion = 14.3.1;
+						LastSwiftMigration = 1520;
 					};
 					1714456E2A693CEC00376B7A = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -418,8 +429,10 @@
 				17B907B92A6686E90026E51A /* HomeTabBarController.swift in Sources */,
 				171433E02A6551FD0040F092 /* SceneDelegate.swift in Sources */,
 				171433FD2A655A240040F092 /* LoginViewController.swift in Sources */,
+				174CB0762B51573400A4F9C5 /* CrashViewController.swift in Sources */,
 				171445A02A6A53D100376B7A /* ConfigurationVC.swift in Sources */,
 				173B337B2A692FA2003A4ADE /* UserInfo.swift in Sources */,
+				174CB07A2B54D22900A4F9C5 /* Crasher.mm in Sources */,
 				171433F82A6555FA0040F092 /* MineViewController.swift in Sources */,
 				1714459E2A6A301100376B7A /* NativeViewController.swift in Sources */,
 				17B907B72A666B410026E51A /* UserManager.swift in Sources */,
@@ -596,6 +609,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = GuanceDemo/GuanceDemo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -620,6 +634,8 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "GuanceDemo/View/GuanceDemo-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -631,6 +647,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = GuanceDemo/GuanceDemo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -655,6 +672,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "GuanceDemo/View/GuanceDemo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -788,6 +806,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = GuanceDemo/GuanceDemo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -817,6 +836,8 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "GuanceDemo/View/GuanceDemo-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

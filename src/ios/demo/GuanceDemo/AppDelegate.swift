@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        print("SDK_APP_ID:\(appid)")
 //        print("SDK_ENV:\(env)")
         let dynamicTag:String? = UserDefaults.standard.value(forKey: "DYNAMIC_TAG") as? String
-        let config = FTMobileConfig.init(metricsUrl: UserDefaults.datakitURL)
+        let config = FTMobileConfig.init(datakitUrl: UserDefaults.datakitURL)
         config.enableSDKDebugLog = true
         config.groupIdentifiers = [GroupIdentifier]
         config.globalContext = ["gc_custom_key":STATIC_TAG]

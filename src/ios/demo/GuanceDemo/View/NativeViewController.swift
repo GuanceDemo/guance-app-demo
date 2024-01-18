@@ -45,8 +45,8 @@ class NativeViewController: UIViewController,UITableViewDataSource,UITableViewDe
             self.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(LongTaskViewController(), animated: true)
         case 1:
-            let array = ["1","2","3"]
-            let str = array[3]
+            self.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(CrashViewController(), animated: true)
         default:
             print("default")
         }
