@@ -70,7 +70,7 @@ abstract class BaseData(private val returnResult: ReturnResult) {
 
     abstract fun onHttpOk(json: JSONObject)
 
-    fun onHttpError(json: JSONObject) {
+    private fun onHttpError(json: JSONObject) {
         errorMessage = json.optString("error")
     }
 }
@@ -98,6 +98,7 @@ class UserData(result: ReturnResult) : BaseData(result) {
 class ReturnResult(val code: Int, val result: String? = null)
 
 
+
 object HttpEngine {
 
     private const val API_SEGMENT = "/api"
@@ -105,6 +106,10 @@ object HttpEngine {
     const val API_USER_INFO: String = "$API_SEGMENT/user"
     private const val API_CONNECT: String = "/connect"
     private const val API_DATAKIT_PING: String = "/v1/ping"
+    private const val API_DATAWAY_CHECK_GUANCE_LOG: String =
+        "/v1/write/logging?token=%s&to_headless=true"
+    private const val CONNECT_POST_CONNECT = """df_rum_android_log message="connect test" %s"""
+
 
     private lateinit var apiAddress: String
 
@@ -116,7 +121,7 @@ object HttpEngine {
         val url = "$apiAddress$API_LOGIN"
         val json = """{"username": "$user", "password": "$password"}"""
         val builder: Request.Builder = Request.Builder().url(url)
-            .method("post", json.toRequestBody("application/json".toMediaTypeOrNull()))
+            .method("POST", json.toRequestBody("application/json".toMediaTypeOrNull()))
         return request(builder.build())
     }
 
@@ -131,6 +136,15 @@ object HttpEngine {
         val builder: Request.Builder = Request.Builder().url(url)
         return request(builder.build())
     }
+
+    fun datawayPing(dataWay: String, clientToken: String): ConnectData {
+        val url = "$dataWay${String.format(API_DATAWAY_CHECK_GUANCE_LOG, clientToken)}"
+        val content = String.format(CONNECT_POST_CONNECT,com.ft.sdk.garble.utils.Utils.getCurrentNanoTime())
+        val builder: Request.Builder = Request.Builder().url(url)
+            .method("POST", content.toRequestBody("text/plain".toMediaTypeOrNull()))
+        return request(builder.build())
+    }
+
 
     fun apiConnect(demoAPIUrl: String): ConnectData {
         val url = "$demoAPIUrl$API_CONNECT"

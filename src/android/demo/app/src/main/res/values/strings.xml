@@ -12,6 +12,8 @@
     <string name="app_id">AppId</string>
     <string name="demo_api_address">Demo API Address</string>
     <string name="datakit_address">Datakit Address</string>
+    <string name="dataway_address">Dataway Address</string>
+    <string name="dataway_token">Dataway Token</string>
     <string name="edit_setting">编辑 Demo 配置</string>
     <string name="main_index_mine">我的</string>
     <string name="main_index_home">首页</string>
@@ -26,4 +28,7 @@
     <string name="setting_log_out">退出登录</string>
     <string name="setting_version">版本号</string>
     <string name="webview_refresh">刷新</string>
+    <string name="datakit_deploy">本地部署（Datakit 方式）</string>
+    <string name="dataway_deploy">使用公网 DataWay</string>
+    <string name="sdk_access_type_format">Type: %s</string>
 </resources>

@@ -5,7 +5,27 @@
     android:orientation="vertical"
     android:padding="20dp">
 
+    <RadioGroup
+        android:id="@+id/setting_access_type_rg"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/setting_datakit_deploy_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/datakit_deploy" />
+
+        <RadioButton
+            android:id="@+id/setting_dataway_deploy_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dataway_deploy" />
+    </RadioGroup>
+
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/setting_app_id_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -13,7 +33,7 @@
         android:hint="@string/app_id">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/setting_app_id"
+            android:id="@+id/setting_app_id_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="15"
@@ -22,13 +42,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/setting_datakit_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="27dp"
         android:hint="@string/datakit_address">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/setting_datakit"
+            android:id="@+id/setting_datakit_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="15"
@@ -37,13 +58,47 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/setting_dataway_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="27dp"
+        android:hint="@string/dataway_address">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/setting_dataway_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="15"
+            android:inputType="textUri" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/setting_dataway_client_token_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="27dp"
+        android:hint="@string/dataway_token">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/setting_dataway_client_token_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="15"
+            android:inputType="textUri" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/setting_demo_api_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="27dp"
         android:hint="@string/demo_api_address">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/setting_demo_api"
+            android:id="@+id/setting_demo_api_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="15"
@@ -57,5 +112,4 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/url_check" />
-
 </LinearLayout>

@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
+import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.cloudcare.ft.mobile.sdk.demo.data.AccessType
 import com.cloudcare.ft.mobile.sdk.demo.data.GC_SCHEME_URL
 import com.cloudcare.ft.mobile.sdk.demo.http.HttpEngine
 import com.cloudcare.ft.mobile.sdk.demo.manager.SettingConfigManager
@@ -27,36 +30,38 @@ import java.nio.charset.StandardCharsets
 @DelicateCoroutinesApi
 class SettingActivity : BaseActivity() {
     private var datakitAddressEt: TextInputEditText? = null
+    private var datawayAddressEt: TextInputEditText? = null
+    private var datawayClientTokenEt: TextInputEditText? = null
     private var demoAPIAddressEt: TextInputEditText? = null
     private var appIDEt: TextInputEditText? = null
     private var settingData: SettingData? = null
+    private var radioGroup: RadioGroup? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
         setTitle(R.string.edit_setting)
-        datakitAddressEt = findViewById(R.id.setting_datakit)
-        demoAPIAddressEt = findViewById(R.id.setting_demo_api)
-        appIDEt = findViewById(R.id.setting_app_id)
+        datakitAddressEt = findViewById(R.id.setting_datakit_et)
+        datawayAddressEt = findViewById(R.id.setting_dataway_et)
+        datawayClientTokenEt = findViewById(R.id.setting_dataway_client_token_et)
+        demoAPIAddressEt = findViewById(R.id.setting_demo_api_et)
+        appIDEt = findViewById(R.id.setting_app_id_et)
 
-//        appIDEt?.setOnFocusChangeListener { _, _ ->
-//            checkAppId()
-//        }
-//
-//        datakitAddressEt?.setOnFocusChangeListener { _, _ ->
-//            checkDatakitAddress()
-//        }
-//
-//        demoAPIAddressEt?.setOnFocusChangeListener { _, _ ->
-//            checkDemoAPIAddress()
-//        }
+        radioGroup = findViewById(R.id.setting_access_type_rg)
+        radioGroup?.setOnCheckedChangeListener { radioGroup, id ->
+            when (id) {
+                R.id.setting_datakit_deploy_rb -> {
+                    setDatakitView()
+                }
+
+                R.id.setting_dataway_deploy_rb -> {
+                    setDatawayView()
+                }
+            }
+
+        }
 
         findViewById<Button>(R.id.setting_check).setOnClickListener {
-            val data = SettingData(
-                datakitAddressEt?.text.toString(),
-                demoAPIAddressEt?.text.toString(),
-                appIDEt?.text.toString()
-            )
-            checkAddressConnect(data) {
+            checkAddressConnect {
                 Toast.makeText(
                     this@SettingActivity,
                     getString(R.string.setting_tip_connect_success),
@@ -67,12 +72,33 @@ class SettingActivity : BaseActivity() {
 
         settingData = SettingConfigManager.readSetting()
         setSettingView(settingData!!)
+        radioGroup?.check(
+            if (settingData!!.type == AccessType.DATAKIT.value)
+                R.id.setting_datakit_deploy_rb
+            else
+                R.id.setting_dataway_deploy_rb
+        )
     }
 
     private fun setSettingView(settingData: SettingData) {
         datakitAddressEt?.setText(settingData.datakitAddress)
         demoAPIAddressEt?.setText(settingData.demoApiAddress)
+        datawayAddressEt?.setText(settingData.datawayAddress)
+        datawayClientTokenEt?.setText(settingData.datawayClientToken)
         appIDEt?.setText(settingData.appId)
+    }
+
+    private fun setDatawayView() {
+        findViewById<View>(R.id.setting_dataway_layout)?.visibility = View.VISIBLE
+        findViewById<View>(R.id.setting_dataway_client_token_layout)?.visibility = View.VISIBLE
+        findViewById<View>(R.id.setting_datakit_layout)?.visibility = View.GONE
+    }
+
+    private fun setDatakitView() {
+        findViewById<View>(R.id.setting_dataway_layout)?.visibility = View.GONE
+        findViewById<View>(R.id.setting_dataway_client_token_layout)?.visibility = View.GONE
+        findViewById<View>(R.id.setting_datakit_layout)?.visibility = View.VISIBLE
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -105,10 +131,51 @@ class SettingActivity : BaseActivity() {
         }
     }
 
-    private fun checkAllInput() {
+    private fun checkDatawayAddress() {
+        if (!Utils.isValidHttpUrl(datawayAddressEt!!.text.toString())) {
+            datawayAddressEt?.error = "非法地址"
+        } else {
+            datawayAddressEt?.error = null
+        }
+    }
+
+    private fun checkDatawayClientToken() {
+        if (datawayClientTokenEt!!.text.isNullOrEmpty()) {
+            datawayClientTokenEt?.error = "非法地址"
+        } else {
+            datawayClientTokenEt?.error = null
+        }
+    }
+
+    private fun checkAllInput(): Boolean {
         checkAppId()
-        checkDatakitAddress()
         checkDemoAPIAddress()
+
+        if (radioGroup?.checkedRadioButtonId == R.id.setting_datakit_deploy_rb) {
+            checkDatakitAddress()
+
+            if (!(appIDEt?.error.isNullOrEmpty()
+                        && datakitAddressEt?.error.isNullOrEmpty()
+                        && demoAPIAddressEt?.error.isNullOrEmpty())
+
+            ) {
+                return false
+            }
+        } else if (radioGroup?.checkedRadioButtonId == R.id.setting_dataway_deploy_rb) {
+            checkDatawayAddress()
+            checkDatawayClientToken()
+
+            if (!(appIDEt?.error.isNullOrEmpty()
+                        && datawayAddressEt?.error.isNullOrEmpty()
+                        && datawayClientTokenEt?.error.isNullOrEmpty()
+                        && demoAPIAddressEt?.error.isNullOrEmpty())
+            ) {
+                return false
+            }
+
+        }
+        return true
+
     }
 
 
@@ -149,24 +216,12 @@ class SettingActivity : BaseActivity() {
             }
 
             R.id.setting_save -> {
-
-                checkAllInput()
-                if (!(appIDEt?.error.isNullOrEmpty()
-                            && datakitAddressEt?.error.isNullOrEmpty()
-                            && demoAPIAddressEt?.error.isNullOrEmpty())
-
-                ) {
+                if (!checkAllInput()) {
                     return true
                 }
 
-                val data = SettingData(
-                    datakitAddressEt?.text.toString(),
-                    demoAPIAddressEt?.text.toString(),
-                    appIDEt?.text.toString()
-                )
-
-                checkAddressConnect(data) {
-                    SettingConfigManager.saveSetting(data)
+                checkAddressConnect {
+                    SettingConfigManager.saveSetting(it)
 
                     val builder: AlertDialog.Builder = AlertDialog.Builder(this)
                     builder.setTitle(getString(R.string.tip))
@@ -191,37 +246,75 @@ class SettingActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun checkAddressConnect(settingData: SettingData, success: (() -> Unit)? = null) {
+    private fun checkAddressConnect(success: ((data: SettingData) -> Unit)? = null) {
+        if (!checkAllInput()) {
+            return
+        }
+
+        val settingData = SettingData(
+            datakitAddressEt?.text.toString(),
+            demoAPIAddressEt?.text.toString(),
+            appIDEt?.text.toString(),
+            datawayAddressEt?.text.toString(),
+            datawayClientTokenEt?.text.toString(),
+            if (radioGroup?.checkedRadioButtonId == R.id.setting_datakit_deploy_rb)
+                AccessType.DATAKIT.value else AccessType.DATAWAY.value
+        )
+
         UtilsDialog.showLoadingDialog(this@SettingActivity)
         GlobalScope.launch(Dispatchers.IO) {
-            val datakitConnect = HttpEngine.datakitPing(settingData.datakitAddress)
+            val datakitConnect = if (settingData.type == AccessType.DATAKIT.value)
+                HttpEngine.datakitPing(settingData.datakitAddress)
+            else
+                HttpEngine.datawayPing(settingData.datawayAddress, settingData.datawayClientToken)
+
             val apiConnect = HttpEngine.apiConnect(settingData.demoApiAddress)
 
             withContext(Dispatchers.Main) {
-                if (datakitConnect.code != HttpURLConnection.HTTP_OK) {
-                    datakitAddressEt?.error = datakitConnect.errorMessage
-                }else{
-                    datakitAddressEt?.error = null
-
+                if (settingData.type == AccessType.DATAKIT.value) {
+                    if (datakitConnect.code != HttpURLConnection.HTTP_OK) {
+                        datakitAddressEt?.error = datakitConnect.errorMessage
+                    } else {
+                        datakitAddressEt?.error = null
+                    }
+                } else {
+                    if (datakitConnect.code != HttpURLConnection.HTTP_OK) {
+                        datawayAddressEt?.error = datakitConnect.errorMessage
+                        datawayClientTokenEt?.error = datakitConnect.errorMessage
+                    } else {
+                        datawayAddressEt?.error = null
+                        datawayClientTokenEt?.error = null
+                    }
                 }
 
                 if (apiConnect.code != HttpURLConnection.HTTP_OK) {
                     demoAPIAddressEt?.error = apiConnect.errorMessage
-                }else{
+                } else {
                     demoAPIAddressEt?.error = null
 
                 }
                 UtilsDialog.hideLoadingDialog()
 
-                if (!(demoAPIAddressEt?.error.isNullOrEmpty()
-                            && datakitAddressEt?.error.isNullOrEmpty())
-                ) {
-                    return@withContext
+                if (settingData.type == AccessType.DATAKIT.value) {
+                    if (!(demoAPIAddressEt?.error.isNullOrEmpty()
+                                && datakitAddressEt?.error.isNullOrEmpty())
+                    ) {
+                        return@withContext
+                    }
+                } else {
+                    if (!(demoAPIAddressEt?.error.isNullOrEmpty()
+                                && datawayAddressEt?.error.isNullOrEmpty()
+                                && datawayClientTokenEt?.error.isNullOrEmpty())
+                    ) {
+                        return@withContext
+                    }
+
                 }
 
 
+
                 success?.let {
-                    it()
+                    it(settingData)
                 }
 
             }

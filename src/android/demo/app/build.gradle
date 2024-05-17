@@ -20,8 +20,8 @@ android {
         applicationId "com.guance.mobile.sdk.demo"
         minSdkVersion 23
         targetSdkVersion 34
-        versionCode 5
-        versionName "1.0.2"
+        versionCode 6
+        versionName "1.1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
@@ -60,7 +60,9 @@ android {
 
         prodTest {
             buildConfigField "String", "CUSTOM_VALUE", "\"Custom value\""
-            buildConfigField "String", "ACCESS_SERVER_URL", "\"${ft_env.datakitRUMUrl}\""
+            buildConfigField "String", "DATAKIT_URL", "\"${ft_env.datakitRUMUrl}\""
+            buildConfigField "String", "DATAWAY_URL", "\"${ft_env.datawayRUMUrl}\""
+            buildConfigField "String", "DATAWAY_CLIENT_TOKEN", "\"${ft_env.cliToken}\""
             buildConfigField "String", "RUM_APP_ID", "\"${ft_env.rumAppid}\""
             buildConfigField "String", "DEMO_API_URL", "\"${ft_env.demoAPIURL}\""
             buildConfigField "String", "ENV", "\"${ft_env.prodTestEnv}\""
@@ -69,7 +71,9 @@ android {
 
         prodPublish {
             buildConfigField "String", "CUSTOM_VALUE", "\"Custom value\""
-            buildConfigField "String", "ACCESS_SERVER_URL", "\"${ft_env.datakitRUMUrl}\""
+            buildConfigField "String", "DATAKIT_URL", "\"${ft_env.datakitRUMUrl}\""
+            buildConfigField "String", "DATAWAY_URL", "\"${ft_env.datawayRUMUrl}\""
+            buildConfigField "String", "DATAWAY_CLIENT_TOKEN", "\"${ft_env.cliToken}\""
             buildConfigField "String", "RUM_APP_ID", "\"${ft_env.rumAppid}\""
             buildConfigField "String", "DEMO_API_URL", "\"${ft_env.demoAPIURL}\""
             buildConfigField "String", "ENV", "\"${ft_env.prodPublishEnv}\""
@@ -97,7 +101,7 @@ FTExt {
             datakitUrl = ft_env.datakitRUMUrl
             datawayToken = ft_env.datawayToken //remote datakit dca address
             appId = ft_env.rumAppid
-            env = ft_env.prodPublishEnv
+            env = ft_env.prodTestEnv
 
         }
         prodPublish {
@@ -144,9 +148,9 @@ dependencies {
 
     //================FT-SDK需要使用的引用=================//
     //FT-SDK引用
-    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.4.0-beta01')
+    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.4.6')
 
-    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-native:1.0.0-beta01'
+    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-native:1.1.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.picasso:picasso:2.8'
 

@@ -13,7 +13,9 @@ import com.cloudcare.ft.mobile.sdk.demo.BuildConfig
 import com.cloudcare.ft.mobile.sdk.demo.MainActivity
 import com.cloudcare.ft.mobile.sdk.demo.R
 import com.cloudcare.ft.mobile.sdk.demo.SettingActivity
+import com.cloudcare.ft.mobile.sdk.demo.data.AccessType
 import com.cloudcare.ft.mobile.sdk.demo.manager.AccountManager
+import com.cloudcare.ft.mobile.sdk.demo.manager.SettingConfigManager
 import com.cloudcare.ft.mobile.sdk.demo.utils.CircleTransform
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -45,8 +47,13 @@ class MineFragment : Fragment() {
         }
 
         view.findViewById<TextView>(R.id.mine_app_version).text =
-            "${BuildConfig.VERSION_NAME}${(if(BuildConfig.DEBUG)"-Debug" else "")} (${BuildConfig.VERSION_CODE})"
+            "${BuildConfig.VERSION_NAME}${(if (BuildConfig.DEBUG) "-Debug" else "")} (${BuildConfig.VERSION_CODE})"
 
+        val settingData = SettingConfigManager.readSetting()
+        view.findViewById<TextView>(R.id.mine_settings_access_type_label).text = getString(
+            R.string.sdk_access_type_format,
+            if (settingData.type == AccessType.DATAKIT.value) "Datakit" else "Dataway"
+        )
         val refreshView: SwipeRefreshLayout = view.findViewById(R.id.mine_refresh_layout)
         refreshView.setOnRefreshListener {
             AccountManager.getUserInfo {
