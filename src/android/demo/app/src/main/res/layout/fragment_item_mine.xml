@@ -11,11 +11,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/setting_button_color_bg"
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/mine_user_info_rl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:background="@drawable/ic_mine_avatar_bg">
 
                 <ImageView
@@ -50,6 +55,15 @@
                         android:layout_marginTop="8dp"
                         android:text="someone@example.com"
                         android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/mine_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/how_to_refresh"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
 
@@ -88,6 +102,7 @@
                     android:text="@string/edit_setting"
                     android:textColor="#000"
                     android:textSize="16sp" />
+
                 <TextView
                     android:id="@+id/mine_settings_access_type_label"
                     android:layout_width="wrap_content"

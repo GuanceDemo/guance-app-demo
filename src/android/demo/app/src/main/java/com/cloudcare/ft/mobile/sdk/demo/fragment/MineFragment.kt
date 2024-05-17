@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cloudcare.ft.mobile.sdk.demo.BuildConfig
@@ -17,6 +18,7 @@ import com.cloudcare.ft.mobile.sdk.demo.data.AccessType
 import com.cloudcare.ft.mobile.sdk.demo.manager.AccountManager
 import com.cloudcare.ft.mobile.sdk.demo.manager.SettingConfigManager
 import com.cloudcare.ft.mobile.sdk.demo.utils.CircleTransform
+import com.ft.sdk.FTRUMInnerManager
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -56,12 +58,29 @@ class MineFragment : Fragment() {
         )
         val refreshView: SwipeRefreshLayout = view.findViewById(R.id.mine_refresh_layout)
         refreshView.setOnRefreshListener {
-            AccountManager.getUserInfo {
-
-                bindUserView(view)
-
+            FTRUMInnerManager.get().startAction("用户数据刷新", "refresh_user_data")
+            refreshUserInfo(view) {
                 refreshView.isRefreshing = false
+            }
 
+        }
+
+        view.findViewById<View>(R.id.mine_user_info_rl).setOnClickListener {
+            refreshUserInfo(view)
+        }
+    }
+
+    private fun refreshUserInfo(view: View, callback: ((success: Boolean) -> Unit)? = null) {
+        Toast.makeText(context, "Refreshing", Toast.LENGTH_SHORT).show()
+        AccountManager.getUserInfo { success ->
+            callback?.let {
+                it(success)
+            }
+            if (success) {
+                bindUserView(view)
+                Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Fail", Toast.LENGTH_SHORT).show()
             }
         }
     }

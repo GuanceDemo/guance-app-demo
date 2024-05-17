@@ -31,4 +31,5 @@
     <string name="datakit_deploy">本地部署（Datakit 方式）</string>
     <string name="dataway_deploy">使用公网 DataWay</string>
     <string name="sdk_access_type_format">Type: %s</string>
+    <string name="how_to_refresh">[点击用户信息框或下拉进行刷新]</string>
 </resources>

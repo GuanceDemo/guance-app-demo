@@ -66,7 +66,7 @@ open class DemoApplication : Application() {
                     .setRumAppId(data.appId)
                     .setEnableTraceUserAction(true)
                     .setEnableTraceUserView(true)
-                    .setEnableTraceUserResource(false)
+                    .setEnableTraceUserResource(true)
                     .setSamplingRate(1f)
                     .addGlobalContext(CUSTOM_STATIC_TAG, BuildConfig.CUSTOM_VALUE)
                     .addGlobalContext(CUSTOM_DYNAMIC_TAG, customDynamicValue!!)
@@ -80,7 +80,7 @@ open class DemoApplication : Application() {
             FTSdk.initTraceWithConfig(
                 FTTraceConfig()
                     .setSamplingRate(1f)
-                    .setEnableAutoTrace(false)
+                    .setEnableAutoTrace(true)
                     .setEnableLinkRUMData(true)
             )
         }

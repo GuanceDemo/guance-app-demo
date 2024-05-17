@@ -63,7 +63,7 @@ object AccountManager {
         }
     }
 
-    fun getUserInfo(success: (() -> Unit)? = null) {
+    fun getUserInfo(callback: ((success: Boolean) -> Unit)? = null) {
         GlobalScope.launch(Dispatchers.IO) {
             val data = HttpEngine.userinfo()
 
@@ -76,8 +76,12 @@ object AccountManager {
                     userData.name = data.username
                     userData.id = data.email
                     FTSdk.bindRumUserData(userData)
-                    success?.let {
-                        it()
+                    callback?.let {
+                        it(true)
+                    }
+                } else {
+                    callback?.let {
+                        it(false)
                     }
                 }
             }
