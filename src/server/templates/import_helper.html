@@ -43,42 +43,69 @@
   </style>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
   <meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport"/>
-  <!--remote script-->
-  <!-- <script type="text/javascript" src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-<script type="text/javascript" src="https://static.runoob.com/assets/qrcode/qrcode.min.js"></script> -->
-  <!--local script-->
-  <script src="{{ url_for('static', filename='jquery.min.js') }}">
-  </script>
-  <script src="{{ url_for('static', filename='qrcode.min.js') }}">
-  </script>
+  <!-- Script sources -->
+  <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='qrcode.min.js') }}"></script>
  </head>
  <body>
   <label>
-   Datakit Address：
+   Choose Access Type:
   </label>
   <br/>
-  <input id="datakit-address-input" style="width:60%" type="text" value="http://10.100.64.166:9529"/>
-  <br/>
+  <input type="radio" id="datakit-radio" name="config-type" value="datakit" checked>
+  <label for="datakit-radio">本地部署（Datakit）</label>
+  <input type="radio" id="dataway-radio" name="config-type" value="dataway">
+  <label for="dataway-radio">使用公网 Dataway</label>
+
+  <br/><br/>
+
+  <!-- Dataway Fields -->
+  <div id="dataway-fields" style="display:none;">
+    <label>
+      Dataway Address：
+    </label>
+    <br/>
+    <input id="dataway-address-input" style="width:60%" type="text" value="http://10.100.64.166:9528"/>
+    <br/>
+    <label>
+      Dataway Client Token：
+    </label>
+    <br/>
+    <input id="dataway-client-token-input" style="width:60%" type="text" value="[Dataway Client Token]"/>
+    <br/>
+  </div>
+
+  <!-- Datakit Fields -->
+  <div id="datakit-fields" >
+    <label>
+      Datakit Address：
+    </label>
+    <br/>
+    <input id="datakit-address-input" style="width:60%" type="text" value="http://10.100.64.166:9529"/>
+    <br/>
+  </div>
+
+  <!-- Common Fields -->
   <label>
-   Demo API Address：
+    Demo API Address：
   </label>
   <br/>
   <input id="demo-api-address-input" style="width:60%" type="text" value="http://10.100.64.166:8000"/>
   <br/>
   <label>
-   Android App ID：
+    Android App ID：
   </label>
   <br/>
   <input id="demo-android-app-id" style="width:60%" type="text" value="gc_app_android_demo"/>
   <br/>
   <label>
-   iOS App ID：
+    iOS App ID：
   </label>
   <br/>
   <input id="demo-ios-app-id" style="width:60%" type="text" value="gc_app_ios_demo"/>
   <br/>
   <label>
-   Demo Import String：（文本复制并在“编辑 Demo 配置”页面点击右上角“剪贴板导入”的图标）
+    Demo Import String：（文本复制并在“编辑 Demo 配置”页面点击右上角“剪贴板导入”的图标）
   </label>
   <br/>
   <label id="import-string">
@@ -101,70 +128,91 @@
   <br/>
   <script type="text/javascript">
    var qrcode = new QRCode(document.getElementById("qrcode"), {
-  width : 256,
-  height : 256
-});
+      width: 256,
+      height: 256
+    });
 
-function makeCode() {
-    // 获取输入框的值
-    const datakitAddress = document.getElementById('datakit-address-input').value;
-    const demoApiAddress = document.getElementById('demo-api-address-input').value;
-    const demoAndroidAppId = document.getElementById('demo-android-app-id').value;
-    const demoIosAppId = document.getElementById('demo-ios-app-id').value;
+    function makeCode() {
+      const datakitFields = document.getElementById('datakit-fields');
+      const datawayFields = document.getElementById('dataway-fields');
 
-    // 组装JSON对象
-    const importData = {
-        datakitAddress: datakitAddress,
-        demoApiAddress: demoApiAddress,
-        demoAndroidAppId: demoAndroidAppId,
-        demoIOSAppId: demoIosAppId,
-    };
+      const configType = document.querySelector('input[name="config-type"]:checked').value;
 
-    // 将JSON对象转换为字符串
-    const jsonString = JSON.stringify(importData);
+      if (configType === 'datakit') {
+        datakitFields.style.display = 'block';
+        datawayFields.style.display = 'none';
+      } else {
+        datakitFields.style.display = 'none';
+        datawayFields.style.display = 'block';
+      }
 
-    // 将字符串进行Base64编码
-    const base64String = btoa(jsonString);
+      // Get input values
+      const datakitAddress = document.getElementById('datakit-address-input').value;
+      const datawayAddress = document.getElementById('dataway-address-input').value;
+      const datawayClientToken = document.getElementById('dataway-client-token-input').value;
+      const demoApiAddress = document.getElementById('demo-api-address-input').value;
+      const demoAndroidAppId = document.getElementById('demo-android-app-id').value;
+      const demoIosAppId = document.getElementById('demo-ios-app-id').value;
 
-    const invokeString = 'gc-demo://'+base64String;
+      // Construct JSON object
+      let importData;
+      if (configType === 'datakit') {
+        importData = {
+          datakitAddress: datakitAddress,
+          demoApiAddress: demoApiAddress,
+          demoAndroidAppId: demoAndroidAppId,
+          demoIOSAppId: demoIosAppId,
+        };
+      } else {
+        importData = {
+          datawayAddress: datawayAddress,
+          datawayClientToken: datawayClientToken,
+          demoApiAddress: demoApiAddress,
+          demoAndroidAppId: demoAndroidAppId,
+          demoIOSAppId: demoIosAppId,
+        };
+      }
 
-    // 输出到import-string标签中
-    document.getElementById('import-string').innerText = invokeString;
+      // Convert JSON object to string
+      const jsonString = JSON.stringify(importData);
 
-    qrcode.makeCode(invokeString);
-}
+      // Base64 encode the string
+      const base64String = btoa(jsonString);
 
-function copyText() {
-    // 获取要复制的文本内容
-    const textToCopy = document.getElementById('import-string').innerText;
+      const invokeString = 'gc-demo://' + base64String;
 
-    // 创建一个临时的textarea元素
-    const textarea = document.createElement('textarea');
-    textarea.value = textToCopy;
-    document.body.appendChild(textarea);
+      // Output to import-string label
+      document.getElementById('import-string').innerText = invokeString;
 
-    // 选择并复制文本
-    textarea.select();
-    document.execCommand('copy');
-
-    // 删除临时的textarea元素
-    document.body.removeChild(textarea);
-
-    // 提示用户复制成功（可选）
-    alert('文本已成功复制到剪贴板！');
-}
-
-makeCode();
-
-$("#datakit-address-input,#demo-api-address-input,#demo-android-app-id,#demo-ios-app-id").
-  on("blur", function () {
-    makeCode();
-  }).
-  on("keydown", function (e) {
-    if (e.keyCode == 13) {
-      makeCode();
+      qrcode.makeCode(invokeString);
     }
-  });
+
+    function copyText() {
+      const textToCopy = document.getElementById('import-string').innerText;
+      const textarea = document.createElement('textarea');
+      textarea.value = textToCopy;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      alert('文本已成功复制到剪贴板！');
+    }
+
+    makeCode();
+
+    $("input[name='config-type']").on("change", function() {
+      makeCode();
+    });
+
+    $("#dataway-client-token-input,#dataway-address-input,#datakit-address-input,#demo-api-address-input,#demo-android-app-id,#demo-ios-app-id").
+    on("blur", function() {
+      makeCode();
+    }).
+    on("keydown", function(e) {
+      if (e.keyCode == 13) {
+        makeCode();
+      }
+    });
   </script>
  </body>
 </html>
