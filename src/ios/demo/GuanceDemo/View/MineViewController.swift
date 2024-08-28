@@ -31,6 +31,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = .navigationBackgroundColor
         // Do any additional setup after loading the view.
         createUI()
     }
