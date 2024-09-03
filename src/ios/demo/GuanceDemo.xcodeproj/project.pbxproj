@@ -144,9 +144,7 @@
 		171433D12A6551FD0040F092 = {
 			isa = PBXGroup;
 			children = (
-				17A67EB92A8481D700DCB88D /* Config-Demo.pre.xcconfig */,
-				17A67EB82A83B3CB00DCB88D /* Config-Demo.release.xcconfig */,
-				17A67EB72A83A37B00DCB88D /* Config-Demo.develop.xcconfig */,
+				1722E4D12C86A96C00B60D91 /* xcconfig */,
 				171445862A69406700376B7A /* GuanceExtension.entitlements */,
 				171433DC2A6551FD0040F092 /* GuanceDemo */,
 				171445722A693CEC00376B7A /* Guance */,
@@ -207,6 +205,16 @@
 				1714457B2A693CED00376B7A /* Info.plist */,
 			);
 			path = Guance;
+			sourceTree = "<group>";
+		};
+		1722E4D12C86A96C00B60D91 /* xcconfig */ = {
+			isa = PBXGroup;
+			children = (
+				17A67EB92A8481D700DCB88D /* Config-Demo.pre.xcconfig */,
+				17A67EB82A83B3CB00DCB88D /* Config-Demo.release.xcconfig */,
+				17A67EB72A83A37B00DCB88D /* Config-Demo.develop.xcconfig */,
+			);
+			path = xcconfig;
 			sourceTree = "<group>";
 		};
 		175951122A7106B6006FAB9D /* Model */ = {
