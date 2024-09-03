@@ -7,8 +7,13 @@
 
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
+
+// 导入 pod 对应的 .xcconfig
 #include "Pods/Target Support Files/Pods-GuanceDemo/Pods-GuanceDemo.debug.xcconfig"
 
 SDK_APP_ID = "app_id_common"
-SDK_DEA_ADDRESS = http:\$()\xxxxxxxx:9529
+// URL // 中需要添加 $()
+SDK_DATAKIT_ADDRESS = http:/$()/xxxxxxxx:9529
 SDK_ENV = common
+SDK_DATAWAY_TOKEN = token
+
