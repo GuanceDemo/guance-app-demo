@@ -280,6 +280,7 @@
 				171433D82A6551FD0040F092 /* Resources */,
 				173B33752A692D15003A4ADE /* Embed Foundation Extensions */,
 				938D14D79FFE2702CB6533F2 /* [CP] Copy Pods Resources */,
+				1722E4D42C86B8CA00B60D91 /* [FT] dSYM Upload */,
 			);
 			buildRules = (
 			);
@@ -368,6 +369,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1722E4D42C86B8CA00B60D91 /* [FT] dSYM Upload */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[FT] dSYM Upload";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "source \"${SRCROOT}/FTdSYMUploader.sh\"\n";
+		};
 		5779B408AF75B4AA36271815 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

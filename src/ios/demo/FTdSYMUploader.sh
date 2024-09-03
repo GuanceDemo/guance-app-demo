@@ -9,19 +9,19 @@
 # --- Copy the SCRIPT to the Run Script of Build Phases in the Xcode project ---
 #
 # #
-FT_APP_ID="YOUR_APP_ID"
-#dea_address
-FT_DEA_ADDRESS="YOUR_DEA_ADDRESS"
+FT_APP_ID=${SDK_APP_ID}
+#datakit_address
+FT_DATAKIT_ADDRESS=${SDK_DATAKIT_ADDRESS}
 # 环境字段。属性值：prod/gray/pre/common/local。需要与 SDK 设置一致
-FT_ENV="common"
+FT_ENV=${SDK_ENV}
 # 配置文件 datakit.conf 中 dataway 的 token
-FT_TOKEN="YOUR_DATAWAY_TOKEN"
+FT_TOKEN=${SDK_DATAWAY_TOKEN}
 #
 # 脚本默认配置的版本格式为CFBundleShortVersionString,如果你修改默认的版本格式, 请设置此变量。注意：需要确保在此填写的与SDK设置的一致。
 # FT_VERSION=""
 #
 # Debug模式编译是否上传，1＝上传 0＝不上传，默认不上传
-# UPLOAD_DEBUG_SYMBOLS=0
+#UPLOAD_DEBUG_SYMBOLS=1
 #
 # # 模拟器编译是否上传，1=上传 0=不上传，默认不上传
 # UPLOAD_SIMULATOR_SYMBOLS=0
@@ -29,7 +29,7 @@ FT_TOKEN="YOUR_DATAWAY_TOKEN"
 # #只有Archive操作时上传, 1=支持Archive上传 0=所有Release模式编译都上传
 UPLOAD_ARCHIVE_ONLY=1
 # #
-# source FTdSYMUpload.sh
+# source FTdSYMUploader.sh
 #
 # --- END OF SCRIPT ---
 #
@@ -38,12 +38,18 @@ UPLOAD_ARCHIVE_ONLY=1
 # 2. 脚本根据输入参数处理
 #######################################################
 #
-# #命令行下输入应用基本信息, .dSYM文件的父目录路径, 输出文件目录即可
+# #命令行下输入应用基本信息
 #
-# sh dSYMUpload.sh <sdk_url> <rum_app_id> <app_version> <app_env> <bSYMBOL_src_dir> <bSYMBOL_dest_dir>
+# sh  FTdSYMUpload.sh <datakit_address> <app_id> <version> <env> <dataway_token> <dSYMBOL_src_dir>
 #
+#  变量说明：
+#  - `<datakit_address>`: DataKit 服务的地址，如 `http://localhost:9529`
+#  - `<app_id>`: 对应 RUM 的 `applicationId`
+#  - `<env>`: 对应 RUM 的 `env`
+#  - `<version>`: 对应 RUM 的 `version`
+#  - `<dataway_token>`: 配置文件 `datakit.conf` 中 `dataway` 的 token
+#  - `<dSYMBOL_src_dir>`: 待上传的 `dSYMBOL` 文件夹路径
 #
-
 #
 # --- CONTENT OF SCRIPT ---
 #
@@ -64,7 +70,8 @@ function dSYMUpload(){
     P_APP_ENV="$4"
     P_TOKEN="$5"
     P_BSYMBOL_ZIP_FILE="$6"
-    
+    P_DSYM_TEMPORARY_DIR="$7"
+
     #
     P_BSYMBOL_ZIP_FILE_NAME=${P_BSYMBOL_ZIP_FILE##*/}
     P_BSYMBOL_ZIP_FILE_NAME=${P_BSYMBOL_ZIP_FILE_NAME//&/_}
@@ -74,7 +81,7 @@ function dSYMUpload(){
     echo "dSYM upload url: ${DSYM_UPLOAD_URL}"
     
     echo "-----------------------------"
-    STATUS=$(curl -X PUT "${DSYM_UPLOAD_URL}"  -F "file=@${P_BSYMBOL_ZIP_FILE}" -H "Content-Type: multipart/form-data")
+    STATUS=$(curl -X PUT "${DSYM_UPLOAD_URL}"  -F "file=@\"$P_BSYMBOL_ZIP_FILE\"")
     echo "-----------------------------"
     
     UPLOAD_RESULT="FAILTURE"
@@ -89,15 +96,15 @@ function dSYMUpload(){
     echo "Error: Failed to upload the zip archive file to DataKit."
     fi
     #Remove temp dSYM archive
-    echo "Remove temporary zip archive: ${DSYM_ZIP_FPATH}"
-    rm -f "${P_BSYMBOL_ZIP_FILE}"
+    echo "Remove temporary DIR: ${P_DSYM_TEMPORARY_DIR}"
+    rm -rf "${P_DSYM_TEMPORARY_DIR}"
     
     if [ "$?" -ne 0 ]; then
     exitWithMessage "Error: Failed to remove temporary zip archive." 0
     fi
     
     echo "--------------------------------"
-    echo "${UPLOAD_RESULT} - dSYM upload complete."
+    echo "Upload Result: ${UPLOAD_RESULT}."
     
     if [[ "${UPLOAD_RESULT}" == "FAILTURE" ]]; then
     echo "--------------------------------"
@@ -147,7 +154,7 @@ function run() {
     fi
     
     if [ ! -e "${CONFIG_DSYM_DEST_DIR}" ]; then
-    mkdir ${CONFIG_DSYM_DEST_DIR}
+    mkdir "${CONFIG_DSYM_DEST_DIR}"
     fi
     
     DSYM_FOLDER="${CONFIG_DSYM_SOURCE_DIR}"
@@ -175,7 +182,7 @@ function run() {
     zip -r -q $DSYM_SYMBOL_ZIP_FILE *
     popd
     # 上传
-    dSYMUpload $CONFIG_SDK_URL $CONFIG_APP_ID $CONFIG_APP_VERSION $CONFIG_APP_ENV $CONFIG_TOKEN $DSYM_SYMBOL_ZIP_FILE
+    dSYMUpload $CONFIG_SDK_URL $CONFIG_APP_ID $CONFIG_APP_VERSION $CONFIG_APP_ENV $CONFIG_TOKEN "$DSYM_SYMBOL_ZIP_FILE" "$CONFIG_DSYM_DEST_DIR"
     fi
     
     if [ $RET = "F" ]; then
@@ -267,7 +274,7 @@ function runInXcode(){
     fi
     done
     #
-    run ${FT_DEA_ADDRESS} ${FT_APP_ID} ${FT_APP_VERSION} ${FT_ENV} ${FT_TOKEN} ${DWARF_DSYM_FOLDER_PATH} ${BUILD_DIR}/SymbolTemp
+    run ${FT_DATAKIT_ADDRESS} ${FT_APP_ID} ${FT_APP_VERSION} ${FT_ENV} ${FT_TOKEN} ${DWARF_DSYM_FOLDER_PATH} ${BUILD_DIR}/SymbolTemp
 }
 # 根据Xcode的环境变量判断是否处于Xcode环境
 INFO_PLIST_FILE="${INFOPLIST_FILE}"
@@ -280,17 +287,15 @@ fi
 if [ $BuildInXcode = "T" ]; then
 runInXcode
 else
-echo "\nUsage: dSYMUpload.sh <sdk_url> <rum_app_id> <app_version> <app_env> <token> <dSYMBOL_src_dir> <dSYMBOL_dest_dir>\n"
+echo "\nUsage: dSYMUpload.sh <sdk_url> <rum_app_id> <app_version> <app_env> <dataway_token> <dSYMBOL_src_dir> <dSYMBOL_dest_dir>\n"
 
-# 你可以在此处直接设置 URL、RUM_APP_ID 、APP_VERSION、 APP_ENV、DSYM_FOLDER_PATH，排除不常变参数的输入
-FT_SDK_URL="$1"
-FT_RUM_APP_ID="$2"
-FT_APP_VERSION="$3"
-FT_APP_ENV="$4"
-FT_DATAWAY_TOKEN="$5"
+# 你可以在此处直接设置 DATAKIT_ADDRESS、RUM_APP_ID 、APP_VERSION、 APP_ENV、DATAWAY_TOKEN、DSYM_FOLDER_PATH，排除不常变参数的输入
+FT_I_DATAKIT_ADDRESS="$1"
+FT_I_RUM_APP_ID="$2"
+FT_I_APP_VERSION="$3"
+FT_I_APP_ENV="$4"
+FT_I_DATAWAY_TOKEN="$5"
 DWARF_DSYM_FOLDER_PATH="$6"
-#需要一个空的文件夹,如果不进行设置就默认为 ${DWARF_DSYM_FOLDER_PATH}/SymbolTemp
-SYMBOL_OUTPUT_PATH="$7"
 
-run ${FT_SDK_URL} ${FT_RUM_APP_ID} ${FT_APP_VERSION} ${FT_APP_ENV} ${FT_DATAWAY_TOKEN} ${DWARF_DSYM_FOLDER_PATH} ${SYMBOL_OUTPUT_PATH}
+run ${FT_I_DATAKIT_ADDRESS} ${FT_I_RUM_APP_ID} ${FT_I_APP_VERSION} ${FT_I_APP_ENV} ${FT_I_DATAWAY_TOKEN} "$DWARF_DSYM_FOLDER_PATH"
 fi
