@@ -11,7 +11,7 @@ import FTMobileSDK
 
 class UserManager {
     private static let sharedManager:UserManager = {
-        let shared = UserManager.init(isLogin: UserDefaults.login)
+        let shared = UserManager.init(isLogin: UserDefaults.login,isDataKit: UserDefaults.isDataKit)
         if let data = UserDefaults.userInfo {
             shared.userInfo = parse(data)
         }
@@ -42,7 +42,7 @@ class UserManager {
     
     var loginObserver:((Bool)->Void)?
     
-    init(isLogin: Bool, loginObserver: ( (Bool) -> Void)? = nil) {
+    init(isLogin: Bool, isDataKit:Bool, loginObserver: ( (Bool) -> Void)? = nil) {
         self.isLogin = isLogin
         self.loginObserver = loginObserver
     }
@@ -53,7 +53,7 @@ class UserManager {
     
     func login(userName:String,password:String) async throws -> Bool{
         do {
-            let success = try await NetworkEngine().login(userName, password)
+            let success = try await NetworkEngine.shared.login(userName, password)
             if success {
                let result = try await loadUserInfo()
                 if result {
@@ -66,7 +66,7 @@ class UserManager {
         return false
     }
     func loadUserInfo() async throws -> Bool{
-        let data = try await NetworkEngine().getUserInfo()
+        let data = try await NetworkEngine.shared.getUserInfo()
         if let data = data {
             UserDefaults.userInfo = data
             self.userInfo = parse(data)

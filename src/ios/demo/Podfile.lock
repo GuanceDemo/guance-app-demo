@@ -1,50 +1,51 @@
 PODS:
-  - FTMobileSDK (1.4.8-alpha.2):
-    - FTMobileSDK/FTMobileAgent (= 1.4.8-alpha.2)
-  - FTMobileSDK/Extension (1.4.8-alpha.2):
-    - FTMobileSDK/FTSDKCore/Exception
+  - FTMobileSDK (1.5.2):
+    - FTMobileSDK/FTMobileAgent (= 1.5.2)
+  - FTMobileSDK/Extension (1.5.2):
     - FTMobileSDK/FTSDKCore/FTRUM
     - FTMobileSDK/FTSDKCore/Logger
     - FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation
-  - FTMobileSDK/FTMobileAgent (1.4.8-alpha.2):
+  - FTMobileSDK/FTMobileAgent (1.5.2):
     - FTMobileSDK/FTSDKCore
-  - FTMobileSDK/FTSDKCore (1.4.8-alpha.2):
-    - FTMobileSDK/FTSDKCore/BaseUtils (= 1.4.8-alpha.2)
-    - FTMobileSDK/FTSDKCore/DataManager (= 1.4.8-alpha.2)
-    - FTMobileSDK/FTSDKCore/Exception (= 1.4.8-alpha.2)
-    - FTMobileSDK/FTSDKCore/FTRUM (= 1.4.8-alpha.2)
-    - FTMobileSDK/FTSDKCore/FTWKWebView (= 1.4.8-alpha.2)
-    - FTMobileSDK/FTSDKCore/Logger (= 1.4.8-alpha.2)
-    - FTMobileSDK/FTSDKCore/Protocol (= 1.4.8-alpha.2)
-    - FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation (= 1.4.8-alpha.2)
-  - FTMobileSDK/FTSDKCore/BaseUtils (1.4.8-alpha.2):
-    - FTMobileSDK/FTSDKCore/BaseUtils/Base (= 1.4.8-alpha.2)
-    - FTMobileSDK/FTSDKCore/BaseUtils/Swizzle (= 1.4.8-alpha.2)
-    - FTMobileSDK/FTSDKCore/BaseUtils/Thread (= 1.4.8-alpha.2)
-  - FTMobileSDK/FTSDKCore/BaseUtils/Base (1.4.8-alpha.2)
-  - FTMobileSDK/FTSDKCore/BaseUtils/Swizzle (1.4.8-alpha.2):
+  - FTMobileSDK/FTSDKCore (1.5.2):
+    - FTMobileSDK/FTSDKCore/BaseUtils (= 1.5.2)
+    - FTMobileSDK/FTSDKCore/DataManager (= 1.5.2)
+    - FTMobileSDK/FTSDKCore/FTRUM (= 1.5.2)
+    - FTMobileSDK/FTSDKCore/FTWKWebView (= 1.5.2)
+    - FTMobileSDK/FTSDKCore/Logger (= 1.5.2)
+    - FTMobileSDK/FTSDKCore/Protocol (= 1.5.2)
+    - FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation (= 1.5.2)
+  - FTMobileSDK/FTSDKCore/BaseUtils (1.5.2):
+    - FTMobileSDK/FTSDKCore/BaseUtils/Base (= 1.5.2)
+    - FTMobileSDK/FTSDKCore/BaseUtils/Swizzle (= 1.5.2)
+    - FTMobileSDK/FTSDKCore/BaseUtils/Thread (= 1.5.2)
+  - FTMobileSDK/FTSDKCore/BaseUtils/Base (1.5.2)
+  - FTMobileSDK/FTSDKCore/BaseUtils/Swizzle (1.5.2):
     - FTMobileSDK/FTSDKCore/BaseUtils/Base
-  - FTMobileSDK/FTSDKCore/BaseUtils/Thread (1.4.8-alpha.2)
-  - FTMobileSDK/FTSDKCore/DataManager (1.4.8-alpha.2):
+  - FTMobileSDK/FTSDKCore/BaseUtils/Thread (1.5.2)
+  - FTMobileSDK/FTSDKCore/DataManager (1.5.2):
     - FTMobileSDK/FTSDKCore/BaseUtils/Base
     - FTMobileSDK/FTSDKCore/BaseUtils/Thread
-  - FTMobileSDK/FTSDKCore/Exception (1.4.8-alpha.2):
-    - FTMobileSDK/FTSDKCore/BaseUtils/Base
-    - FTMobileSDK/FTSDKCore/Protocol
-  - FTMobileSDK/FTSDKCore/FTRUM (1.4.8-alpha.2):
+  - FTMobileSDK/FTSDKCore/FTRUM (1.5.2):
     - FTMobileSDK/FTSDKCore/BaseUtils/Base
     - FTMobileSDK/FTSDKCore/BaseUtils/Thread
     - FTMobileSDK/FTSDKCore/Protocol
-  - FTMobileSDK/FTSDKCore/FTWKWebView (1.4.8-alpha.2):
+  - FTMobileSDK/FTSDKCore/FTWKWebView (1.5.2):
     - FTMobileSDK/FTSDKCore/BaseUtils/Swizzle
     - FTMobileSDK/FTSDKCore/Protocol
-  - FTMobileSDK/FTSDKCore/Logger (1.4.8-alpha.2):
+  - FTMobileSDK/FTSDKCore/Logger (1.5.2):
     - FTMobileSDK/FTSDKCore/BaseUtils/Base
-  - FTMobileSDK/FTSDKCore/Protocol (1.4.8-alpha.2)
-  - FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation (1.4.8-alpha.2):
+  - FTMobileSDK/FTSDKCore/Protocol (1.5.2)
+  - FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation (1.5.2):
     - FTMobileSDK/FTSDKCore/BaseUtils/Swizzle
     - FTMobileSDK/FTSDKCore/Protocol
   - MBProgressHUD (1.2.0)
+  - RxCocoa (6.7.1):
+    - RxRelay (= 6.7.1)
+    - RxSwift (= 6.7.1)
+  - RxRelay (6.7.1):
+    - RxSwift (= 6.7.1)
+  - RxSwift (6.7.1)
   - SDWebImage (5.16.0):
     - SDWebImage/Core (= 5.16.0)
   - SDWebImage/Core (5.16.0)
@@ -52,9 +53,11 @@ PODS:
   - Toast-Swift (5.0.1)
 
 DEPENDENCIES:
-  - FTMobileSDK (= 1.4.8-alpha.2)
-  - FTMobileSDK/Extension (= 1.4.8-alpha.2)
+  - FTMobileSDK (= 1.5.2)
+  - FTMobileSDK/Extension (= 1.5.2)
   - MBProgressHUD (~> 1.2.0)
+  - RxCocoa
+  - RxSwift
   - SDWebImage
   - SnapKit (~> 5.6.0)
   - Toast-Swift (~> 5.0.1)
@@ -63,17 +66,23 @@ SPEC REPOS:
   trunk:
     - FTMobileSDK
     - MBProgressHUD
+    - RxCocoa
+    - RxRelay
+    - RxSwift
     - SDWebImage
     - SnapKit
     - Toast-Swift
 
 SPEC CHECKSUMS:
-  FTMobileSDK: 8c8559e1aaccf7cf4764d61009ae9fc500d4ecb1
+  FTMobileSDK: dd1cd9813503b45cf5b9d696a775abc401246a73
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
+  RxCocoa: f5609cb4637587a7faa99c5d5787e3ad582b75a4
+  RxRelay: 4151ba01152436b08271e08410135e099880eae5
+  RxSwift: b9a93a26031785159e11abd40d1a55bcb8057e52
   SDWebImage: 2aea163b50bfcb569a2726b6a754c54a4506fcf6
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
 
-PODFILE CHECKSUM: 65ce1c8b67326b606c1faf3c7935c468799003e1
+PODFILE CHECKSUM: 5f87be20926b1083c57da19c754350f0d8f9988b
 
-COCOAPODS: 1.14.2
+COCOAPODS: 1.15.2
