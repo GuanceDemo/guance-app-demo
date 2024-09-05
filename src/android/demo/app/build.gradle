@@ -23,6 +23,14 @@ android {
         versionCode 7
         versionName "1.1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+//        buildConfigField "String", "CUSTOM_VALUE", "\"Custom value\""
+//        buildConfigField "String", "DATAKIT_URL", "\"${ft_env.datakitRUMUrl}\""
+//        buildConfigField "String", "DATAWAY_URL", "\"${ft_env.datawayRUMUrl}\""
+//        buildConfigField "String", "DATAWAY_CLIENT_TOKEN", "\"${ft_env.cliToken}\""
+//        buildConfigField "String", "RUM_APP_ID", "\"${ft_env.rumAppid}\""
+//        buildConfigField "String", "DEMO_API_URL", "\"${ft_env.demoAPIURL}\""
+//        buildConfigField "String", "ENV", "\"${ft_env.prodTestEnv}\""
     }
     signingConfigs {
         release {
@@ -99,7 +107,7 @@ FTExt {
             autoUploadMap = true
             autoUploadNativeDebugSymbol = true
             datakitUrl = ft_env.datakitRUMUrl
-            datawayToken = ft_env.datawayToken //remote datakit dca address
+            datawayToken = ft_env.datawayToken
             appId = ft_env.rumAppid
             env = ft_env.prodTestEnv
 
