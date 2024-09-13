@@ -36,10 +36,12 @@ class UserInfoView: UIView {
     private func commonInit() {
         self.backgroundColor = .lightGray
         let backgroundImg = UIImageView(image: UIImage(named: "ft_setting_avatar_bg"))
+        backgroundImg.backgroundColor = .lightGray
         backgroundImg.frame = CGRect(x: 0, y: 0, width: self.bounds.size.width, height: 160)
         backgroundImg.contentMode = .scaleAspectFill
         self.addSubview(backgroundImg)
         self.addSubview(avatar)
+        avatar.backgroundColor = .lightGray
         avatar.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.left.equalTo(self).offset(15)

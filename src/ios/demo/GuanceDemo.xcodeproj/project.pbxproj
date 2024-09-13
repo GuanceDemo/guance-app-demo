@@ -37,6 +37,8 @@
 		1722E4CD2C855B5100B60D91 /* InputTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1722E4CC2C855B5100B60D91 /* InputTableViewCell.swift */; };
 		1722E4CF2C859C9900B60D91 /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1722E4CE2C859C9900B60D91 /* UserInfoView.swift */; };
 		1722E4D92C883D3F00B60D91 /* SelectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1722E4D82C883D3F00B60D91 /* SelectButton.swift */; };
+		1722E4E12C8AB48600B60D91 /* SessionReplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1722E4E02C8AB48600B60D91 /* SessionReplayViewController.swift */; };
+		1722E4E32C8AF99500B60D91 /* Province.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1722E4E22C8AF99500B60D91 /* Province.plist */; };
 		17355D332A73B8E00022181E /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17355D322A73B8E00022181E /* ColorExtension.swift */; };
 		173B337B2A692FA2003A4ADE /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B337A2A692FA2003A4ADE /* UserInfo.swift */; };
 		174CB0762B51573400A4F9C5 /* CrashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174CB0752B51573400A4F9C5 /* CrashViewController.swift */; };
@@ -46,6 +48,7 @@
 		17B907B92A6686E90026E51A /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B907B82A6686E90026E51A /* HomeTabBarController.swift */; };
 		17B907BB2A6688490026E51A /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B907BA2A6688490026E51A /* ListViewController.swift */; };
 		17C7A1162C81CBDF0080DD92 /* TFTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C7A1152C81CBDF0080DD92 /* TFTableView.swift */; };
+		17FDFCB22C914295009029DD /* SRTipLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FDFCB12C914295009029DD /* SRTipLabel.swift */; };
 		2D2B668EA2ADA62E580061E0 /* libPods-GuanceDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E526B42F97ECAA968904FA /* libPods-GuanceDemo.a */; };
 		F6434B1E97AA72B332CC8071 /* libPods-GuanceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C88494A24726B1B797179A0A /* libPods-GuanceExtension.a */; };
 /* End PBXBuildFile section */
@@ -104,6 +107,8 @@
 		1722E4CC2C855B5100B60D91 /* InputTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTableViewCell.swift; sourceTree = "<group>"; };
 		1722E4CE2C859C9900B60D91 /* UserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserInfoView.swift; path = GuanceDemo/View/UserInfoView.swift; sourceTree = SOURCE_ROOT; };
 		1722E4D82C883D3F00B60D91 /* SelectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectButton.swift; sourceTree = "<group>"; };
+		1722E4E02C8AB48600B60D91 /* SessionReplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SessionReplayViewController.swift; path = GuanceDemo/View/SessionReplayViewController.swift; sourceTree = SOURCE_ROOT; };
+		1722E4E22C8AF99500B60D91 /* Province.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Province.plist; sourceTree = "<group>"; };
 		17355D322A73B8E00022181E /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		173B33642A692D11003A4ADE /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		173B33662A692D11003A4ADE /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -122,6 +127,7 @@
 		17B907B82A6686E90026E51A /* HomeTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarController.swift; sourceTree = "<group>"; };
 		17B907BA2A6688490026E51A /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		17C7A1152C81CBDF0080DD92 /* TFTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TFTableView.swift; sourceTree = "<group>"; };
+		17FDFCB12C914295009029DD /* SRTipLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRTipLabel.swift; sourceTree = "<group>"; };
 		2E6B12E17B4BB8B6A4A70B90 /* Pods-GuanceDemo.pre.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuanceDemo.pre.xcconfig"; path = "Target Support Files/Pods-GuanceDemo/Pods-GuanceDemo.pre.xcconfig"; sourceTree = "<group>"; };
 		464713DFF9B3B89BBDBD6076 /* Pods-GuanceDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuanceDemo.release.xcconfig"; path = "Target Support Files/Pods-GuanceDemo/Pods-GuanceDemo.release.xcconfig"; sourceTree = "<group>"; };
 		52E526B42F97ECAA968904FA /* libPods-GuanceDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GuanceDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -186,6 +192,7 @@
 				175951122A7106B6006FAB9D /* Model */,
 				171433F92A6556040040F092 /* View */,
 				171433E32A6551FD0040F092 /* Main.storyboard */,
+				1722E4E22C8AF99500B60D91 /* Province.plist */,
 				171433E62A6551FE0040F092 /* Assets.xcassets */,
 				171433E82A6551FE0040F092 /* LaunchScreen.storyboard */,
 				171433EB2A6551FE0040F092 /* Info.plist */,
@@ -198,6 +205,7 @@
 			children = (
 				17B907B22A6654D90026E51A /* Helpers */,
 				171433F72A6555FA0040F092 /* MineViewController.swift */,
+				1722E4E02C8AB48600B60D91 /* SessionReplayViewController.swift */,
 				1722E4CE2C859C9900B60D91 /* UserInfoView.swift */,
 				171433FA2A65587B0040F092 /* WebViewController.swift */,
 				171433FC2A655A240040F092 /* LoginViewController.swift */,
@@ -258,6 +266,7 @@
 				171445A32A6E545E00376B7A /* ConnectStatusBtn.swift */,
 				17355D322A73B8E00022181E /* ColorExtension.swift */,
 				1722E4D82C883D3F00B60D91 /* SelectButton.swift */,
+				17FDFCB12C914295009029DD /* SRTipLabel.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -377,6 +386,7 @@
 			files = (
 				171433EA2A6551FE0040F092 /* LaunchScreen.storyboard in Resources */,
 				171433E72A6551FE0040F092 /* Assets.xcassets in Resources */,
+				1722E4E32C8AF99500B60D91 /* Province.plist in Resources */,
 				171433E52A6551FD0040F092 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -485,6 +495,7 @@
 				1722E4D92C883D3F00B60D91 /* SelectButton.swift in Sources */,
 				171433DE2A6551FD0040F092 /* AppDelegate.swift in Sources */,
 				171432442A691E0E00125AFE /* LongTaskViewController.swift in Sources */,
+				17FDFCB22C914295009029DD /* SRTipLabel.swift in Sources */,
 				17B907B92A6686E90026E51A /* HomeTabBarController.swift in Sources */,
 				171433E02A6551FD0040F092 /* SceneDelegate.swift in Sources */,
 				17C7A1162C81CBDF0080DD92 /* TFTableView.swift in Sources */,
@@ -500,6 +511,7 @@
 				17B907BB2A6688490026E51A /* ListViewController.swift in Sources */,
 				171445912A69632E00376B7A /* UserDefaultsExtension.swift in Sources */,
 				1722E4CD2C855B5100B60D91 /* InputTableViewCell.swift in Sources */,
+				1722E4E12C8AB48600B60D91 /* SessionReplayViewController.swift in Sources */,
 				171433FB2A65587B0040F092 /* WebViewController.swift in Sources */,
 				171445A42A6E545E00376B7A /* ConnectStatusBtn.swift in Sources */,
 				17355D332A73B8E00022181E /* ColorExtension.swift in Sources */,

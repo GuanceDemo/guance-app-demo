@@ -28,7 +28,7 @@ let configPrefix = "gc-demo://"
 struct Configuration:Codable,Hashable{
     var datakitAddress: String?
     var datawayAddress: String?
-    var clientToken: String?
+    var datawayClientToken: String?
     var demoApiAddress: String?
     var demoIOSAppId: String?
     
@@ -40,7 +40,7 @@ struct Configuration:Codable,Hashable{
             return true
         }
         
-        if let _ = datawayAddress,let _ = clientToken {
+        if let _ = datawayAddress,let _ = datawayClientToken {
             return true
         }
         return false
@@ -48,6 +48,12 @@ struct Configuration:Codable,Hashable{
     
     func isDataKit() -> Bool {
         if let _ = datakitAddress {
+            return true
+        }
+        return false
+    }
+    func isDataWay() -> Bool {
+        if let _ = datawayAddress,let _ = datawayClientToken {
             return true
         }
         return false

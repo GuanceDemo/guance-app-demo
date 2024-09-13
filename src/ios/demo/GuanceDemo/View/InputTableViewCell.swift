@@ -23,6 +23,7 @@ class InputTableViewCell: UITableViewCell {
         textField.keyboardType = .default
         textField.clearButtonMode = .always
         textField.addTarget(self, action: #selector(onInputTextChanged(textField:)), for: .editingChanged)
+        textField.lineColor = .clear
         return textField
     }()
     
@@ -49,6 +50,7 @@ class InputTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     func setupInitialUI(){
+        self.backgroundColor = .white
         self.contentView.addSubview(titleLabel)
         self.contentView.addSubview(contentTextfield)
         titleLabel.snp.makeConstraints { make in
@@ -59,7 +61,7 @@ class InputTableViewCell: UITableViewCell {
         contentTextfield.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp_bottomMargin).offset(20)
             make.left.equalTo(titleLabel)
-            make.right.equalTo(contentView).offset(-20)
+            make.right.equalTo(contentView).offset(-10)
             make.bottom.equalTo(contentView.snp_bottomMargin).offset(10)
         }
     }

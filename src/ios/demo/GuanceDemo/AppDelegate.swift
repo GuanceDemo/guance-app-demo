@@ -22,18 +22,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-//      示例：多环境配置参数使用
+        //      示例：多环境配置参数使用
         let info = Bundle.main.infoDictionary!
         let env:String  = info["SDK_ENV"] as! String
-//      let appid:String = info["SDK_APP_ID"] as! String
-//        print("SDK_APP_ID:\(appid)")
-//        print("SDK_ENV:\(env)")
+        //      let appid:String = info["SDK_APP_ID"] as! String
+        //        print("SDK_APP_ID:\(appid)")
+        //        print("SDK_ENV:\(env)")
         let dynamicTag:String? = UserDefaults.standard.value(forKey: "DYNAMIC_TAG") as? String
-        let config = FTMobileConfig.init(datakitUrl: UserDefaults.datakitURL)
+        var config:FTMobileConfig
+        if UserDefaults.isDataKit{
+            config = FTMobileConfig.init(datakitUrl: UserDefaults.datakitURL)
+        }else{
+            config = FTMobileConfig.init(datawayUrl: UserDefaults.dataWayURL, clientToken: UserDefaults.clientToken)
+        }
         config.enableSDKDebugLog = true
         config.groupIdentifiers = [GroupIdentifier]
         config.globalContext = ["gc_custom_key":STATIC_TAG]
-        config.autoSync = false
         config.env = env
         FTMobileAgent.start(withConfigOptions: config)
         let rum = FTRumConfig(appid:UserDefaults.rumAppId )
@@ -60,6 +64,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         logger.enableLinkRumData = true
         logger.printCustomLogToConsole = true
         FTMobileAgent.sharedInstance().startLogger(withConfigOptions: logger)
+
+        if UserDefaults.enableSessionReplay {
+            let srConfig = FTSessionReplayConfig()
+            srConfig.privacy = FTSRPrivacy(rawValue: UInt(UserDefaults.sessionReplayPrivacy)) ?? .mask
+            srConfig.sampleRate = 100
+            FTRumSessionReplay.shared().start(with: srConfig)
+        }
         return true
     }
     

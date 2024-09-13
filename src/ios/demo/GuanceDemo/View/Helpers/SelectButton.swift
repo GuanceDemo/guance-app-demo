@@ -18,7 +18,6 @@ class SelectButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     func setupInitialUI(){
-        setTitle("本地部署 (Datakit 方式)", for: .normal)
         titleLabel?.font = .systemFont(ofSize: 13)
         setTitleColor(.darkGray, for: .normal)
         setImage(UIImage(systemName: "circle"), for: .normal)

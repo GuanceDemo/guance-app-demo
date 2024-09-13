@@ -45,7 +45,11 @@ extension RequestError: LocalizedError {
 struct NetworkEngine{
     static let shared = NetworkEngine()
     let session:URLSession = URLSession(configuration: .default)
-    var baseUrl:String = UserDefaults.baseUrl
+    var baseUrl:String {
+        get {
+            UserDefaults.baseUrl
+        }
+    }
     
     let login:String = "/api/login"
     let user:String = "/api/user"

@@ -36,11 +36,11 @@ class DesignableUITextField: UITextField {
         willSet {
             switch newValue {
             case .normal:
-                self.lineColor = .darkGray
+                self.textColor = .darkGray
             case .success:
-                self.lineColor = .green
+                self.textColor = .systemGreen
             case .error:
-                self.lineColor = .red
+                self.textColor = .systemRed
             }
         }
     }

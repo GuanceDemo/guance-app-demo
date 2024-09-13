@@ -12,6 +12,8 @@ let  DEFAULT_DATAWAY_URL = "http://127.0.0.1:9529"
 let  DEFAULT_DATAKIT_URL = "http://127.0.0.1:9529"
 let  DEFAULT_CLIENT_ID = "[Dataway Client Token]"
 let  DEFAULT_BASE_URL = "http://127.0.0.1:8000"
+let  DEFAULT_SR_TEXT_PRIVACY = 2
+
 let  DEFAULT_USER_ACCOUNT = "guance"
 let  DEFAULT_USER_PASSWORD = "admin"
 
@@ -20,6 +22,8 @@ let  KEY_USER_INFO = "key_user_info"
 let  KEY_LOGIN = "key_login"
 let  KEY_IS_DATAKIT = "key_is_datakit"
 let  KEY_BASE_URL = "key_baseurl"
+let  KEY_SR_TEXT_PRIVACY = "key_sr_text_privacy"
+let  KEY_SR_ENABLE = "key_sr_enable"
 let  KEY_USER_ACCOUNT = "key_user_account"
 let  KEY_USER_PASSWORD = "key_user_password"
 
@@ -78,6 +82,10 @@ public extension UserDefaults {
     @UserDefaultsOptionalWrapper(key: KEY_USER_INFO)  static var userInfo: Data?
     @UserDefaultsWrapper(key: KEY_LOGIN,defaultValue: false,storage: .shared)  static var login: Bool
     @UserDefaultsWrapper(key: KEY_IS_DATAKIT,defaultValue: true,storage: .shared)  static var isDataKit: Bool
+    // 记录是否开启 SR 功能
+    @UserDefaultsWrapper(key: KEY_SR_ENABLE,defaultValue: false,storage: .shared)  static var enableSessionReplay: Bool
+    // SR text 隐私权限
+    @UserDefaultsWrapper(key: KEY_SR_TEXT_PRIVACY,defaultValue:DEFAULT_SR_TEXT_PRIVACY,storage: .shared)  static var sessionReplayPrivacy: Int
 
     
     // 记录上次用户输入的用户名

@@ -11,7 +11,7 @@ import Toast_Swift
 import MBProgressHUD
 import RxSwift
 import RxCocoa
-
+import FTMobileSDK
 enum CellInfoType{
     case rum,dataKit,dataWay,clientToken,demoAPI
 }
@@ -43,35 +43,96 @@ class CellInfo:NSObject{
     }
 }
 class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
- 
+    
     lazy var tableView:TFTableView = {
         let width = self.view.bounds.width
         let height = self.view.bounds.height
-        let table = TFTableView.init(frame: CGRect(x: 0, y: 0, width: width, height: height))
+        let table = TFTableView.init(frame: CGRect(x: 0, y: 0, width: width, height: height),style: .insetGrouped)
         table.delegate = self
         table.dataSource = self
         if #available(iOS 15.0, *) {
             table.sectionHeaderTopPadding = 0
         }
         table.register(InputTableViewCell.self, forCellReuseIdentifier: "InputTableViewCell")
-        table.tableHeaderView = chooseDeploymentTypeView()
-        table.tableFooterView = footerView()
-        table.rowHeight = 80
-        table.separatorStyle = .none
+        table.separatorStyle = .singleLine
+        table.backgroundColor = .secondarySystemBackground
         return table
     }()
+    lazy var chooseSessionReplayView:UIView = {
+        let backgroundView = UIView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: 60))
+        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width-40, height: 50))
+        backgroundView.addSubview(view)
+        view.backgroundColor = .white
+        let label = UILabel.init(frame: CGRect(x: 10, y: 5, width: 250, height: 40))
+        label.text = "Session Replay Privacy"
+        label.font = .systemFont(ofSize: 15)
+        view.addSubview(label)
+        let switchBtn = UISwitch()
+        switchBtn.isOn = self.enableSessionReplay
+        view.addSubview(switchBtn)
+        switchBtn.snp.makeConstraints { make in
+            make.right.equalTo(view).offset(-20)
+            make.centerY.equalTo(view)
+        }
+        view.layer.cornerRadius = 10
+        switchBtn.rx.isOn.subscribe { [weak self] element in
+            guard let self = self else {
+                return
+            }
+            self.enableSessionReplay = switchBtn.isOn
+        }.disposed(by: disposeBag)
+        return backgroundView
+    }()
+    
+    lazy var chooseDeploymentTypeView:UIView = {
+        let contentView = UIView.init(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
+        let label = UILabel.init(frame: CGRect(x: 10, y: 5, width: 200, height: 20))
+        label.font = .systemFont(ofSize: 12)
+        label.text = "请选择部署方式"
+        contentView.addSubview(label)
+        let segmentControl = UISegmentedControl(items: ["本地部署 (Datakit 方式)","使用公网 DataWay"])
+        segmentControl.selectedSegmentIndex = self.isDataKit ? 0 : 1
+        contentView.addSubview(segmentControl)
+        segmentControl.snp.makeConstraints { (make)->Void in
+            make.top.equalTo(label.snp_bottomMargin).offset(10)
+            make.left.equalTo(contentView)
+            make.right.equalTo(contentView)
+            make.height.equalTo(30)
+        }
+        segmentControl.rx.selectedSegmentIndex.subscribe { [weak self] selectIndex in
+            guard let self = self else{
+                return
+            }
+            let isDataKit = selectIndex == 0 ? true : false
+            if isDataKit != self.isDataKit {
+                self.isDataKit = isDataKit
+            }
+        }.disposed(by: disposeBag)
+        return contentView
+    }()
     let disposeBag = DisposeBag()
-    var dataSource = Array<CellInfo>()
+    var dataSource:Array<Array<Any>> = [[],[]]
     var dataKitArray = Array<CellInfo>()
     var dataWayArray = Array<CellInfo>()
+    var srPrivacy = UserDefaults.sessionReplayPrivacy
     var isDataKit:Bool = UserDefaults.isDataKit {
         didSet {
+            if dataSource.count > 0{
+                dataSource.remove(at: 0)
+            }
             if isDataKit == true {
-                dataSource = dataKitArray
+                dataSource.insert(dataKitArray, at: 0)
             }else{
-                dataSource = dataWayArray
+                dataSource.insert(dataWayArray, at: 0)
             }
             self.tableView.reloadData()
+        }
+    }
+    var enableSessionReplay:Bool = UserDefaults.enableSessionReplay {
+        didSet {
+            if enableSessionReplay != oldValue {
+                self.resetPrivacyData()
+            }
         }
     }
     override func viewDidLoad() {
@@ -82,9 +143,9 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         self.navigationItem.rightBarButtonItems = [saveItem,copyItem]
         view.backgroundColor = .navigationBackgroundColor
         self.createData()
+        resetPrivacyData()
     }
-  
-        
+    
     func createData(){
         let rumItem = CellInfo(title: "RUM App ID", hint: "Please enter RUM App ID",type:.rum ,detail: UserDefaults.rumAppId)
         let demoApiItem = CellInfo(title: "Demo API Address", hint: "Please enter Demo API Address",type:.demoAPI ,detail: UserDefaults.baseUrl)
@@ -96,13 +157,26 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         isDataKit = UserDefaults.isDataKit
         self.view.addSubview(tableView)
     }
-
+    func resetPrivacyData(){
+        if dataSource.count > 1{
+            dataSource.remove(at: 1)
+        }
+        if enableSessionReplay {
+            dataSource.insert(["Allow","MaskUserInput","Mask"], at: 1)
+        }else{
+            dataSource.insert([], at: 1)
+        }
+        self.tableView.reloadData()
+    }
     func showAlert(){
         let alert = UIAlertController(title: "注意⚠️", message: "SDK 配置的新参数，需要重启应用才能生效❗️", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "取消", style: .cancel))
         alert.addAction(UIAlertAction(title: "确认", style: .default,handler: { action in
+            UserDefaults.sessionReplayPrivacy = self.srPrivacy
+            UserDefaults.enableSessionReplay = self.enableSessionReplay
             UserDefaults.isDataKit = self.isDataKit
-            for item in self.dataSource {
+            let itemArray:Array<CellInfo> = self.dataSource[0] as! Array<CellInfo>
+            for item in itemArray {
                 switch item.type {
                 case .rum:
                     UserDefaults.rumAppId = item.detail!
@@ -130,18 +204,24 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         if let string = paste.string{
             do {
                 let config = try string.parsePaste()
-                if config.isDataKit() {
-                    dataKitArray[0].detail = config.demoIOSAppId
-                    dataKitArray[1].detail = config.datakitAddress
-                    dataKitArray[2].detail = config.datawayAddress
-                    self.isDataKit = true
-                }else{
-                    dataKitArray[0].detail = config.demoIOSAppId
-                    dataKitArray[1].detail = config.datawayAddress
-                    dataKitArray[2].detail = config.clientToken
-                    dataKitArray[3].detail = config.datawayAddress
-                    self.isDataKit = false
+                if let demoIOSAppId = config.demoIOSAppId{
+                    dataKitArray[0].detail = demoIOSAppId
+                    dataWayArray[0].detail = demoIOSAppId
                 }
+                if let datakitAddress = config.datakitAddress{
+                    dataKitArray[1].detail = datakitAddress
+                }
+                if let demoApiAddress = config.demoApiAddress{
+                    dataKitArray[2].detail = demoApiAddress
+                    dataWayArray[3].detail = demoApiAddress
+                }
+                if let datawayAddress = config.datawayAddress{
+                    dataWayArray[1].detail = datawayAddress
+                }
+                if let clientToken = config.datawayClientToken {
+                    dataWayArray[2].detail = clientToken
+                }
+                self.isDataKit = config.isDataKit()
                 toast = "Data replication succeeds"
             }
             catch{
@@ -153,7 +233,8 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     @objc func saveConfigs(){
         self.view.endEditing(true)
-        for item in dataSource {
+        let itemArray:Array<CellInfo> = dataSource[0] as! Array<CellInfo>
+        for item in itemArray {
             if item.detail == nil || item.detail!.isEmpty {
                 self.view.makeToast("Save failure:"+item.hint,position: .center)
                 return
@@ -225,60 +306,94 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
             return false
         }
     }
- 
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    func chooseDeploymentTypeView()->UIView{
-        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: 50))
-        let dataKitBtn = SelectButton.init(frame: CGRect(x: 10, y: 10, width: self.view.frame.width/2 - 20, height: 30))
-        dataKitBtn.setTitle("本地部署 (Datakit 方式)", for: .normal)
-        dataKitBtn.isSelected = self.isDataKit
-        let dataWayBtn = SelectButton.init(frame: CGRect(x: self.view.frame.width/2 + 10, y: 10, width: self.view.frame.width/2 - 20, height: 30))
-        dataWayBtn.setTitle("使用公网 DataWay", for: .normal)
-        dataWayBtn.isSelected = !self.isDataKit
-        view.addSubview(dataKitBtn)
-        view.addSubview(dataWayBtn)
-        dataKitBtn.rx.tap
-                   .subscribe(onNext: { [weak self]() in
-                       dataKitBtn.isSelected = true
-                       dataWayBtn.isSelected = false
-                       self?.isDataKit = true
-                   })
-                   .disposed(by: disposeBag)
-
-        dataWayBtn.rx.tap
-            .subscribe(onNext: { [weak self]() in
-                dataWayBtn.isSelected = true
-                dataKitBtn.isSelected = false
-                self?.isDataKit = false
-            })
-            .disposed(by: disposeBag)
-        return view
-    }
-    func footerView()->UIView{
-         let view = UIView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: 57))
-         let logout = UIButton.init(frame: CGRect(x: 0, y: 12, width: self.view.bounds.size.width, height: 45))
-         logout.setTitle("地址检测", for: .normal)
-         logout.setTitleColor(.orange, for: .normal)
-         logout.addTarget(self, action: #selector(confirmClick), for: .touchUpInside)
-         view.addSubview(logout)
-         return view
-    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = InputTableViewCell(style: .default, reuseIdentifier: "mineTableViewCell")
-        let cellInfo = self.dataSource[indexPath.row]
-        
-        cell.setInfo(info: cellInfo)
-        
-        cell.inputTextFieldChanged = { [weak self] string in
-            self?.dataSource[indexPath.row].detail = string
+        if(indexPath.section == 0){
+            if indexPath.row != dataSource[0].count {
+                let cell = InputTableViewCell(style: .default, reuseIdentifier: "mineTableViewCell")
+                let itemArray:Array<CellInfo> = dataSource[0] as! Array<CellInfo>
+                let cellInfo = itemArray[indexPath.row]
+                
+                cell.setInfo(info: cellInfo)
+                
+                cell.inputTextFieldChanged = { [weak self] string in
+                    guard let self = self else { return }
+                    let itemArray:Array<CellInfo> = self.dataSource[0] as! Array<CellInfo>
+                    itemArray[indexPath.row].detail = string
+                }
+                return cell
+            }else{
+                let cell = UITableViewCell(style: .default, reuseIdentifier: "defaultCell")
+                cell.textLabel?.text = "地址检测"
+                cell.textLabel?.textColor = .orange
+                cell.textLabel?.textAlignment = .center
+                return cell
+            }
+        }else{
+            let cell = UITableViewCell(style: .default, reuseIdentifier: "privacyCell")
+            let array:Array<String> =  self.dataSource[1] as! Array<String>
+            cell.textLabel?.text = array[indexPath.row]
+            if indexPath.row == self.srPrivacy {
+                cell.accessoryType = .checkmark
+            }
+            return cell
         }
-        return cell
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource.count
+        if section == 0 {
+            return dataSource[section].count + 1
+        }
+        return dataSource[section].count
     }
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 0 ,indexPath.row == dataSource[0].count{
+            self.confirmClick()
+        }else if indexPath.section == 1 {
+            let oldIndexPath = IndexPath(row: self.srPrivacy, section: 1)
+            let newCell = tableView.cellForRow(at: indexPath)
+            if let cell = newCell {
+                if (cell.accessoryType == .none) {
+                    cell.accessoryType = .checkmark
+                    self.srPrivacy = indexPath.row
+                    let oldCell = tableView.cellForRow(at: oldIndexPath)
+                    if let oldCell = oldCell {
+                        oldCell.accessoryType = .none
+                    }
+                }
+            }
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if(section == 0){
+            return self.chooseDeploymentTypeView
+        }else{
+            return self.chooseSessionReplayView
+        }
+    }
+   
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 {
+            return 65
+        }
+        return 60
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            if indexPath.row != dataSource[0].count {
+                return 70
+            }
+        }
+        return 44
+    }
+  
     
     /*
      // MARK: - Navigation
