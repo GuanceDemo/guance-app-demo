@@ -9,250 +9,277 @@ import UIKit
 import SnapKit
 import Toast_Swift
 import MBProgressHUD
-class ConfigurationVC: UIViewController,UITextFieldDelegate {
-    lazy var appidtf:DesignableUITextField = {
-        let appidtf = DesignableUITextField.init()
-        appidtf.text = UserDefaults.rumAppid
-        appidtf.leftViewMode = .always
-        appidtf.keyboardType = .default
-        appidtf.clearButtonMode = .always
-        appidtf.delegate = self
-        return appidtf
-    }()
-    lazy var datakittf:DesignableUITextField = {
-        let datakittf = DesignableUITextField.init()
-        datakittf.text = UserDefaults.datakitURL
-        datakittf.leftViewMode = .always
-        datakittf.keyboardType = .default
-        datakittf.clearButtonMode = .always
-        datakittf.delegate = self
-        return datakittf
-    }()
-    
-    lazy var baseURL:DesignableUITextField = {
-        let baseURL = DesignableUITextField.init()
-        baseURL.text = UserDefaults.baseUrl
-        baseURL.leftViewMode = .always
-        baseURL.keyboardType = .default
-        baseURL.clearButtonMode = .always
-        baseURL.delegate = self
-        return baseURL
-    }()
-    
-    lazy var confirmBtn:UIButton = {
-        let btn = UIButton.init(type: .system)
-        btn.layer.cornerRadius = 8
-        btn.layer.masksToBounds = true
-        btn.addTarget(self, action: #selector(confirmClick), for: .touchUpInside)
-        btn.setTitle("保存配置", for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 16)
-        btn.isEnabled = true
-        btn.setBackgroundImage(UIImage.init(color: .orange), for: .normal)
-        btn.setBackgroundImage(UIImage.init(color: .lightGray), for: .disabled)
-        btn.setTitleColor(.white, for: .disabled)
-        btn.setTitleColor(.white, for: .normal)
-        return btn
-    }()
-    lazy var dataKitBtn:ConnectStatusBtn = {
-        let btn = ConnectStatusBtn.init()
-        btn.connect = .normal
-        btn.setImage(UIImage(systemName: "network"), for: .normal)
-        btn.addTarget(self, action: #selector(connectClick(_:)), for: .touchUpInside)
-        return btn
-    }()
-    lazy var baseApiBtn:ConnectStatusBtn = {
-        let btn = ConnectStatusBtn.init()
-        btn.connect = .normal
-        btn.setImage(UIImage(systemName: "network"), for: .normal)
-        btn.addTarget(self, action: #selector(connectClick(_:)), for: .touchUpInside)
-        return btn
-    }()
-    var tfArray:Array<UITextField> = Array()
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = "配置"
-        
-        // Do any additional setup after loading the view.
-        let item = UIBarButtonItem.init(image: UIImage(systemName: "doc.on.clipboard"), style: .plain, target: self, action: #selector(copyConfigs))
-        self.navigationItem.rightBarButtonItem = item
-        view.backgroundColor = .navigationBackgroundColor
-        createUI()
-    }
-    func createUI(){
-        view.addSubview(appidtf)
-        view.addSubview(datakittf)
-        view.addSubview(baseURL)
-        view.addSubview(confirmBtn)
-        view.addSubview(dataKitBtn)
-        view.addSubview(baseApiBtn)
-        let rumTipLab =  UILabel.init()
-        rumTipLab.text = "RUM App ID"
-        rumTipLab.textColor = .tipLable
-        rumTipLab.font = .boldSystemFont(ofSize: 13)
-        let addressTipLab =  UILabel.init()
-        addressTipLab.text = "Datakit Address"
-        addressTipLab.textColor = .tipLable
-        addressTipLab.font = .boldSystemFont(ofSize: 13)
+import RxSwift
+import RxCocoa
 
-        let apiTipLab =  UILabel.init()
-        apiTipLab.text = "Demo API Address"
-        apiTipLab.textColor = .tipLable
-        apiTipLab.font = .boldSystemFont(ofSize: 13)
-
-        view.addSubview(rumTipLab)
-        view.addSubview(addressTipLab)
-        view.addSubview(apiTipLab)
-
-        tfArray = [appidtf,datakittf,baseURL]
-        let width = self.view.bounds.size.width - 60 - 20
-        let top = self.navigationController?.navigationBar.frame.maxY ?? 0
-        rumTipLab.snp.makeConstraints { make in
-            make.top.equalTo(self.view).offset(top+30)
-            make.centerX.equalTo(self.view).offset(-10)
-            make.size.equalTo(CGSize(width: width, height: 20))
-        }
-        appidtf.snp.makeConstraints { make in
-            make.top.equalTo(rumTipLab).offset(15)
-            make.centerX.equalTo(self.view).offset(-10)
-            make.size.equalTo(CGSize(width: width, height: 40))
-        }
-        addressTipLab.snp.makeConstraints { make in
-            make.top.equalTo(appidtf.snp_bottomMargin).offset(20)
-            make.centerX.equalTo(self.view).offset(-10)
-            make.size.equalTo(CGSize(width: width, height: 20))
-        }
-        datakittf.snp.makeConstraints { make in
-            make.top.equalTo(addressTipLab).offset(15)
-            make.centerX.equalTo(self.view).offset(-10)
-            make.size.equalTo(CGSize(width: width, height: 40))
-        }
-        dataKitBtn.snp.makeConstraints { make in
-            make.left.equalTo(datakittf.snp_rightMargin).offset(15)
-            make.centerY.equalTo(datakittf)
-            make.size.equalTo(CGSize(width: 20, height: 20))
-        }
-        apiTipLab.snp.makeConstraints { make in
-            make.top.equalTo(datakittf.snp_bottomMargin).offset(20)
-            make.centerX.equalTo(self.view).offset(-10)
-            make.size.equalTo(CGSize(width: width, height: 20))
-        }
-        baseURL.snp.makeConstraints { make in
-            make.top.equalTo(apiTipLab).offset(15)
-            make.centerX.equalTo(self.view).offset(-10)
-            make.size.equalTo(CGSize(width: width, height: 40))
-        }
-        baseApiBtn.snp.makeConstraints { make in
-            make.left.equalTo(baseURL.snp_rightMargin).offset(15)
-            make.centerY.equalTo(baseURL)
-            make.size.equalTo(CGSize(width: 20, height: 20))
-        }
-        confirmBtn.snp.makeConstraints { make in
-            make.top.equalTo(baseURL.snp_bottomMargin).offset(50)
-            make.centerX.equalTo(self.view)
-            make.size.equalTo(CGSize(width: width, height: 44))
+enum CellInfoType{
+    case rum,dataKit,dataWay,clientToken,demoAPI
+}
+class CellInfo:NSObject{
+    let title:String
+    let hint:String
+    let type:CellInfoType
+    var detail:String? {
+        willSet{
+            connectStatus = .normal
         }
     }
-    
-    @objc func confirmClick(){
-        resignTF()
-        connect(true,url: datakittf.text!) { success in
-            if success {
-                self.connect(false,url:self.baseURL.text!) { result in
-                    if result {
-                        self.showAlert()
-                    }
+    var refresh:(()->Void)?
+
+    var connectStatus:ConnectStatus = .normal {
+        didSet {
+            if connectStatus != oldValue{
+                if let refresh = refresh{
+                    refresh()
                 }
             }
         }
     }
+    init(title: String, hint: String, type: CellInfoType, detail: String? = nil) {
+        self.title = title
+        self.hint = hint
+        self.type = type
+        self.detail = detail
+    }
+}
+class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
+ 
+    lazy var tableView:TFTableView = {
+        let width = self.view.bounds.width
+        let height = self.view.bounds.height
+        let table = TFTableView.init(frame: CGRect(x: 0, y: 0, width: width, height: height))
+        table.delegate = self
+        table.dataSource = self
+        if #available(iOS 15.0, *) {
+            table.sectionHeaderTopPadding = 0
+        }
+        table.register(InputTableViewCell.self, forCellReuseIdentifier: "InputTableViewCell")
+        table.tableHeaderView = chooseDeploymentTypeView()
+        table.tableFooterView = footerView()
+        table.rowHeight = 80
+        table.separatorStyle = .none
+        return table
+    }()
+    let disposeBag = DisposeBag()
+    var dataSource = Array<CellInfo>()
+    var dataKitArray = Array<CellInfo>()
+    var dataWayArray = Array<CellInfo>()
+    var isDataKit:Bool = UserDefaults.isDataKit {
+        didSet {
+            if isDataKit == true {
+                dataSource = dataKitArray
+            }else{
+                dataSource = dataWayArray
+            }
+            self.tableView.reloadData()
+        }
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        title = "配置"
+        let copyItem = UIBarButtonItem.init(image: UIImage(systemName: "doc.on.clipboard"), style: .plain, target: self, action: #selector(copyConfigs))
+        let saveItem = UIBarButtonItem.init(barButtonSystemItem: .save, target: self, action: #selector(saveConfigs))
+        self.navigationItem.rightBarButtonItems = [saveItem,copyItem]
+        view.backgroundColor = .navigationBackgroundColor
+        self.createData()
+    }
+  
+        
+    func createData(){
+        let rumItem = CellInfo(title: "RUM App ID", hint: "Please enter RUM App ID",type:.rum ,detail: UserDefaults.rumAppId)
+        let demoApiItem = CellInfo(title: "Demo API Address", hint: "Please enter Demo API Address",type:.demoAPI ,detail: UserDefaults.baseUrl)
+        let dataKitItem = CellInfo(title: "DataKit Address", hint: "Please enter DataKit Address",type:.dataKit, detail: UserDefaults.datakitURL)
+        let dataWayItem = CellInfo(title: "DataWay Address", hint: "Please enter DataWay Address",type:.dataWay, detail: UserDefaults.dataWayURL)
+        let clientTokenItem = CellInfo(title: "ClientToken", hint: "Please enter ClientToken",type:.clientToken, detail: UserDefaults.clientToken)
+        dataKitArray = [rumItem,dataKitItem,demoApiItem]
+        dataWayArray = [rumItem,dataWayItem,clientTokenItem,demoApiItem]
+        isDataKit = UserDefaults.isDataKit
+        self.view.addSubview(tableView)
+    }
+
     func showAlert(){
         let alert = UIAlertController(title: "注意⚠️", message: "SDK 配置的新参数，需要重启应用才能生效❗️", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "取消", style: .cancel))
         alert.addAction(UIAlertAction(title: "确认", style: .default,handler: { action in
-            UserDefaults.baseUrl = self.baseURL.text!
-            UserDefaults.rumAppid = self.appidtf.text!
-            UserDefaults.datakitURL = self.datakittf.text!
-            FTLogInfo("datakitAddress:\(self.datakittf.text!)\ndemoApiAddress:\(self.baseURL.text!)\ndemoIOSAppId:\(self.appidtf.text!)")
-        }))
+            UserDefaults.isDataKit = self.isDataKit
+            for item in self.dataSource {
+                switch item.type {
+                case .rum:
+                    UserDefaults.rumAppId = item.detail!
+                case .dataKit:
+                    UserDefaults.datakitURL = item.detail!
+                case .dataWay:
+                    UserDefaults.dataWayURL = item.detail!
+                case .demoAPI:
+                    UserDefaults.baseUrl = item.detail!
+                case .clientToken:
+                    UserDefaults.clientToken = item.detail!
+                }
+                FTLogInfo("\(item.type):\(item.detail!)")
+            }
+        })
+        )
         self.navigationController?.present(alert, animated: true)
     }
     @objc func copyConfigs(){
+        var toast:String = "";
+        defer {
+            self.view.makeToast(toast,position: .center)
+        }
         let paste = UIPasteboard.general
         if let string = paste.string{
-            if let config = string.parsePaste(){
-                appidtf.text = config.demoIOSAppId
-                datakittf.text = config.datakitAddress
-                baseURL.text = config.demoApiAddress
-                dataKitBtn.connect = .normal
-                baseApiBtn.connect = .normal
-                self.view.makeToast("数据复制成功",position: .center)
-            }else{
-                self.view.makeToast("数据解析失败",position: .center)
-            }
-            
-        }else{
-            self.view.makeToast("没有可复制的数据",position: .center)
-        }
-    }
-    @objc func connectClick(_ sender:UIButton){
-        let str = sender == dataKitBtn ? datakittf.text : baseURL.text
-        if let urlStr = str {
-            connect(sender == dataKitBtn, url: urlStr)
-        }else{
-            self.view.makeToast("格式错误",position: .center)
-        }
-    }
-    
-    func connect(_ datakit:Bool, url:String,complete:((Bool)->Void)? = nil) {
-        let btn = datakit ? dataKitBtn : baseApiBtn
-
-        Task(priority: .medium) {
-            do{
-                let _ = MBProgressHUD.showAdded(to: self.view, animated: true)
-                if datakit {
-                    let _ = try await NetworkEngine().datakitConnect(url: datakittf.text!)
+            do {
+                let config = try string.parsePaste()
+                if config.isDataKit() {
+                    dataKitArray[0].detail = config.demoIOSAppId
+                    dataKitArray[1].detail = config.datakitAddress
+                    dataKitArray[2].detail = config.datawayAddress
+                    self.isDataKit = true
                 }else{
-                    let _ = try await NetworkEngine().baseUrlConnent(url: url)
+                    dataKitArray[0].detail = config.demoIOSAppId
+                    dataKitArray[1].detail = config.datawayAddress
+                    dataKitArray[2].detail = config.clientToken
+                    dataKitArray[3].detail = config.datawayAddress
+                    self.isDataKit = false
                 }
-                btn.connect = .success
-                complete?(true)
-                FTLogInfo("\(url) connected successful.")
-            } catch {
-                self.view.makeToast(error.localizedDescription,position: .center)
-                btn.connect = .error
-                complete?(false)
-                FTLogError("\(url) connected failure.")
+                toast = "Data replication succeeds"
             }
+            catch{
+                toast = error.localizedDescription
+            }
+        }else{
+            toast = PasteConfigurationError.noData.localizedDescription
+        }
+    }
+    @objc func saveConfigs(){
+        self.view.endEditing(true)
+        for item in dataSource {
+            if item.detail == nil || item.detail!.isEmpty {
+                self.view.makeToast("Save failure:"+item.hint,position: .center)
+                return
+            }
+        }
+        showAlert()
+    }
+    @objc func confirmClick(){
+        self.view.endEditing(true)
+        Task {
+            var connect:Array<(CellInfo,CellInfo?)> = Array.init()
+            if self.isDataKit {
+                connect = [(self.dataKitArray[1],nil),(self.dataKitArray[2],nil)]
+            }else{
+                connect = [(self.dataWayArray[1],self.dataWayArray[2]),(self.dataWayArray[3],nil)]
+            }
+            for (item,tokenItem) in connect {
+                do{
+                    _ = await self.connect(item: item,tokenItem: tokenItem)
+                }
+            }
+        }
+    }
+    func connect(item:CellInfo,tokenItem:CellInfo?) async -> Bool {
+        defer{
             let _ = MBProgressHUD.hide(for: self.view, animated: true)
         }
+        let progressHud =  MBProgressHUD.init(view: self.view)
+        self.view.addSubview(progressHud)
+        progressHud.label.text = item.title+" connecting ..."
+        progressHud.show(animated: true)
+        do{
+            switch item.type {
+            case .dataKit:
+                if item.connectStatus != .success {
+                    let _ = try await NetworkEngine.shared.dataKitConnect(url: item.detail!)
+                }
+            case .dataWay:
+                if item.connectStatus != .success || tokenItem?.connectStatus != .success {
+                    let _ = try await NetworkEngine.shared.dataWayConnect(url: item.detail!, token: tokenItem!.detail!)
+                }
+            case .demoAPI:
+                if item.connectStatus != .success {
+                    let _ = try await NetworkEngine.shared.baseUrlConnect(url: item.detail!)
+                }
+            default:
+                return true
+            }
+            item.connectStatus = .success
+            tokenItem?.connectStatus = .success
+            FTLogInfo("\(item.detail!) connected successful.")
+            return true
+        } catch {
+            var errorMessage = item.title+" connected failure."
+            if error is RequestError {
+                errorMessage = errorMessage + error.localizedDescription
+                let rError = error as! RequestError
+                if rError.isTokenNotFound() {
+                    item.connectStatus = .success
+                    tokenItem?.connectStatus = .error
+                }else{
+                    item.connectStatus = .error
+                }
+            }else{
+                item.connectStatus = .error
+            }
+            self.view.makeToast(errorMessage,position: .center)
+            FTLogError("\(item.detail!) ")
+            return false
+        }
     }
-    func resignTF(){
-        appidtf.resignFirstResponder()
-        datakittf.resignFirstResponder()
-        baseURL.resignFirstResponder()
-    }
+ 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        resignTF()
+        self.view.endEditing(true)
+    }
+    func chooseDeploymentTypeView()->UIView{
+        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: 50))
+        let dataKitBtn = SelectButton.init(frame: CGRect(x: 10, y: 10, width: self.view.frame.width/2 - 20, height: 30))
+        dataKitBtn.setTitle("本地部署 (Datakit 方式)", for: .normal)
+        dataKitBtn.isSelected = self.isDataKit
+        let dataWayBtn = SelectButton.init(frame: CGRect(x: self.view.frame.width/2 + 10, y: 10, width: self.view.frame.width/2 - 20, height: 30))
+        dataWayBtn.setTitle("使用公网 DataWay", for: .normal)
+        dataWayBtn.isSelected = !self.isDataKit
+        view.addSubview(dataKitBtn)
+        view.addSubview(dataWayBtn)
+        dataKitBtn.rx.tap
+                   .subscribe(onNext: { [weak self]() in
+                       dataKitBtn.isSelected = true
+                       dataWayBtn.isSelected = false
+                       self?.isDataKit = true
+                   })
+                   .disposed(by: disposeBag)
+
+        dataWayBtn.rx.tap
+            .subscribe(onNext: { [weak self]() in
+                dataWayBtn.isSelected = true
+                dataKitBtn.isSelected = false
+                self?.isDataKit = false
+            })
+            .disposed(by: disposeBag)
+        return view
+    }
+    func footerView()->UIView{
+         let view = UIView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: 57))
+         let logout = UIButton.init(frame: CGRect(x: 0, y: 12, width: self.view.bounds.size.width, height: 45))
+         logout.setTitle("地址检测", for: .normal)
+         logout.setTitleColor(.orange, for: .normal)
+         logout.addTarget(self, action: #selector(confirmClick), for: .touchUpInside)
+         view.addSubview(logout)
+         return view
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = InputTableViewCell(style: .default, reuseIdentifier: "mineTableViewCell")
+        let cellInfo = self.dataSource[indexPath.row]
         
-    }
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        confirmBtn.isEnabled = datakittf.text?.count ?? 0 > 0 && appidtf.text?.count ?? 0 > 0 && baseURL.text?.count ?? 0 > 0
-        if textField == datakittf {
-            dataKitBtn.connect = .normal
-        }else if textField == baseURL {
-            baseApiBtn.connect = .normal
+        cell.setInfo(info: cellInfo)
+        
+        cell.inputTextFieldChanged = { [weak self] string in
+            self?.dataSource[indexPath.row].detail = string
         }
+        return cell
     }
-   
-    func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        confirmBtn.isEnabled = false
-        if textField == datakittf {
-            dataKitBtn.connect = .normal
-        }else if textField == baseURL {
-            baseApiBtn.connect = .normal
-        }
-        return true
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataSource.count
     }
+    
     /*
      // MARK: - Navigation
      

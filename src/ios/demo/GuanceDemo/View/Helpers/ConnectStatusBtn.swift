@@ -6,12 +6,12 @@
 //
 
 import UIKit
-enum connectStatus {
+enum ConnectStatus {
     case normal,success,error
 }
 
 class ConnectStatusBtn: UIButton {
-    var connect: connectStatus = .normal {
+    var connect: ConnectStatus = .normal {
         willSet {
             switch newValue {
             case .normal:

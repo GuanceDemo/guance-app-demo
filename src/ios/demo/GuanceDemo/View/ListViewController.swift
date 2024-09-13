@@ -23,6 +23,7 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
         createUI()
+        self.view.backgroundColor = .navigationBackgroundColor
         // Do any additional setup after loading the view.
     }
     func createUI(){

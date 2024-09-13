@@ -33,9 +33,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         config.enableSDKDebugLog = true
         config.groupIdentifiers = [GroupIdentifier]
         config.globalContext = ["gc_custom_key":STATIC_TAG]
+        config.autoSync = false
         config.env = env
         FTMobileAgent.start(withConfigOptions: config)
-        let rum = FTRumConfig(appid:UserDefaults.rumAppid )
+        let rum = FTRumConfig(appid:UserDefaults.rumAppId )
         rum.enableTrackAppANR = true
         rum.enableTraceUserView = true
         rum.enableTraceUserAction = true

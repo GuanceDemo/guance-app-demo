@@ -50,6 +50,8 @@ DEPENDENCIES:
   - FTMobileSDK (~> 1.5.2)
   - FTMobileSDK/Extension (= 1.5.2)
   - MBProgressHUD (~> 1.2.0)
+  - RxCocoa
+  - RxSwift
   - SDWebImage
   - SnapKit (~> 5.6.0)
   - Toast-Swift (~> 5.0.1)
@@ -58,6 +60,9 @@ SPEC REPOS:
   trunk:
     - FTMobileSDK
     - MBProgressHUD
+    - RxCocoa
+    - RxRelay
+    - RxSwift
     - SDWebImage
     - SnapKit
     - Toast-Swift

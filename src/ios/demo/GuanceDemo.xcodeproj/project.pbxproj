@@ -34,12 +34,18 @@
 		171445A02A6A53D100376B7A /* ConfigurationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1714459F2A6A53D100376B7A /* ConfigurationVC.swift */; };
 		171445A22A6A6A3B00376B7A /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171445A12A6A6A3B00376B7A /* StringExtension.swift */; };
 		171445A42A6E545E00376B7A /* ConnectStatusBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171445A32A6E545E00376B7A /* ConnectStatusBtn.swift */; };
+		1722E4CD2C855B5100B60D91 /* InputTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1722E4CC2C855B5100B60D91 /* InputTableViewCell.swift */; };
+		1722E4CF2C859C9900B60D91 /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1722E4CE2C859C9900B60D91 /* UserInfoView.swift */; };
+		1722E4D92C883D3F00B60D91 /* SelectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1722E4D82C883D3F00B60D91 /* SelectButton.swift */; };
 		17355D332A73B8E00022181E /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17355D322A73B8E00022181E /* ColorExtension.swift */; };
 		173B337B2A692FA2003A4ADE /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B337A2A692FA2003A4ADE /* UserInfo.swift */; };
+		174CB0762B51573400A4F9C5 /* CrashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174CB0752B51573400A4F9C5 /* CrashViewController.swift */; };
+		174CB07A2B54D22900A4F9C5 /* Crasher.mm in Sources */ = {isa = PBXBuildFile; fileRef = 174CB0792B54D22900A4F9C5 /* Crasher.mm */; };
 		17B907B42A66560D0026E51A /* DesignableUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B907B32A66560D0026E51A /* DesignableUITextField.swift */; };
 		17B907B72A666B410026E51A /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B907B62A666B410026E51A /* UserManager.swift */; };
 		17B907B92A6686E90026E51A /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B907B82A6686E90026E51A /* HomeTabBarController.swift */; };
 		17B907BB2A6688490026E51A /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B907BA2A6688490026E51A /* ListViewController.swift */; };
+		17C7A1162C81CBDF0080DD92 /* TFTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C7A1152C81CBDF0080DD92 /* TFTableView.swift */; };
 		2D2B668EA2ADA62E580061E0 /* libPods-GuanceDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E526B42F97ECAA968904FA /* libPods-GuanceDemo.a */; };
 		F6434B1E97AA72B332CC8071 /* libPods-GuanceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C88494A24726B1B797179A0A /* libPods-GuanceExtension.a */; };
 /* End PBXBuildFile section */
@@ -95,12 +101,19 @@
 		1714459F2A6A53D100376B7A /* ConfigurationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationVC.swift; sourceTree = "<group>"; };
 		171445A12A6A6A3B00376B7A /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		171445A32A6E545E00376B7A /* ConnectStatusBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectStatusBtn.swift; sourceTree = "<group>"; };
+		1722E4CC2C855B5100B60D91 /* InputTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTableViewCell.swift; sourceTree = "<group>"; };
+		1722E4CE2C859C9900B60D91 /* UserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserInfoView.swift; path = GuanceDemo/View/UserInfoView.swift; sourceTree = SOURCE_ROOT; };
+		1722E4D82C883D3F00B60D91 /* SelectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectButton.swift; sourceTree = "<group>"; };
 		17355D322A73B8E00022181E /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		173B33642A692D11003A4ADE /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		173B33662A692D11003A4ADE /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		173B337A2A692FA2003A4ADE /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		173B337D2A693039003A4ADE /* ModelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelData.swift; sourceTree = "<group>"; };
 		173B33812A693422003A4ADE /* GuanceDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GuanceDemo.entitlements; sourceTree = "<group>"; };
+		174CB0752B51573400A4F9C5 /* CrashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashViewController.swift; sourceTree = "<group>"; };
+		174CB0772B54D22800A4F9C5 /* GuanceDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GuanceDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		174CB0782B54D22900A4F9C5 /* Crasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crasher.h; sourceTree = "<group>"; };
+		174CB0792B54D22900A4F9C5 /* Crasher.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Crasher.mm; sourceTree = "<group>"; };
 		17A67EB72A83A37B00DCB88D /* Config-Demo.develop.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-Demo.develop.xcconfig"; sourceTree = "<group>"; };
 		17A67EB82A83B3CB00DCB88D /* Config-Demo.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		17A67EB92A8481D700DCB88D /* Config-Demo.pre.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-Demo.pre.xcconfig"; sourceTree = "<group>"; };
@@ -108,6 +121,7 @@
 		17B907B62A666B410026E51A /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		17B907B82A6686E90026E51A /* HomeTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarController.swift; sourceTree = "<group>"; };
 		17B907BA2A6688490026E51A /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		17C7A1152C81CBDF0080DD92 /* TFTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TFTableView.swift; sourceTree = "<group>"; };
 		2E6B12E17B4BB8B6A4A70B90 /* Pods-GuanceDemo.pre.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuanceDemo.pre.xcconfig"; path = "Target Support Files/Pods-GuanceDemo/Pods-GuanceDemo.pre.xcconfig"; sourceTree = "<group>"; };
 		464713DFF9B3B89BBDBD6076 /* Pods-GuanceDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuanceDemo.release.xcconfig"; path = "Target Support Files/Pods-GuanceDemo/Pods-GuanceDemo.release.xcconfig"; sourceTree = "<group>"; };
 		52E526B42F97ECAA968904FA /* libPods-GuanceDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GuanceDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,6 +198,7 @@
 			children = (
 				17B907B22A6654D90026E51A /* Helpers */,
 				171433F72A6555FA0040F092 /* MineViewController.swift */,
+				1722E4CE2C859C9900B60D91 /* UserInfoView.swift */,
 				171433FA2A65587B0040F092 /* WebViewController.swift */,
 				171433FC2A655A240040F092 /* LoginViewController.swift */,
 				17B907B82A6686E90026E51A /* HomeTabBarController.swift */,
@@ -191,6 +206,10 @@
 				171432432A691E0E00125AFE /* LongTaskViewController.swift */,
 				1714459D2A6A301100376B7A /* NativeViewController.swift */,
 				1714459F2A6A53D100376B7A /* ConfigurationVC.swift */,
+				17C7A1152C81CBDF0080DD92 /* TFTableView.swift */,
+				174CB0752B51573400A4F9C5 /* CrashViewController.swift */,
+				1722E4CC2C855B5100B60D91 /* InputTableViewCell.swift */,
+				174CB0772B54D22800A4F9C5 /* GuanceDemo-Bridging-Header.h */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -232,10 +251,13 @@
 		17B907B22A6654D90026E51A /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				174CB0782B54D22900A4F9C5 /* Crasher.h */,
+				174CB0792B54D22900A4F9C5 /* Crasher.mm */,
 				17B907B32A66560D0026E51A /* DesignableUITextField.swift */,
 				171445A12A6A6A3B00376B7A /* StringExtension.swift */,
 				171445A32A6E545E00376B7A /* ConnectStatusBtn.swift */,
 				17355D322A73B8E00022181E /* ColorExtension.swift */,
+				1722E4D82C883D3F00B60D91 /* SelectButton.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -322,6 +344,7 @@
 				TargetAttributes = {
 					171433D92A6551FD0040F092 = {
 						CreatedOnToolsVersion = 14.3.1;
+						LastSwiftMigration = 1520;
 					};
 					1714456E2A693CEC00376B7A = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -458,19 +481,25 @@
 				17B907B42A66560D0026E51A /* DesignableUITextField.swift in Sources */,
 				171432462A6924EB00125AFE /* LoggerExtension.swift in Sources */,
 				171433F42A6552FD0040F092 /* NetworkEngine.swift in Sources */,
+				1722E4CF2C859C9900B60D91 /* UserInfoView.swift in Sources */,
+				1722E4D92C883D3F00B60D91 /* SelectButton.swift in Sources */,
 				171433DE2A6551FD0040F092 /* AppDelegate.swift in Sources */,
 				171432442A691E0E00125AFE /* LongTaskViewController.swift in Sources */,
 				17B907B92A6686E90026E51A /* HomeTabBarController.swift in Sources */,
 				171433E02A6551FD0040F092 /* SceneDelegate.swift in Sources */,
+				17C7A1162C81CBDF0080DD92 /* TFTableView.swift in Sources */,
 				171433FD2A655A240040F092 /* LoginViewController.swift in Sources */,
+				174CB0762B51573400A4F9C5 /* CrashViewController.swift in Sources */,
 				171445A02A6A53D100376B7A /* ConfigurationVC.swift in Sources */,
 				173B337B2A692FA2003A4ADE /* UserInfo.swift in Sources */,
+				174CB07A2B54D22900A4F9C5 /* Crasher.mm in Sources */,
 				171433F82A6555FA0040F092 /* MineViewController.swift in Sources */,
 				1714459E2A6A301100376B7A /* NativeViewController.swift in Sources */,
 				17B907B72A666B410026E51A /* UserManager.swift in Sources */,
 				171445A22A6A6A3B00376B7A /* StringExtension.swift in Sources */,
 				17B907BB2A6688490026E51A /* ListViewController.swift in Sources */,
 				171445912A69632E00376B7A /* UserDefaultsExtension.swift in Sources */,
+				1722E4CD2C855B5100B60D91 /* InputTableViewCell.swift in Sources */,
 				171433FB2A65587B0040F092 /* WebViewController.swift in Sources */,
 				171445A42A6E545E00376B7A /* ConnectStatusBtn.swift in Sources */,
 				17355D332A73B8E00022181E /* ColorExtension.swift in Sources */,
@@ -641,6 +670,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = GuanceDemo/GuanceDemo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -665,6 +695,8 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "GuanceDemo/View/GuanceDemo-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -676,6 +708,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = GuanceDemo/GuanceDemo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -700,6 +733,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "GuanceDemo/View/GuanceDemo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -833,6 +867,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = GuanceDemo/GuanceDemo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -862,6 +897,8 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "GuanceDemo/View/GuanceDemo-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

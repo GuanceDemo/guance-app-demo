@@ -10,6 +10,8 @@ target 'GuanceDemo' do
   pod 'MBProgressHUD', '~> 1.2.0'
   pod 'FTMobileSDK', '~>1.5.2'
   pod 'Toast-Swift', '~> 5.0.1'
+  pod 'RxSwift'
+  pod 'RxCocoa'
 end
 
 target 'GuanceExtension' do

@@ -19,13 +19,31 @@ class DesignableUITextField: UITextField {
             updateView()
         }
     }
+    var lineColor: UIColor = .darkGray {
+        didSet {
+            if lineColor != oldValue {
+                self.setNeedsDisplay()
+            }
+        }
+    }
     var isPassword: Bool = false {
         didSet{
             updateView()
         }
     }
     var eyeBtn:UIButton?
-    
+    var connect: ConnectStatus = .normal {
+        willSet {
+            switch newValue {
+            case .normal:
+                self.lineColor = .darkGray
+            case .success:
+                self.lineColor = .green
+            case .error:
+                self.lineColor = .red
+            }
+        }
+    }
     override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
         var textRect = super.leftViewRect(forBounds: bounds)
         textRect.size.width += leftPadding
@@ -72,7 +90,7 @@ class DesignableUITextField: UITextField {
     }
     override func draw(_ rect: CGRect) {
         let lineHeight:CGFloat = 0.5
-        let lineColor:UIColor = .darkGray
+        let lineColor:UIColor = lineColor
         
         guard let content = UIGraphicsGetCurrentContext() else{return}
         
