@@ -18,6 +18,7 @@ import com.cloudcare.ft.mobile.sdk.demo.data.AccessType
 import com.cloudcare.ft.mobile.sdk.demo.manager.AccountManager
 import com.cloudcare.ft.mobile.sdk.demo.manager.SettingConfigManager
 import com.cloudcare.ft.mobile.sdk.demo.utils.CircleTransform
+import com.ft.sdk.FTRUMGlobalManager
 import com.ft.sdk.FTRUMInnerManager
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -58,7 +59,7 @@ class MineFragment : Fragment() {
         )
         val refreshView: SwipeRefreshLayout = view.findViewById(R.id.mine_refresh_layout)
         refreshView.setOnRefreshListener {
-            FTRUMInnerManager.get().startAction("用户数据刷新", "refresh_user_data")
+            FTRUMGlobalManager.get().startAction("用户数据刷新", "refresh_user_data")
             refreshUserInfo(view) {
                 refreshView.isRefreshing = false
             }

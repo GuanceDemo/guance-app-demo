@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SwitchCompat
 import com.cloudcare.ft.mobile.sdk.demo.data.AccessType
 import com.cloudcare.ft.mobile.sdk.demo.data.GC_SCHEME_URL
 import com.cloudcare.ft.mobile.sdk.demo.http.HttpEngine
@@ -17,6 +18,8 @@ import com.cloudcare.ft.mobile.sdk.demo.manager.SettingConfigManager
 import com.cloudcare.ft.mobile.sdk.demo.manager.SettingData
 import com.cloudcare.ft.mobile.sdk.demo.utils.Utils
 import com.cloudcare.ft.mobile.sdk.demo.utils.UtilsDialog
+import com.ft.sdk.FTSdk
+import com.ft.sdk.sessionreplay.SessionReplayPrivacy
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +38,9 @@ class SettingActivity : BaseActivity() {
     private var demoAPIAddressEt: TextInputEditText? = null
     private var appIDEt: TextInputEditText? = null
     private var settingData: SettingData? = null
-    private var radioGroup: RadioGroup? = null
+    private var deployTypeRG: RadioGroup? = null
+    private var privacyTypeRG: RadioGroup? = null
+    private var switch: SwitchCompat? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
@@ -46,8 +51,11 @@ class SettingActivity : BaseActivity() {
         demoAPIAddressEt = findViewById(R.id.setting_demo_api_et)
         appIDEt = findViewById(R.id.setting_app_id_et)
 
-        radioGroup = findViewById(R.id.setting_access_type_rg)
-        radioGroup?.setOnCheckedChangeListener { radioGroup, id ->
+        deployTypeRG = findViewById(R.id.setting_access_type_rg)
+        privacyTypeRG = findViewById(R.id.setting_session_privacy_rg)
+        switch = findViewById(R.id.setting_session_switch)
+
+        deployTypeRG?.setOnCheckedChangeListener { radioGroup, id ->
             when (id) {
                 R.id.setting_datakit_deploy_rb -> {
                     setDatakitView()
@@ -72,11 +80,19 @@ class SettingActivity : BaseActivity() {
 
         settingData = SettingConfigManager.readSetting()
         setSettingView(settingData!!)
-        radioGroup?.check(
+        deployTypeRG?.check(
             if (settingData!!.type == AccessType.DATAKIT.value)
                 R.id.setting_datakit_deploy_rb
             else
                 R.id.setting_dataway_deploy_rb
+        )
+        switch?.isChecked = settingData?.enableSessionReplay ?: false
+        privacyTypeRG?.check(
+            when (settingData!!.sessionReplayPrivacyType) {
+                SessionReplayPrivacy.ALLOW -> R.id.setting_session_privacy_allow_rb
+                SessionReplayPrivacy.MASK -> R.id.setting_session_privacy_mask_rb
+                SessionReplayPrivacy.MASK_USER_INPUT -> R.id.setting_session_privacy_only_input_rb
+            }
         )
     }
 
@@ -151,7 +167,7 @@ class SettingActivity : BaseActivity() {
         checkAppId()
         checkDemoAPIAddress()
 
-        if (radioGroup?.checkedRadioButtonId == R.id.setting_datakit_deploy_rb) {
+        if (deployTypeRG?.checkedRadioButtonId == R.id.setting_datakit_deploy_rb) {
             checkDatakitAddress()
 
             if (!(appIDEt?.error.isNullOrEmpty()
@@ -161,7 +177,7 @@ class SettingActivity : BaseActivity() {
             ) {
                 return false
             }
-        } else if (radioGroup?.checkedRadioButtonId == R.id.setting_dataway_deploy_rb) {
+        } else if (deployTypeRG?.checkedRadioButtonId == R.id.setting_dataway_deploy_rb) {
             checkDatawayAddress()
             checkDatawayClientToken()
 
@@ -231,6 +247,7 @@ class SettingActivity : BaseActivity() {
                         val intent = Intent(this@SettingActivity, MainActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         startActivity(intent)
+                        FTSdk.shutDown()
 
                         DemoApplication.setSDK(this@SettingActivity)
                     }
@@ -257,8 +274,15 @@ class SettingActivity : BaseActivity() {
             appIDEt?.text.toString(),
             datawayAddressEt?.text.toString(),
             datawayClientTokenEt?.text.toString(),
-            if (radioGroup?.checkedRadioButtonId == R.id.setting_datakit_deploy_rb)
-                AccessType.DATAKIT.value else AccessType.DATAWAY.value
+            if (deployTypeRG?.checkedRadioButtonId == R.id.setting_datakit_deploy_rb)
+                AccessType.DATAKIT.value else AccessType.DATAWAY.value,
+            switch?.isChecked ?: false,
+            when (privacyTypeRG?.checkedRadioButtonId) {
+                R.id.setting_session_privacy_allow_rb -> SessionReplayPrivacy.ALLOW
+                R.id.setting_session_privacy_only_input_rb -> SessionReplayPrivacy.MASK_USER_INPUT
+                R.id.setting_session_privacy_mask_rb -> SessionReplayPrivacy.MASK
+                else -> SessionReplayPrivacy.ALLOW
+            }
         )
 
         UtilsDialog.showLoadingDialog(this@SettingActivity)

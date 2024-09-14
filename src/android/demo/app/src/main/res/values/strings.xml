@@ -32,4 +32,20 @@
     <string name="dataway_deploy">使用公网 DataWay</string>
     <string name="sdk_access_type_format">Type: %s</string>
     <string name="how_to_refresh">[点击用户信息框或下拉进行刷新]</string>
+    <string name="setting_privacy_option">文字隐私脱敏选项</string>
+    <string name="setting_enable_session_replay">开启 Session Replay</string>
+    <string name="setting_privacy_allow">allow</string>
+    <string name="setting_privacy_only_input">only input</string>
+    <string name="setting_privacy_mask">mask all</string>
+    <string name="pick_current_date">date</string>
+    <string name="button_nav_appcompat">appcompat view</string>
+    <string name="pick_current_time">time</string>
+    <string name="spinner">spinner</string>
+    <string name="switch_button">switch</string>
+    <string name="radio_button">radio_button</string>
+    <string name="checkbox">checkbox\n</string>
+    <string name="checked_text_view">checked text\n</string>
+    <string name="edit_text">edit text</string>
+    <string name="session_replay_compat_title">compat title</string>
+    <string name="session_replay_material_title">material title</string>
 </resources>

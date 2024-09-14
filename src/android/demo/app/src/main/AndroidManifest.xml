@@ -28,6 +28,9 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".WebViewActivity" />
         <activity android:name=".SettingActivity" />
+        <activity android:name=".SessionReplayActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
     </application>
 
 </manifest>

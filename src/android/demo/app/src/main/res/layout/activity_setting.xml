@@ -1,115 +1,183 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:layout_height="match_parent">
 
-    <RadioGroup
-        android:id="@+id/setting_access_type_rg"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <RadioButton
-            android:id="@+id/setting_datakit_deploy_rb"
+
+        <RadioGroup
+            android:id="@+id/setting_access_type_rg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/setting_datakit_deploy_rb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/datakit_deploy" />
+
+            <RadioButton
+                android:id="@+id/setting_dataway_deploy_rb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dataway_deploy" />
+        </RadioGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/setting_app_id_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:hint="@string/app_id">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/setting_app_id_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="15"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/setting_datakit_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="@string/datakit_address">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/setting_datakit_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="15"
+                android:inputType="textUri" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/setting_dataway_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="@string/dataway_address">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/setting_dataway_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="15"
+                android:inputType="textUri" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/setting_dataway_client_token_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="@string/dataway_token">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/setting_dataway_client_token_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="15"
+                android:inputType="textUri" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/setting_demo_api_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="@string/demo_api_address">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/setting_demo_api_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="15"
+                android:inputType="textUri" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/setting_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/datakit_deploy" />
+            android:text="@string/url_check" />
 
-        <RadioButton
-            android:id="@+id/setting_dataway_deploy_rb"
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/setting_enable_session_replay"
+                android:textColor="#000" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/setting_session_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/dataway_deploy" />
-    </RadioGroup>
+            android:layout_marginTop="16dp"
+            android:text="@string/setting_privacy_option"
+            android:textColor="#000" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/setting_app_id_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="27dp"
-        android:hint="@string/app_id">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/setting_app_id_et"
+        <RadioGroup
+            android:id="@+id/setting_session_privacy_rg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="15"
-            android:inputType="text" />
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:padding="8dp">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <RadioButton
+                android:id="@+id/setting_session_privacy_allow_rb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/setting_privacy_allow" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/setting_datakit_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="27dp"
-        android:hint="@string/datakit_address">
+            <RadioButton
+                android:id="@+id/setting_session_privacy_only_input_rb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/setting_privacy_only_input" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/setting_datakit_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="15"
-            android:inputType="textUri" />
+            <RadioButton
+                android:id="@+id/setting_session_privacy_mask_rb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/setting_dataway_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="27dp"
-        android:hint="@string/dataway_address">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/setting_dataway_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="15"
-            android:inputType="textUri" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/setting_dataway_client_token_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="27dp"
-        android:hint="@string/dataway_token">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/setting_dataway_client_token_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="15"
-            android:inputType="textUri" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+                android:text="@string/setting_privacy_mask" />
+        </RadioGroup>
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/setting_demo_api_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="27dp"
-        android:hint="@string/demo_api_address">
+    </LinearLayout>
+</ScrollView>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/setting_demo_api_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="15"
-            android:inputType="textUri" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <Button
-        android:id="@+id/setting_check"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/url_check" />
-</LinearLayout>

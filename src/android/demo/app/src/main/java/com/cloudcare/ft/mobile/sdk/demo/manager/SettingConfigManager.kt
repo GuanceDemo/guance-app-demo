@@ -10,6 +10,7 @@ import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_DATAWAY_ADDRESS
 import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_DATAWAY_CLIENT_TOKEN
 import com.cloudcare.ft.mobile.sdk.demo.http.HttpEngine
 import com.ft.sdk.FTApplication
+import com.ft.sdk.sessionreplay.SessionReplayPrivacy
 import org.json.JSONObject
 
 private const val PREFS_USER_DATA_NAME = "gc_demo_sdk_setting"
@@ -19,6 +20,8 @@ private const val KEY_DEMO_DATAWAY_CLIENT_TOKEN = "datawayClientToken"
 private const val KEY_DEMO_APP_ACCESS_TYPE = "appAccessType"
 private const val KEY_DEMO_API_ADDRESS = "demoApiAddress"
 private const val KEY_DEMO_APP_ID = "demoAndroidAppId"
+private const val KEY_DEMO_ENABLE_SESSION_REPLAY = "demoEnableSessionReplay"
+private const val KEY_DEMO_ENABLE_SESSION_REPLAY_PRIVACY_TYPE = "demoEnableSessionReplayPrivacyType"
 
 data class SettingData(
     val datakitAddress: String,
@@ -27,6 +30,8 @@ data class SettingData(
     val datawayAddress: String,
     val datawayClientToken: String,
     val type: Int,
+    val enableSessionReplay: Boolean,
+    val sessionReplayPrivacyType: SessionReplayPrivacy
 ) {
     fun getUserInfoUrl(): String {
         return demoApiAddress + HttpEngine.API_USER_INFO
@@ -42,13 +47,17 @@ data class SettingData(
                 val datawayAddress = json.optString(KEY_DEMO_DATAWAY_ADDRESS, "")
                 val datawayClientToken = json.optString(KEY_DEMO_DATAWAY_CLIENT_TOKEN, "")
                 val type = json.optInt(KEY_DEMO_APP_ACCESS_TYPE, 0)
+                val enableSessionReplay = json.optBoolean(KEY_DEMO_ENABLE_SESSION_REPLAY, false)
+                val sessionReplayType = json.optInt(KEY_DEMO_ENABLE_SESSION_REPLAY_PRIVACY_TYPE, 0)
                 return SettingData(
                     datakitAddress,
                     demoApiAddress,
                     appId,
                     datawayAddress,
                     datawayClientToken,
-                    type
+                    type,
+                    enableSessionReplay,
+                    SessionReplayPrivacy.values()[sessionReplayType]
                 )
             } catch (_: Exception) {
 
@@ -75,6 +84,8 @@ object SettingConfigManager {
         editor.putString(KEY_DEMO_DATAWAY_ADDRESS, data.datawayAddress)
         editor.putString(KEY_DEMO_DATAWAY_CLIENT_TOKEN, data.datawayClientToken)
         editor.putInt(KEY_DEMO_APP_ACCESS_TYPE, data.type)
+        editor.putBoolean(KEY_DEMO_ENABLE_SESSION_REPLAY, data.enableSessionReplay)
+        editor.putInt(KEY_DEMO_ENABLE_SESSION_REPLAY_PRIVACY_TYPE, data.sessionReplayPrivacyType.ordinal)
         editor.apply()
 
     }
@@ -121,7 +132,16 @@ object SettingConfigManager {
             sharedPreferences.getInt(
                 KEY_DEMO_APP_ACCESS_TYPE,
                 AccessType.DATAKIT.value
-            )
+            ),
+            sharedPreferences.getBoolean(
+                KEY_DEMO_ENABLE_SESSION_REPLAY,
+                false
+            ),
+            SessionReplayPrivacy.values()[sharedPreferences.getInt(
+                KEY_DEMO_ENABLE_SESSION_REPLAY_PRIVACY_TYPE,
+                0
+            )]
+
         )
         return data!!
     }

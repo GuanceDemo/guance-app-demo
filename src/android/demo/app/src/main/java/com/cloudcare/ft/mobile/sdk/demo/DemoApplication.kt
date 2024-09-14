@@ -12,6 +12,9 @@ import com.ft.sdk.FTRUMConfig
 import com.ft.sdk.FTSDKConfig
 import com.ft.sdk.FTSdk
 import com.ft.sdk.FTTraceConfig
+import com.ft.sdk.sessionreplay.FTSessionReplayConfig
+import com.ft.sdk.sessionreplay.SessionReplayPrivacy
+import com.ft.sdk.sessionreplay.material.MaterialExtensionSupport
 
 
 /**
@@ -57,6 +60,7 @@ open class DemoApplication : Application() {
 
             )
 
+
             val sp = context.getSharedPreferences(SP_STORE_DATA, MODE_PRIVATE)
             val customDynamicValue = sp.getString(CUSTOM_DYNAMIC_TAG, "not set")
 
@@ -83,6 +87,22 @@ open class DemoApplication : Application() {
                     .setEnableAutoTrace(true)
                     .setEnableLinkRUMData(true)
             )
+
+            if (data.enableSessionReplay) {
+//                SessionReplay.enable(
+//                    SessionReplayConfiguration.Builder(1f)
+////                        .setPrivacy(SessionReplayPrivacy.ALLOW)
+//                        .setPrivacy(data.sessionReplayPrivacyType)
+//                        .addExtensionSupport(MaterialExtensionSupport()).build(), context
+//
+//
+//                )
+                FTSdk.initSessionReplayConfig(
+                    FTSessionReplayConfig().setPrivacy(
+                        SessionReplayPrivacy.MASK
+                    ).addExtensionSupport(MaterialExtensionSupport())
+                )
+            }
         }
 
         fun setDynamicParams(context: Context, value: String) {
@@ -90,6 +110,7 @@ open class DemoApplication : Application() {
             sp.edit().putString(CUSTOM_DYNAMIC_TAG, value).apply()
 
         }
+
 
     }
 

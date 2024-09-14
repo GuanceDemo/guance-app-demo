@@ -36,6 +36,9 @@ class NativeActivity : BaseActivity() {
                 e.printStackTrace()
             }
         }
+        findViewById<View>(R.id.native_session_replay_compat).setOnClickListener {
+            startActivity(Intent(this@NativeActivity,SessionReplayActivity::class.java))
+        }
 
     }
 
