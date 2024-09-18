@@ -1,5 +1,7 @@
 package com.cloudcare.ft.mobile.sdk.demo
 
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -10,15 +12,19 @@ import com.datadog.benchmark.sample.fragment.SessionReplayAppcompatFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
+
 class SessionReplayActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_session_replay)
         // Setup Toolbar
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         toolbar.setTitleTextColor(getColor(R.color.white))
         setSupportActionBar(toolbar)
+        super.onCreate(savedInstanceState)
+        val navIcon = toolbar.navigationIcon
+        navIcon?.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+
 
 
         // Setup ViewPager2 and Adapter

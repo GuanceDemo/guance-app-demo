@@ -99,7 +99,7 @@ open class DemoApplication : Application() {
 //                )
                 FTSdk.initSessionReplayConfig(
                     FTSessionReplayConfig().setPrivacy(
-                        SessionReplayPrivacy.MASK
+                        data.sessionReplayPrivacyType
                     ).addExtensionSupport(MaterialExtensionSupport())
                 )
             }
