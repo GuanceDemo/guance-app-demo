@@ -10,7 +10,7 @@ import WebKit
 class WebViewController: UIViewController,WKNavigationDelegate,WKUIDelegate {
     var webView:WKWebView!
     var progressView: UIProgressView!
-    var website = NetworkEngine().webview
+    var website = NetworkEngine.shared.webView
 
     override func viewDidLoad() {
         super.viewDidLoad()

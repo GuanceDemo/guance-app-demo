@@ -20,7 +20,7 @@ extension UIColor {
         }
     }
     
-    class var tipLable: UIColor {
+    class var tipLabel: UIColor {
        get {
            UIColor.init { traitCollection in
                if traitCollection.userInterfaceStyle == .dark {
@@ -30,7 +30,9 @@ extension UIColor {
                }
            }
        }
-   }
+    }
+    
+    
     class var navigationBackgroundColor:UIColor {
         get {
             UIColor.init { traitCollection in

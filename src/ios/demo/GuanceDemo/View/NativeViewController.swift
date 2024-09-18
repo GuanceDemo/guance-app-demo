@@ -28,7 +28,7 @@ class NativeViewController: UIViewController,UITableViewDataSource,UITableViewDe
     }
     func createUI(){
         view.addSubview(tableView)
-        dataSource = ["LongTask","Crash"]
+        dataSource = ["LongTask","Crash","Session Replay"]
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "NativeTableViewCell")
@@ -45,8 +45,11 @@ class NativeViewController: UIViewController,UITableViewDataSource,UITableViewDe
             self.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(LongTaskViewController(), animated: true)
         case 1:
-            let array = ["1","2","3"]
-            let str = array[3]
+            self.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(CrashViewController(), animated: true)
+        case 2:
+            self.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(SessionReplayViewController(), animated: true)
         default:
             print("default")
         }

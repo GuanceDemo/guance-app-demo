@@ -18,7 +18,7 @@ class ModelData: ObservableObject{
     }
     func getUserInfo() async{
         do{
-            let data = try await NetworkEngine().getUserInfo()
+            let data = try await NetworkEngine.shared.getUserInfo()
             if let info = data {
                userInfo = parse(info)
                FTLogInfo("\(userInfo)")

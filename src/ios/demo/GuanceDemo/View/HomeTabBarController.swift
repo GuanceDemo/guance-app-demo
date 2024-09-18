@@ -18,22 +18,19 @@ class HomeTabBarController: UITabBarController {
     func setUpAllChildViewController(){
         let listVC = ListViewController.init()
         listVC.title = "首页"
-        listVC.tabBarItem.title = listVC.title
-        listVC.tabBarItem.image = UIImage(systemName: "flag")
         let navi = UINavigationController.init(rootViewController: listVC)
         navi.navigationBar.tintColor = .orange
-        listVC.view.backgroundColor = .navigationBackgroundColor
-
         self.addChild(navi)
-        
+        self.tabBar.items?.first?.title = listVC.title
+        self.tabBar.items?.first?.image = UIImage(systemName: "flag")
+
         let mineVC = MineViewController.init()
         mineVC.title = "我的"
-        mineVC.tabBarItem.title = mineVC.title
-        mineVC.tabBarItem.image = UIImage(systemName: "person.crop.circle.fill")
         let naviMine = UINavigationController.init(rootViewController: mineVC)
         naviMine.navigationBar.tintColor = .orange
-        mineVC.view.backgroundColor = .navigationBackgroundColor
         self.addChild(naviMine)
+        self.tabBar.items?.last?.title = "我的"
+        self.tabBar.items?.last?.image = UIImage(systemName: "person.crop.circle.fill")
 
     }
     /*
