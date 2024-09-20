@@ -73,9 +73,9 @@ object SettingConfigManager {
 
     private var data: SettingData? = null
 
-    fun saveSetting(data: SettingData) {
+    fun saveSetting(context: Context,data: SettingData) {
         this.data = data;
-        val sharedPreferences = FTApplication.getApplication()
+        val sharedPreferences = context
             .getSharedPreferences(PREFS_USER_DATA_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString(KEY_DEMO_DATAKIT_ADDRESS, data.datakitAddress)
@@ -91,11 +91,11 @@ object SettingConfigManager {
     }
 
 
-    fun readSetting(): SettingData {
+    fun readSetting(context: Context): SettingData {
         if (data != null) {
             return data!!
         }
-        val sharedPreferences = FTApplication.getApplication()
+        val sharedPreferences = context
             .getSharedPreferences(PREFS_USER_DATA_NAME, Context.MODE_PRIVATE)
 
         data = SettingData(

@@ -25,7 +25,12 @@ class LoginActivity : AppCompatActivity(), AccountManager.Callback {
         val passwordEt = findViewById<TextInputEditText>(R.id.login_password)
 
         findViewById<Button>(R.id.login_btn).setOnClickListener {
-            AccountManager.login(usernameEt.text.toString(), passwordEt.text.toString(), this)
+            AccountManager.login(
+                this@LoginActivity,
+                usernameEt.text.toString(),
+                passwordEt.text.toString(),
+                this
+            )
         }
         supportActionBar?.hide()
 

@@ -45,18 +45,21 @@ class MineFragment : Fragment() {
         bindUserView(view)
 
         view.findViewById<View>(R.id.mine_logout).setOnClickListener {
-            AccountManager.logout()
+
+            context?.let { c1 -> AccountManager.logout(c1) }
             (context as MainActivity).goToLogin()
         }
 
         view.findViewById<TextView>(R.id.mine_app_version).text =
             "${BuildConfig.VERSION_NAME}${(if (BuildConfig.DEBUG) "-Debug" else "")} (${BuildConfig.VERSION_CODE})"
 
-        val settingData = SettingConfigManager.readSetting()
-        view.findViewById<TextView>(R.id.mine_settings_access_type_label).text = getString(
-            R.string.sdk_access_type_format,
-            if (settingData.type == AccessType.DATAKIT.value) "Datakit" else "Dataway"
-        )
+        context?.let {
+           val settingData= SettingConfigManager.readSetting(it)
+            view.findViewById<TextView>(R.id.mine_settings_access_type_label).text = getString(
+                R.string.sdk_access_type_format,
+                if (settingData.type == AccessType.DATAKIT.value) "Datakit" else "Dataway"
+            )
+        }
         val refreshView: SwipeRefreshLayout = view.findViewById(R.id.mine_refresh_layout)
         refreshView.setOnRefreshListener {
             FTRUMGlobalManager.get().startAction("用户数据刷新", "refresh_user_data")
@@ -73,15 +76,17 @@ class MineFragment : Fragment() {
 
     private fun refreshUserInfo(view: View, callback: ((success: Boolean) -> Unit)? = null) {
         Toast.makeText(context, "Refreshing", Toast.LENGTH_SHORT).show()
-        AccountManager.getUserInfo { success ->
-            callback?.let {
-                it(success)
-            }
-            if (success) {
-                bindUserView(view)
-                Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(context, "Fail", Toast.LENGTH_SHORT).show()
+        context?.let {
+            AccountManager.getUserInfo(it) { success ->
+                callback?.let {
+                    it(success)
+                }
+                if (success) {
+                    bindUserView(view)
+                    Toast.makeText(it, "Success", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(it, "Fail", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

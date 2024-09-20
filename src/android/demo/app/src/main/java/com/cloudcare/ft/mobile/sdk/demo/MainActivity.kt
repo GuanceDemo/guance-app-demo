@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_loading)
-        if (AccountManager.checkLogin()) {
+        if (AccountManager.checkLogin(this@MainActivity)) {
             setUpView()
             FTLogger.getInstance().logBackground("Account Exists", Status.INFO)
         } else {

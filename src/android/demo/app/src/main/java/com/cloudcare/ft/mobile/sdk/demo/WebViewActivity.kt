@@ -18,7 +18,7 @@ class WebViewActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_webview)
 
-        val data = SettingConfigManager.readSetting()
+        val data = SettingConfigManager.readSetting(this@WebViewActivity)
 
         webView = findViewById<WebView>(R.id.webView)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)

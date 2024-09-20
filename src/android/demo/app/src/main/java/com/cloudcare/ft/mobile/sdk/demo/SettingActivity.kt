@@ -78,7 +78,7 @@ class SettingActivity : BaseActivity() {
             }
         }
 
-        settingData = SettingConfigManager.readSetting()
+        settingData = SettingConfigManager.readSetting(this@SettingActivity)
         setSettingView(settingData!!)
         deployTypeRG?.check(
             if (settingData!!.type == AccessType.DATAKIT.value)
@@ -237,7 +237,7 @@ class SettingActivity : BaseActivity() {
                 }
 
                 checkAddressConnect {
-                    SettingConfigManager.saveSetting(it)
+                    SettingConfigManager.saveSetting(this@SettingActivity, it)
 
                     val builder: AlertDialog.Builder = AlertDialog.Builder(this)
                     builder.setTitle(getString(R.string.tip))
@@ -288,11 +288,15 @@ class SettingActivity : BaseActivity() {
         UtilsDialog.showLoadingDialog(this@SettingActivity)
         GlobalScope.launch(Dispatchers.IO) {
             val datakitConnect = if (settingData.type == AccessType.DATAKIT.value)
-                HttpEngine.datakitPing(settingData.datakitAddress)
+                HttpEngine.datakitPing(this@SettingActivity, settingData.datakitAddress)
             else
-                HttpEngine.datawayPing(settingData.datawayAddress, settingData.datawayClientToken)
+                HttpEngine.datawayPing(
+                    this@SettingActivity,
+                    settingData.datawayAddress,
+                    settingData.datawayClientToken
+                )
 
-            val apiConnect = HttpEngine.apiConnect(settingData.demoApiAddress)
+            val apiConnect = HttpEngine.apiConnect(this@SettingActivity, settingData.demoApiAddress)
 
             withContext(Dispatchers.Main) {
                 if (settingData.type == AccessType.DATAKIT.value) {

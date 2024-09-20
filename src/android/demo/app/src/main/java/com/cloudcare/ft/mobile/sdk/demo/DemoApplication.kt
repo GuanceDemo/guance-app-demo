@@ -13,7 +13,6 @@ import com.ft.sdk.FTSDKConfig
 import com.ft.sdk.FTSdk
 import com.ft.sdk.FTTraceConfig
 import com.ft.sdk.sessionreplay.FTSessionReplayConfig
-import com.ft.sdk.sessionreplay.SessionReplayPrivacy
 import com.ft.sdk.sessionreplay.material.MaterialExtensionSupport
 
 
@@ -34,7 +33,7 @@ open class DemoApplication : Application() {
         private const val SP_STORE_DATA = "store_data"
 
         fun setSDK(context: Context) {
-            val data = SettingConfigManager.readSetting()
+            val data = SettingConfigManager.readSetting(context)
             HttpEngine.initAPIAddress(data.demoApiAddress)
 
             val ftSDKConfig = if (data.type == AccessType.DATAKIT.value)
@@ -89,14 +88,6 @@ open class DemoApplication : Application() {
             )
 
             if (data.enableSessionReplay) {
-//                SessionReplay.enable(
-//                    SessionReplayConfiguration.Builder(1f)
-////                        .setPrivacy(SessionReplayPrivacy.ALLOW)
-//                        .setPrivacy(data.sessionReplayPrivacyType)
-//                        .addExtensionSupport(MaterialExtensionSupport()).build(), context
-//
-//
-//                )
                 FTSdk.initSessionReplayConfig(
                     FTSessionReplayConfig().setPrivacy(
                         data.sessionReplayPrivacyType
@@ -110,10 +101,6 @@ open class DemoApplication : Application() {
             sp.edit().putString(CUSTOM_DYNAMIC_TAG, value).apply()
 
         }
-
-
     }
-
-
 }
 

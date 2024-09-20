@@ -4,7 +4,6 @@ import android.content.Context
 import android.widget.Toast
 import com.cloudcare.ft.mobile.sdk.demo.http.HttpEngine
 import com.cloudcare.ft.mobile.sdk.demo.http.UserData
-import com.ft.sdk.FTApplication
 import com.ft.sdk.FTSdk
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -30,9 +29,9 @@ object AccountManager {
         fun success(success: Boolean)
     }
 
-    fun checkLogin(): Boolean {
+    fun checkLogin(context: Context): Boolean {
         if (userData == null) {
-            userData = readUserData()
+            userData = readUserData(context)
         }
 
 
@@ -43,17 +42,17 @@ object AccountManager {
         return isLogin
     }
 
-    fun login(userName: String, password: String, callback: Callback) {
+    fun login(context: Context, userName: String, password: String, callback: Callback) {
         GlobalScope.launch(Dispatchers.IO) {
-            val data = HttpEngine.login(userName, password)
+            val data = HttpEngine.login(context, userName, password)
             withContext(Dispatchers.Main) {
                 if (data.code == HttpURLConnection.HTTP_OK) {
                     isLogin = true
                     callback.success(true)
-                    getUserInfo()
+                    getUserInfo(context)
                 } else {
                     Toast.makeText(
-                        FTApplication.getApplication(),
+                        context,
                         data.errorMessage,
                         Toast.LENGTH_SHORT
                     ).show()
@@ -63,13 +62,13 @@ object AccountManager {
         }
     }
 
-    fun getUserInfo(callback: ((success: Boolean) -> Unit)? = null) {
+    fun getUserInfo(context: Context, callback: ((success: Boolean) -> Unit)? = null) {
         GlobalScope.launch(Dispatchers.IO) {
-            val data = HttpEngine.userinfo()
+            val data = HttpEngine.userinfo(context)
 
             withContext(Dispatchers.Main) {
                 if (data.code == HttpURLConnection.HTTP_OK) {
-                    saveUserData(data)
+                    saveUserData(context, data)
 
                     val userData = com.ft.sdk.garble.bean.UserData()
                     userData.email = data.email
@@ -88,10 +87,10 @@ object AccountManager {
         }
     }
 
-    private fun saveUserData(data: UserData) {
-        this.userData = data;
+    private fun saveUserData(context: Context, data: UserData) {
+        this.userData = data
 
-        val sharedPreferences = FTApplication.getApplication().getSharedPreferences(
+        val sharedPreferences = context.getSharedPreferences(
             PREFS_USER_DATA_NAME,
             Context.MODE_PRIVATE
         )
@@ -103,8 +102,8 @@ object AccountManager {
 
     }
 
-    private fun readUserData(): UserData {
-        val sharedPreferences = FTApplication.getApplication().getSharedPreferences(
+    private fun readUserData(context: Context): UserData {
+        val sharedPreferences = context.getSharedPreferences(
             PREFS_USER_DATA_NAME,
             Context.MODE_PRIVATE
         )
@@ -115,17 +114,17 @@ object AccountManager {
         return userData
     }
 
-    private fun cleanUserData() {
-        val sharedPreferences = FTApplication.getApplication()
+    private fun cleanUserData(context: Context) {
+        val sharedPreferences = context
             .getSharedPreferences(PREFS_USER_DATA_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.clear()
         editor.apply()
     }
 
-    fun logout() {
+    fun logout(context: Context) {
         isLogin = false
-        cleanUserData()
+        cleanUserData(context)
         userData = null
         FTSdk.unbindRumUserData()
     }

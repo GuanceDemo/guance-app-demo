@@ -1,8 +1,8 @@
 package com.cloudcare.ft.mobile.sdk.demo.http
 
+import android.content.Context
 import android.util.Log
 import com.cloudcare.ft.mobile.sdk.demo.utils.Utils
-import com.ft.sdk.FTApplication
 import com.ft.sdk.FTLogger
 import com.ft.sdk.FTRUMGlobalManager
 import com.ft.sdk.garble.bean.AppState
@@ -117,44 +117,44 @@ object HttpEngine {
         this.apiAddress = url;
     }
 
-    fun login(user: String, password: String): ConnectData {
+    fun login(context: Context, user: String, password: String): ConnectData {
         val url = "$apiAddress$API_LOGIN"
         val json = """{"username": "$user", "password": "$password"}"""
         val builder: Request.Builder = Request.Builder().url(url)
             .method("POST", json.toRequestBody("application/json".toMediaTypeOrNull()))
-        return request(builder.build())
+        return request(context, builder.build())
     }
 
-    fun userinfo(): UserData {
+    fun userinfo(context: Context): UserData {
         val url = "$apiAddress$API_USER_INFO"
         val builder: Request.Builder = Request.Builder().url(url)
-        return request(builder.build())
+        return request(context, builder.build())
     }
 
-    fun datakitPing(datakitUrl: String): ConnectData {
+    fun datakitPing(context: Context, datakitUrl: String): ConnectData {
         val url = "$datakitUrl$API_DATAKIT_PING"
         val builder: Request.Builder = Request.Builder().url(url)
-        return request(builder.build())
+        return request(context, builder.build())
     }
 
-    fun datawayPing(dataWay: String, clientToken: String): ConnectData {
+    fun datawayPing(context: Context, dataWay: String, clientToken: String): ConnectData {
         val url = "$dataWay${String.format(API_DATAWAY_CHECK_GUANCE_LOG, clientToken)}"
         val content = String.format(CONNECT_POST_CONNECT,com.ft.sdk.garble.utils.Utils.getCurrentNanoTime())
         val builder: Request.Builder = Request.Builder().url(url)
             .method("POST", content.toRequestBody("text/plain".toMediaTypeOrNull()))
-        return request(builder.build())
+        return request(context, builder.build())
     }
 
 
-    fun apiConnect(demoAPIUrl: String): ConnectData {
+    fun apiConnect(context: Context, demoAPIUrl: String): ConnectData {
         val url = "$demoAPIUrl$API_CONNECT"
         val builder: Request.Builder = Request.Builder().url(url)
-        return request(builder.build())
+        return request(context, builder.build())
     }
 
 
-    private inline fun <reified T : BaseData> request(request: Request): T {
-        if (!Utils.isNetworkAvailable(FTApplication.getApplication())) {
+    private inline fun <reified T : BaseData> request(context: Context, request: Request): T {
+        if (!Utils.isNetworkAvailable(context)) {
             return ReturnResult(BaseData.ERROR_CODE_NET_WORK_NO_AVAILABLE).convertFTData()
         }
         try {
