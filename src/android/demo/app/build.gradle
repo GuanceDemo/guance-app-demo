@@ -20,7 +20,7 @@ android {
         applicationId "com.guance.mobile.sdk.demo"
         minSdkVersion 23
         targetSdkVersion 34
-        versionCode 9
+        versionCode 10
         versionName "1.2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -156,11 +156,11 @@ dependencies {
 
     //================FT-SDK需要使用的引用=================//
     //FT-SDK引用
-    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.7.0-alpha02')
+    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.7.0-alpha03')
 
     implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-native:1.1.1'
-    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay:0.1.0-alpha02'
-    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay-material:0.1.0-alpha01'
+    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay:0.1.0-alpha03'
+    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay-material:0.1.0-alpha03'
 
 //    implementation files('libs/ft-session-replay-debug.aar')
 //    implementation files('libs/ft-sdk-debug.aar')
