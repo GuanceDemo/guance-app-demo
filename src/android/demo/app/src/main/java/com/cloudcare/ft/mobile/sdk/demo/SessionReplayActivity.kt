@@ -25,7 +25,7 @@ class SessionReplayActivity : BaseActivity() {
         val navIcon = toolbar.navigationIcon
         navIcon?.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
 
-
+        title = "Session Replay"
 
         // Setup ViewPager2 and Adapter
         val viewPager: ViewPager2 = findViewById(R.id.view_pager)

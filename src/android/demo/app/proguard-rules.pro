@@ -30,6 +30,11 @@
 -keepnames class * extends android.view.MenuItem
 #=========
 -keep class com.cloudcare.ft.mobile.sdk.demo.http.*{*;}
+
+# 保留 com.google.android.material.tabs.TabLayout 相关点击采集
+-keepclassmembers class com.google.android.material.tabs.TabLayout$Tab {
+    *;
+}
 #====================
 
 -dontwarn org.bouncycastle.jsse.BCSSLParameters
