@@ -62,13 +62,13 @@ struct Configuration:Codable,Hashable{
 protocol PasteConfiguration {
     func parsePaste() throws -> Configuration
     
-    func base64Decoding()->String
+    func base64Decoding() throws ->String
 }
 extension String:PasteConfiguration {
     func parsePaste() throws -> Configuration {
         if self.hasPrefix(configPrefix) {
             let str = String(self.dropFirst(configPrefix.count))
-            let decodeStr = str.base64Decoding()
+            let decodeStr = try str.base64Decoding()
             if let jsonData = decodeStr.data(using: .utf8) {
                 let decoder = JSONDecoder()
                 do {
@@ -85,9 +85,12 @@ extension String:PasteConfiguration {
         throw PasteConfigurationError.formatError
     }
     
-    func base64Decoding()->String{
+    func base64Decoding()throws ->String{
         let decodeData = NSData(base64Encoded: self,options: NSData.Base64DecodingOptions.init(rawValue: 0))
-        let decodeStr = NSString(data: decodeData! as Data, encoding: NSUTF8StringEncoding)! as String
-        return decodeStr
+        if let data = decodeData {
+            let decodeStr = NSString(data: data as Data, encoding: NSUTF8StringEncoding)! as String
+            return decodeStr
+        }
+        throw PasteConfigurationError.parseError
     }
 }
