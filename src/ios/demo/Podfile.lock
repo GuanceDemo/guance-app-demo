@@ -1,45 +1,45 @@
 PODS:
-  - FTMobileSDK (1.6.0-alpha.2):
-    - FTMobileSDK/FTMobileAgent (= 1.6.0-alpha.2)
-  - FTMobileSDK/Extension (1.6.0-alpha.2):
+  - FTMobileSDK (1.6.0-alpha.6):
+    - FTMobileSDK/FTMobileAgent (= 1.6.0-alpha.6)
+  - FTMobileSDK/Extension (1.6.0-alpha.6):
     - FTMobileSDK/FTSDKCore/FTRUM
     - FTMobileSDK/FTSDKCore/Logger
     - FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation
-  - FTMobileSDK/FTMobileAgent (1.6.0-alpha.2):
+  - FTMobileSDK/FTMobileAgent (1.6.0-alpha.6):
     - FTMobileSDK/FTSDKCore
-  - FTMobileSDK/FTSDKCore (1.6.0-alpha.2):
-    - FTMobileSDK/FTSDKCore/BaseUtils (= 1.6.0-alpha.2)
-    - FTMobileSDK/FTSDKCore/DataManager (= 1.6.0-alpha.2)
-    - FTMobileSDK/FTSDKCore/FTRUM (= 1.6.0-alpha.2)
-    - FTMobileSDK/FTSDKCore/FTWKWebView (= 1.6.0-alpha.2)
-    - FTMobileSDK/FTSDKCore/Logger (= 1.6.0-alpha.2)
-    - FTMobileSDK/FTSDKCore/Protocol (= 1.6.0-alpha.2)
-    - FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation (= 1.6.0-alpha.2)
-  - FTMobileSDK/FTSDKCore/BaseUtils (1.6.0-alpha.2):
-    - FTMobileSDK/FTSDKCore/BaseUtils/Base (= 1.6.0-alpha.2)
-    - FTMobileSDK/FTSDKCore/BaseUtils/Swizzle (= 1.6.0-alpha.2)
-    - FTMobileSDK/FTSDKCore/BaseUtils/Thread (= 1.6.0-alpha.2)
-  - FTMobileSDK/FTSDKCore/BaseUtils/Base (1.6.0-alpha.2)
-  - FTMobileSDK/FTSDKCore/BaseUtils/Swizzle (1.6.0-alpha.2):
+  - FTMobileSDK/FTSDKCore (1.6.0-alpha.6):
+    - FTMobileSDK/FTSDKCore/BaseUtils (= 1.6.0-alpha.6)
+    - FTMobileSDK/FTSDKCore/DataManager (= 1.6.0-alpha.6)
+    - FTMobileSDK/FTSDKCore/FTRUM (= 1.6.0-alpha.6)
+    - FTMobileSDK/FTSDKCore/FTWKWebView (= 1.6.0-alpha.6)
+    - FTMobileSDK/FTSDKCore/Logger (= 1.6.0-alpha.6)
+    - FTMobileSDK/FTSDKCore/Protocol (= 1.6.0-alpha.6)
+    - FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation (= 1.6.0-alpha.6)
+  - FTMobileSDK/FTSDKCore/BaseUtils (1.6.0-alpha.6):
+    - FTMobileSDK/FTSDKCore/BaseUtils/Base (= 1.6.0-alpha.6)
+    - FTMobileSDK/FTSDKCore/BaseUtils/Swizzle (= 1.6.0-alpha.6)
+    - FTMobileSDK/FTSDKCore/BaseUtils/Thread (= 1.6.0-alpha.6)
+  - FTMobileSDK/FTSDKCore/BaseUtils/Base (1.6.0-alpha.6)
+  - FTMobileSDK/FTSDKCore/BaseUtils/Swizzle (1.6.0-alpha.6):
     - FTMobileSDK/FTSDKCore/BaseUtils/Base
-  - FTMobileSDK/FTSDKCore/BaseUtils/Thread (1.6.0-alpha.2)
-  - FTMobileSDK/FTSDKCore/DataManager (1.6.0-alpha.2):
-    - FTMobileSDK/FTSDKCore/BaseUtils/Base
-    - FTMobileSDK/FTSDKCore/BaseUtils/Thread
-  - FTMobileSDK/FTSDKCore/FTRUM (1.6.0-alpha.2):
+  - FTMobileSDK/FTSDKCore/BaseUtils/Thread (1.6.0-alpha.6)
+  - FTMobileSDK/FTSDKCore/DataManager (1.6.0-alpha.6):
     - FTMobileSDK/FTSDKCore/BaseUtils/Base
     - FTMobileSDK/FTSDKCore/BaseUtils/Thread
-    - FTMobileSDK/FTSDKCore/Protocol
-  - FTMobileSDK/FTSDKCore/FTWKWebView (1.6.0-alpha.2):
-    - FTMobileSDK/FTSDKCore/BaseUtils/Swizzle
-    - FTMobileSDK/FTSDKCore/Protocol
-  - FTMobileSDK/FTSDKCore/Logger (1.6.0-alpha.2):
+  - FTMobileSDK/FTSDKCore/FTRUM (1.6.0-alpha.6):
     - FTMobileSDK/FTSDKCore/BaseUtils/Base
-  - FTMobileSDK/FTSDKCore/Protocol (1.6.0-alpha.2)
-  - FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation (1.6.0-alpha.2):
+    - FTMobileSDK/FTSDKCore/BaseUtils/Thread
+    - FTMobileSDK/FTSDKCore/Protocol
+  - FTMobileSDK/FTSDKCore/FTWKWebView (1.6.0-alpha.6):
     - FTMobileSDK/FTSDKCore/BaseUtils/Swizzle
     - FTMobileSDK/FTSDKCore/Protocol
-  - FTMobileSDK/FTSessionReplay (1.6.0-alpha.2):
+  - FTMobileSDK/FTSDKCore/Logger (1.6.0-alpha.6):
+    - FTMobileSDK/FTSDKCore/BaseUtils/Base
+  - FTMobileSDK/FTSDKCore/Protocol (1.6.0-alpha.6)
+  - FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation (1.6.0-alpha.6):
+    - FTMobileSDK/FTSDKCore/BaseUtils/Swizzle
+    - FTMobileSDK/FTSDKCore/Protocol
+  - FTMobileSDK/FTSessionReplay (1.6.0-alpha.6):
     - FTMobileSDK/FTSDKCore
   - MBProgressHUD (1.2.0)
   - RxCocoa (6.7.1):
@@ -55,9 +55,9 @@ PODS:
   - Toast-Swift (5.0.1)
 
 DEPENDENCIES:
-  - FTMobileSDK (= 1.6.0-alpha.2)
-  - FTMobileSDK/Extension (= 1.6.0-alpha.2)
-  - FTMobileSDK/FTSessionReplay (= 1.6.0-alpha.2)
+  - FTMobileSDK (= 1.6.0-alpha.6)
+  - FTMobileSDK/Extension (= 1.6.0-alpha.6)
+  - FTMobileSDK/FTSessionReplay (= 1.6.0-alpha.6)
   - MBProgressHUD (~> 1.2.0)
   - RxCocoa
   - RxSwift
@@ -77,7 +77,7 @@ SPEC REPOS:
     - Toast-Swift
 
 SPEC CHECKSUMS:
-  FTMobileSDK: ebf72f153e426d684908e1b68ec33d119a9c35a7
+  FTMobileSDK: 8c7e461ffc06ad2b39872b35cc97a1d20a371e32
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   RxCocoa: f5609cb4637587a7faa99c5d5787e3ad582b75a4
   RxRelay: 4151ba01152436b08271e08410135e099880eae5
@@ -86,6 +86,6 @@ SPEC CHECKSUMS:
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
 
-PODFILE CHECKSUM: f6f0f9c3d0ab4d6ab8b8cca045db96c2d07f2a85
+PODFILE CHECKSUM: 182a4b15d81e47c05d0aadd3b15f7b7dd3b39a70
 
 COCOAPODS: 1.15.2

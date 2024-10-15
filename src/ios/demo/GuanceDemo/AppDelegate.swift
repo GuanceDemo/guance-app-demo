@@ -67,7 +67,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if UserDefaults.enableSessionReplay {
             let srConfig = FTSessionReplayConfig()
-            srConfig.privacy = FTSRPrivacy(rawValue: UInt(UserDefaults.sessionReplayPrivacy)) ?? .mask
+            var privacy:FTSRPrivacy = .mask
+            switch UserDefaults.sessionReplayPrivacy {
+            case 0:
+                privacy = .allow
+            case 1:
+                privacy = .maskUserInput
+            case 2:
+                privacy = .mask
+            default:
+                privacy = .mask
+            }
+            srConfig.privacy = privacy
             srConfig.sampleRate = 100
             FTRumSessionReplay.shared().start(with: srConfig)
         }
