@@ -156,7 +156,7 @@ dependencies {
 
     //================FT-SDK需要使用的引用=================//
     //FT-SDK引用
-    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.6.0')
+    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.6.5')
 
     implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-native:1.1.1'
     implementation 'com.google.code.gson:gson:2.8.5'
