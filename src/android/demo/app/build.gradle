@@ -20,8 +20,8 @@ android {
         applicationId "com.guance.mobile.sdk.demo"
         minSdkVersion 23
         targetSdkVersion 34
-        versionCode 11
-        versionName "1.2.1"
+        versionCode 12
+        versionName "1.2.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
 //        buildConfigField "String", "CUSTOM_VALUE", "\"Custom value\""
@@ -58,8 +58,16 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
+    }
+
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "1.8"
     }
 
     flavorDimensions = ['tier']
@@ -158,7 +166,7 @@ dependencies {
     //FT-SDK引用
     implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-native:1.1.1'
 
-    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.7.0-alpha06')
+    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.7.0-alpha09')
     implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay:0.1.0-alpha04'
     implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay-material:0.1.0-alpha04'
 
@@ -170,5 +178,10 @@ dependencies {
     //需用监控网络数据时，添加该依赖，实现网络引擎
 //    implementation 'com.squareup.okhttp3:okhttp:3.12.12'
     implementation 'com.squareup.okhttp3:okhttp:4.5.0'
+
+    implementation "androidx.activity:activity-compose:1.6.0"
+    implementation "androidx.compose.material3:material3:1.1.0"
+    implementation "androidx.compose.ui:ui:1.5.0"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.2.0"
 
 }

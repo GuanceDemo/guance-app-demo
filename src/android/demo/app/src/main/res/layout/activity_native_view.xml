@@ -31,6 +31,12 @@
             android:text="UIBlock(Longtask)" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/native_compose_activity_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Compose Activity" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/native_dynamic_rum_tag_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

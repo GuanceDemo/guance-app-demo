@@ -31,6 +31,7 @@
         <activity android:name=".SessionReplayActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
+        <activity android:name="com.cloudcare.ft.mobile.sdk.demo.compose.ComposeActivity" />
     </application>
 
 </manifest>
