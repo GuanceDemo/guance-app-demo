@@ -30,6 +30,12 @@
             android:text="UIBlock(Longtask)" />
 
         <Button
+            android:id="@+id/native_compose_activity_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Compose Activity" />
+
+        <Button
             android:id="@+id/native_dynamic_rum_tag_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

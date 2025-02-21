@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import com.cloudcare.ft.mobile.sdk.demo.compose.ComposeActivity
 import com.cloudcare.ft.mobile.sdk.demo.http.HttpEngine
 import com.cloudcare.ft.mobile.sdk.demo.nativelib.NativeLib
 import kotlinx.coroutines.Dispatchers
@@ -74,6 +75,9 @@ class NativeActivity : BaseActivity() {
                 }
             }
 
+        }
+        findViewById<View>(R.id.native_compose_activity_btn).setOnClickListener {
+            startActivity(Intent(this@NativeActivity, ComposeActivity::class.java))
         }
     }
 

@@ -11,7 +11,7 @@
 //ext.ft_env=[]
 
 buildscript {
-    ext.kotlin_version = '1.8.20'
+    ext.kotlin_version = '1.9.25'
     repositories {
         google()
         mavenCentral()
@@ -41,12 +41,14 @@ buildscript {
     def datawayRUMUrl = properties.getProperty("DATAWAY_URL")
     def cliToken = properties.getProperty("CLIENT_TOKEN")
     def datawayToken = properties.getProperty("DATAWAY_TOKEN")
+//    def otelUrl = properties.getProperty("OTEL_URL")
 
     ext.ft_env = [
             'rumAppid'  : appIdString,
             'datakitRUMUrl': datakitRUMUrl,
             'datawayRUMUrl': datawayRUMUrl,
             'cliToken': cliToken,
+//            'otelUrl': otelUrl,
             'datawayToken': datawayToken,
             'demoAPIURL': demoAPIURL,
             'prodTestEnv'  : 'gray',

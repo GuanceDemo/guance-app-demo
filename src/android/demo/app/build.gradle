@@ -58,8 +58,16 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
+    }
+
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "1.8"
     }
 
     flavorDimensions = ['tier']
@@ -71,6 +79,7 @@ android {
             buildConfigField "String", "DATAKIT_URL", "\"${ft_env.datakitRUMUrl}\""
             buildConfigField "String", "DATAWAY_URL", "\"${ft_env.datawayRUMUrl}\""
             buildConfigField "String", "DATAWAY_CLIENT_TOKEN", "\"${ft_env.cliToken}\""
+//            buildConfigField "String", "OTEL_URL", "\"${ft_env.otelUrl}\""
             buildConfigField "String", "RUM_APP_ID", "\"${ft_env.rumAppid}\""
             buildConfigField "String", "DEMO_API_URL", "\"${ft_env.demoAPIURL}\""
             buildConfigField "String", "ENV", "\"${ft_env.prodTestEnv}\""
@@ -82,6 +91,7 @@ android {
             buildConfigField "String", "DATAKIT_URL", "\"${ft_env.datakitRUMUrl}\""
             buildConfigField "String", "DATAWAY_URL", "\"${ft_env.datawayRUMUrl}\""
             buildConfigField "String", "DATAWAY_CLIENT_TOKEN", "\"${ft_env.cliToken}\""
+//            buildConfigField "String", "OTEL_URL", "\"${ft_env.otelUrl}\""
             buildConfigField "String", "RUM_APP_ID", "\"${ft_env.rumAppid}\""
             buildConfigField "String", "DEMO_API_URL", "\"${ft_env.demoAPIURL}\""
             buildConfigField "String", "ENV", "\"${ft_env.prodPublishEnv}\""
@@ -165,6 +175,12 @@ dependencies {
     //需用监控网络数据时，添加该依赖，实现网络引擎
 //    implementation 'com.squareup.okhttp3:okhttp:3.12.12'
     implementation 'com.squareup.okhttp3:okhttp:4.5.0'
+
+    implementation "androidx.navigation:navigation-compose:2.7.5"
+    implementation "androidx.activity:activity-compose:1.6.0"
+    implementation "androidx.compose.material3:material3:1.1.0"
+    implementation "androidx.compose.ui:ui:1.6.0"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.2.0"
 
     //otel SDK
     implementation("io.opentelemetry:opentelemetry-sdk:1.36.0")
