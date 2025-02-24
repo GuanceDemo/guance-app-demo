@@ -156,7 +156,7 @@ dependencies {
 
     //================FT-SDK需要使用的引用=================//
     //FT-SDK引用
-    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.6.5')
+    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.6.8')
 
     implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-native:1.1.1'
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -165,5 +165,11 @@ dependencies {
     //需用监控网络数据时，添加该依赖，实现网络引擎
 //    implementation 'com.squareup.okhttp3:okhttp:3.12.12'
     implementation 'com.squareup.okhttp3:okhttp:4.5.0'
+
+    //otel SDK
+    implementation("io.opentelemetry:opentelemetry-sdk:1.36.0")
+    implementation("io.opentelemetry:opentelemetry-exporter-otlp:1.36.0") // OTLP Exporter
+    implementation("io.opentelemetry:opentelemetry-api:1.36.0")
+    implementation("io.opentelemetry:opentelemetry-context:1.36.0")
 
 }

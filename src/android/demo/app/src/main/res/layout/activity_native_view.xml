@@ -35,6 +35,12 @@
             android:layout_height="wrap_content"
             android:text="Tag 动态设置" />
 
+        <Button
+            android:id="@+id/native_dynamic_create_otel_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="create otel span" />
+
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
