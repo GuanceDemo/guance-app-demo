@@ -98,7 +98,6 @@ class UserData(result: ReturnResult) : BaseData(result) {
 class ReturnResult(val code: Int, val result: String? = null)
 
 
-
 object HttpEngine {
 
     private const val API_SEGMENT = "/api"
@@ -139,7 +138,8 @@ object HttpEngine {
 
     fun datawayPing(context: Context, dataWay: String, clientToken: String): ConnectData {
         val url = "$dataWay${String.format(API_DATAWAY_CHECK_GUANCE_LOG, clientToken)}"
-        val content = String.format(CONNECT_POST_CONNECT,com.ft.sdk.garble.utils.Utils.getCurrentNanoTime())
+        val content =
+            String.format(CONNECT_POST_CONNECT, com.ft.sdk.garble.utils.Utils.getCurrentNanoTime())
         val builder: Request.Builder = Request.Builder().url(url)
             .method("POST", content.toRequestBody("text/plain".toMediaTypeOrNull()))
         return request(context, builder.build())
@@ -150,6 +150,12 @@ object HttpEngine {
         val url = "$demoAPIUrl$API_CONNECT"
         val builder: Request.Builder = Request.Builder().url(url)
         return request(context, builder.build())
+    }
+
+    fun userinfoWithOtel(): Response {
+        val url = "$apiAddress$API_USER_INFO"
+        val builder: Request.Builder = Request.Builder().url(url)
+        return OkHttpClientInstance.get().newCall(builder.build()).execute()
     }
 
 

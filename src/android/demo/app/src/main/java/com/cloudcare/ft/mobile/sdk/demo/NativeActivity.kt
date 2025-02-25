@@ -4,8 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import com.cloudcare.ft.mobile.sdk.demo.http.HttpEngine
 import com.cloudcare.ft.mobile.sdk.demo.compose.ComposeActivity
 import com.cloudcare.ft.mobile.sdk.demo.nativelib.NativeLib
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.math.BigInteger
+import java.net.HttpURLConnection
+
 
 class NativeActivity : BaseActivity() {
 
@@ -45,6 +53,45 @@ class NativeActivity : BaseActivity() {
             startActivity(Intent(this@NativeActivity, ComposeActivity::class.java))
         }
 
+
+        findViewById<View>(R.id.native_dynamic_create_otel_data).setOnClickListener {
+
+            GlobalScope.launch(Dispatchers.IO) {
+                val response = HttpEngine.userinfoWithOtel()
+//                val parentId = Utils.getGUID_16()
+//                val traceId = Utils.randomUUID()
+                var traceId = response.headers["trace_id"]
+                var parentId = response.headers["span_id"]
+                //如果使用 ddtrace  traceid 需要将64位int 转 128位16进制，spanid需要转化为 16进制
+                traceId = traceId?.toBigInteger()?.let { it1 -> convert64To128Bit(it1) }
+                parentId = parentId?.toBigInteger()?.let { it1 -> convertHex(it1) }
+                println(response.body?.string())
+                withContext(Dispatchers.Main) {
+                    if (response.code == HttpURLConnection.HTTP_OK) {
+                        if (traceId != null && parentId != null) {
+                            DemoApplication.createSpanWithOtel(
+                                traceId,
+                                parentId,
+                                "add.action.after_request"
+                            ) {
+                            }
+
+                        }
+                    }
+
+                }
+            }
+
+        }
     }
+
+    private fun convert64To128Bit(traceId64: BigInteger): String {
+        return "0000000000000000" + traceId64.toString(16).padStart(16, '0')
+    }
+
+    private fun convertHex(spanId: BigInteger): String {
+        return spanId.toString(16).padStart(16, '0')
+    }
+
 
 }

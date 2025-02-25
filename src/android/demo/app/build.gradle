@@ -184,4 +184,10 @@ dependencies {
     implementation "androidx.compose.ui:ui:1.5.0"
     implementation "androidx.compose.ui:ui-tooling-preview:1.2.0"
 
+    //otel SDK
+    implementation("io.opentelemetry:opentelemetry-sdk:1.36.0")
+    implementation("io.opentelemetry:opentelemetry-exporter-otlp:1.36.0") // OTLP Exporter
+    implementation("io.opentelemetry:opentelemetry-api:1.36.0")
+    implementation("io.opentelemetry:opentelemetry-context:1.36.0")
+
 }
