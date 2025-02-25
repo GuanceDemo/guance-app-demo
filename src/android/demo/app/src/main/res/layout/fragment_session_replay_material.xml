@@ -136,6 +136,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/horizontal_app_compat_seekbar" />
 
+        <Button
+            android:id="@+id/show_custom_toast_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/default_number_picker"
+            android:text="custom toast">
+
+        </Button>
+
 
         <LinearLayout
             android:id="@+id/image_layout"
@@ -143,7 +153,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/default_number_picker">
+            app:layout_constraintTop_toBottomOf="@id/show_custom_toast_button">
 
             <ImageView
                 android:id="@+id/imageView_remote"

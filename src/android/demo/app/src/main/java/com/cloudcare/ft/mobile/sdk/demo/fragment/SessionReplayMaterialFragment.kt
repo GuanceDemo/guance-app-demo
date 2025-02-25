@@ -6,13 +6,11 @@
 
 package com.cloudcare.ft.mobile.sdk.demo.fragment
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.CheckedTextView
 import android.widget.EditText
 import android.widget.ImageButton
@@ -21,6 +19,7 @@ import android.widget.NumberPicker
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import com.cloudcare.ft.mobile.sdk.demo.R
+import com.cloudcare.ft.mobile.sdk.demo.utils.CustomToast
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import java.util.Locale
@@ -35,6 +34,11 @@ internal class SessionReplayMaterialFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_session_replay_material, container, false).apply {
             findViewById<CheckedTextView>(R.id.checked_text_view).apply {
                 setOnClickListener { this.toggle() }
+            }
+            findViewById<View>(R.id.show_custom_toast_button).apply {
+                setOnClickListener{
+                    CustomToast.showToast(activity, "Toast:" + System.currentTimeMillis(), 1000)
+                }
             }
 
             findViewById<Spinner>(R.id.default_spinner)?.let { spinner ->
