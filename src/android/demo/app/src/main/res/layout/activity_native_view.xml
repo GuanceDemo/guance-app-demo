@@ -48,5 +48,11 @@
             android:layout_height="wrap_content"
             android:text="Session Replay" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/native_dynamic_create_otel_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Otel Span" />
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
