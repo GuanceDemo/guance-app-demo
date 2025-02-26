@@ -182,7 +182,13 @@ open class DemoApplication : Application() {
                 }
             }
 
-            val currentSpan: Span = childSpanBuilder.startSpan()
+            val currentSpan: Span = childSpanBuilder
+                //设置服务端偏移时间
+//                .setStartTimestamp(
+//                System.currentTimeMillis() + 10,
+//                TimeUnit.MILLISECONDS
+//            )
+                .startSpan()
             try {
                 callback.invoke()
             } finally {
