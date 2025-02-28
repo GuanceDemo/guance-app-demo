@@ -6,9 +6,18 @@
 //
 
 import UIKit
+import FTMobileSDK
 
 class NativeViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
     var dataSource = Array<String>()
+    lazy var activity:UIActivityIndicatorView = {
+        let activity = UIActivityIndicatorView.init(style: .large)
+        activity.color = .gray
+        activity.center = self.view.center
+        self.view.addSubview(activity)
+        return activity
+    }()
+
     lazy var tableView:UITableView = {
         let width = self.view.bounds.width
         let height = self.view.bounds.height
@@ -28,8 +37,37 @@ class NativeViewController: UIViewController,UITableViewDataSource,UITableViewDe
     }
     func createUI(){
         view.addSubview(tableView)
-        dataSource = ["LongTask","Crash"]
+        dataSource = ["LongTask","Crash","Tag 动态设置","Create Otel Span"]
     }
+    
+    func dynamicTag(){
+        FTMobileAgent.appendGlobalContext(["global_key": "global_value"])
+        FTMobileAgent.appendRUMGlobalContext(["rum_key": "rum_value"])
+        FTMobileAgent.appendLogGlobalContext(["log_key": "log_value"])
+    }
+    
+    func createOtelSpan(){
+        Task(priority: .medium) {
+            do {
+                defer{
+                    activity.stopAnimating()
+                }
+                if !activity.isAnimating {
+                    activity.startAnimating()
+                }
+                let (response,_) = try await NetworkEngine.shared.userInfoWithOtel()
+                if let traceID = response?.allHeaderFields["trace_id"] as? String, let spanID = response?.allHeaderFields["span_id"] as? String {
+                    
+                    if  let biggerTraceID = UInt64(traceID)?.convert64To128Bit(),let biggerSpanID = UInt64(spanID)?.convertHex(){
+                       _ = createSpanWithOtel(traceId: biggerTraceID,parentSpanId: biggerSpanID ,actionName: "add.action.after_request")
+                    }
+                }
+            } catch {
+                self.view.makeToast(error.localizedDescription,position: .center)
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "NativeTableViewCell")
         cell.textLabel?.text = dataSource[indexPath.row]
@@ -47,6 +85,10 @@ class NativeViewController: UIViewController,UITableViewDataSource,UITableViewDe
         case 1:
             self.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(CrashViewController(), animated: true)
+        case 2:
+            dynamicTag()
+        case 3:
+            createOtelSpan()
         default:
             print("default")
         }
@@ -63,3 +105,18 @@ class NativeViewController: UIViewController,UITableViewDataSource,UITableViewDe
     */
 
 }
+
+extension UInt64{
+    
+    func convert64To128Bit()->String{
+        let hex = String(self, radix: 16).uppercased() // 手动转换为十六进制‌:ml-citation{ref="5" data="citationList"}
+        let paddedHex = hex.padding(toLength: 16, withPad: "0", startingAt: 0) // 补零至16位‌:ml-citation{ref="5" data="citationList"}
+        return "0000000000000000" + paddedHex
+    }
+    
+    func convertHex()->String{
+        let hexString = String(self, radix: 16).uppercased() // 手动转换为十六进制‌:ml-citation{ref="1,3" data="citationList"}
+        return hexString.padding(toLength: 16, withPad: "0", startingAt: 0)
+    }
+}
+

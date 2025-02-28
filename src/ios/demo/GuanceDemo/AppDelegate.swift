@@ -7,6 +7,7 @@
 
 import UIKit
 import FTMobileSDK
+
 #if PRE
 let Track_id = "0000000001"
 let STATIC_TAG = "preprod"
@@ -33,7 +34,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         config.enableSDKDebugLog = true
         config.groupIdentifiers = [GroupIdentifier]
         config.globalContext = ["gc_custom_key":STATIC_TAG]
-        config.autoSync = false
         config.env = env
         FTMobileAgent.start(withConfigOptions: config)
         let rum = FTRumConfig(appid:UserDefaults.rumAppId )
@@ -60,6 +60,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         logger.enableLinkRumData = true
         logger.printCustomLogToConsole = true
         FTMobileAgent.sharedInstance().startLogger(withConfigOptions: logger)
+        
+        otelSdkInit()
         return true
     }
     

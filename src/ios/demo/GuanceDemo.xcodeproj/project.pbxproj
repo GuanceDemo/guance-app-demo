@@ -41,6 +41,7 @@
 		173B337B2A692FA2003A4ADE /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B337A2A692FA2003A4ADE /* UserInfo.swift */; };
 		174CB0762B51573400A4F9C5 /* CrashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174CB0752B51573400A4F9C5 /* CrashViewController.swift */; };
 		174CB07A2B54D22900A4F9C5 /* Crasher.mm in Sources */ = {isa = PBXBuildFile; fileRef = 174CB0792B54D22900A4F9C5 /* Crasher.mm */; };
+		17933E592D71B61A00524BF2 /* Otel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17933E582D71B61A00524BF2 /* Otel.swift */; };
 		17B907B42A66560D0026E51A /* DesignableUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B907B32A66560D0026E51A /* DesignableUITextField.swift */; };
 		17B907B72A666B410026E51A /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B907B62A666B410026E51A /* UserManager.swift */; };
 		17B907B92A6686E90026E51A /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B907B82A6686E90026E51A /* HomeTabBarController.swift */; };
@@ -114,6 +115,7 @@
 		174CB0772B54D22800A4F9C5 /* GuanceDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GuanceDemo-Bridging-Header.h"; sourceTree = "<group>"; };
 		174CB0782B54D22900A4F9C5 /* Crasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crasher.h; sourceTree = "<group>"; };
 		174CB0792B54D22900A4F9C5 /* Crasher.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Crasher.mm; sourceTree = "<group>"; };
+		17933E582D71B61A00524BF2 /* Otel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Otel.swift; sourceTree = "<group>"; };
 		17A67EB72A83A37B00DCB88D /* Config-Demo.develop.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-Demo.develop.xcconfig"; sourceTree = "<group>"; };
 		17A67EB82A83B3CB00DCB88D /* Config-Demo.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		17A67EB92A8481D700DCB88D /* Config-Demo.pre.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-Demo.pre.xcconfig"; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				171433E62A6551FE0040F092 /* Assets.xcassets */,
 				171433E82A6551FE0040F092 /* LaunchScreen.storyboard */,
 				171433EB2A6551FE0040F092 /* Info.plist */,
+				17933E582D71B61A00524BF2 /* Otel.swift */,
 			);
 			path = GuanceDemo;
 			sourceTree = "<group>";
@@ -499,6 +502,7 @@
 				171445A22A6A6A3B00376B7A /* StringExtension.swift in Sources */,
 				17B907BB2A6688490026E51A /* ListViewController.swift in Sources */,
 				171445912A69632E00376B7A /* UserDefaultsExtension.swift in Sources */,
+				17933E592D71B61A00524BF2 /* Otel.swift in Sources */,
 				1722E4CD2C855B5100B60D91 /* InputTableViewCell.swift in Sources */,
 				171433FB2A65587B0040F092 /* WebViewController.swift in Sources */,
 				171445A42A6E545E00376B7A /* ConnectStatusBtn.swift in Sources */,
