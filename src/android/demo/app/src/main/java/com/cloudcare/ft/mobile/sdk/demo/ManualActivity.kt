@@ -156,18 +156,30 @@ class ManualActivity : BaseActivity() {
 
                     override fun callStart(call: Call) {
                         super.callStart(call)
-                        netStatusBean.fetchStartTime = Utils.getCurrentNanoTime()
+                        netStatusBean.callStartTime = Utils.getCurrentNanoTime()
                     }
 
                     override fun responseHeadersStart(call: Call) {
                         super.responseHeadersStart(call)
-                        netStatusBean.responseStartTime = Utils.getCurrentNanoTime()
+                        netStatusBean.headerStartTime = Utils.getCurrentNanoTime()
+
+                    }
+
+                    override fun requestHeadersEnd(call: Call, request: Request) {
+                        super.requestHeadersEnd(call, request)
+                        netStatusBean.headerEndTime = Utils.getCurrentNanoTime()
+                    }
+
+
+                    override fun requestBodyStart(call: Call) {
+                        super.requestBodyStart(call)
+                        netStatusBean.bodyStartTime = Utils.getCurrentNanoTime()
 
                     }
 
                     override fun responseBodyEnd(call: Call, byteCount: Long) {
                         super.responseBodyEnd(call, byteCount)
-                        netStatusBean.responseEndTime = Utils.getCurrentNanoTime()
+                        netStatusBean.bodyEndTime = Utils.getCurrentNanoTime()
 
                     }
 
