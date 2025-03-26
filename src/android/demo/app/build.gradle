@@ -166,9 +166,9 @@ dependencies {
     //FT-SDK引用
     implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-native:1.1.1'
 
-    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.7.0-alpha13')
-    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay:0.1.0-alpha08'
-    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay-material:0.1.0-alpha04'
+    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.7.0-alpha15')
+    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay:0.1.1-alpha01'
+    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay-material:0.1.1-alpha01'
 
 //    implementation files('libs/ft-session-replay-debug.aar')
 //    implementation files('libs/ft-sdk-debug.aar')
