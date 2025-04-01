@@ -272,6 +272,8 @@ class ManualActivity : BaseActivity() {
 
                     //设置开始时间
                     netStatusBean.callStartTime = Utils.getCurrentNanoTime()
+                    params.resourceMethod = method
+                    params.url = url
                     //设置请求 header
                     params.requestHeader = connection.requestProperties.toString()
 
@@ -286,8 +288,6 @@ class ManualActivity : BaseActivity() {
                     params.responseContentEncoding = connection.contentEncoding
                     params.responseHeader = responseHeaders.toString()
                     params.resourceStatus = responseCode
-                    params.resourceMethod = method
-                    params.url = url
 
                     val inputStream =
                         if (responseCode >= 400) connection.errorStream else connection.inputStream
