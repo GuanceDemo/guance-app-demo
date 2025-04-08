@@ -136,16 +136,16 @@ def getLocalProperties() {
     def storePassword = System.getenv("storePassword")
     def keyAlias = System.getenv("keyAlias")
     def keyPassword = System.getenv("keyPassword")
-    def keystorePath = System.getenv("keystorePath")
+    def keyStorePath = System.getenv("keyStorePath")
 
 
     Properties properties = new Properties()
-    if (storePassword != null && keyAlias != null && keyPassword != null && keystorePath != null) {
+    if (storePassword != null && keyAlias != null && keyPassword != null && keyStorePath != null) {
         println("getLocalProperties for env")
         properties.setProperty("storePassword", storePassword)
         properties.setProperty("keyAlias", keyAlias)
         properties.setProperty("keyPassword", keyPassword)
-        properties.setProperty("keystorePath", keystorePath)
+        properties.setProperty("keyStorePath", keyStorePath)
 
     } else {
         properties.load(project.rootProject.file('local.properties').newDataInputStream())

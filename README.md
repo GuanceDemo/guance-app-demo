@@ -9,7 +9,7 @@
 * 输出「用户访问监测」数据，覆盖 Session View，Action，LongTask，Error，同时提供 Native View 原生页面和 Webview 的数据
 * 输出「日志」数据
 * 输出 「应用性能监测」数据
-*  提供 SourceMap 崩溃日志符号还原
+* 提供 SourceMap 崩溃日志符号还原
 
 ## 结构功能示意图
 ![](./src/server/guance_demo_structrue.jpg)
@@ -51,8 +51,10 @@
 	* 脚本替换 (需要 `python3 `安装 `beautifulsoup4`)
 
 	```bash
-	python3 update_input_value.py demo-api-address-input  $DEMO_API_DRESS templates/import_helper.html
-	python3 update_input_value.py datakit-address-input  $DATAKIT_ADDRESS templates/import_helper.html
+	python3 update_input_value.py demo-api-address-input $DEMO_API_ADDRESS templates/import_helper.html
+	python3 update_input_value.py datakit-address-input $DATAKIT_ADDRESS templates/import_helper.html
+	python3 update_input_value.py dataway-address-input $DATAWAY_ADDRESS templates/import_helper.html
+	python3 update_input_value.py dataway-client-token-input $DATAWAY_CLIENT_TOKEN templates/import_helper.html
 	```
 	
 	* 手动替换 `import_helper.html` 对应 `datakit-address-input ` ,`demo-api-address-input`
@@ -60,9 +62,14 @@
 	| **变量** | **含义**  |
 	| --- | --- |
 	| datakit-address-input |  `import_helper.html` 中 Datakit Address 输入框 id |
+	| dataway-address-input |  `import_helper.html` 中公网 Dataway 地址 |
+	| dataway-client-token-input |  `import_helper.html` 中公网 Dataway 使用 `clientToken` 输入框 id |
 	| demo-api-address-input |  `import_helper.html` 中 Demo API Address 输入框 id |
-	| DATAKIT_ADDRESS | datakit 数据接入地址，例子：http://10.0.0.1:9529  |
-	| DEMO_API_DRESS |  demo api 请求地址, 例子：http://10.0.0.1:8000  |
+	| DATAKIT_ADDRESS | 本地部署 datakit 数据接入地址，例子：http://10.0.0.1:9529  |
+	| DATAWAY_ADDRESS | 公网 dataway 数据接入地址，例子：http://10.0.0.1:9528  |
+	| DATAWAY_CLIENT_TOKEN |  公网 dataway 认证使用 token |
+	| DEMO_API_ADDRESS |  demo api 请求地址, 例子：http://10.0.0.1:8000  |
+
 
 
 * 启动 Demo 访问后端服务
@@ -116,6 +123,9 @@ curl -X POST '<dca_address>/v1/rum/sourcemap?app_id=gc_app_ios-demo&env=prod&ver
 
 ```
 
+#### 从观测云 Studio Web 上传
+支持直接从 Studio 应用上[直接上传 source map](https://docs.guance.com/real-user-monitoring/sourcemap/set-sourcemap/#upload)
+
 ## App 安装
 * Android: Demo [下载地址](https://static.guance.com/ft-mobile-demo/guance_sdk_demo.apk)
 * iOS: 
@@ -131,7 +141,12 @@ GuanceDemo Datakit 地址和 Demo  api 地址可以随意变更，第一次使�
 密码默认自动填充，用户名 `guance` 密码 `admin`
 
 ### 编辑 Demo 配置
-「登录页面」 > 「编辑 Demo 配置」，输入对应该 datakit 地址和 demo api 地址后并保存配置，配置保存成功需要重启，iOS 需要自行后台杀进程。
+「登录页面」 > 「编辑 Demo 配置」。 上报地址设置完毕后并保存配置，配置保存成功需要重启，iOS 需要自行后台杀进程。
+##### 本地部署（Datakit）
+输入对应 `RUM App Id` 、`Datakit Address` 地址和 `Demo API Address` 地址
+##### 使用公网 DataWay
+输入对应 `RUM App Id` 、`Dataway Address` 地址和 `Demo API Address` 地址
+
 
 #### 剪切板导入
 服务端部署完毕后，可以通过访问 `http://{demo_api_url}/improt_helper` 页面，进行快速配置导入。配置可以通过桌面端访问 improt_helper 页，然后用手机扫码获取，又或者从手机上访问 improt_helper 页，点击“复制文本”获取配置。

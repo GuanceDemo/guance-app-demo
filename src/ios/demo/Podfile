@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '10.0'
+platform :ios, '13.0'
 
 target 'GuanceDemo' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -14,6 +14,8 @@ target 'GuanceDemo' do
   pod 'Toast-Swift', '~> 5.0.1'
   pod 'RxSwift'
   pod 'RxCocoa'
+  pod 'OpenTelemetry-Swift-Protocol-Exporter-Http'
+  pod 'OpenTelemetry-Swift-Sdk'
 end
 
 target 'GuanceExtension' do
@@ -21,12 +23,12 @@ target 'GuanceExtension' do
   pod 'FTMobileSDK/Extension', '1.6.0-alpha.6'
 end
 #解决找不到静态库 libarclite_iphonesimulator.a/libarclite_iphoneos.a 问题
-post_install do |installer|
-   installer.generated_projects.each do |project|
-    project.targets.each do |target|
-        target.build_configurations.each do |config|
-            config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '10.0'
-         end
-    end
-  end
-end
+#post_install do |installer|
+#   installer.generated_projects.each do |project|
+#    project.targets.each do |target|
+#        target.build_configurations.each do |config|
+#            config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '10.0'
+#         end
+#    end
+#  end
+#end

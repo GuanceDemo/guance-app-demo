@@ -23,10 +23,14 @@ import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
+import java.io.BufferedReader
 import java.io.IOException
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
 import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Proxy
+import java.net.URL
 import java.util.UUID
 
 /**
@@ -93,7 +97,7 @@ class ManualActivity : BaseActivity() {
 
         }
 
-        findViewById<Button>(R.id.manual_http_custom_btn).setOnClickListener {
+        findViewById<Button>(R.id.manual_http_okhttp_custom_btn).setOnClickListener {
             //自定义 Resource TraceHeader
             Thread {
                 val uuid = UUID.randomUUID().toString()
@@ -156,18 +160,30 @@ class ManualActivity : BaseActivity() {
 
                     override fun callStart(call: Call) {
                         super.callStart(call)
-                        netStatusBean.fetchStartTime = Utils.getCurrentNanoTime()
+                        netStatusBean.callStartTime = Utils.getCurrentNanoTime()
                     }
 
                     override fun responseHeadersStart(call: Call) {
                         super.responseHeadersStart(call)
-                        netStatusBean.responseStartTime = Utils.getCurrentNanoTime()
+                        netStatusBean.headerStartTime = Utils.getCurrentNanoTime()
+
+                    }
+
+                    override fun requestHeadersEnd(call: Call, request: Request) {
+                        super.requestHeadersEnd(call, request)
+                        netStatusBean.headerEndTime = Utils.getCurrentNanoTime()
+                    }
+
+
+                    override fun requestBodyStart(call: Call) {
+                        super.requestBodyStart(call)
+                        netStatusBean.bodyStartTime = Utils.getCurrentNanoTime()
 
                     }
 
                     override fun responseBodyEnd(call: Call, byteCount: Long) {
                         super.responseBodyEnd(call, byteCount)
-                        netStatusBean.responseEndTime = Utils.getCurrentNanoTime()
+                        netStatusBean.bodyEndTime = Utils.getCurrentNanoTime()
 
                     }
 
@@ -228,6 +244,79 @@ class ManualActivity : BaseActivity() {
                 LogUtils.i("log", res.body?.string() + "")
 
             }.start()
+        }
+
+        findViewById<Button>(R.id.manual_http_http_url_connection_custom_btn).setOnClickListener {
+            Thread {
+                val uuid = UUID.randomUUID().toString()
+                val netStatusBean = NetStatusBean()
+                val params = ResourceParams()
+
+
+                val url = "https://www.guance.com"
+                try {
+                    //开始 resource
+                    FTRUMGlobalManager.get().startResource(uuid)
+
+                    val urlObj = URL(url)
+                    val method = "GET"
+                    val connection = urlObj.openConnection() as HttpURLConnection
+
+                    //设置 trace header
+                    val headers = FTTraceManager.get().getTraceHeader(uuid, url)
+                    for ((key, value) in headers) {
+                        connection.setRequestProperty(key, value)
+                    }
+
+                    connection.requestMethod = method
+
+                    //设置开始时间
+                    netStatusBean.callStartTime = Utils.getCurrentNanoTime()
+                    params.resourceMethod = method
+                    params.url = url
+                    //设置请求 header
+                    params.requestHeader = connection.requestProperties.toString()
+
+                    connection.connect()
+
+                    val responseCode = connection.responseCode
+                    val responseHeaders = connection.headerFields
+
+                    netStatusBean.bodyEndTime = Utils.getCurrentNanoTime()
+                    params.responseContentType = connection.contentType
+                    params.responseContentEncoding = (connection.getHeaderField("Connection"))
+                    params.responseContentEncoding = connection.contentEncoding
+                    params.responseHeader = responseHeaders.toString()
+                    params.resourceStatus = responseCode
+
+                    val inputStream =
+                        if (responseCode >= 400) connection.errorStream else connection.inputStream
+                    var responseBody = ""
+                    if (inputStream != null) {
+                        BufferedReader(InputStreamReader(inputStream))
+                            .use { reader ->
+                                val stringBuilder = StringBuilder()
+                                var line: String?
+                                while ((reader.readLine().also { line = it }) != null) {
+                                    stringBuilder.append(line)
+                                }
+                                responseBody = stringBuilder.toString()
+                            }
+                    }
+
+                    //结束请求
+                    FTRUMGlobalManager.get().stopResource(uuid)
+                    //添加指标和请求
+
+                    println(responseBody)
+                } catch (e: Exception) {
+                    // Handle errors
+                    FTRUMGlobalManager.get().stopResource(uuid)
+                    e.printStackTrace()
+                }
+                FTRUMGlobalManager.get().addResource(uuid, params, netStatusBean)
+            }.start()
+
         }
         findViewById<Button>(R.id.manual_error_btn).setOnClickListener {
             FTRUMGlobalManager.get()

@@ -88,6 +88,19 @@ struct NetworkEngine{
         }
     }
     
+    func userInfoWithOtel() async throws -> (HTTPURLResponse?, Data?) {
+        let urlStr = baseUrl+user
+        do {
+            var request = URLRequest.init(url: URL(string: urlStr)!)
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            request.httpMethod = "GET"
+            let data = try await otlHttpNetwork(request: request)
+            return data
+        }catch{
+            throw error
+        }
+    }
     func baseUrlConnect(url:String) async throws -> Bool {
         let urlStr = url+connect
         do {
@@ -189,7 +202,36 @@ struct NetworkEngine{
             throw RequestError.netError
         }
     }
-        
+       
+    func otlHttpNetwork(request:URLRequest) async throws -> (HTTPURLResponse?,Data?) {
+        return try await withCheckedThrowingContinuation { continuation in
+            let task = self.session.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else
+                if let response = response as? HTTPURLResponse{
+                    if response.statusCode == 200 {
+                        continuation.resume(returning: (response,data))
+                    }else if response.statusCode == 401 || response.statusCode ==  403 {
+                        /// 状态码为 401 或 403 时，认定账号密码错误
+                        if let data = data{
+                            continuation.resume(throwing: RequestError.errorCode(data: data))
+                        }else{
+                            continuation.resume(throwing: RequestError.tokenError)
+                        }
+                    }else{
+                        /// 其余情况判定网络原因
+                        continuation.resume(throwing: RequestError.netError)
+                    }
+                }else{
+                    /// 其余情况判定网络原因
+                    continuation.resume(throwing: RequestError.netError)
+                }
+            }
+            task.resume()
+            
+        }
+    }
     
 }
 

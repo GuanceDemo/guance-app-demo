@@ -28,7 +28,6 @@ PODS:
     - FTMobileSDK/FTSDKCore/BaseUtils/Thread
   - FTMobileSDK/FTSDKCore/FTRUM (1.6.0-alpha.6):
     - FTMobileSDK/FTSDKCore/BaseUtils/Base
-    - FTMobileSDK/FTSDKCore/BaseUtils/Thread
     - FTMobileSDK/FTSDKCore/Protocol
   - FTMobileSDK/FTSDKCore/FTWKWebView (1.6.0-alpha.6):
     - FTMobileSDK/FTSDKCore/BaseUtils/Swizzle
@@ -52,6 +51,7 @@ PODS:
     - SDWebImage/Core (= 5.19.7)
   - SDWebImage/Core (5.19.7)
   - SnapKit (5.6.0)
+  - SwiftProtobuf (1.29.0)
   - Toast-Swift (5.0.1)
 
 DEPENDENCIES:
@@ -59,6 +59,8 @@ DEPENDENCIES:
   - FTMobileSDK/Extension (= 1.6.0-alpha.6)
   - FTMobileSDK/FTSessionReplay (= 1.6.0-alpha.6)
   - MBProgressHUD (~> 1.2.0)
+  - OpenTelemetry-Swift-Protocol-Exporter-Http
+  - OpenTelemetry-Swift-Sdk
   - RxCocoa
   - RxSwift
   - SDWebImage
@@ -69,11 +71,17 @@ SPEC REPOS:
   trunk:
     - FTMobileSDK
     - MBProgressHUD
+    - OpenTelemetry-Swift-Api
+    - OpenTelemetry-Swift-DataCompression
+    - OpenTelemetry-Swift-Protocol-Exporter-Common
+    - OpenTelemetry-Swift-Protocol-Exporter-Http
+    - OpenTelemetry-Swift-Sdk
     - RxCocoa
     - RxRelay
     - RxSwift
     - SDWebImage
     - SnapKit
+    - SwiftProtobuf
     - Toast-Swift
 
 SPEC CHECKSUMS:
@@ -84,6 +92,7 @@ SPEC CHECKSUMS:
   RxSwift: b9a93a26031785159e11abd40d1a55bcb8057e52
   SDWebImage: 8a6b7b160b4d710e2a22b6900e25301075c34cb3
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
+  SwiftProtobuf: b7aa08087e2ab6d162862d143020091254095f69
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
 
 PODFILE CHECKSUM: 182a4b15d81e47c05d0aadd3b15f7b7dd3b39a70

@@ -7,6 +7,7 @@
 
 import UIKit
 import FTMobileSDK
+
 #if PRE
 let Track_id = "0000000001"
 let STATIC_TAG = "preprod"

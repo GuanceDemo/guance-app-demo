@@ -21,17 +21,14 @@ class HomeTabBarController: UITabBarController {
         let navi = UINavigationController.init(rootViewController: listVC)
         navi.navigationBar.tintColor = .orange
         self.addChild(navi)
-        self.tabBar.items?.first?.title = listVC.title
-        self.tabBar.items?.first?.image = UIImage(systemName: "flag")
-
+        navi.tabBarItem = UITabBarItem(title: listVC.title, image: UIImage(systemName: "flag"), tag: 0)
+        
         let mineVC = MineViewController.init()
         mineVC.title = "我的"
         let naviMine = UINavigationController.init(rootViewController: mineVC)
         naviMine.navigationBar.tintColor = .orange
         self.addChild(naviMine)
-        self.tabBar.items?.last?.title = "我的"
-        self.tabBar.items?.last?.image = UIImage(systemName: "person.crop.circle.fill")
-
+        naviMine.tabBarItem = UITabBarItem(title: mineVC.title, image: UIImage(systemName: "person.crop.circle.fill"), tag: 1)
     }
     /*
     // MARK: - Navigation
