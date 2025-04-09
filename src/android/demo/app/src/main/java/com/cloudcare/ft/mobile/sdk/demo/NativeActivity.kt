@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Button
 import com.cloudcare.ft.mobile.sdk.demo.compose.ComposeActivity
 import com.cloudcare.ft.mobile.sdk.demo.http.HttpEngine
-import com.cloudcare.ft.mobile.sdk.demo.compose.ComposeActivity
 import com.cloudcare.ft.mobile.sdk.demo.nativelib.NativeLib
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
