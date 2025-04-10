@@ -8,6 +8,7 @@ import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_APP_ID
 import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_DATAKIT_ADDRESS
 import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_DATAWAY_ADDRESS
 import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_DATAWAY_CLIENT_TOKEN
+import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_OTEL_ADDRESS
 import com.cloudcare.ft.mobile.sdk.demo.http.HttpEngine
 import com.ft.sdk.FTApplication
 import org.json.JSONObject
@@ -15,6 +16,7 @@ import org.json.JSONObject
 private const val PREFS_USER_DATA_NAME = "gc_demo_sdk_setting"
 private const val KEY_DEMO_DATAKIT_ADDRESS = "datakitAddress"
 private const val KEY_DEMO_DATAWAY_ADDRESS = "datawayAddress"
+private const val KEY_OTEL_ADDRESS = "otelAddress"
 private const val KEY_DEMO_DATAWAY_CLIENT_TOKEN = "datawayClientToken"
 private const val KEY_DEMO_APP_ACCESS_TYPE = "appAccessType"
 private const val KEY_DEMO_API_ADDRESS = "demoApiAddress"
@@ -26,6 +28,7 @@ data class SettingData(
     val appId: String,
     val datawayAddress: String,
     val datawayClientToken: String,
+    val otelAddress: String,
     val type: Int,
 ) {
     fun getUserInfoUrl(): String {
@@ -41,6 +44,7 @@ data class SettingData(
                 val appId = json.optString(KEY_DEMO_APP_ID, "")
                 val datawayAddress = json.optString(KEY_DEMO_DATAWAY_ADDRESS, "")
                 val datawayClientToken = json.optString(KEY_DEMO_DATAWAY_CLIENT_TOKEN, "")
+                val otelAddress = json.optString(KEY_OTEL_ADDRESS, "")
                 val type = json.optInt(KEY_DEMO_APP_ACCESS_TYPE, 0)
                 return SettingData(
                     datakitAddress,
@@ -48,6 +52,7 @@ data class SettingData(
                     appId,
                     datawayAddress,
                     datawayClientToken,
+                    otelAddress,
                     type
                 )
             } catch (_: Exception) {
@@ -74,6 +79,7 @@ object SettingConfigManager {
         editor.putString(KEY_DEMO_APP_ID, data.appId)
         editor.putString(KEY_DEMO_DATAWAY_ADDRESS, data.datawayAddress)
         editor.putString(KEY_DEMO_DATAWAY_CLIENT_TOKEN, data.datawayClientToken)
+        editor.putString(KEY_OTEL_ADDRESS, data.otelAddress)
         editor.putInt(KEY_DEMO_APP_ACCESS_TYPE, data.type)
         editor.apply()
 
@@ -117,6 +123,12 @@ object SettingConfigManager {
                     BuildConfig.DATAWAY_CLIENT_TOKEN
                 else
                     DEFAULT_DATAWAY_CLIENT_TOKEN
+            )!!,
+            sharedPreferences.getString(
+                KEY_OTEL_ADDRESS, if (BuildConfig.DEBUG)
+                    BuildConfig.OTEL_URL
+                else
+                    DEFAULT_OTEL_ADDRESS
             )!!,
             sharedPreferences.getInt(
                 KEY_DEMO_APP_ACCESS_TYPE,

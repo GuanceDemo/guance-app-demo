@@ -32,6 +32,7 @@ class SettingActivity : BaseActivity() {
     private var datakitAddressEt: TextInputEditText? = null
     private var datawayAddressEt: TextInputEditText? = null
     private var datawayClientTokenEt: TextInputEditText? = null
+    private var otelAddressEt: TextInputEditText? = null
     private var demoAPIAddressEt: TextInputEditText? = null
     private var appIDEt: TextInputEditText? = null
     private var settingData: SettingData? = null
@@ -44,6 +45,7 @@ class SettingActivity : BaseActivity() {
         datawayAddressEt = findViewById(R.id.setting_dataway_et)
         datawayClientTokenEt = findViewById(R.id.setting_dataway_client_token_et)
         demoAPIAddressEt = findViewById(R.id.setting_demo_api_et)
+        otelAddressEt = findViewById(R.id.setting_otel_api_et)
         appIDEt = findViewById(R.id.setting_app_id_et)
 
         radioGroup = findViewById(R.id.setting_access_type_rg)
@@ -85,6 +87,7 @@ class SettingActivity : BaseActivity() {
         demoAPIAddressEt?.setText(settingData.demoApiAddress)
         datawayAddressEt?.setText(settingData.datawayAddress)
         datawayClientTokenEt?.setText(settingData.datawayClientToken)
+        otelAddressEt?.setText(settingData.otelAddress)
         appIDEt?.setText(settingData.appId)
     }
 
@@ -257,6 +260,7 @@ class SettingActivity : BaseActivity() {
             appIDEt?.text.toString(),
             datawayAddressEt?.text.toString(),
             datawayClientTokenEt?.text.toString(),
+            otelAddressEt?.text.toString(),
             if (radioGroup?.checkedRadioButtonId == R.id.setting_datakit_deploy_rb)
                 AccessType.DATAKIT.value else AccessType.DATAWAY.value
         )
