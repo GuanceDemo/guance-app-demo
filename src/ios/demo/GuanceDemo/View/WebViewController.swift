@@ -20,6 +20,9 @@ class WebViewController: UIViewController,WKNavigationDelegate,WKUIDelegate {
     }
     func createUI(){
         webView = WKWebView()
+//        if #available(iOS 16.4, *) {
+//            webView.isInspectable=true
+//        } 
         webView.navigationDelegate = self
         webView.uiDelegate = self
         let top = self.navigationController?.navigationBar.frame.maxY ?? 0
