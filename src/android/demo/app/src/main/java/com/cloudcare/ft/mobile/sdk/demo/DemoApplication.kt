@@ -57,6 +57,7 @@ open class DemoApplication : Application() {
                 data.datawayClientToken
             )
             ftSDKConfig.setServiceName("ft-sdk-demo")
+                .setEnableOkhttpRequestTag(true)
                 .setDebug(true)//是否开启Debug模式（开启后能查看调试数据）
             FTSdk.install(ftSDKConfig)
 
