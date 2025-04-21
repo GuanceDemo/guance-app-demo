@@ -60,6 +60,7 @@ open class DemoApplication : Application() {
             )
             ftSDKConfig.setServiceName("ft-sdk-demo")
                 .setDebug(true)//是否开启Debug模式（开启后能查看调试数据）
+            ftSDKConfig.setEnableOkhttpRequestTag(true)
             FTSdk.install(ftSDKConfig)
 
             //配置 Log
