@@ -13,6 +13,7 @@ import com.ft.sdk.FTRUMConfig
 import com.ft.sdk.FTSDKConfig
 import com.ft.sdk.FTSdk
 import com.ft.sdk.FTTraceConfig
+import com.ft.sdk.garble.utils.LogUtils
 import com.ft.sdk.sessionreplay.FTSessionReplayConfig
 import com.ft.sdk.sessionreplay.material.MaterialExtensionSupport
 import io.opentelemetry.api.GlobalOpenTelemetry
@@ -59,6 +60,7 @@ open class DemoApplication : Application() {
                 data.datawayClientToken
             )
             ftSDKConfig.setServiceName("ft-sdk-demo")
+                .setEnableOkhttpRequestTag(true)
                 .setDebug(true)//是否开启Debug模式（开启后能查看调试数据）
             ftSDKConfig.setEnableOkhttpRequestTag(true)
             FTSdk.install(ftSDKConfig)
@@ -123,28 +125,36 @@ open class DemoApplication : Application() {
          * 设置 otel SDK
          */
         fun setOtelSDK() {
-            val otlpExporter = OtlpHttpSpanExporter.builder()
-                .setEndpoint("http://10.0.0.1:9529/otel/v1/traces") // APM 服务器地址
-                .build()
+            try {
+                val data = SettingConfigManager.readSetting()
+                val otlpExporter = OtlpHttpSpanExporter.builder()
+                    .setEndpoint(data.otelAddress) // APM 服务器地址
+                    .build()
 
-            val spanProcessor = SimpleSpanProcessor.create(otlpExporter)
+                val spanProcessor = SimpleSpanProcessor.create(otlpExporter)
 
-            val sdkTracerProvider = SdkTracerProvider.builder()
-                .addSpanProcessor(spanProcessor)
-                .setResource(
-                    Resource.create(
-                        Attributes.of(
-                            AttributeKey.stringKey("service.name"),
-                            "ft-sdk-demo"
+                val sdkTracerProvider = SdkTracerProvider.builder()
+                    .addSpanProcessor(spanProcessor)
+                    .setResource(
+                        Resource.create(
+                            Attributes.of(
+                                AttributeKey.stringKey("service.name"),
+                                "ft-sdk-demo"
+                            )
                         )
                     )
-                )
-                .build()
+                    .build()
 
-            OpenTelemetrySdk.builder()
-                .setTracerProvider(sdkTracerProvider)
-                .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
-                .buildAndRegisterGlobal()
+                OpenTelemetrySdk.builder()
+                    .setTracerProvider(sdkTracerProvider)
+                    .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
+                    .buildAndRegisterGlobal()
+            } catch (e: Exception) {
+                LogUtils.e(
+                    "Otel Setting",
+                    "Otel Config set fail:" + LogUtils.getStackTraceString(e)
+                )
+            }
         }
 
 

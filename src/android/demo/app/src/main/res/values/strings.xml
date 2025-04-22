@@ -11,6 +11,7 @@
     <string name="url_check">地址检测</string>
     <string name="app_id">AppId</string>
     <string name="demo_api_address">Demo API Address</string>
+    <string name="otel_api_address">Otel API Address (optional)</string>
     <string name="datakit_address">Datakit Address</string>
     <string name="dataway_address">Dataway Address</string>
     <string name="dataway_token">Dataway Token</string>
