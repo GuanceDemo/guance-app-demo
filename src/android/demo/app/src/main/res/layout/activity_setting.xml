@@ -8,8 +8,8 @@
     <RadioGroup
         android:id="@+id/setting_access_type_rg"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/setting_datakit_deploy_rb"
@@ -111,7 +111,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="27dp"
-        android:hint="@string/demo_api_address">
+        android:hint="@string/otel_api_address">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/setting_otel_api_et"

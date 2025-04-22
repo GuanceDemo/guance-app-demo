@@ -35,6 +35,11 @@ buildscript {
         properties.load(project.rootProject.file(localPropertiesPath).newDataInputStream())
     }
 
+    ext.sanitizeString = { value, defaultValue = "" ->
+        def cleaned = value?.toString()?.trim()
+        return (cleaned == null) ? defaultValue : cleaned
+    }
+
     def appIdString = properties.getProperty("RUM_APP_ID")
     def demoAPIURL = properties.getProperty("DEMO_API_URL")
     def datakitRUMUrl = properties.getProperty("DATAKIT_URL")
@@ -44,15 +49,15 @@ buildscript {
     def otelUrl = properties.getProperty("OTEL_URL")
 
     ext.ft_env = [
-            'rumAppid'  : appIdString,
-            'datakitRUMUrl': datakitRUMUrl,
-            'datawayRUMUrl': datawayRUMUrl,
-            'cliToken': cliToken,
-            'otelUrl': otelUrl,
-            'datawayToken': datawayToken,
-            'demoAPIURL': demoAPIURL,
-            'prodTestEnv'  : 'gray',
-            'prodPublishEnv'  : 'prod'
+            'rumAppid'      : sanitizeString(appIdString),
+            'datakitRUMUrl' : sanitizeString(datakitRUMUrl),
+            'datawayRUMUrl' : sanitizeString(datawayRUMUrl),
+            'cliToken'      : sanitizeString(cliToken),
+            'otelUrl'       : sanitizeString(otelUrl),
+            'datawayToken'  : sanitizeString(datawayToken),
+            'demoAPIURL'    : sanitizeString(demoAPIURL),
+            'prodTestEnv'   : 'gray',
+            'prodPublishEnv': 'prod'
     ]
 }
 

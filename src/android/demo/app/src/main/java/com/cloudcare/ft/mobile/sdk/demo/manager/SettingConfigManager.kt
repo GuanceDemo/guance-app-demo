@@ -7,7 +7,6 @@ import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_API_ADDRESS
 import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_APP_ID
 import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_DATAKIT_ADDRESS
 import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_DATAWAY_ADDRESS
-import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_DATAWAY_CLIENT_TOKEN
 import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_OTEL_ADDRESS
 import com.cloudcare.ft.mobile.sdk.demo.http.HttpEngine
 import com.ft.sdk.FTApplication
@@ -69,8 +68,51 @@ object SettingConfigManager {
 
     private var data: SettingData? = null
 
+    private val defaultDatakitUrl: String by lazy {
+        if (BuildConfig.DEBUG) {
+            BuildConfig.DATAKIT_URL.ifEmpty { DEFAULT_DATAKIT_ADDRESS }
+        } else {
+            DEFAULT_DATAKIT_ADDRESS
+        }
+    }
+
+    private val defaultDemoApiUrl: String by lazy {
+        if (BuildConfig.DEBUG)
+            BuildConfig.DEMO_API_URL.ifEmpty { DEFAULT_API_ADDRESS }
+        else
+            DEFAULT_API_ADDRESS
+    }
+
+    private val defaultAppId: String by lazy {
+        if (BuildConfig.DEBUG)
+            BuildConfig.RUM_APP_ID.ifEmpty { DEFAULT_APP_ID }
+        else
+            DEFAULT_APP_ID
+    }
+
+    private val defaulDatawayUrl: String by lazy {
+        if (BuildConfig.DEBUG)
+            BuildConfig.DATAWAY_URL.ifEmpty { DEFAULT_DATAWAY_ADDRESS }
+        else
+            DEFAULT_DATAWAY_ADDRESS
+    }
+
+    private val defaultDatawayClientToken: String by lazy {
+        if (BuildConfig.DEBUG)
+            BuildConfig.DATAWAY_URL.ifEmpty { DEFAULT_DATAWAY_ADDRESS }
+        else
+            DEFAULT_DATAWAY_ADDRESS
+    }
+
+    private val defaultOtelUrl: String by lazy {
+        if (BuildConfig.DEBUG)
+            BuildConfig.OTEL_URL.ifEmpty { DEFAULT_OTEL_ADDRESS }
+        else
+            DEFAULT_OTEL_ADDRESS
+    }
+
     fun saveSetting(data: SettingData) {
-        this.data = data;
+        this.data = data
         val sharedPreferences = FTApplication.getApplication()
             .getSharedPreferences(PREFS_USER_DATA_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
@@ -79,12 +121,11 @@ object SettingConfigManager {
         editor.putString(KEY_DEMO_APP_ID, data.appId)
         editor.putString(KEY_DEMO_DATAWAY_ADDRESS, data.datawayAddress)
         editor.putString(KEY_DEMO_DATAWAY_CLIENT_TOKEN, data.datawayClientToken)
-        editor.putString(KEY_OTEL_ADDRESS, data.otelAddress)
+        editor.putString(KEY_OTEL_ADDRESS, data.otelAddress.ifEmpty { defaultOtelUrl })
         editor.putInt(KEY_DEMO_APP_ACCESS_TYPE, data.type)
         editor.apply()
 
     }
-
 
     fun readSetting(): SettingData {
         if (data != null) {
@@ -94,46 +135,13 @@ object SettingConfigManager {
             .getSharedPreferences(PREFS_USER_DATA_NAME, Context.MODE_PRIVATE)
 
         data = SettingData(
-            sharedPreferences.getString(
-                KEY_DEMO_DATAKIT_ADDRESS, if (BuildConfig.DEBUG)
-                    BuildConfig.DATAKIT_URL
-                else
-                    DEFAULT_DATAKIT_ADDRESS
-            )!!,
-            sharedPreferences.getString(
-                KEY_DEMO_API_ADDRESS, if (BuildConfig.DEBUG)
-                    BuildConfig.DEMO_API_URL
-                else
-                    DEFAULT_API_ADDRESS
-            )!!,
-            sharedPreferences.getString(
-                KEY_DEMO_APP_ID, if (BuildConfig.DEBUG)
-                    BuildConfig.RUM_APP_ID
-                else
-                    DEFAULT_APP_ID
-            )!!,
-            sharedPreferences.getString(
-                KEY_DEMO_DATAWAY_ADDRESS, if (BuildConfig.DEBUG)
-                    BuildConfig.DATAWAY_URL
-                else
-                    DEFAULT_DATAWAY_ADDRESS
-            )!!,
-            sharedPreferences.getString(
-                KEY_DEMO_DATAWAY_CLIENT_TOKEN, if (BuildConfig.DEBUG)
-                    BuildConfig.DATAWAY_CLIENT_TOKEN
-                else
-                    DEFAULT_DATAWAY_CLIENT_TOKEN
-            )!!,
-            sharedPreferences.getString(
-                KEY_OTEL_ADDRESS, if (BuildConfig.DEBUG)
-                    BuildConfig.OTEL_URL
-                else
-                    DEFAULT_OTEL_ADDRESS
-            )!!,
-            sharedPreferences.getInt(
-                KEY_DEMO_APP_ACCESS_TYPE,
-                AccessType.DATAKIT.value
-            )
+            sharedPreferences.getString(KEY_DEMO_DATAKIT_ADDRESS, defaultDatakitUrl)!!,
+            sharedPreferences.getString(KEY_DEMO_API_ADDRESS, defaultDemoApiUrl)!!,
+            sharedPreferences.getString(KEY_DEMO_APP_ID, defaultAppId)!!,
+            sharedPreferences.getString(KEY_DEMO_DATAWAY_ADDRESS, defaulDatawayUrl)!!,
+            sharedPreferences.getString(KEY_DEMO_DATAWAY_CLIENT_TOKEN, defaultDatawayClientToken)!!,
+            sharedPreferences.getString(KEY_OTEL_ADDRESS, defaultOtelUrl)!!,
+            sharedPreferences.getInt(KEY_DEMO_APP_ACCESS_TYPE, AccessType.DATAKIT.value)
         )
         return data!!
     }
