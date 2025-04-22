@@ -52,4 +52,9 @@
 -dontwarn org.bouncycastle.**
 -dontwarn org.openjsse.**
 
+-dontwarn com.fasterxml.jackson.core.JsonFactory
+-dontwarn com.fasterxml.jackson.core.JsonGenerator
+-dontwarn com.google.auto.value.AutoValue$Builder
+-dontwarn com.google.auto.value.AutoValue
+
 

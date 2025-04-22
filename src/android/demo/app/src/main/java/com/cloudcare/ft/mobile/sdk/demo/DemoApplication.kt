@@ -41,7 +41,7 @@ open class DemoApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         setSDK(this)
-        setOtelSDK()
+        setOtelSDK(this)
     }
 
     companion object {
@@ -124,9 +124,9 @@ open class DemoApplication : Application() {
         /**
          * 设置 otel SDK
          */
-        fun setOtelSDK() {
+        fun setOtelSDK(context: Context) {
             try {
-                val data = SettingConfigManager.readSetting()
+                val data = SettingConfigManager.readSetting(context)
                 val otlpExporter = OtlpHttpSpanExporter.builder()
                     .setEndpoint(data.otelAddress) // APM 服务器地址
                     .build()
