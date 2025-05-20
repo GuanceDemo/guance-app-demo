@@ -110,6 +110,7 @@ FTExt {
     datawayToken = ft_env.datawayToken
     appId = ft_env.rumAppid
     env = 'common'
+    generateSourceMapOnly = true
 
     prodFlavors {
         //Favor 中的配置会覆盖主项目 FTExt 中的配置
