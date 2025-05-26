@@ -88,13 +88,10 @@
 sourcemap 是用于 app 崩溃数据符号还原使用。
 ### 安装
 * [Datakit 安装 sourcemap 工具 ](https://docs.guance.com/integrations/rum/#sourcemap)
-* 下载最新 [sourcemap](https://static.guance.com/ft-mobile-demo/demo_source_map.zip) 
+* 下载最新 sourcemap
+	* [Android](https://static.guance.com/ft-mobile-demo/android_source_map.zip) 
+	* [iOS](https://static.guance.com/ft-mobile-demo/ios_source_map.zip) 
 
-```
-|-- demo_source_map.zip
-	|-- gc_app_android_demo-prod-1.0.0.zip       //Android sourceMap
-	|-- gc_app_ios-demo-prod-1.0.0.zip			    //iOS sourceMap
-```
 ### Soucemap 上传
 sourcemap 上传有两种方式， curl 或者手动放置，手动放置需要 datakit 部署机器的访问权限
 #### CURL 上传
@@ -124,7 +121,7 @@ curl -X POST '<dca_address>/v1/rum/sourcemap?app_id=gc_app_ios-demo&env=prod&ver
 ```
 
 #### 从观测云 Studio Web 上传
-支持直接从 Studio 应用上[直接上传 source map](https://docs.guance.com/real-user-monitoring/sourcemap/set-sourcemap/#upload)
+支持通过 Studio 应用[上传 source map](https://docs.guance.com/real-user-monitoring/sourcemap/set-sourcemap/#upload)
 
 ## App 安装
 * Android: Demo [下载地址](https://static.guance.com/ft-mobile-demo/guance_sdk_demo.apk)
