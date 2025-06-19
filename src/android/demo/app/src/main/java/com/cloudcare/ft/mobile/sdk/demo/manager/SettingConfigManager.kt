@@ -7,6 +7,7 @@ import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_API_ADDRESS
 import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_APP_ID
 import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_DATAKIT_ADDRESS
 import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_DATAWAY_ADDRESS
+import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_DATAWAY_CLIENT_TOKEN
 import com.cloudcare.ft.mobile.sdk.demo.data.DEFAULT_OTEL_ADDRESS
 import com.cloudcare.ft.mobile.sdk.demo.http.HttpEngine
 import com.ft.sdk.FTApplication
@@ -108,7 +109,7 @@ object SettingConfigManager {
 
     private val defaultDatawayClientToken: String by lazy {
         if (BuildConfig.DEBUG)
-            BuildConfig.DATAWAY_URL.ifEmpty { DEFAULT_DATAWAY_ADDRESS }
+            BuildConfig.DATAWAY_CLIENT_TOKEN.ifEmpty { DEFAULT_DATAWAY_CLIENT_TOKEN }
         else
             DEFAULT_DATAWAY_ADDRESS
     }
