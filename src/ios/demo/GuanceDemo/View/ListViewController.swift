@@ -28,7 +28,7 @@ class ListViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     func createUI(){
         view.addSubview(tableView)
-        dataSource = [("Native View","iOS 原生界面","ic_ios"),("Webview","iOS Webview 界面，通过观测云 JS 配置实现","ic_web")]
+        dataSource = [("Native View",NSLocalizedString("ios_native_interface", comment: "iOS native interface"),"ic_ios"),("Webview",NSLocalizedString("ios_webview_interface", comment: "iOS Webview interface, implemented through Guance JS configuration"),"ic_web")]
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "listTableViewCell")

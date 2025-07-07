@@ -29,17 +29,17 @@ import com.ft.sdk.FTRUMGlobalManager
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-    //监听 Compose 中 Navigation 事件
+    // Listen for Navigation events in Compose
     LaunchedEffect(navController) {
         var previousRoute: String? = null
 
         navController.currentBackStackEntryFlow.collect { backStackEntry ->
             val currentRoute = backStackEntry.destination.route
             if (previousRoute != null) {
-                //离开
+                // Leave
                 FTRUMGlobalManager.get().stopView()
             }
-            //进入
+            // Enter
             FTRUMGlobalManager.get().startView("$currentRoute")
             previousRoute = currentRoute
         }
@@ -98,7 +98,7 @@ fun DefaultPreview() {
     MainScreen()
 }
 
-//如果跟踪 Compose 的点击事件
+// If you want to track click events in Compose
 fun trackClick(actionName: String, onClick: () -> Unit): () -> Unit {
     return {
         FTRUMGlobalManager.get().startAction(actionName, "click")

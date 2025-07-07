@@ -43,7 +43,7 @@ class CellInfo:NSObject{
     }
 }
 class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
-    
+
     lazy var tableView:TFTableView = {
         let width = self.view.bounds.width
         let height = self.view.bounds.height
@@ -83,7 +83,7 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         }.disposed(by: disposeBag)
         return backgroundView
     }()
-    
+
     lazy var chooseDeploymentTypeView:UIView = {
         let contentView = UIView.init(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
         let label = UILabel.init(frame: CGRect(x: 10, y: 5, width: 200, height: 20))
@@ -137,7 +137,7 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "配置"
+        title = NSLocalizedString("configuration", comment: "Configuration title")
         let copyItem = UIBarButtonItem.init(image: UIImage(systemName: "doc.on.clipboard"), style: .plain, target: self, action: #selector(copyConfigs))
         let saveItem = UIBarButtonItem.init(barButtonSystemItem: .save, target: self, action: #selector(saveConfigs))
         self.navigationItem.rightBarButtonItems = [saveItem,copyItem]
@@ -145,7 +145,7 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         self.createData()
         resetPrivacyData()
     }
-    
+
     func createData(){
         let rumItem = CellInfo(title: "RUM App ID", hint: "Please enter RUM App ID",type:.rum ,detail: UserDefaults.rumAppId)
         let demoApiItem = CellInfo(title: "Demo API Address", hint: "Please enter Demo API Address",type:.demoAPI ,detail: UserDefaults.baseUrl)
@@ -169,11 +169,11 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         self.tableView.reloadData()
     }
     func showAlert(){
-        let alert = UIAlertController(title: "注意⚠️", message: "SDK 配置的新参数，需要重启应用才能生效❗️", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "取消", style: .cancel))
-        alert.addAction(UIAlertAction(title: "确认", style: .default,handler: { action in
-            UserDefaults.sessionReplayPrivacy = self.srPrivacy
-            UserDefaults.enableSessionReplay = self.enableSessionReplay
+        let alert = UIAlertController(title: NSLocalizedString("attention", comment: "Attention"), message: NSLocalizedString("sdk_config_restart_message", comment: "SDK configuration restart message"), preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: "Cancel"), style: .cancel))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("confirm", comment: "Confirm"), style: .default,handler: { action in
+             UserDefaults.sessionReplayPrivacy = self.srPrivacy
+                        UserDefaults.enableSessionReplay = self.enableSessionReplay
             UserDefaults.isDataKit = self.isDataKit
             let itemArray:Array<CellInfo> = self.dataSource[0] as! Array<CellInfo>
             for item in itemArray {
@@ -306,20 +306,20 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
             return false
         }
     }
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if(indexPath.section == 0){
             if indexPath.row != dataSource[0].count {
                 let cell = InputTableViewCell(style: .default, reuseIdentifier: "mineTableViewCell")
                 let itemArray:Array<CellInfo> = dataSource[0] as! Array<CellInfo>
                 let cellInfo = itemArray[indexPath.row]
-                
+
                 cell.setInfo(info: cellInfo)
-                
+
                 cell.inputTextFieldChanged = { [weak self] string in
                     guard let self = self else { return }
                     let itemArray:Array<CellInfo> = self.dataSource[0] as! Array<CellInfo>
@@ -378,7 +378,7 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
             return self.chooseSessionReplayView
         }
     }
-   
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
             return 65
@@ -393,7 +393,7 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         }
         return 44
     }
-  
+
     
     /*
      // MARK: - Navigation

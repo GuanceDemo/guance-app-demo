@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
 
         })
 
-        //请求权限
+        // Request permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(phonePermission) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions = requestPermissions.plus(phonePermission)
@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        //权限回调提示
+        // Permission callback prompt
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE) {
             var count = 0
@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
             if (count > 0) {
                 Toast.makeText(
                     this,
-                    "你拒绝了电话权限",
+                    "You denied the phone permission",
                     Toast.LENGTH_SHORT
                 ).show()
             }

@@ -34,7 +34,7 @@ import java.net.URL
 import java.util.UUID
 
 /**
- *  Action Resource 和 Trace  手动方式 示范
+ *  Demonstration of manual Action, Resource, and Trace
  *
  */
 class ManualActivity : BaseActivity() {
@@ -49,7 +49,7 @@ class ManualActivity : BaseActivity() {
 
 
         findViewById<Button>(R.id.manual_http_btn).setOnClickListener {
-            //手动设置 OKHttp
+            //Manually set OKHttp
             Thread {
                 val requestBuilder: Request.Builder = Request.Builder()
                     .url("https://www.guance.com")
@@ -73,7 +73,7 @@ class ManualActivity : BaseActivity() {
         }
 
         findViewById<Button>(R.id.manual_http_custom_interceptor_btn).setOnClickListener {
-            //OKHttp 自定义 EventListener Interceptor
+            //OKHttp custom EventListener Interceptor
             Thread {
                 val requestBuilder: Request.Builder = Request.Builder()
                     .url("https://www.guance.com")
@@ -98,11 +98,11 @@ class ManualActivity : BaseActivity() {
         }
 
         findViewById<Button>(R.id.manual_http_okhttp_custom_btn).setOnClickListener {
-            //自定义 Resource TraceHeader
+            //Custom Resource TraceHeader
             Thread {
                 val uuid = UUID.randomUUID().toString()
                 val url = "https://www.guance.com"
-                //获取 trace 头标识
+                //Get trace header identifier
                 val headers = FTTraceManager.get().getTraceHeader(uuid, url)
 
                 var response: Response?
@@ -111,7 +111,7 @@ class ManualActivity : BaseActivity() {
                 val netStatusBean = NetStatusBean()
 
                 val client: OkHttpClient = OkHttpClient.Builder().addInterceptor { chain ->
-                    //开始 resource
+                    //Start resource
                     FTRUMGlobalManager.get().startResource(uuid)
                     val original = chain.request()
 
@@ -123,7 +123,7 @@ class ManualActivity : BaseActivity() {
 
                     response = chain.proceed(request)
 
-                    //结束 resource
+                    //End resource
                     FTRUMGlobalManager.get().stopResource(uuid)
 
                     if (response != null) {
@@ -153,7 +153,7 @@ class ManualActivity : BaseActivity() {
                 }.eventListener(object : EventListener() {
                     override fun callEnd(call: Call) {
                         super.callEnd(call)
-                        //发送 resource 指标数据
+                        //Send resource metric data
                         FTRUMGlobalManager.get().addResource(uuid, params, netStatusBean)
 
                     }
@@ -255,14 +255,14 @@ class ManualActivity : BaseActivity() {
 
                 val url = "https://www.guance.com"
                 try {
-                    //开始 resource
+                    //Start resource
                     FTRUMGlobalManager.get().startResource(uuid)
 
                     val urlObj = URL(url)
                     val method = "GET"
                     val connection = urlObj.openConnection() as HttpURLConnection
 
-                    //设置 trace header
+                    //Set trace header
                     val headers = FTTraceManager.get().getTraceHeader(uuid, url)
                     for ((key, value) in headers) {
                         connection.setRequestProperty(key, value)
@@ -270,11 +270,11 @@ class ManualActivity : BaseActivity() {
 
                     connection.requestMethod = method
 
-                    //设置开始时间
+                    //Set start time
                     netStatusBean.callStartTime = Utils.getCurrentNanoTime()
                     params.resourceMethod = method
                     params.url = url
-                    //设置请求 header
+                    //Set request header
                     params.requestHeader = connection.requestProperties.toString()
 
                     connection.connect()
@@ -304,9 +304,9 @@ class ManualActivity : BaseActivity() {
                             }
                     }
 
-                    //结束请求
+                    //End request
                     FTRUMGlobalManager.get().stopResource(uuid)
-                    //添加指标和请求
+                    //Add metrics and request
 
                     println(responseBody)
                 } catch (e: Exception) {

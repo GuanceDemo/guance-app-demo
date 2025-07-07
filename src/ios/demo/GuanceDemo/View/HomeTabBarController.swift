@@ -17,14 +17,14 @@ class HomeTabBarController: UITabBarController {
     }
     func setUpAllChildViewController(){
         let listVC = ListViewController.init()
-        listVC.title = "首页"
+        listVC.title = NSLocalizedString("home", comment: "Home tab title")
         let navi = UINavigationController.init(rootViewController: listVC)
         navi.navigationBar.tintColor = .orange
         self.addChild(navi)
         navi.tabBarItem = UITabBarItem(title: listVC.title, image: UIImage(systemName: "flag"), tag: 0)
         
         let mineVC = MineViewController.init()
-        mineVC.title = "我的"
+        mineVC.title = NSLocalizedString("mine", comment: "Mine tab title")
         let naviMine = UINavigationController.init(rootViewController: mineVC)
         naviMine.navigationBar.tintColor = .orange
         self.addChild(naviMine)

@@ -61,11 +61,11 @@ open class DemoApplication : Application() {
             )
             ftSDKConfig.setServiceName("ft-sdk-demo")
                 .setEnableOkhttpRequestTag(true)
-                .setDebug(true)//是否开启Debug模式（开启后能查看调试数据）
+                .setDebug(true)// Whether to enable Debug mode (enables debug data viewing)
             ftSDKConfig.setEnableOkhttpRequestTag(true)
             FTSdk.install(ftSDKConfig)
 
-            //配置 Log
+            // Configure Log
             FTSdk.initLogWithConfig(
                 FTLoggerConfig()
                     .setEnableConsoleLog(true)
@@ -82,7 +82,7 @@ open class DemoApplication : Application() {
             val sp = context.getSharedPreferences(SP_STORE_DATA, MODE_PRIVATE)
             val customDynamicValue = sp.getString(CUSTOM_DYNAMIC_TAG, "not set")
 
-            //配置 RUM
+            // Configure RUM
             FTSdk.initRUMWithConfig(
                 FTRUMConfig()
                     .setRumAppId(data.appId)
@@ -98,7 +98,7 @@ open class DemoApplication : Application() {
                     .setEnableTrackAppANR(true)
             )
 
-            //配置 Trace
+            // Configure Trace
             FTSdk.initTraceWithConfig(
                 FTTraceConfig()
                     .setSamplingRate(1f)
@@ -122,13 +122,13 @@ open class DemoApplication : Application() {
         }
 
         /**
-         * 设置 otel SDK
+         * Set otel SDK
          */
         fun setOtelSDK(context: Context) {
             try {
                 val data = SettingConfigManager.readSetting(context)
                 val otlpExporter = OtlpHttpSpanExporter.builder()
-                    .setEndpoint(data.otelAddress) // APM 服务器地址
+                    .setEndpoint(data.otelAddress) // APM server address
                     .build()
 
                 val spanProcessor = SimpleSpanProcessor.create(otlpExporter)
@@ -180,7 +180,7 @@ open class DemoApplication : Application() {
                 val spanContext = SpanContext.create(
                     traceId,
                     parentSpanId,
-                    TraceFlags.getSampled(), // 重要：让 Span 参与采样
+                    TraceFlags.getSampled(), // Important: let Span participate in sampling
                     TraceState.getDefault()
                 )
 
@@ -194,7 +194,7 @@ open class DemoApplication : Application() {
             }
 
             val currentSpan: Span = childSpanBuilder
-                //设置服务端偏移时间
+                // Set server-side offset time
 //                .setStartTimestamp(
 //                System.currentTimeMillis() + 10,
 //                TimeUnit.MILLISECONDS

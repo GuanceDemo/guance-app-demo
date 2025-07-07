@@ -55,7 +55,7 @@ class WebViewController: UIViewController,WKNavigationDelegate,WKUIDelegate {
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo) async {
         let alert = UIAlertController.init(title: nil, message: message, preferredStyle: .alert)
         
-        alert.addAction(UIAlertAction(title: "关闭", style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("close", comment: "Close"), style: .cancel))
         self.present(alert, animated: true)
     }
   

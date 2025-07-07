@@ -33,6 +33,32 @@
     <string name="dataway_deploy">使用公网 DataWay</string>
     <string name="sdk_access_type_format">Type: %s</string>
     <string name="how_to_refresh">[点击用户信息框或下拉进行刷新]</string>
+
+    <!-- Layout strings -->
+    <string name="manual_action">手动 Action</string>
+    <string name="manual_okhttp_setting">手动 OKHttp 设置</string>
+    <string name="okhttp_custom_eventlistener_interceptor">OKHttp 自定义 EventListener Interceptor</string>
+    <string name="manual_trace_resource_okhttp_custom">手动 Trace Resource OkHttp 自定义</string>
+    <string name="manual_trace_resource_httpurlconnection_custom">手动 Trace Resource HttpUrlConnection 自定义</string>
+    <string name="manual_error">手动 Error</string>
+    <string name="manual_longtask">手动 LongTask</string>
+    <string name="tag_dynamic_setting">Tag 动态设置</string>
+
+    <!-- Native view strings -->
+    <string name="crash_java_kotlin">Crash Java/Kotlin</string>
+    <string name="crash_c_cpp">Crash C/C++</string>
+    <string name="uiblock_longtask">UIBlock(Longtask)</string>
+    <string name="compose_activity">Compose Activity</string>
+    <string name="create_otel_span">create otel span</string>
+
+    <!-- List item strings -->
+    <string name="native_view">NativeView</string>
+    <string name="description">Description</string>
+
+    <!-- User info strings -->
+    <string name="default_username">SomeOne</string>
+    <string name="default_email">someone@example.com</string>
+    <string name="app_version">1.0.0</string>
     <string name="setting_privacy_option">文字隐私脱敏选项</string>
     <string name="setting_enable_session_replay">开启 Session Replay</string>
     <string name="setting_privacy_allow">allow</string>

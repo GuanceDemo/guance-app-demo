@@ -2,28 +2,28 @@ from flask import Flask, request, jsonify, render_template, url_for
 from ddtrace import tracer, patch
 #from flask_cors import CORS
 
-# 启用 Flask 的 ddtrace 自动监控
+# Enable ddtrace auto-instrumentation for Flask
 patch(flask=True)
 
 app = Flask(__name__)
 
 # @app.before_request
 # def extract_trace_info():
-#     """从请求头中提取 trace_id 和 span_id，并统一存储到 request 对象中"""
-#     # 提取 Datadog 的 trace-id 和 parent-id
+#     """Extract trace_id and span_id from request headers and store them in the request object"""
+#     # Extract Datadog's trace-id and parent-id
 #     datadog_trace_id = request.headers.get("x-datadog-trace-id")
 #     datadog_span_id = request.headers.get("x-datadog-parent-id")
 
-#     # 提取 W3C Trace Context 的 traceparent
+#     # Extract W3C Trace Context's traceparent
 #     traceparent = request.headers.get("traceparent")
 #     if traceparent:
 #         parts = traceparent.split('-')
 #         if len(parts) >= 3:
-#             # 提取 trace-id 和 parent-id
+#             # Extract trace-id and parent-id
 #             w3c_trace_id = parts[1]
 #             w3c_span_id = parts[2]
 #         else:
-#             # 如果 traceparent 格式不正确，可以记录日志或忽略
+#             # If traceparent format is incorrect, you can log or ignore
 #             app.logger.warning(f"Invalid traceparent header: {traceparent}")
 #             w3c_trace_id = None
 #             w3c_span_id = None
@@ -31,16 +31,16 @@ app = Flask(__name__)
 #         w3c_trace_id = None
 #         w3c_span_id = None
 
-#     # 统一 trace_id 和 span_id
-#     # 优先级：W3C Trace Context > Datadog
+#     # Unified trace_id and span_id
+#     # Priority: W3C Trace Context > Datadog
 #     request.trace_id = w3c_trace_id if w3c_trace_id else datadog_trace_id
 #     request.span_id = w3c_span_id if w3c_span_id else datadog_span_id
 
 # @app.after_request
 # def attach_trace_info(response):
-#     """将 trace_id 和 span_id 附加到响应头"""
+#     """Attach trace_id and span_id to response headers"""
 #     if hasattr(request, "trace_id") and request.trace_id:
-#         # 同时支持 Datadog 和 W3C Trace Context
+#         # Support both Datadog and W3C Trace Context
 #         response.headers["trace_id"] = request.trace_id
 
 #     if hasattr(request, "span_id") and request.span_id:
@@ -50,7 +50,7 @@ app = Flask(__name__)
 
 @app.after_request
 def after_request(response):
-    # 获取当前的 trace span
+    # Get the current trace span
     span = tracer.current_span()
     if span:
         response.headers["span_id"] = str(span.span_id)
@@ -88,7 +88,7 @@ def connect():
     }
     return jsonify(result), 200
 
-# HTML 页面渲染，此处为移动端 WebView 展示使用
+# HTML page rendering, used for mobile WebView display
 @app.route('/')
 def index():
     name = 'GC_WebView'
@@ -100,5 +100,5 @@ def import_helper():
     return render_template('import_helper.html', name=name)
 
 if __name__ == '__main__':
-    #局域网设置
+    # LAN settings
     app.run(host='0.0.0.0', port=8000)

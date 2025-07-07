@@ -1,0 +1,71 @@
+/* Refresh button title */
+"refresh_btn_title" = "[Click here or pull down to refresh]";
+
+/* User information */
+"user_info" = "User Information";
+
+/* Network request address */
+"network_request_address" = "Network Request Address";
+
+/* Record the last entered username */
+"record_last_username" = "Record the last entered username";
+
+/* Record the last entered password */
+"record_last_password" = "Record the last entered password";
+
+/* UserDefaults shared with the app */
+"userdefaults_shared_app" = "UserDefaults shared with the app";
+
+/* Which UserDefaults to store in, default is shared with the app */
+"userdefaults_storage_location" = "Which UserDefaults to store in, default is shared with the app";
+
+/* UserDefaults property wrapper */
+"userdefaults_property_wrapper" = "UserDefaults property wrapper";
+
+/* Log content */
+"log_content" = "Log content";
+
+/* Custom properties (optional) */
+"custom_properties_optional" = "Custom properties (optional)";
+
+/* File name */
+"file_name" = "File name";
+
+/* Method name */
+"method_name" = "Method name";
+
+/* Line number */
+"line_number" = "Line number";
+
+/* Extension example for custom log API usage based on FTMobileSDK */
+"logger_extension_description" = "Extension example for custom log API usage based on FTMobileSDK";
+
+/* Add file name, method name, and line number to custom logs */
+"logger_extension_detail" = "Add file name, method name, and line number to custom logs";
+
+/* Example: Multi-environment configuration parameter usage */
+"multi_env_config_example" = "Example: Multi-environment configuration parameter usage";
+
+/* UI Strings */
+"home" = "Home";
+"mine" = "Mine";
+"configuration" = "Configuration";
+"attention" = "Attention⚠️";
+"sdk_config_restart_message" = "New SDK configuration parameters require app restart to take effect❗️";
+"cancel" = "Cancel";
+"confirm" = "Confirm";
+"local_deployment_datakit" = "Local Deployment (Datakit)";
+"use_public_dataway" = "Public DataWay Delopyment";
+"address_check" = "Address Check";
+"tag_dynamic_setting" = "Tag Dynamic Setting";
+"close" = "Close";
+"ios_native_interface" = "iOS Native Interface";
+"ios_webview_interface" = "iOS Webview Interface, implemented through Guance JS configuration";
+"edit_demo_configuration" = "Edit Demo Configuration";
+"pull_down_refresh_data" = "Pull down to refresh data";
+"version_number" = "Version";
+"logout" = "Logout";
+"lag_text" = "Lag";
+"please_enter_username" = "Please enter username";
+"please_enter_password" = "Please enter password";
+"login" = "Login"; 

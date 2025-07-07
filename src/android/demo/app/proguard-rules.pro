@@ -20,7 +20,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-#=========== SDK 所需配置
+#=========== SDK required configuration
 -dontwarn com.ft.sdk.**
 -keep class com.ft.sdk.**{*;}
 

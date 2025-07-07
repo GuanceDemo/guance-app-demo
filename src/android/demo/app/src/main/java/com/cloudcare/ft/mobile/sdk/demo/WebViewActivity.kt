@@ -23,11 +23,11 @@ class WebViewActivity : BaseActivity() {
         webView = findViewById<WebView>(R.id.webView)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
 
-        // 配置 WebView 设置
+        // Configure WebView settings
         val webSettings: WebSettings = webView!!.settings
-        webSettings.javaScriptEnabled = true // 启用 JavaScript
+        webSettings.javaScriptEnabled = true // Enable JavaScript
 
-        // 设置 WebViewClient 以处理页面加载
+        // Set WebViewClient to handle page loading
         webView!!.webChromeClient = object : WebChromeClient() {
             override fun onReceivedTitle(view: WebView, title: String) {
                 super.onReceivedTitle(view, title)
@@ -45,7 +45,7 @@ class WebViewActivity : BaseActivity() {
             }
         }
 
-        // 加载网页
+        // Load web page
         webView!!.loadUrl("${data.demoApiAddress}?requestUrl=${data.getUserInfoUrl()}")
 
     }

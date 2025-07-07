@@ -7,7 +7,7 @@
 
 import Foundation
 class ModelData: ObservableObject{
-    static let shared = ModelData(userInfo: UserInfo(avatar: "", email: "无", username: "无"))
+    static let shared = ModelData(userInfo: UserInfo(avatar: "", email: "None", username: "None"))
 
     @Published var userInfo:UserInfo
     init(userInfo: UserInfo) {

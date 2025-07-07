@@ -1,7 +1,7 @@
 {
   "time": 1742376039000,
   "action_id": "a294c86a2b454f3a8e77e9cbdf767a1a",
-  "action_name": "AppCompatButton/模拟 native 崩溃#main_mock_crash_native_btn",
+  "action_name": "AppCompatButton/Simulate native crash#main_mock_crash_native_btn",
   "app_id": "appid_xxx",
   "app_name": "Android Sample",
   "application_uuid": "592687f6-9b4d-4348-acbf-d47cba9d0d33",

@@ -22,7 +22,7 @@ target 'GuanceExtension' do
   use_modular_headers!
   pod 'FTMobileSDK/Extension', '1.6.1-alpha.1'
 end
-#解决找不到静态库 libarclite_iphonesimulator.a/libarclite_iphoneos.a 问题
+# Solve the issue of not finding the static library libarclite_iphonesimulator.a/libarclite_iphoneos.a
 #post_install do |installer|
 #   installer.generated_projects.each do |project|
 #    project.targets.each do |target|

@@ -32,14 +32,14 @@ let  KEY_DATAKIT_URL = "key_dataKit_url"
 let  KEY_DATAWAY_URL = "key_dataWay_url"
 let  KEY_CLIENT_TOKEN = "key_clientToken_url"
 
-let  REFRESH_BTN_TITLE =  "[点击此处或下拉进行刷新]"
-///UserDefaults 属性包装器
+let  REFRESH_BTN_TITLE =  NSLocalizedString("refresh_btn_title", comment: "Refresh button title")
+///UserDefaults property wrapper
 @propertyWrapper
 public struct UserDefaultsWrapper<Value> {
     
     let key: String
     let defaultValue: Value
-     ///存储在哪个 UserDefaults，默认为与APP共享数据的
+     ///Which UserDefaults to store in, default is shared with the app
     var storage: UserDefaults? = .standard
 
     public var wrappedValue: Value {
@@ -58,7 +58,7 @@ public struct UserDefaultsOptionalWrapper<Value> {
     
     let key: String
     let defaultValue: Value?
-     ///存储在哪个 UserDefaults，默认为与APP共享数据的
+     ///Which UserDefaults to store in, default is shared with the app
     var storage: UserDefaults? = .standard
     init(key: String, defaultValue: Value? = nil, storage: UserDefaults? = .standard) {
         self.key = key
@@ -78,7 +78,7 @@ public struct UserDefaultsOptionalWrapper<Value> {
 }
 
 public extension UserDefaults {
-    ///用户信息
+    ///User information
     @UserDefaultsOptionalWrapper(key: KEY_USER_INFO)  static var userInfo: Data?
     @UserDefaultsWrapper(key: KEY_LOGIN,defaultValue: false,storage: .shared)  static var login: Bool
     @UserDefaultsWrapper(key: KEY_IS_DATAKIT,defaultValue: true,storage: .shared)  static var isDataKit: Bool
@@ -88,10 +88,10 @@ public extension UserDefaults {
     @UserDefaultsWrapper(key: KEY_SR_TEXT_PRIVACY,defaultValue:DEFAULT_SR_TEXT_PRIVACY,storage: .shared)  static var sessionReplayPrivacy: Int
 
     
-    // 记录上次用户输入的用户名
+    // Record the last entered username
     @UserDefaultsWrapper(key: KEY_USER_ACCOUNT,defaultValue: DEFAULT_USER_ACCOUNT,storage: .shared)
     static var userAccount: String
-    // 记录上次用户输入的密码
+    // Record the last entered password
     @UserDefaultsWrapper(key: KEY_USER_PASSWORD,defaultValue: DEFAULT_USER_PASSWORD,storage: .shared)
     static var userPassword: String
     // sdk rum appid
@@ -102,10 +102,10 @@ public extension UserDefaults {
     @UserDefaultsWrapper(key: KEY_DATAWAY_URL,defaultValue: DEFAULT_DATAWAY_URL,storage: .shared)  static var dataWayURL: String
     // sdk ClientToken
     @UserDefaultsWrapper(key: KEY_CLIENT_TOKEN,defaultValue: DEFAULT_CLIENT_ID,storage: .shared)  static var clientToken: String
-    // 网络请求地址
+    // Network request address
     @UserDefaultsWrapper(key: KEY_BASE_URL,defaultValue:DEFAULT_BASE_URL,storage: .shared)  static var baseUrl: String
     
-    ///与app共享数据的UserDefaults
+    ///UserDefaults shared with the app
     @objc
     static var shared: UserDefaults? {
         if let value = Bundle.main.object(forInfoDictionaryKey: "GroupIdentifier") as? String {

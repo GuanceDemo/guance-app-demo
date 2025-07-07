@@ -11,23 +11,23 @@ import OpenTelemetrySdk
 import OpenTelemetryProtocolExporterHttp
 
 func otelSdkInit(){
-    // 1. 创建 OTLP Exporter,填写 APM 服务器地址
+    // 1. Create OTLP Exporter, fill in APM server address
     guard let endpoint = URL(string:"http://10.0.0.1:9529/otel/v1/traces") else {
         fatalError("Invalid endpoint URL")
     }
     
     let exporter = OtlpHttpTraceExporter(endpoint: endpoint)
     
-    // 2. 创建 Span Processor
+    // 2. Create Span Processor
     let processor = SimpleSpanProcessor(spanExporter: exporter)
     
     
-    // 3. 创建 Resource
+    // 3. Create Resource
     let resource = Resource(attributes: [
         "service.name": AttributeValue.string("ft-sdk-demo")
     ])
     
-    // 5. 全局注册
+    // 5. Global registration
     OpenTelemetry.registerTracerProvider(tracerProvider:  TracerProviderBuilder()
         .add(spanProcessor: processor)
         .with(resource: resource)

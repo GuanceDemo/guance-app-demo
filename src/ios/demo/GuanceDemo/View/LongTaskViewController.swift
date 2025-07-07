@@ -41,8 +41,8 @@ class LongTaskViewController: UIViewController ,UITableViewDataSource,UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "longtaskTableViewCell")
         if indexPath.row % 10 == 0 {
-            usleep(1 * 1000 * 1000); // 1秒
-            cell.textLabel?.text = "卡咯"
+            usleep(1 * 1000 * 1000); // 1 second
+            cell.textLabel?.text = NSLocalizedString("lag_text", comment: "Lag text")
         }else{
             cell.textLabel?.text = String(indexPath.row)
         }
