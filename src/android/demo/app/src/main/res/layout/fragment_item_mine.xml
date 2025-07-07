@@ -45,7 +45,7 @@
                         android:id="@+id/mine_username"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="SomeOne"
+                        android:text="@string/default_username"
                         android:textSize="20sp" />
 
                     <TextView
@@ -53,7 +53,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="someone@example.com"
+                        android:text="@string/default_email"
                         android:textSize="16sp" />
 
                     <TextView
@@ -141,7 +141,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="1.0.0"
+                    android:text="@string/app_version"
                     android:textSize="16sp" />
 
             </LinearLayout>

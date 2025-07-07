@@ -15,7 +15,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        //添加FT SDK的远程仓库地址
+        //Add FT SDK remote repository address
         maven {
             url 'https://mvnrepo.jiagouyun.com/repository/maven-releases'
         }
@@ -65,7 +65,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        //添加FT SDK的远程仓库地址
+        //Add FT SDK remote repository address
         maven {
             url 'https://mvnrepo.jiagouyun.com/repository/maven-releases'
         }

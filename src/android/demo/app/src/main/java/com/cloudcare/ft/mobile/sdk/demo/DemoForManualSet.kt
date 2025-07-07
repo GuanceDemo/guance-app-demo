@@ -5,15 +5,15 @@ import com.cloudcare.ft.mobile.sdk.demo.DemoApplication.Companion.setSDK
 import com.ft.sdk.FTAutoTrack
 
 /**
- * 在不使用 ft-plugin 的前提下使用这种方式初始化
+ * Use this initialization method when not using ft-plugin
  */
 class DemoForManualSet : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        //需要在 SDK 初始化前调用
+        // Must be called before SDK initialization
         FTAutoTrack.startApp(null)
-        //设置 SDK 配置
+        // Set SDK configuration
         setSDK(this)
 
     }

@@ -17,6 +17,7 @@ import com.cloudcare.ft.mobile.sdk.demo.manager.SettingConfigManager
 import com.cloudcare.ft.mobile.sdk.demo.manager.SettingData
 import com.cloudcare.ft.mobile.sdk.demo.utils.Utils
 import com.cloudcare.ft.mobile.sdk.demo.utils.UtilsDialog
+import com.ft.sdk.FTSdk
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -111,7 +112,7 @@ class SettingActivity : BaseActivity() {
 
     private fun checkAppId() {
         if (appIDEt?.text.isNullOrEmpty()) {
-            appIDEt?.error = "app id 不为空"
+            appIDEt?.error = "App ID cannot be empty"
         } else {
             appIDEt?.error = null
         }
@@ -119,7 +120,7 @@ class SettingActivity : BaseActivity() {
 
     private fun checkDatakitAddress() {
         if (!Utils.isValidHttpUrl(datakitAddressEt!!.text.toString())) {
-            datakitAddressEt?.error = "非法地址"
+            datakitAddressEt?.error = "Invalid address"
         } else {
             datakitAddressEt?.error = null
 
@@ -128,7 +129,7 @@ class SettingActivity : BaseActivity() {
 
     private fun checkDemoAPIAddress() {
         if (!Utils.isValidHttpUrl(demoAPIAddressEt!!.text.toString())) {
-            demoAPIAddressEt?.error = "非法地址"
+            demoAPIAddressEt?.error = "Invalid address"
         } else {
             demoAPIAddressEt?.error = null
         }
@@ -136,7 +137,7 @@ class SettingActivity : BaseActivity() {
 
     private fun checkDatawayAddress() {
         if (!Utils.isValidHttpUrl(datawayAddressEt!!.text.toString())) {
-            datawayAddressEt?.error = "非法地址"
+            datawayAddressEt?.error = "Invalid address"
         } else {
             datawayAddressEt?.error = null
         }
@@ -144,7 +145,7 @@ class SettingActivity : BaseActivity() {
 
     private fun checkDatawayClientToken() {
         if (datawayClientTokenEt!!.text.isNullOrEmpty()) {
-            datawayClientTokenEt?.error = "非法地址"
+            datawayClientTokenEt?.error = "Invalid address"
         } else {
             datawayClientTokenEt?.error = null
         }
@@ -234,6 +235,7 @@ class SettingActivity : BaseActivity() {
                         val intent = Intent(this@SettingActivity, MainActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         startActivity(intent)
+                        FTSdk.shutDown()
 
                         DemoApplication.setSDK(this@SettingActivity)
                     }

@@ -55,7 +55,7 @@ class NativeActivity : BaseActivity() {
 //                val traceId = Utils.randomUUID()
                 var traceId = response.headers["trace_id"]
                 var parentId = response.headers["span_id"]
-                //如果使用 ddtrace  traceid 需要将64位int 转 128位16进制，spanid需要转化为 16进制
+                // If using ddtrace, traceid needs to be converted from 64-bit int to 128-bit hex, and spanid needs to be converted to hex
                 traceId = traceId?.toBigInteger()?.let { it1 -> convert64To128Bit(it1) }
                 parentId = parentId?.toBigInteger()?.let { it1 -> convertHex(it1) }
                 println(response.body?.string())

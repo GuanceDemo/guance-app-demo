@@ -19,8 +19,8 @@ class HomeFragment : Fragment(), SimpleAdapter.OnItemClickListener {
 
     private val dataList =
         listOf(
-            ListItem("Native View", "Android 原生界面", R.drawable.ic_android),
-            ListItem("WebView", "Android Webview 界面，通过观测云 JS 配置实现", R.drawable.ic_web)
+            ListItem("Native View", "Android native interface", R.drawable.ic_android),
+            ListItem("WebView", "Android Webview interface, implemented via Guance JS configuration", R.drawable.ic_web)
         )
 
     override fun onCreateView(

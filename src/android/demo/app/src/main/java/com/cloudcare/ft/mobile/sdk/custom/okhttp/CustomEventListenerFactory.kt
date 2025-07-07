@@ -15,21 +15,21 @@ import java.net.InetSocketAddress
 import java.net.Proxy
 
 /**
- * 自定义 Okhttp EventListener，如果你的工程中不需要自定义，可以直接调用
+ * Custom Okhttp EventListener. If your project does not require customization, you can directly call
  * @see com.ft.sdk.FTResourceEventListener.FTFactory()
  *
  */
 class CustomEventListenerFactory : FTResourceEventListener.FTFactory() {
     lateinit var guanceEventListener: EventListener
     override fun create(call: Call): EventListener {
-        //在这里实现自定义方法
+        // Implement your custom method here
         guanceEventListener = super.create(call)
         return CustomEventListener(guanceEventListener)
     }
 }
 
 /**
- *  自定义一个 customerListener 将接收到的数据转发给
+ *  Customize a customerListener to forward the received data
  */
 class CustomEventListener(val guanceEventListener: EventListener) : EventListener() {
     override fun callEnd(call: Call) {

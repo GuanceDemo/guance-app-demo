@@ -58,7 +58,7 @@ class MineFragment : Fragment() {
         )
         val refreshView: SwipeRefreshLayout = view.findViewById(R.id.mine_refresh_layout)
         refreshView.setOnRefreshListener {
-            FTRUMGlobalManager.get().startAction("用户数据刷新", "refresh_user_data")
+            FTRUMGlobalManager.get().startAction("User data refresh", "refresh_user_data")
             refreshUserInfo(view) {
                 refreshView.isRefreshing = false
             }

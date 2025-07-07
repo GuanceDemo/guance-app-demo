@@ -15,37 +15,37 @@
             android:id="@+id/native_crash_java_kotlin_data_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Crash Java/Kotlin" />
+            android:text="@string/crash_java_kotlin" />
 
         <Button
             android:id="@+id/native_crash_c_cpp_data_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Crash C/C++" />
+            android:text="@string/crash_c_cpp" />
 
         <Button
             android:id="@+id/native_long_task_data_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="UIBlock(Longtask)" />
+            android:text="@string/uiblock_longtask" />
 
         <Button
             android:id="@+id/native_compose_activity_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Compose Activity" />
+            android:text="@string/compose_activity" />
 
         <Button
             android:id="@+id/native_dynamic_rum_tag_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tag 动态设置" />
+            android:text="@string/tag_dynamic_setting" />
 
         <Button
             android:id="@+id/native_dynamic_create_otel_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="create otel span" />
+            android:text="@string/create_otel_span" />
 
 
     </LinearLayout>
