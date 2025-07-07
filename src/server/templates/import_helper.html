@@ -2,7 +2,7 @@
 <html>
  <head>
   <title>
-   Demo 地址导入
+   Demo Address Import
   </title>
   <style>
    /* 为输入框添加一些基本样式 */
@@ -53,9 +53,9 @@
   </label>
   <br/>
   <input type="radio" id="datakit-radio" name="config-type" value="datakit" checked>
-  <label for="datakit-radio">本地部署（Datakit）</label>
+  <label for="datakit-radio">Local Deployment (Datakit)</label>
   <input type="radio" id="dataway-radio" name="config-type" value="dataway">
-  <label for="dataway-radio">使用公网 Dataway</label>
+  <label for="dataway-radio">Public Dataway Deployment</label>
 
   <br/><br/>
 
@@ -105,7 +105,7 @@
   <input id="demo-ios-app-id" style="width:60%" type="text" value="gc_app_ios_demo"/>
   <br/>
   <label>
-    Demo Import String：（文本复制并在“编辑 Demo 配置”页面点击右上角“剪贴板导入”的图标）
+    Demo Import String: (Copy the text and click the "Clipboard Import" icon in the upper right corner of the "Edit Demo Configuration" page)
   </label>
   <br/>
   <label id="import-string">
@@ -113,12 +113,12 @@
   <br/>
   <br/>
   <button onclick="copyText()">
-   复制文本
+   Copy Text
   </button>
   <br/>
   <br/>
   <label>
-   Demo Import QRcode：（也可以通过支付宝或微信扫描复制文本, 推荐支付宝）
+   Demo Import QRcode: (You can also scan to copy the text via Alipay or WeChat, Alipay recommended)
   </label>
   <br/>
   <div id="qrcode" style="width:100px; height:100px; margin:15px;">
@@ -195,7 +195,7 @@
       textarea.select();
       document.execCommand('copy');
       document.body.removeChild(textarea);
-      alert('文本已成功复制到剪贴板！');
+      alert('Text has been successfully copied to the clipboard!');
     }
 
     makeCode();

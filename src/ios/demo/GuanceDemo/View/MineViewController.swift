@@ -52,7 +52,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if !self.tableView.visibleCells.isEmpty {
-            self.dataSource[0] = ("编辑 Demo 配置",getConfiguration())
+            self.dataSource[0] = (NSLocalizedString("edit_demo_configuration", comment: "Edit Demo configuration"),getConfiguration())
             self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
         }
     }
@@ -64,16 +64,16 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     func createUI(){
         view.addSubview(tableView)
-        //添加刷新
+        //Add refresh
         refreshControl.addTarget(self, action: #selector(refreshData),
                                  for: .valueChanged)
-        refreshControl.attributedTitle = NSAttributedString(string: "下拉刷新数据")
+        refreshControl.attributedTitle = NSAttributedString(string: NSLocalizedString("pull_down_refresh_data", comment: "Pull down to refresh data"))
         tableView.addSubview(refreshControl)
         let infoDictionary = Bundle.main.infoDictionary
-        let majorVersion:String = infoDictionary?["CFBundleShortVersionString"] as! String//主程序版本号
-        let minorVersion:String = infoDictionary? ["CFBundleVersion"] as! String//版本号（内部标示）
+        let majorVersion:String = infoDictionary?["CFBundleShortVersionString"] as! String//Main program version number
+        let minorVersion:String = infoDictionary? ["CFBundleVersion"] as! String//Version number (internal identifier)
         let appVersion = "\(majorVersion)(\(minorVersion))"
-        dataSource=[("编辑 Demo 配置",getConfiguration()),("版本号",appVersion)]
+        dataSource=[(NSLocalizedString("edit_demo_configuration", comment: "Edit Demo configuration"),getConfiguration()),(NSLocalizedString("version_number", comment: "Version number"),appVersion)]
     }
     func getConfiguration()->String{
         let type = (UserDefaults.isDataKit == true) ? "Datakit" : "Dataway"
@@ -103,7 +103,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     func getTableFooterView()->UIView{
        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: 57))
         let logout = UIButton.init(frame: CGRect(x: 0, y: 12, width: self.view.bounds.size.width, height: 45))
-        logout.setTitle("退出登录", for: .normal)
+        logout.setTitle(NSLocalizedString("logout", comment: "Logout"), for: .normal)
         logout.setTitleColor(.orange, for: .normal)
         logout.addTarget(self, action: #selector(userLogout), for: .touchUpInside)
         view.addSubview(logout)

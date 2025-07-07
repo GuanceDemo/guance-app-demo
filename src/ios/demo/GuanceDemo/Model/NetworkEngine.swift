@@ -164,18 +164,18 @@ struct NetworkEngine{
                     if response.statusCode == 200 {
                         continuation.resume(returning: data)
                     }else if response.statusCode == 401 || response.statusCode ==  403 {
-                        /// 状态码为 401 或 403 时，认定账号密码错误
+                        /// When status code is 401 or 403, consider it as account/password error
                         if let data = data{
                             continuation.resume(throwing: RequestError.errorCode(data: data))
                         }else{
                             continuation.resume(throwing: RequestError.tokenError)
                         }
                     }else{
-                        /// 其余情况判定网络原因
+                        /// For other cases, consider it as network issue
                         continuation.resume(throwing: RequestError.netError)
                     }
                 }else{
-                    /// 其余情况判定网络原因
+                    /// For other cases, consider it as network issue
                     continuation.resume(throwing: RequestError.netError)
                 }
             }
@@ -209,18 +209,18 @@ struct NetworkEngine{
                     if response.statusCode == 200 {
                         continuation.resume(returning: (response,data))
                     }else if response.statusCode == 401 || response.statusCode ==  403 {
-                        /// 状态码为 401 或 403 时，认定账号密码错误
+                        /// When status code is 401 or 403, consider it as account/password error
                         if let data = data{
                             continuation.resume(throwing: RequestError.errorCode(data: data))
                         }else{
                             continuation.resume(throwing: RequestError.tokenError)
                         }
                     }else{
-                        /// 其余情况判定网络原因
+                        /// For other cases, consider it as network issue
                         continuation.resume(throwing: RequestError.netError)
                     }
                 }else{
-                    /// 其余情况判定网络原因
+                    /// For other cases, consider it as network issue
                     continuation.resume(throwing: RequestError.netError)
                 }
             }

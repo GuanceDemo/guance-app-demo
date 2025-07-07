@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-//      示例：多环境配置参数使用
+//      Example: Multi-environment configuration parameter usage
         let info = Bundle.main.infoDictionary!
         let env:String  = info["SDK_ENV"] as! String
 //      let appid:String = info["SDK_APP_ID"] as! String

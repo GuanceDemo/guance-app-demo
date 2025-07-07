@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">GuanceDemo</string>
+    <string name="str_custom_track">Manual Tracking (No Upload Result Return)</string>
+    <string name="str_custom_track_result">Manual Tracking (Async Upload Result Return)</string>
+    <string name="str_custom_track_multi_result">Manual Tracking Multiple Data (Async Upload Result Return)</string>
+    <string name="str_upload_flow_chart">Upload Flow Chart</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="url_check">Address Check</string>
+    <string name="app_id">AppId</string>
+    <string name="demo_api_address">Demo API Address</string>
+    <string name="otel_api_address">Otel API Address (optional)</string>
+    <string name="datakit_address">Datakit Address</string>
+    <string name="dataway_address">Dataway Address</string>
+    <string name="dataway_token">Dataway Token</string>
+    <string name="edit_setting">Edit Demo Configuration</string>
+    <string name="main_index_mine">Mine</string>
+    <string name="main_index_home">Home</string>
+    <string name="setting_save">Save</string>
+    <string name="setting_import_from_clipboard">Import from Clipboard</string>
+    <string name="tip">Tip</string>
+    <string name="setting_tip_restart">Settings completed, need to restart the application</string>
+    <string name="setting_import_success">Configuration imported successfully</string>
+    <string name="setting_import_fail">Configuration parsing failed</string>
+    <string name="setting_configure_not_found">No configuration found</string>
+    <string name="setting_tip_connect_success">Address connection normal</string>
+    <string name="setting_log_out">Logout</string>
+    <string name="setting_version">Version</string>
+    <string name="webview_refresh">Refresh</string>
+    <string name="datakit_deploy">Local Deployment (Datakit Method)</string>
+    <string name="dataway_deploy">Use Public Network DataWay</string>
+    <string name="sdk_access_type_format">Type: %s</string>
+    <string name="how_to_refresh">[Click user info box or pull down to refresh]</string>
+    
+    <!-- Layout strings -->
+    <string name="manual_action">Manual Action</string>
+    <string name="manual_okhttp_setting">Manual OKHttp Setting</string>
+    <string name="okhttp_custom_eventlistener_interceptor">OKHttp Custom EventListener Interceptor</string>
+    <string name="manual_trace_resource_okhttp_custom">Manual Trace Resource OkHttp Custom</string>
+    <string name="manual_trace_resource_httpurlconnection_custom">Manual Trace Resource HttpUrlConnection Custom</string>
+    <string name="manual_error">Manual Error</string>
+    <string name="manual_longtask">Manual LongTask</string>
+    <string name="tag_dynamic_setting">Tag Dynamic Setting</string>
+    
+    <!-- Native view strings -->
+    <string name="crash_java_kotlin">Crash Java/Kotlin</string>
+    <string name="crash_c_cpp">Crash C/C++</string>
+    <string name="uiblock_longtask">UIBlock(Longtask)</string>
+    <string name="compose_activity">Compose Activity</string>
+    <string name="create_otel_span">create otel span</string>
+    
+    <!-- List item strings -->
+    <string name="native_view">NativeView</string>
+    <string name="description">Description</string>
+    
+    <!-- User info strings -->
+    <string name="default_username">SomeOne</string>
+    <string name="default_email">someone@example.com</string>
+    <string name="app_version">1.0.0</string>
+</resources> 

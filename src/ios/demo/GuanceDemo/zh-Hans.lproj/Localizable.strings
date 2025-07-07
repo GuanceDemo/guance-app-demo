@@ -1,0 +1,71 @@
+/* Refresh button title */
+"refresh_btn_title" = "[点击此处或下拉进行刷新]";
+
+/* User information */
+"user_info" = "用户信息";
+
+/* Network request address */
+"network_request_address" = "网络请求地址";
+
+/* Record the last entered username */
+"record_last_username" = "记录上次用户输入的用户名";
+
+/* Record the last entered password */
+"record_last_password" = "记录上次用户输入的密码";
+
+/* UserDefaults shared with the app */
+"userdefaults_shared_app" = "与app共享数据的UserDefaults";
+
+/* Which UserDefaults to store in, default is shared with the app */
+"userdefaults_storage_location" = "存储在哪个 UserDefaults，默认为与APP共享数据的";
+
+/* UserDefaults property wrapper */
+"userdefaults_property_wrapper" = "UserDefaults 属性包装器";
+
+/* Log content */
+"log_content" = "日志内容";
+
+/* Custom properties (optional) */
+"custom_properties_optional" = "自定义属性(可选)";
+
+/* File name */
+"file_name" = "文件名";
+
+/* Method name */
+"method_name" = "方法名";
+
+/* Line number */
+"line_number" = "行号";
+
+/* Extension example for custom log API usage based on FTMobileSDK */
+"logger_extension_description" = "基于 FTMobileSDK 自定义日志 API 的使用扩展示例";
+
+/* Add file name, method name, and line number to custom logs */
+"logger_extension_detail" = "在自定义日志中添加文件名、方法名称、行号";
+
+/* Example: Multi-environment configuration parameter usage */
+"multi_env_config_example" = "示例：多环境配置参数使用";
+
+/* UI Strings */
+"home" = "首页";
+"mine" = "我的";
+"configuration" = "配置";
+"attention" = "注意⚠️";
+"sdk_config_restart_message" = "SDK 配置的新参数，需要重启应用才能生效❗️";
+"cancel" = "取消";
+"confirm" = "确认";
+"local_deployment_datakit" = "本地部署 (Datakit 方式)";
+"use_public_dataway" = "使用公网 DataWay";
+"address_check" = "地址检测";
+"tag_dynamic_setting" = "Tag 动态设置";
+"close" = "关闭";
+"ios_native_interface" = "iOS 原生界面";
+"ios_webview_interface" = "iOS Webview 界面，通过观测云 JS 配置实现";
+"edit_demo_configuration" = "编辑 Demo 配置";
+"pull_down_refresh_data" = "下拉刷新数据";
+"version_number" = "版本号";
+"logout" = "退出登录";
+"lag_text" = "卡咯";
+"please_enter_username" = "请输入用户名";
+"please_enter_password" = "请输入密码";
+"login" = "登录"; 

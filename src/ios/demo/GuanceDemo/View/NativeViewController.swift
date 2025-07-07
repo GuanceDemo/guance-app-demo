@@ -37,7 +37,7 @@ class NativeViewController: UIViewController,UITableViewDataSource,UITableViewDe
     }
     func createUI(){
         view.addSubview(tableView)
-        dataSource = ["LongTask","Crash","Tag 动态设置","Create Otel Span"]
+        dataSource = ["LongTask","Crash",NSLocalizedString("tag_dynamic_setting", comment: "Tag dynamic setting"),"Create Otel Span"]
     }
     
     func dynamicTag(){
@@ -109,13 +109,13 @@ class NativeViewController: UIViewController,UITableViewDataSource,UITableViewDe
 extension UInt64{
     
     func convert64To128Bit()->String{
-        let hex = String(self, radix: 16).uppercased() // 手动转换为十六进制‌:ml-citation{ref="5" data="citationList"}
-        let paddedHex = hex.padding(toLength: 16, withPad: "0", startingAt: 0) // 补零至16位‌:ml-citation{ref="5" data="citationList"}
+        let hex = String(self, radix: 16).uppercased() // Manually convert to hexadecimal
+        let paddedHex = hex.padding(toLength: 16, withPad: "0", startingAt: 0) // Pad to 16 digits
         return "0000000000000000" + paddedHex
     }
     
     func convertHex()->String{
-        let hexString = String(self, radix: 16).uppercased() // 手动转换为十六进制‌:ml-citation{ref="1,3" data="citationList"}
+        let hexString = String(self, radix: 16).uppercased() // Manually convert to hexadecimal
         return hexString.padding(toLength: 16, withPad: "0", startingAt: 0)
     }
 }

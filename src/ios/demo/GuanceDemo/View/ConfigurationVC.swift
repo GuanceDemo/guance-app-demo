@@ -76,7 +76,7 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "配置"
+        title = NSLocalizedString("configuration", comment: "Configuration title")
         let copyItem = UIBarButtonItem.init(image: UIImage(systemName: "doc.on.clipboard"), style: .plain, target: self, action: #selector(copyConfigs))
         let saveItem = UIBarButtonItem.init(barButtonSystemItem: .save, target: self, action: #selector(saveConfigs))
         self.navigationItem.rightBarButtonItems = [saveItem,copyItem]
@@ -98,9 +98,9 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
 
     func showAlert(){
-        let alert = UIAlertController(title: "注意⚠️", message: "SDK 配置的新参数，需要重启应用才能生效❗️", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "取消", style: .cancel))
-        alert.addAction(UIAlertAction(title: "确认", style: .default,handler: { action in
+        let alert = UIAlertController(title: NSLocalizedString("attention", comment: "Attention"), message: NSLocalizedString("sdk_config_restart_message", comment: "SDK configuration restart message"), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: "Cancel"), style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("confirm", comment: "Confirm"), style: .default,handler: { action in
             UserDefaults.isDataKit = self.isDataKit
             for item in self.dataSource {
                 switch item.type {
@@ -232,10 +232,10 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     func chooseDeploymentTypeView()->UIView{
         let view = UIView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: 50))
         let dataKitBtn = SelectButton.init(frame: CGRect(x: 10, y: 10, width: self.view.frame.width/2 - 20, height: 30))
-        dataKitBtn.setTitle("本地部署 (Datakit 方式)", for: .normal)
+        dataKitBtn.setTitle(NSLocalizedString("local_deployment_datakit", comment: "Local deployment Datakit method"), for: .normal)
         dataKitBtn.isSelected = self.isDataKit
         let dataWayBtn = SelectButton.init(frame: CGRect(x: self.view.frame.width/2 + 10, y: 10, width: self.view.frame.width/2 - 20, height: 30))
-        dataWayBtn.setTitle("使用公网 DataWay", for: .normal)
+        dataWayBtn.setTitle(NSLocalizedString("use_public_dataway", comment: "Use public network DataWay"), for: .normal)
         dataWayBtn.isSelected = !self.isDataKit
         view.addSubview(dataKitBtn)
         view.addSubview(dataWayBtn)
@@ -259,7 +259,7 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     func footerView()->UIView{
          let view = UIView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: 57))
          let logout = UIButton.init(frame: CGRect(x: 0, y: 12, width: self.view.bounds.size.width, height: 45))
-         logout.setTitle("地址检测", for: .normal)
+         logout.setTitle(NSLocalizedString("address_check", comment: "Address check"), for: .normal)
          logout.setTitleColor(.orange, for: .normal)
          logout.addTarget(self, action: #selector(confirmClick), for: .touchUpInside)
          view.addSubview(logout)

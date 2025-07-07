@@ -16,7 +16,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
     }()
     lazy var nametf:DesignableUITextField = {
         let nametf = DesignableUITextField.init()
-        nametf.placeholder = "请输入用户名"
+        nametf.placeholder = NSLocalizedString("please_enter_username", comment: "Please enter username")
         nametf.text = UserDefaults.userAccount
         nametf.leftImage = UIImage.init(systemName: "person")
         nametf.textAlignment = .left
@@ -30,7 +30,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
     }()
     lazy var passwordtf:DesignableUITextField = {
         let passwordtf = DesignableUITextField.init()
-        passwordtf.placeholder = "请输入密码"
+        passwordtf.placeholder = NSLocalizedString("please_enter_password", comment: "Please enter password")
         passwordtf.leftImage =  UIImage(systemName: "lock")
         passwordtf.isPassword = true
         passwordtf.text = UserDefaults.userPassword
@@ -47,7 +47,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
         btn.layer.cornerRadius = 8
         btn.layer.masksToBounds = true
         btn.addTarget(self, action: #selector(login), for: .touchUpInside)
-        btn.setTitle("登录", for: .normal)
+        btn.setTitle(NSLocalizedString("login", comment: "Login"), for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 16)
         btn.isEnabled = true
         btn.setBackgroundImage(UIImage.init(color: .orange), for: .normal)
@@ -60,7 +60,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
     lazy var changeBaseUrlBtn:UIButton = {
         let btn = UIButton.init(type: .system)
         btn.addTarget(self, action: #selector(changeBaseUrl), for: .touchUpInside)
-        btn.setTitle("编辑 Demo 配置", for: .normal)
+        btn.setTitle(NSLocalizedString("edit_demo_configuration", comment: "Edit Demo configuration"), for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 16)
         btn.tintColor = .orange
         return btn

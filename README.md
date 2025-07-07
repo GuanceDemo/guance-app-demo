@@ -4,51 +4,51 @@
 * [iOS](./src/ios/demo)
 
 # 
-# 观测云 Demo 使用及部署说明
-## 功能说明
-* 输出「用户访问监测」数据，覆盖 Session View，Action，LongTask，Error，同时提供 Native View 原生页面和 Webview 的数据
-* 输出「日志」数据
-* 输出 「应用性能监测」数据
-* 提供 SourceMap 崩溃日志符号还原
+# Guance Cloud Demo Usage and Deployment Instructions
+## Function Description
+* Outputs "RUM" data, covering Session View, Action, LongTask, Error, and provides data for both Native View and Webview pages
+* Outputs "Log" data
+* Outputs "Application Performance Monitoring" data
+* Provides SourceMap crash log symbolication
 
-## 结构功能示意图
+## Structure Function Diagram
 ![](./src/server/guance_demo_structrue.jpg)
 
-| **名词** | **含义**  |
+| **Term** | **Meaning**  |
 | --- | --- |
-|  Native |  这里指 Guance Demo 原生界面对应的数据处理|
-|  Webview | 应用加载 html 使用的组件 |
-|  Guance Demo Webview | 应用加载 html 使用的组件 |
-|  Guance Demo API |  Demo API http 请求 |
-|  Guance Mobile SDK | 观测云 Android iOS 移动端 SDK |
-|  Guance JS SDK | 观测云 Web 监测 SDK |
-|  JS Bridge | 指原生应用与 Webview 进行通信通道，观测云移动端 SDK 在 App 中 Webview 数据追踪通过 `Guance JS SDK` `JSBridge` 发送给 `Guance Mobile SDK` |
-| RUM | [用户访问监测数据](https://docs.guance.com/real-user-monitoring/) |
-| Resource | RUM 中网络请求数据 |
-| TraceHeader | 指 APM 在 Http 请求中 Http Header 数据标记，上面会携带有 `TraceId`，`SpanId` 等数据 |
+|  Native |  Refers to the data processing corresponding to the Guance Demo native interface |
+|  Webview | The component used by the app to load HTML |
+|  Guance Demo Webview | The component used by the app to load HTML |
+|  Guance Demo API |  Demo API HTTP requests |
+|  Guance Mobile SDK | Guance Cloud Android/iOS mobile SDK |
+|  Guance JS SDK | Guance Cloud Web monitoring SDK |
+|  JS Bridge | Refers to the communication channel between the native app and Webview. Guance Cloud mobile SDK tracks Webview data in the app by sending it to the Guance Mobile SDK via `Guance JS SDK` and `JSBridge` |
+| RUM | [RUM Data](https://docs.guance.com/real-user-monitoring/) |
+| Resource | Network request data in RUM |
+| TraceHeader | Refers to the APM Http Header data marker in Http requests, which carries data such as `TraceId`, `SpanId`, etc. |
 
-## 环境部署
-* [Datakit 安装](https://docs.guance.com/datakit/datakit-install/) 
-* 配置 [Datakit/ddtrace](https://docs.guance.com/integrations/ddtrace-python/)
-* 准备 Demo 访问文件
+## Environment Deployment
+* [Datakit Installation](https://docs.guance.com/datakit/datakit-install/) 
+* Configure [Datakit/ddtrace](https://docs.guance.com/integrations/ddtrace-python/)
+* Prepare Demo access files
 
 	```	
-	|-- app.py 						//配置 Demo App 所需 http 访问地址
-	|-- static						//静态文件：js 及 图片文件
-		|-- dataflux-rum.js			//观测云 Web js SDK 
+	|-- app.py // HTTP access addresses required for Demo App configuration
+	|-- static // Static files: js and image files
+		|-- dataflux-rum.js // Guance Cloud Web js SDK 
 		|-- images
-			|-- logo.png			//Webview 显示图标
-			|-- demo-logo.png		//移动端“我的”页面头像显示
-		|-- jquery.mini.js			// jquery js
-		|-- qrcode.mini.js			// 二维码处理
+			|-- logo.png // Webview display icon
+			|-- demo-logo.png // Avatar display on the mobile "Mine" page
+		|-- jquery.mini.js // jquery js
+		|-- qrcode.mini.js // QR code processing
 	|-- templates					
-		|--index.html				//Demo App 访问的 Webview html
-		|--import_helper.html		//GuanceDemo 快捷导入配置使用
-	|-- update_input_value.py		//更新 import_helper.html 显示 datakit 和 Demo API 地址使用
+		|--index.html // Webview html accessed by Demo App
+		|--import_helper.html // GuanceDemo quick import configuration usage
+	|-- update_input_value.py // Used to update datakit and Demo API addresses displayed in import_helper.html
 	
 	```		
-* 替换 import_helper.html 显示地址
-	* 脚本替换 (需要 `python3 `安装 `beautifulsoup4`)
+* Replace the address displayed in import_helper.html
+	* Script replacement (requires `python3` and `beautifulsoup4` installed)
 
 	```bash
 	python3 update_input_value.py demo-api-address-input $DEMO_API_ADDRESS templates/import_helper.html
@@ -57,22 +57,21 @@
 	python3 update_input_value.py dataway-client-token-input $DATAWAY_CLIENT_TOKEN templates/import_helper.html
 	```
 	
-	* 手动替换 `import_helper.html` 对应 `datakit-address-input ` ,`demo-api-address-input`
+	* Manually replace the corresponding `datakit-address-input`, `demo-api-address-input` in `import_helper.html`
 	
-	| **变量** | **含义**  |
+	| **Variable** | **Meaning**  |
 	| --- | --- |
-	| datakit-address-input |  `import_helper.html` 中 Datakit Address 输入框 id |
-	| dataway-address-input |  `import_helper.html` 中公网 Dataway 地址 |
-	| dataway-client-token-input |  `import_helper.html` 中公网 Dataway 使用 `clientToken` 输入框 id |
-	| demo-api-address-input |  `import_helper.html` 中 Demo API Address 输入框 id |
-	| DATAKIT_ADDRESS | 本地部署 datakit 数据接入地址，例子：http://10.0.0.1:9529  |
-	| DATAWAY_ADDRESS | 公网 dataway 数据接入地址，例子：http://10.0.0.1:9528  |
-	| DATAWAY_CLIENT_TOKEN |  公网 dataway 认证使用 token |
-	| DEMO_API_ADDRESS |  demo api 请求地址, 例子：http://10.0.0.1:8000  |
+	| datakit-address-input |  The Datakit Address input box id in `import_helper.html` |
+	| dataway-address-input |  The public Dataway address in `import_helper.html` |
+	| dataway-client-token-input |  The input box id for public Dataway `clientToken` in `import_helper.html` |
+	| demo-api-address-input |  The Demo API Address input box id in `import_helper.html` |
+	| DATAKIT_ADDRESS | Local deployment datakit data access address, e.g.: http://10.0.0.1:9529  |
+	| DATAWAY_ADDRESS | Public dataway data access address, e.g.: http://10.0.0.1:9528  |
+	| DATAWAY_CLIENT_TOKEN |  Token for public dataway authentication |
+	| DEMO_API_ADDRESS |  Demo api request address, e.g.: http://10.0.0.1:8000  |
 
 
-
-* 启动 Demo 访问后端服务
+* Start the Demo backend service
 
 	```python
 	DD_SERVICE=GC_SERVICE_SDK_DEMO \                   
@@ -82,24 +81,24 @@
 	DD_AGENT_PORT=9529 \
 	ddtrace-run python3 app.py &> demo.log &
 	```
->变量含义请查询  [Datakit ddtrace Python 部署环境变量](https://docs.guance.com/integrations/ddtrace-python/#envs)
+>For variable meanings, please refer to [Datakit ddtrace Python deployment environment variables](https://docs.guance.com/integrations/ddtrace-python/#envs)
 
-## Sourcemap 功能
-sourcemap 是用于 app 崩溃数据符号还原使用。
-### 安装
-* [Datakit 安装 sourcemap 工具 ](https://docs.guance.com/integrations/rum/#sourcemap)
-* 下载最新 sourcemap
+## Sourcemap Function
+Sourcemap is used for app crash data symbolication.
+### Installation
+* [Datakit install sourcemap tool ](https://docs.guance.com/integrations/rum/#sourcemap)
+* Download the latest sourcemap
 	* [Android](https://static.guance.com/ft-mobile-demo/android_source_map.zip) 
 	* [iOS](https://static.guance.com/ft-mobile-demo/ios_source_map.zip) 
 
-### Soucemap 上传
-sourcemap 上传有两种方式， curl 或者手动放置，手动放置需要 datakit 部署机器的访问权限
-#### CURL 上传
+### Sourcemap Upload
+There are two ways to upload sourcemap: curl or manual placement. Manual placement requires access to the datakit deployment machine.
+#### CURL Upload
 
-CURL 命令上传需要替换一下 `<dca_address>` 地址 ，这里是[官方文档](https://docs.guance.com/integrations/rum/#upload-delete)
+CURL command upload requires replacing the `<dca_address>` address. See [official documentation](https://docs.guance.com/integrations/rum/#upload-delete)
 
 ```
-#  demo_source_map 文件夹下执行
+#  Execute in the demo_source_map folder
 
 # Android 
 curl -X POST '<dca_address>/v1/rum/sourcemap?app_id=gc_app_android_demo&env=prod&version=1.0.0&platform=android' -F "file=@gc_app_android_demo-prod-1.0.0.zip" -H "Content-Type: multipart/form-data"
@@ -109,50 +108,58 @@ curl -X POST '<dca_address>/v1/rum/sourcemap?app_id=gc_app_ios-demo&env=prod&ver
 
 ```
 
-#### 手动放置
+#### Manual Placement
 
 ```
-//Android SourceMap 路径
+//Android SourceMap path
 /usr/local/datakit/data/rum/android
 
-//iOS SourceMap 路径
+//iOS SourceMap path
 /usr/local/datakit/data/rum/ios
 
 ```
 
-#### 从观测云 Studio Web 上传
-支持通过 Studio 应用[上传 source map](https://docs.guance.com/real-user-monitoring/sourcemap/set-sourcemap/#upload)
+#### Upload from Guance Cloud Studio Web
+Supports uploading source map via the Studio app [upload source map](https://docs.guance.com/real-user-monitoring/sourcemap/set-sourcemap/#upload)
 
-## App 安装
-* Android: Demo [下载地址](https://static.guance.com/ft-mobile-demo/guance_sdk_demo.apk)
+## App Installation
+* Android: Demo [Download Link](https://static.guance.com/ft-mobile-demo/guance_sdk_demo.apk)
 * iOS: 
-	* 内部人员需提交[内测申请](https://confluence.jiagouyun.com/pages/viewpage.action?pageId=68715410)
-	* 外部人员需自行源码打包安装
+	* Internal staff need to submit a [beta test application](https://confluence.jiagouyun.com/pages/viewpage.action?pageId=68715410)
+	* External users need to build and install from source code
 
 ![](./src/server/guance_mobile_demo.gif)
 
-## GuanceDemo App 使用说明
-GuanceDemo Datakit 地址和 Demo  api 地址可以随意变更，第一次使用必须要先进行
-「编辑 Demo 配置」
-### 登录
-密码默认自动填充，用户名 `guance` 密码 `admin`
+## GuanceDemo App Usage Instructions
+GuanceDemo Datakit address and Demo api address can be changed at will. The first use must first
+"Edit Demo Configuration"
+### Login
+The password is automatically filled in by default. Username `guance` Password `admin`
 
-### 编辑 Demo 配置
-「登录页面」 > 「编辑 Demo 配置」。 上报地址设置完毕后并保存配置，配置保存成功需要重启，iOS 需要自行后台杀进程。
-##### 本地部署（Datakit）
-输入对应 `RUM App Id` 、`Datakit Address` 地址和 `Demo API Address` 地址
-##### 使用公网 DataWay
-输入对应 `RUM App Id` 、`Dataway Address` 地址和 `Demo API Address` 地址
+### Edit Demo Configuration
+"Login page" > "Edit Demo Configuration". After setting and saving the reporting address, you need to restart after the configuration is saved. For iOS, you need to manually kill the process in the background.
+##### Local Deployment (Datakit)
+Enter the corresponding `RUM App Id`, `Datakit Address`, and `Demo API Address`
+##### Use Public DataWay
+Enter the corresponding `RUM App Id`, `Dataway Address`, and `Demo API Address`
 
 
-#### 剪切板导入
-服务端部署完毕后，可以通过访问 `http://{demo_api_url}/improt_helper` 页面，进行快速配置导入。配置可以通过桌面端访问 improt_helper 页，然后用手机扫码获取，又或者从手机上访问 improt_helper 页，点击“复制文本”获取配置。
+#### Import from Clipboard
+After the server is deployed, you can quickly import the configuration by visiting `http://{demo_api_url}/improt_helper` page. The configuration can be accessed on the desktop by visiting the improt_helper page and scanning the QR code with your phone, or by visiting the improt_helper page on your phone and clicking "Copy Text" to get the configuration.
 
 ![](./src/server/guance_mobile_demo_set_from_clipboard.gif)  
 
-### 故障排查
-在「编辑 Demo 」配置页面，你可以对 App 访问进行“地址检测”，你可以在「登录页面」和主界面的「我的」页面找到「编辑 Demo 配置」的入口。
+### Troubleshooting
+On the "Edit Demo" configuration page, you can perform "Address Check" for App access. You can find the entrance to "Edit Demo Configuration" on the "Login page" and the "Mine" page of the main interface.
  
+
+
+
+
+
+
+
+
 
 
 
