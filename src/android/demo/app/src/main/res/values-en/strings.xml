@@ -59,4 +59,22 @@
     <string name="default_username">SomeOne</string>
     <string name="default_email">someone@example.com</string>
     <string name="app_version">1.0.0</string>
+
+    <string name="setting_privacy_option">Text privacy desensitization options</string>
+    <string name="setting_enable_session_replay">Enable Session Replay</string>
+    <string name="setting_privacy_allow">allow</string>
+    <string name="setting_privacy_only_input">only input</string>
+    <string name="setting_privacy_mask">mask all</string>
+    <string name="pick_current_date">date</string>
+    <string name="button_nav_appcompat">appcompat view</string>
+    <string name="pick_current_time">time</string>
+    <string name="spinner">spinner</string>
+    <string name="switch_button">switch</string>
+    <string name="radio_button">radio_button</string>
+    <string name="checkbox">checkbox\n</string>
+    <string name="checked_text_view">checked text\n</string>
+    <string name="edit_text">edit text</string>
+    <string name="session_replay_compat_title">compat title</string>
+    <string name="session_replay_material_title">material title</string>
+    <string name="session_replay">Session Replay</string>
 </resources> 

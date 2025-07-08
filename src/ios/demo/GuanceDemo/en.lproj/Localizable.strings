@@ -59,8 +59,8 @@
 "address_check" = "Address Check";
 "tag_dynamic_setting" = "Tag Dynamic Setting";
 "close" = "Close";
-"ios_native_interface" = "iOS Native Interface";
-"ios_webview_interface" = "iOS Webview Interface, implemented through Guance JS configuration";
+"ios_native_interface" = "iOS Native Monitor";
+"ios_webview_interface" = "iOS Webview Monitoring via Guance JS SDK";
 "edit_demo_configuration" = "Edit Demo Configuration";
 "pull_down_refresh_data" = "Pull down to refresh data";
 "version_number" = "Version";
@@ -69,3 +69,5 @@
 "please_enter_username" = "Please enter username";
 "please_enter_password" = "Please enter password";
 "login" = "Login"; 
+"choose_deployment_type" = "Choose deployment type"; 
+"url_check" = "Url Check"; 

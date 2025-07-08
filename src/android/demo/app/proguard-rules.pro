@@ -31,7 +31,7 @@
 #=========
 -keep class com.cloudcare.ft.mobile.sdk.demo.http.*{*;}
 
-# 保留 com.google.android.material.tabs.TabLayout 相关点击采集
+# keep com.google.android.material.tabs.TabLayout click events
 -keepclassmembers class com.google.android.material.tabs.TabLayout$Tab {
     *;
 }

@@ -38,7 +38,6 @@
 		1722E4CF2C859C9900B60D91 /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1722E4CE2C859C9900B60D91 /* UserInfoView.swift */; };
 		1722E4D92C883D3F00B60D91 /* SelectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1722E4D82C883D3F00B60D91 /* SelectButton.swift */; };
 		1722E4E12C8AB48600B60D91 /* SessionReplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1722E4E02C8AB48600B60D91 /* SessionReplayViewController.swift */; };
-		1722E4E32C8AF99500B60D91 /* Province.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1722E4E22C8AF99500B60D91 /* Province.plist */; };
 		17355D332A73B8E00022181E /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17355D322A73B8E00022181E /* ColorExtension.swift */; };
 		173B337B2A692FA2003A4ADE /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173B337A2A692FA2003A4ADE /* UserInfo.swift */; };
 		174CB0762B51573400A4F9C5 /* CrashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174CB0752B51573400A4F9C5 /* CrashViewController.swift */; };
@@ -51,8 +50,8 @@
 		17C7A1162C81CBDF0080DD92 /* TFTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C7A1152C81CBDF0080DD92 /* TFTableView.swift */; };
 		17FDFCB22C914295009029DD /* SRTipLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FDFCB12C914295009029DD /* SRTipLabel.swift */; };
 		2D2B668EA2ADA62E580061E0 /* libPods-GuanceDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E526B42F97ECAA968904FA /* libPods-GuanceDemo.a */; };
-		CA50FECA2E1BB24C004886E0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CA50FEBF2E1BB24C004886E0 /* Localizable.strings */; };
-		CA50FECF2E1BB24C004886E0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CA50FEC82E1BB24C004886E0 /* Localizable.strings */; };
+		CA50FED72E1CF622004886E0 /* Province.plist in Resources */ = {isa = PBXBuildFile; fileRef = CA50FED62E1CF622004886E0 /* Province.plist */; };
+		CA50FEE62E1CFAD7004886E0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CA50FEE52E1CFAD7004886E0 /* Localizable.strings */; };
 		F6434B1E97AA72B332CC8071 /* libPods-GuanceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C88494A24726B1B797179A0A /* libPods-GuanceExtension.a */; };
 /* End PBXBuildFile section */
 
@@ -110,7 +109,6 @@
 		1722E4CE2C859C9900B60D91 /* UserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserInfoView.swift; path = GuanceDemo/View/UserInfoView.swift; sourceTree = SOURCE_ROOT; };
 		1722E4D82C883D3F00B60D91 /* SelectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectButton.swift; sourceTree = "<group>"; };
 		1722E4E02C8AB48600B60D91 /* SessionReplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SessionReplayViewController.swift; path = GuanceDemo/View/SessionReplayViewController.swift; sourceTree = SOURCE_ROOT; };
-		1722E4E22C8AF99500B60D91 /* Province.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Province.plist; sourceTree = "<group>"; };
 		17355D322A73B8E00022181E /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		173B33642A692D11003A4ADE /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		173B33662A692D11003A4ADE /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -139,8 +137,10 @@
 		C74E5F8C527BD07BC37B8A83 /* Pods_WidgetDemoExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WidgetDemoExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C88494A24726B1B797179A0A /* libPods-GuanceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GuanceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA50FEA22E1BB167004886E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CA50FEBE2E1BB24C004886E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
-		CA50FEC72E1BB24C004886E0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = Localizable.strings; sourceTree = "<group>"; };
+		CA50FEE42E1CFAD7004886E0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		CA50FEE72E1CFB02004886E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Province.plist; sourceTree = "<group>"; };
+		CA50FEE82E1CFB12004886E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CA50FEE92E1CFB72004886E0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "zh-Hans"; path = "zh-Hans.lproj/Province.plist"; sourceTree = "<group>"; };
 		CC17F54327DB1D08CD01B5CB /* Pods-GuanceExtension.pre.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuanceExtension.pre.xcconfig"; path = "Target Support Files/Pods-GuanceExtension/Pods-GuanceExtension.pre.xcconfig"; sourceTree = "<group>"; };
 		D41F34A7D798D8CF6EF9F736 /* Pods-GuanceDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuanceDemo.debug.xcconfig"; path = "Target Support Files/Pods-GuanceDemo/Pods-GuanceDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -192,19 +192,18 @@
 		171433DC2A6551FD0040F092 /* GuanceDemo */ = {
 			isa = PBXGroup;
 			children = (
-				CA50FEC22E1BB24C004886E0 /* en.lproj */,
-				CA50FEC92E1BB24C004886E0 /* zh-Hans.lproj */,
 				173B33812A693422003A4ADE /* GuanceDemo.entitlements */,
 				171433DD2A6551FD0040F092 /* AppDelegate.swift */,
 				171433DF2A6551FD0040F092 /* SceneDelegate.swift */,
 				175951122A7106B6006FAB9D /* Model */,
 				171433F92A6556040040F092 /* View */,
 				171433E32A6551FD0040F092 /* Main.storyboard */,
-				1722E4E22C8AF99500B60D91 /* Province.plist */,
+				CA50FED62E1CF622004886E0 /* Province.plist */,
 				171433E62A6551FE0040F092 /* Assets.xcassets */,
 				171433E82A6551FE0040F092 /* LaunchScreen.storyboard */,
 				CA50FEA22E1BB167004886E0 /* Info.plist */,
 				17933E582D71B61A00524BF2 /* Otel.swift */,
+				CA50FEE52E1CFAD7004886E0 /* Localizable.strings */,
 			);
 			path = GuanceDemo;
 			sourceTree = "<group>";
@@ -307,22 +306,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		CA50FEC22E1BB24C004886E0 /* en.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				CA50FEBF2E1BB24C004886E0 /* Localizable.strings */,
-			);
-			path = en.lproj;
-			sourceTree = "<group>";
-		};
-		CA50FEC92E1BB24C004886E0 /* zh-Hans.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				CA50FEC82E1BB24C004886E0 /* Localizable.strings */,
-			);
-			path = "zh-Hans.lproj";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -390,11 +373,9 @@
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
 				"zh-Hans",
-				"en 2",
-				"zh-Hans 2",
+				en,
 			);
 			mainGroup = 171433D12A6551FD0040F092;
 			productRefGroup = 171433DB2A6551FD0040F092 /* Products */;
@@ -412,11 +393,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA50FEE62E1CFAD7004886E0 /* Localizable.strings in Resources */,
 				171433EA2A6551FE0040F092 /* LaunchScreen.storyboard in Resources */,
-				CA50FECA2E1BB24C004886E0 /* Localizable.strings in Resources */,
-				CA50FECF2E1BB24C004886E0 /* Localizable.strings in Resources */,
 				171433E72A6551FE0040F092 /* Assets.xcassets in Resources */,
-				1722E4E32C8AF99500B60D91 /* Province.plist in Resources */,
+				CA50FED72E1CF622004886E0 /* Province.plist in Resources */,
 				171433E52A6551FD0040F092 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -502,13 +482,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GuanceDemo/Pods-GuanceDemo-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GuanceDemo/Pods-GuanceDemo-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -594,18 +570,20 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
-		CA50FEBF2E1BB24C004886E0 /* Localizable.strings */ = {
+		CA50FED62E1CF622004886E0 /* Province.plist */ = {
 			isa = PBXVariantGroup;
 			children = (
-				CA50FEBE2E1BB24C004886E0 /* en */,
+				CA50FEE72E1CFB02004886E0 /* en */,
+				CA50FEE92E1CFB72004886E0 /* zh-Hans */,
 			);
-			name = Localizable.strings;
+			name = Province.plist;
 			sourceTree = "<group>";
 		};
-		CA50FEC82E1BB24C004886E0 /* Localizable.strings */ = {
+		CA50FEE52E1CFAD7004886E0 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				CA50FEC72E1BB24C004886E0 /* zh-Hans */,
+				CA50FEE42E1CFAD7004886E0 /* zh-Hans */,
+				CA50FEE82E1CFB12004886E0 /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -617,6 +595,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -669,6 +648,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -677,6 +657,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -722,6 +703,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -744,6 +726,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = RRLM22BB37;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GuanceDemo/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -785,6 +768,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = RRLM22BB37;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GuanceDemo/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -882,6 +866,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -934,6 +919,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Pre;
@@ -959,6 +945,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GuanceDemo/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

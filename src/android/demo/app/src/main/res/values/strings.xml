@@ -59,6 +59,7 @@
     <string name="default_username">SomeOne</string>
     <string name="default_email">someone@example.com</string>
     <string name="app_version">1.0.0</string>
+
     <string name="setting_privacy_option">文字隐私脱敏选项</string>
     <string name="setting_enable_session_replay">开启 Session Replay</string>
     <string name="setting_privacy_allow">allow</string>
@@ -75,4 +76,5 @@
     <string name="edit_text">edit text</string>
     <string name="session_replay_compat_title">compat title</string>
     <string name="session_replay_material_title">material title</string>
+    <string name="session_replay">Session Replay</string>
 </resources>

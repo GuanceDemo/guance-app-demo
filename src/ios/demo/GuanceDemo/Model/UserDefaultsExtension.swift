@@ -82,9 +82,9 @@ public extension UserDefaults {
     @UserDefaultsOptionalWrapper(key: KEY_USER_INFO)  static var userInfo: Data?
     @UserDefaultsWrapper(key: KEY_LOGIN,defaultValue: false,storage: .shared)  static var login: Bool
     @UserDefaultsWrapper(key: KEY_IS_DATAKIT,defaultValue: true,storage: .shared)  static var isDataKit: Bool
-    // 记录是否开启 SR 功能
+    // Record whether SR (Session Replay) feature is enabled, default is off
     @UserDefaultsWrapper(key: KEY_SR_ENABLE,defaultValue: false,storage: .shared)  static var enableSessionReplay: Bool
-    // SR text 隐私权限
+    // SR text privacy permission, default is off
     @UserDefaultsWrapper(key: KEY_SR_TEXT_PRIVACY,defaultValue:DEFAULT_SR_TEXT_PRIVACY,storage: .shared)  static var sessionReplayPrivacy: Int
 
     

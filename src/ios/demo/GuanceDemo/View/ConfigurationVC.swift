@@ -88,9 +88,9 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         let contentView = UIView.init(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
         let label = UILabel.init(frame: CGRect(x: 10, y: 5, width: 200, height: 20))
         label.font = .systemFont(ofSize: 12)
-        label.text = "请选择部署方式"
+        label.text = NSLocalizedString("choose_deployment_type", comment: "Choose deployment type")
         contentView.addSubview(label)
-        let segmentControl = UISegmentedControl(items: ["本地部署 (Datakit 方式)","使用公网 DataWay"])
+        let segmentControl = UISegmentedControl(items: [NSLocalizedString("local_deployment_datakit", comment: "Local deployment"),NSLocalizedString("use_public_dataway", comment: "Use public dataway")])
         segmentControl.selectedSegmentIndex = self.isDataKit ? 0 : 1
         contentView.addSubview(segmentControl)
         segmentControl.snp.makeConstraints { (make)->Void in
@@ -328,7 +328,7 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
                 return cell
             }else{
                 let cell = UITableViewCell(style: .default, reuseIdentifier: "defaultCell")
-                cell.textLabel?.text = "地址检测"
+                cell.textLabel?.text = NSLocalizedString("url_check", comment: "URL check")
                 cell.textLabel?.textColor = .orange
                 cell.textLabel?.textAlignment = .center
                 return cell

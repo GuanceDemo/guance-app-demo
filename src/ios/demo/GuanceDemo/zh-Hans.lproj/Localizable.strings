@@ -14,7 +14,7 @@
 "record_last_password" = "记录上次用户输入的密码";
 
 /* UserDefaults shared with the app */
-"userdefaults_shared_app" = "与app共享数据的UserDefaults";
+"userdefaults_shared_app" = "与app共享数据的 UserDefaults";
 
 /* Which UserDefaults to store in, default is shared with the app */
 "userdefaults_storage_location" = "存储在哪个 UserDefaults，默认为与APP共享数据的";
@@ -68,4 +68,6 @@
 "lag_text" = "卡咯";
 "please_enter_username" = "请输入用户名";
 "please_enter_password" = "请输入密码";
-"login" = "登录"; 
+"login" = "登录";
+"choose_deployment_type" = "请选择部署方式"; 
+"url_check" = "地址检测"; 

@@ -2,13 +2,13 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
 
-    <!-- 半透明黑色背景 -->
+    <!-- Transparent black background -->
     <solid android:color="#CC000000" />
 
-    <!-- 圆角 -->
+    <!-- Corner radius -->
     <corners android:radius="16dp" />
 
-    <!-- 内边距 -->
+    <!-- Padding -->
     <padding
         android:left="16dp"
         android:top="10dp"
