@@ -229,7 +229,7 @@
 				<string>Handan</string>
 				<key>districts</key>
 				<array>
-					<string>邯山区</string>
+					<string>Ganshan</string>
 					<string>Congtai</string>
 					<string>Fuxing</string>
 					<string>Fengfengkuangqu</string>
@@ -313,7 +313,7 @@
 				<string>Zhangjiakou</string>
 				<key>districts</key>
 				<array>
-					<string>桥东区</string>
+					<string>Qiaodong</string>
 					<string>Qiaoxi</string>
 					<string>Xuanhua</string>
 					<string>Xiahuayuan</string>
@@ -531,7 +531,7 @@
 				<key>districts</key>
 				<array>
 					<string>Yanhu</string>
-					<string>临猗县</string>
+					<string>Linying</string>
 					<string>Wanrongxian</string>
 					<string>Wenxixian</string>
 					<string>Jishanxian</string>
@@ -551,8 +551,8 @@
 				<key>districts</key>
 				<array>
 					<string>Xinfu</string>
-					<string>定襄县</string>
-					<string>五台县</string>
+					<string>Dingxiang</string>
+					<string>Wutai</string>
 					<string>Daixian</string>
 					<string>Fanshixian</string>
 					<string>Ningwuxian</string>

@@ -242,8 +242,8 @@ class SessionReplayViewController: UIViewController,UIPickerViewDataSource,UIPic
        
         
 //        let selectButton = UIButton.init(frame: CGRect(x: pickerTip.frame.maxX, y: pickerTip.frame.minY, width: 80, height: 30))
-//        selectButton.setTitle("选择", for: .normal)
-//        selectButton.setTitle("确认", for: .selected)
+//        selectButton.setTitle("Select", for: .normal)
+//        selectButton.setTitle("Confirm", for: .selected)
 //        selectButton.setTitleColor(.darkGray, for: .normal)
 //        selectButton.rx.controlEvent(.touchUpInside).subscribe {[weak self] element in
 //            guard let self = self else {
