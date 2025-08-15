@@ -15,7 +15,7 @@ android {
         compose true
     }
 
-    namespace 'com.cloudcare.ft.mobile.sdk.demo'
+    namespace 'com.ft.mobile.sdk.demo'
     compileSdk 34
     defaultConfig {
         applicationId "com.guance.mobile.sdk.demo"

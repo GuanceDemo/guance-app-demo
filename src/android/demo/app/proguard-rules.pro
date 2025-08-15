@@ -29,7 +29,7 @@
 -keepnames class * extends android.view.View
 -keepnames class * extends android.view.MenuItem
 #=========
--keep class com.cloudcare.ft.mobile.sdk.demo.http.*{*;}
+-keep class com.ft.mobile.sdk.demo.http.*{*;}
 
 # keep com.google.android.material.tabs.TabLayout click events
 -keepclassmembers class com.google.android.material.tabs.TabLayout$Tab {
