@@ -1,4 +1,4 @@
-package com.cloudcare.ft.mobile.sdk.demo
+package com.ft.mobile.sdk.demo
 
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -6,9 +6,9 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import com.cloudcare.ft.mobile.sdk.demo.adapter.ViewPagerAdapter
-import com.cloudcare.ft.mobile.sdk.demo.fragment.SessionReplayMaterialFragment
-import com.datadog.benchmark.sample.fragment.SessionReplayAppcompatFragment
+import com.ft.mobile.sdk.demo.adapter.ViewPagerAdapter
+import com.ft.mobile.sdk.demo.fragment.SessionReplayMaterialFragment
+import com.ft.mobile.sdk.demo.fragment.SessionReplayAppcompatFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 

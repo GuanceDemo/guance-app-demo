@@ -1,4 +1,4 @@
-package com.cloudcare.ft.mobile.sdk.demo.utils;
+package com.ft.mobile.sdk.demo.utils;
 
 import android.app.Activity;
 import android.view.Gravity;
@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.cloudcare.ft.mobile.sdk.demo.R;
+import com.ft.mobile.sdk.demo.R;
+
 
 public class CustomToast {
 

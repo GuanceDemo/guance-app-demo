@@ -4,7 +4,7 @@
  * Copyright 2016-Present Datadog, Inc.
  */
 
-package com.cloudcare.ft.mobile.sdk.demo.fragment
+package com.ft.mobile.sdk.demo.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,8 +18,8 @@ import android.widget.ImageView
 import android.widget.NumberPicker
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
-import com.cloudcare.ft.mobile.sdk.demo.R
-import com.cloudcare.ft.mobile.sdk.demo.utils.CustomToast
+import com.ft.mobile.sdk.demo.R
+import com.ft.mobile.sdk.demo.utils.CustomToast
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import java.util.Locale
@@ -36,7 +36,7 @@ internal class SessionReplayMaterialFragment : Fragment() {
                 setOnClickListener { this.toggle() }
             }
             findViewById<View>(R.id.show_custom_toast_button).apply {
-                setOnClickListener{
+                setOnClickListener {
                     CustomToast.showToast(activity, "Toast:" + System.currentTimeMillis(), 1000)
                 }
             }
