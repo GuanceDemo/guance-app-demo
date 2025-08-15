@@ -29,7 +29,7 @@
 -keepnames class * extends android.view.View
 -keepnames class * extends android.view.MenuItem
 #=========
--keep class com.cloudcare.ft.mobile.sdk.demo.http.*{*;}
+-keep class com.ft.mobile.sdk.demo.http.*{*;}
 #====================
 
 -dontwarn org.bouncycastle.jsse.BCSSLParameters

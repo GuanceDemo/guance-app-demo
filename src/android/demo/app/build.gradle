@@ -14,7 +14,7 @@ android {
         buildConfig = true
     }
 
-    namespace 'com.cloudcare.ft.mobile.sdk.demo'
+    namespace 'com.ft.mobile.sdk.demo'
     compileSdk 34
     defaultConfig {
         applicationId "com.guance.mobile.sdk.demo"
@@ -167,10 +167,10 @@ dependencies {
 
     //================FT-SDK dependencies required for use=================//
     //FT-SDK dependency
-    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.6.12')
+    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.6.13')
 //    implementation files('libs/ft-sdk-debug.aar')
 
-    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-native:1.1.1'
+    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-native:1.1.2'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.picasso:picasso:2.8'
 

@@ -8,7 +8,7 @@ target 'GuanceDemo' do
   pod 'SnapKit', '~> 5.6.0'
   pod 'SDWebImage'
   pod 'MBProgressHUD', '~> 1.2.0'
-  pod 'FTMobileSDK', '~>1.5.17'
+  pod 'FTMobileSDK', '~>1.5.18'
   pod 'Toast-Swift', '~> 5.0.1'
   pod 'RxSwift'
   pod 'RxCocoa'
@@ -18,7 +18,7 @@ end
 
 target 'GuanceExtension' do
   use_modular_headers!
-  pod 'FTMobileSDK/Extension', '1.5.17'
+  pod 'FTMobileSDK/Extension', '1.5.18'
 end
 # Solve the issue of not finding the static library libarclite_iphonesimulator.a/libarclite_iphoneos.a
 #post_install do |installer|

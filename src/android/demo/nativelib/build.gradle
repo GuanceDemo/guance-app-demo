@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.cloudcare.ft.mobile.sdk.demo.nativelib'
+    namespace 'com.ft.mobile.sdk.demo.nativelib'
     compileSdk 34
 
     defaultConfig {
