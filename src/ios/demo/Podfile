@@ -1,8 +1,8 @@
 # Uncomment the next line to define a global platform for your project
 platform :ios, '13.0'
 
-target 'GuanceDemo' do
-  # Comment the next line if you don't want to use dynamic frameworks
+target 'FTSDKDemo' do
+ # Comment the next line if you don't want to use dynamic frameworks
   
   use_modular_headers!
   pod 'SnapKit', '~> 5.6.0'
@@ -18,7 +18,7 @@ target 'GuanceDemo' do
   pod 'OpenTelemetry-Swift-Sdk'
 end
 
-target 'GuanceExtension' do
+target 'FTSDKWidgetDemo' do
   use_modular_headers!
   pod 'FTMobileSDK/Extension', '1.6.2-alpha.2'
 end

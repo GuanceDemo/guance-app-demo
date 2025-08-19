@@ -1,6 +1,6 @@
 //
 //  Config-Demo.release.xcconfig
-//  GuanceDemo
+//  FTSDKDemo
 //
 //  Created by hulilei on 2023/8/9.
 //
@@ -9,7 +9,7 @@
 // https://help.apple.com/xcode/#/dev745c5c974
 
 // Import the corresponding .xcconfig for pod
-#include "Pods/Target Support Files/Pods-GuanceDemo/Pods-GuanceDemo.release.xcconfig"
+#include "Pods/Target Support Files/Pods-FTSDKDemo/Pods-FTSDKDemo.release.xcconfig"
 
 SDK_APP_ID = "app_id_prod"
 // In URL // you need to add $()
