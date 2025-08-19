@@ -1,6 +1,6 @@
 //
 //  SessionReplayViewController.swift
-//  GuanceDemo
+//  FTSDKDemo
 //
 //  Created by hulilei on 2024/9/6.
 //

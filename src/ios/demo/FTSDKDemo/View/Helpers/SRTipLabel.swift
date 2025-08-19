@@ -1,6 +1,6 @@
 //
 //  SRTipLabel.swift
-//  GuanceDemo
+//  FTSDKDemo
 //
 //  Created by hulilei on 2024/9/11.
 //
