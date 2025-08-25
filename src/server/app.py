@@ -75,8 +75,8 @@ def get_user():
     host = request.host
     avatar_url = url_for('static', filename='images/demo-icon.png')
     user = {
-        'username': 'GuanceDemo',
-        'email': 'guance@example.com',
+        'username': 'FakeUser',
+        'email': 'FakeEmail@example.com',
         'avatar': f'http://{host}{avatar_url}'
     }
     return jsonify(user), 200

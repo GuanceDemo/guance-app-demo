@@ -12,7 +12,7 @@
 * Provides SourceMap crash log symbolication
 
 ## Structure Function Diagram
-![](./src/server/guance_demo_structrue.jpg)
+![](./src/server/demo_structrue.jpg)
 
 | **Term** | **Meaning**  |
 | --- | --- |
@@ -128,7 +128,7 @@ Supports uploading source map via the Studio app [upload source map](https://doc
 	* Internal staff need to submit a [beta test application](https://confluence.jiagouyun.com/pages/viewpage.action?pageId=68715410)
 	* External users need to build and install from source code
 
-![](./src/server/guance_mobile_demo.gif)
+![](./src/server/mobile_demo.gif)
 
 ## GuanceDemo App Usage Instructions
 GuanceDemo Datakit address and Demo api address can be changed at will. The first use must first
@@ -147,7 +147,7 @@ Enter the corresponding `RUM App Id`, `Dataway Address`, and `Demo API Address`
 #### Import from Clipboard
 After the server is deployed, you can quickly import the configuration by visiting `http://{demo_api_url}/improt_helper` page. The configuration can be accessed on the desktop by visiting the improt_helper page and scanning the QR code with your phone, or by visiting the improt_helper page on your phone and clicking "Copy Text" to get the configuration.
 
-![](./src/server/guance_mobile_demo_set_from_clipboard.gif)  
+![](./src/server/mobile_demo_set_from_clipboard.gif)  
 
 ### Troubleshooting
 On the "Edit Demo" configuration page, you can perform "Address Check" for App access. You can find the entrance to "Edit Demo Configuration" on the "Login page" and the "Mine" page of the main interface.

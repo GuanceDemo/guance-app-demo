@@ -17,7 +17,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1714456E2A693CEC00376B7A"
-               BuildableName = "GuanceWidgetDemo.appex"
+               BuildableName = "FTSDKWidgetDemo.appex"
                BlueprintName = "FTSDKWidgetDemo"
                ReferencedContainer = "container:FTSDKDemo.xcodeproj">
             </BuildableReference>
@@ -31,7 +31,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "171433D92A6551FD0040F092"
-               BuildableName = "GuanceDemo.app"
+               BuildableName = "FTSDKDemo.app"
                BlueprintName = "FTSDKDemo"
                ReferencedContainer = "container:FTSDKDemo.xcodeproj">
             </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "171433D92A6551FD0040F092"
-            BuildableName = "GuanceDemo.app"
+            BuildableName = "FTSDKDemo.app"
             BlueprintName = "FTSDKDemo"
             ReferencedContainer = "container:FTSDKDemo.xcodeproj">
          </BuildableReference>
@@ -81,7 +81,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "171433D92A6551FD0040F092"
-            BuildableName = "GuanceDemo.app"
+            BuildableName = "FTSDKDemo.app"
             BlueprintName = "FTSDKDemo"
             ReferencedContainer = "container:FTSDKDemo.xcodeproj">
          </BuildableReference>
