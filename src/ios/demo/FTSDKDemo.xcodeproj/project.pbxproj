@@ -53,6 +53,7 @@
 		179042BB2E5476ED00015775 /* SRTipLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179042BA2E5476ED00015775 /* SRTipLabel.swift */; };
 		5ED25F8E8A695FB42E315E53 /* libPods-FTSDKWidgetDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 031EDE9FFF92A5BCCB42843F /* libPods-FTSDKWidgetDemo.a */; };
 		723127D1FD2F465E9715C3F5 /* libPods-FTSDKDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BB4BA3F2DD10C4C6D14B3F8 /* libPods-FTSDKDemo.a */; };
+		CA5849882E5DD91C00B859DB /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5849852E5DD91C00B859DB /* ThemeManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -141,6 +142,7 @@
 		7BB4BA3F2DD10C4C6D14B3F8 /* libPods-FTSDKDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FTSDKDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DB65B6389CC44737C1AC917 /* Pods-FTSDKDemo.pre.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FTSDKDemo.pre.xcconfig"; path = "Target Support Files/Pods-FTSDKDemo/Pods-FTSDKDemo.pre.xcconfig"; sourceTree = "<group>"; };
 		C74E5F8C527BD07BC37B8A83 /* Pods_WidgetDemoExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WidgetDemoExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA5849852E5DD91C00B859DB /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -224,6 +226,7 @@
 		1790425B2E54514100015775 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				CA5849852E5DD91C00B859DB /* ThemeManager.swift */,
 				179042542E54514100015775 /* ColorExtension.swift */,
 				179042552E54514100015775 /* ConnectStatusBtn.swift */,
 				179042562E54514100015775 /* Crasher.h */,
@@ -478,9 +481,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FTSDKDemo/Pods-FTSDKDemo-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FTSDKDemo/Pods-FTSDKDemo-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -518,6 +525,7 @@
 				179042922E54514200015775 /* LoginViewController.swift in Sources */,
 				179042932E54514200015775 /* ColorExtension.swift in Sources */,
 				179042942E54514200015775 /* CrashViewController.swift in Sources */,
+				CA5849882E5DD91C00B859DB /* ThemeManager.swift in Sources */,
 				179042952E54514200015775 /* HomeTabBarController.swift in Sources */,
 				179042962E54514200015775 /* DesignableUITextField.swift in Sources */,
 				179042972E54514200015775 /* UserInfo.swift in Sources */,

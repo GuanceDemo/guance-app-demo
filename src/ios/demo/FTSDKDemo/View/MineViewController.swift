@@ -104,7 +104,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: 57))
         let logout = UIButton.init(frame: CGRect(x: 0, y: 12, width: self.view.bounds.size.width, height: 45))
         logout.setTitle(NSLocalizedString("logout", comment: "Logout"), for: .normal)
-        logout.setTitleColor(.orange, for: .normal)
+        logout.setTitleColor(.theme, for: .normal)
         logout.addTarget(self, action: #selector(userLogout), for: .touchUpInside)
         view.addSubview(logout)
         return view

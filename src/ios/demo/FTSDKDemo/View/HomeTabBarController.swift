@@ -11,7 +11,7 @@ class HomeTabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tabBar.tintColor = .orange
+        tabBar.tintColor = .theme
         setUpAllChildViewController()
         // Do any additional setup after loading the view.
     }
@@ -19,14 +19,14 @@ class HomeTabBarController: UITabBarController {
         let listVC = ListViewController.init()
         listVC.title = NSLocalizedString("home", comment: "Home tab title")
         let navi = UINavigationController.init(rootViewController: listVC)
-        navi.navigationBar.tintColor = .orange
+        navi.navigationBar.tintColor = .theme
         self.addChild(navi)
         navi.tabBarItem = UITabBarItem(title: listVC.title, image: UIImage(systemName: "flag"), tag: 0)
         
         let mineVC = MineViewController.init()
         mineVC.title = NSLocalizedString("mine", comment: "Mine tab title")
         let naviMine = UINavigationController.init(rootViewController: mineVC)
-        naviMine.navigationBar.tintColor = .orange
+        naviMine.navigationBar.tintColor = .theme
         self.addChild(naviMine)
         naviMine.tabBarItem = UITabBarItem(title: mineVC.title, image: UIImage(systemName: "person.crop.circle.fill"), tag: 1)
     }

@@ -50,7 +50,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
         btn.setTitle(NSLocalizedString("login", comment: "Login"), for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 16)
         btn.isEnabled = true
-        btn.setBackgroundImage(UIImage.init(color: .orange), for: .normal)
+        btn.setBackgroundImage(UIImage.init(color: .theme), for: .normal)
         btn.setBackgroundImage(UIImage.init(color: .lightGray), for: .disabled)
         btn.setTitleColor(.white, for: .disabled)
         btn.setTitleColor(.white, for: .normal)
@@ -62,7 +62,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
         btn.addTarget(self, action: #selector(changeBaseUrl), for: .touchUpInside)
         btn.setTitle(NSLocalizedString("edit_demo_configuration", comment: "Edit Demo configuration"), for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 16)
-        btn.tintColor = .orange
+        btn.tintColor = .theme
         return btn
     }()
     override func viewDidLoad() {
@@ -71,7 +71,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
         // Do any additional setup after loading the view.
     }
     func createUI() {
-        self.navigationController!.navigationBar.tintColor = .orange
+        self.navigationController!.navigationBar.tintColor = .theme
         self.view.addSubview(iconImageView)
         self.view.addSubview(nametf)
         self.view.addSubview(passwordtf)

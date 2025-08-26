@@ -22,7 +22,7 @@ class SelectButton: UIButton {
         setTitleColor(.darkGray, for: .normal)
         setImage(UIImage(systemName: "circle"), for: .normal)
         setImage(UIImage(systemName: "checkmark.circle.fill"), for: .selected)
-        tintColor = .orange
+        tintColor = .theme
 
         let spacing: CGFloat = 10.0
         imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20 + spacing)

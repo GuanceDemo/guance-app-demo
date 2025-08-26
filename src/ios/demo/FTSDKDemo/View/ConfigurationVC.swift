@@ -329,7 +329,7 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
             }else{
                 let cell = UITableViewCell(style: .default, reuseIdentifier: "defaultCell")
                 cell.textLabel?.text = NSLocalizedString("url_check", comment: "URL check")
-                cell.textLabel?.textColor = .orange
+                cell.textLabel?.textColor = .theme
                 cell.textLabel?.textAlignment = .center
                 return cell
             }

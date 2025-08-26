@@ -67,7 +67,7 @@ class UserInfoView: UIView {
         let refreshTipBtn = UIButton(type: .system)
         refreshTipBtn.addTarget(self, action: #selector(refreshData), for: .touchUpInside)
         refreshTipBtn.setTitle(REFRESH_BTN_TITLE, for: .normal)
-        refreshTipBtn.setTitleColor(.orange, for: .normal)
+        refreshTipBtn.setTitleColor(.theme, for: .normal)
         refreshTipBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         refreshTipBtn.contentHorizontalAlignment = .left
         self.addSubview(refreshTipBtn)

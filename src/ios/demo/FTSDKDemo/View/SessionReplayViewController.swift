@@ -31,7 +31,7 @@ class SessionReplayViewController: UIViewController,UIPickerViewDataSource,UIPic
     }()
     lazy var activityView:UIActivityIndicatorView = {
         let activity = UIActivityIndicatorView.init(style: .large)
-        activity.color = .orange
+        activity.color = .theme
         return activity
     }()
     override func viewDidLoad() {
@@ -111,9 +111,9 @@ class SessionReplayViewController: UIViewController,UIPickerViewDataSource,UIPic
         button.rx.controlEvent(.touchUpInside).subscribe(onNext: { element in
             button.isSelected = !button.isSelected
         }).disposed(by: disposeBag)
-        button.setTitleColor(.orange, for: .selected)
+                    button.setTitleColor(.theme, for: .selected)
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.orange.cgColor
+        button.layer.borderColor = ThemeManager.primaryColor.cgColor
         button.layer.cornerRadius = 5
         scrollView.addSubview(button)
     
@@ -128,7 +128,7 @@ class SessionReplayViewController: UIViewController,UIPickerViewDataSource,UIPic
         sliderTipLabel.text = "this is a `UISlider`."
         scrollView.addSubview(sliderTipLabel)
         slider.frame = CGRect(x: 10, y: sliderTipLabel.frame.maxY+10, width: 150, height: 30)
-        slider.tintColor = .orange
+        slider.tintColor = .theme
         slider.maximumValue = 20
         slider.minimumValue = 0
         slider.value = 10
@@ -138,7 +138,7 @@ class SessionReplayViewController: UIViewController,UIPickerViewDataSource,UIPic
         progressTipLabel.text = "this is a `UIProgressView`."
         scrollView.addSubview(progressTipLabel)
         progressView.frame = CGRect(x: 10, y: progressTipLabel.frame.maxY+20, width: 150, height: 30)
-        progressView.tintColor = .orange
+        progressView.tintColor = .theme
         progressView.progress = 0.5
         scrollView.addSubview(progressView)
         slider.rx.value.subscribe { [weak self] element in
@@ -183,7 +183,7 @@ class SessionReplayViewController: UIViewController,UIPickerViewDataSource,UIPic
         textView.textColor = .darkGray
         textView.text = "This is a `UITextView`."
         textView.layer.borderWidth = 1
-        textView.backgroundColor = UIColor.orange
+        textView.backgroundColor = .theme
         scrollView.addSubview(textView)
         let collectionTipLabel = SRTipLabel.init(frame: CGRect(x: textView.frame.minX, y: textView.frame.maxY+10, width: 200, height: 20))
         collectionTipLabel.text = "this is a `UICollectionView`."
@@ -226,11 +226,7 @@ class SessionReplayViewController: UIViewController,UIPickerViewDataSource,UIPic
         }
         
         self.arrayDS = readProvince()
-//        nameSelectLabel.frame = CGRect(x: 20, y: Int(CGRectGetMaxY(progressView.frame))+20, width: 200, height: 30)
-//        nameSelectLabel.layer.borderColor = UIColor.orange.cgColor
-//        nameSelectLabel.layer.borderWidth = 1
-//        nameSelectLabel.textAlignment = .center
-//        scrollView.addSubview(nameSelectLabel)
+
         
         
         
