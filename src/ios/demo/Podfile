@@ -9,9 +9,9 @@ target 'FTSDKDemo' do
   pod 'SDWebImage'
   pod 'MBProgressHUD', '~> 1.2.0'
   # RUM, Log ,Trace
-  pod 'FTMobileSDK', '1.6.2-alpha.2'
+  pod 'FTMobileSDK', '1.6.2-alpha.3'
   # Session Replay Configure
-  pod 'FTMobileSDK/FTSessionReplay','1.6.2-alpha.2'
+  pod 'FTMobileSDK/FTSessionReplay','1.6.2-alpha.3'
 
   pod 'Toast-Swift', '~> 5.0.1'
   pod 'RxSwift'
@@ -23,7 +23,7 @@ end
 target 'FTSDKWidgetDemo' do
   use_modular_headers!
   # RUM, Log ,Trace in Extension
-  pod 'FTMobileSDK/Extension', '1.6.2-alpha.2'
+  pod 'FTMobileSDK/Extension', '1.6.2-alpha.3'
 end
 # Solve the issue of not finding the static library libarclite_iphonesimulator.a/libarclite_iphoneos.a
 #post_install do |installer|

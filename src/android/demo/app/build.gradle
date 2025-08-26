@@ -21,8 +21,8 @@ android {
         applicationId "com.guance.mobile.sdk.demo"
         minSdkVersion 23
         targetSdkVersion 34
-        versionCode 13
-        versionName "1.2.5"
+        versionCode 14
+        versionName "1.2.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
 //        buildConfigField "String", "CUSTOM_VALUE", "\"Custom value\""
@@ -166,7 +166,7 @@ dependencies {
     //FT-SDK dependency
 
     // RUM, Log, Trace，
-    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.7.0-alpha21')
+    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.7.0-alpha22')
     // RUM Error Native Crash
     implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-native:1.1.2'
     // Session Replay
