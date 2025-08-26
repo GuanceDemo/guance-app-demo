@@ -12,7 +12,7 @@
 * Provides SourceMap crash log symbolication
 
 ## Structure Function Diagram
-![](./src/server/demo_structrue.jpg)
+![](./src/server/demo_structure.jpg)
 
 | **Term** | **Meaning**  |
 | --- | --- |
