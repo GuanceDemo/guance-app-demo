@@ -47,7 +47,7 @@
 		1790429A2E5456F700015775 /* LoggerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1790424E2E54514100015775 /* LoggerExtension.swift */; };
 		1790429B2E54570300015775 /* NetworkEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1790424F2E54514100015775 /* NetworkEngine.swift */; };
 		1790429C2E545A1200015775 /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179042502E54514100015775 /* UserDefaultsExtension.swift */; };
-		179042A12E5462B000015775 /* FTSDKWidgetDemo.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1714456F2A693CEC00376B7A /* GuanceWidgetDemo.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		179042A12E5462B000015775 /* FTSDKWidgetDemo.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1714456F2A693CEC00376B7A /* FTSDKWidgetDemo.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		179042B62E5476A700015775 /* Province.plist in Resources */ = {isa = PBXBuildFile; fileRef = 179042B42E5476A700015775 /* Province.plist */; };
 		179042B92E5476E100015775 /* SessionReplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179042B82E5476E100015775 /* SessionReplayViewController.swift */; };
 		179042BB2E5476ED00015775 /* SRTipLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179042BA2E5476ED00015775 /* SRTipLabel.swift */; };

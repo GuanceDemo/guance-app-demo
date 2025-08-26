@@ -30,6 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //        print("SDK_APP_ID:\(appid)")
         //        print("SDK_ENV:\(env)")
         let dynamicTag:String? = UserDefaults.standard.value(forKey: "DYNAMIC_TAG") as? String
+        
+        // Base SDK Configure
         var config:FTMobileConfig
         if UserDefaults.isDataKit{
             config = FTMobileConfig.init(datakitUrl: UserDefaults.datakitURL)
@@ -41,6 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         config.globalContext = ["gc_custom_key":STATIC_TAG]
         config.env = env
         FTMobileAgent.start(withConfigOptions: config)
+        
+        // RUM Configure
         let rum = FTRumConfig(appid:UserDefaults.rumAppId )
         rum.enableTrackAppANR = true
         rum.enableTraceUserView = true
@@ -55,11 +59,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         FTMobileAgent.sharedInstance().startRum(withConfigOptions: rum)
         
+        // Trace Configure
         let trace = FTTraceConfig()
         trace.enableAutoTrace = true
         trace.enableLinkRumData = true
         FTMobileAgent.sharedInstance().startTrace(withConfigOptions: trace)
         
+        // Log Configure
         let logger = FTLoggerConfig()
         logger.enableCustomLog = true
         logger.enableLinkRumData = true
@@ -67,6 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FTMobileAgent.sharedInstance().startLogger(withConfigOptions: logger)
 
         if UserDefaults.enableSessionReplay {
+            // Session Replay Configure
             let srConfig = FTSessionReplayConfig()
             var privacy:FTSRPrivacy = .mask
             switch UserDefaults.sessionReplayPrivacy {

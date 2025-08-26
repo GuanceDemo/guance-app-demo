@@ -60,7 +60,7 @@
 "tag_dynamic_setting" = "Tag 动态设置";
 "close" = "关闭";
 "ios_native_interface" = "iOS 原生界面";
-"ios_webview_interface" = "iOS Webview 界面，通过观测云 JS 配置实现";
+"ios_webview_interface" = "iOS Webview 界面，通过 Guance JS SDK 配置实现";
 "edit_demo_configuration" = "编辑 Demo 配置";
 "pull_down_refresh_data" = "下拉刷新数据";
 "version_number" = "版本号";

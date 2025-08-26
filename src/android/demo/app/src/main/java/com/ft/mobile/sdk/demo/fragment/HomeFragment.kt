@@ -17,17 +17,19 @@ import com.ft.mobile.sdk.demo.adapter.SimpleAdapter
 
 class HomeFragment : Fragment(), SimpleAdapter.OnItemClickListener {
 
-    private val dataList =
-        listOf(
-            ListItem("Native View", "Android native interface", R.drawable.ic_android),
-            ListItem("WebView", "Android Webview interface, implemented via Guance JS configuration", R.drawable.ic_web)
-        )
+    private lateinit var dataList: List<ListItem>
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        // Initialize dataList with context available
+        dataList = listOf(
+            ListItem("Native View", getString(R.string.native_view_description), R.drawable.ic_android),
+            ListItem("WebView", getString(R.string.webview_description), R.drawable.ic_web)
+        )
 
         val rootView = inflater.inflate(
             R.layout.fragment_item_index, container, false

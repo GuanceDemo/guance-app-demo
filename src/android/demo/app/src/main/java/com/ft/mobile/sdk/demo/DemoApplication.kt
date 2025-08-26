@@ -107,6 +107,7 @@ open class DemoApplication : Application() {
             )
 
             if (data.enableSessionReplay) {
+                //Configure Session Replay
                 FTSdk.initSessionReplayConfig(
                     FTSessionReplayConfig().setPrivacy(
                         data.sessionReplayPrivacyType

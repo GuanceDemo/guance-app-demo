@@ -54,6 +54,8 @@
     <!-- List item strings -->
     <string name="native_view">NativeView</string>
     <string name="description">Description</string>
+    <string name="native_view_description">Android native interface</string>
+    <string name="webview_description">Android Webview interface, implemented via Guance JS configuration</string>
     
     <!-- User info strings -->
     <string name="default_username">SomeOne</string>
