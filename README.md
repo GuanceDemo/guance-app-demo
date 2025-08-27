@@ -92,40 +92,12 @@ Sourcemap is used for app crash data symbolication.
 	* [iOS](https://static.guance.com/ft-mobile-demo/ios_source_map.zip) 
 
 ### Sourcemap Upload
-There are two ways to upload sourcemap: curl or manual placement. Manual placement requires access to the datakit deployment machine.
-#### CURL Upload
-
-CURL command upload requires replacing the `<dca_address>` address. See [official documentation](https://docs.guance.com/integrations/rum/#upload-delete)
-
-```
-#  Execute in the demo_source_map folder
-
-# Android 
-curl -X POST '<dca_address>/v1/rum/sourcemap?app_id=gc_app_android_demo&env=prod&version=1.0.0&platform=android' -F "file=@gc_app_android_demo-prod-1.0.0.zip" -H "Content-Type: multipart/form-data"
-
-# iOS
-curl -X POST '<dca_address>/v1/rum/sourcemap?app_id=gc_app_ios-demo&env=prod&version=1.0.0&platform=ios' -F "file=@gc_app_ios-demo-prod-1.0.0.zip" -H "Content-Type: multipart/form-data"
-
-```
-
-#### Manual Placement
-
-```
-//Android SourceMap path
-/usr/local/datakit/data/rum/android
-
-//iOS SourceMap path
-/usr/local/datakit/data/rum/ios
-
-```
-
 #### Upload from Guance Cloud Studio Web
 Supports uploading source map via the Studio app [upload source map](https://docs.guance.com/real-user-monitoring/sourcemap/set-sourcemap/#upload)
 
 ## App Installation
 * Android: Demo [Download Link](https://static.guance.com/ft-mobile-demo/guance_sdk_demo.apk)
 * iOS: 
-	* Internal staff need to submit a [beta test application](https://confluence.jiagouyun.com/pages/viewpage.action?pageId=68715410)
 	* External users need to build and install from source code
 
 ![](./src/server/mobile_demo.gif)
