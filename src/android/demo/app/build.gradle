@@ -16,11 +16,12 @@ android {
     }
 
     namespace 'com.ft.mobile.sdk.demo'
-    compileSdk 34
+    compileSdk 35
+    
     defaultConfig {
         applicationId "com.guance.mobile.sdk.demo"
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 14
         versionName "1.2.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

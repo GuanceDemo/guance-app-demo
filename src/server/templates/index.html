@@ -7,87 +7,496 @@
   <script src="{{ url_for('static', filename='dataflux-rum.js') }}"></script>
 
   <style type="text/css">
-    body {
-      font-family: Arial, sans-serif;
-      margin: 10px;
-      padding: 0;
-      background-color: #f0f0f0;
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideDown 0.8s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(-50px);
+      opacity: 0;
     }
-
-
-    header {
-      height: 100px; 
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    to {
+      transform: translateY(0);
+      opacity: 1;
     }
+  }
 
+  .logo {
+    background-size: contain; 
+    background-repeat: no-repeat;
+    width: 130px; 
+    height: auto;
+    transition: transform 0.3s ease;
+  }
 
-    .logo {
+  .logo:hover {
+    transform: scale(1.05);
+  }
 
-      background-size: contain; 
-      background-repeat: no-repeat;
-      width: 130px; 
-      height: auto;
+  .nav-menu {
+    display: flex;
+    gap: 20px;
+  }
+
+  .nav-item {
+    padding: 10px 20px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+
+  .nav-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
     }
-
-    label {
-      display: block; 
-      margin-top: 12px; 
-      font-weight: bold;
+    to {
+      transform: translateY(0);
+      opacity: 1;
     }
+  }
 
+  .card-title {
+    font-size: 1.5em;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+  }
 
+  label {
+    display: block; 
+    margin-top: 15px; 
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1em;
+  }
 
-    #color-cube {
-      width: 80px;
-      height: 60px;
-      margin-left: 10px;
-      background-color: red;
-      justify-content: center;
-      align-items: center;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 10px;
-      text-align: center;
-      display: flex;
+  #color-cube {
+    width: 120px;
+    height: 80px;
+    margin: 15px 0;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 15px;
+    text-align: center;
+    display: flex;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+  }
+
+  #color-cube:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e1e8ed;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  }
+
+  .btn {
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 5px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn:hover::before {
+    left: 100%;
+  }
+
+  .btn-primary {
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+  }
+
+  .btn-success {
+    background: linear-gradient(45deg, #27ae60, #2ecc71);
+    color: white;
+  }
+
+  .btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+  }
+
+  .btn-danger {
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+    color: white;
+  }
+
+  .btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+  }
+
+  .btn-warning {
+    background: linear-gradient(45deg, #f39c12, #e67e22);
+    color: white;
+  }
+
+  .btn-warning:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+  }
+
+  .operation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin: 15px 0;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e1e8ed;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 10px 0;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+  }
+
+  .modal-content {
+    background: white;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+  }
+
+  @keyframes modalSlideIn {
+    from {
+      transform: translateY(-50px);
+      opacity: 0;
     }
-
-    #color-cube:hover {
-      background-color: #ff5733;
+    to {
+      transform: translateY(0);
+      opacity: 1;
     }
+  }
 
-    img {
-      max-width: 100%;
-      height: auto;
-      margin-top: 10px;
-      margin-bottom: 10px;
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .close:hover {
+    color: #000;
+  }
+
+  .notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    background: #2ecc71;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    z-index: 1001;
+  }
+
+  .notification.show {
+    transform: translateX(0);
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e1e8ed;
+  }
+
+  .data-table th {
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    color: white;
+    font-weight: 600;
+  }
+
+  .data-table tr:hover {
+    background: #f8f9fa;
+  }
+
+  .loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .tooltip {
+    position: relative;
+    display: inline-block;
+  }
+
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #2c3e50;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .floating-elements {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .floating-element {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
     }
-
-    button {
-      padding: 10px 20px;
-      font-size: 14px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+    50% {
+      transform: translateY(-20px) rotate(180deg);
     }
+  }
 
-  </style>
+  .floating-element:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+  .floating-element:nth-child(2) { top: 60%; left: 80%; animation-delay: 2s; }
+  .floating-element:nth-child(3) { top: 40%; left: 60%; animation-delay: 4s; }
+  .floating-element:nth-child(4) { top: 80%; left: 30%; animation-delay: 1s; }
+  .floating-element:nth-child(5) { top: 10%; left: 70%; animation-delay: 3s; }
+
+  .status-active {
+    color: #27ae60;
+    font-weight: 600;
+  }
+
+  .status-inactive {
+    color: #95a5a6;
+    font-weight: 600;
+  }
+
+  .status-pending {
+    color: #f39c12;
+    font-weight: 600;
+  }
+
+  .notification.error {
+    background: #e74c3c;
+  }
+
+  .notification.warning {
+    background: #f39c12;
+  }
+
+  .notification.success {
+    background: #2ecc71;
+  }
+
+  @media (max-width: 768px) {
+    .main-content {
+      grid-template-columns: 1fr;
+    }
+    
+    .nav-menu {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .operation-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
 
 </style>
 
 <script>
-  DATAFLUX_RUM.init({
-    applicationId: 'app_webview_demo',
-    datakitOrigin: 'http://127.0.0.1:9529',
-    allowedDDTracingOrigins: [window.location.origin],
-    trackInteractions:true,
+//     Object.defineProperty(document, 'referrer', {
+//   get: function () {
+//     return 'WHERE_ARE_YOU_FROM';
+//   }
+// });
+DATAFLUX_RUM.init({
+  applicationId: 'app_webview_demo',
+  datakitOrigin: 'http://127.0.0.1:9529',
+  allowedDDTracingOrigins: [window.location.origin],
+  sessionSampleRate:0,
+  sessionOnErrorSampleRate:100,
+  trackInteractions:true,
         //  env: 'production',
         //  version: '1.0.0',
-  })
+})
+window.DATAFLUX_RUM.startSessionReplayRecording();
 </script> 
 
   <!-- <script>
@@ -98,124 +507,427 @@
   
 </head>
 <body>
-  <header>
-    <img class="logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
-  </header>
- <Label>Action:</Label></br>
-  <div id="color-cube" >Click to Change</div></br>
+  <div class="floating-elements">
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+  </div>
 
-  <label>Resource:</label></br>
-  <img src="missing.jpg" alt="Missing Image"></br>
-  <script src="http://localhost/missing.js"></script>
+  <div class="container">
+    <header>
+      <img class="logo" src="images/login_logo.png" alt="Logo">
+      <div class="nav-menu">
+        <button class="nav-item" onclick="showSection('dashboard')">Dashboard</button>
+        <button class="nav-item" onclick="showSection('analytics')">Analytics</button>
+        <button class="nav-item" onclick="showSection('settings')">Settings</button>
+        <button class="nav-item" onclick="openModal()">Help</button>
+      </div>
+    </header>
 
-  <button id="http-request-btn" >Http XHR Request</button></br>
+    <div class="main-content">
+      <!-- Left Card -->
+      <div class="card">
+        <h2 class="card-title">Interactive Testing Area</h2>
+        
+        <label>Color Change Test:</label>
+        <div id="color-cube" class="tooltip">
+          <span class="tooltiptext">Click to change color</span>
+          Click to Change
+        </div>
 
-    <label id="long-task-result">Longtask:</label></br>
+        <label>Progress Bar Test:</label>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <button class="btn btn-primary" onclick="animateProgress()">Start Progress Animation</button>
 
-    <div id="operation">
-      <button delay="10">10ms</button>
-      <button delay="500">500ms</button>
-      <button delay="1000">1s</button>
+        <label>Form Input Test:</label>
+        <div class="form-group">
+          <input type="text" class="form-control" id="test-input" placeholder="Enter test content...">
+        </div>
+        <div class="form-group">
+          <select class="form-control" id="test-select">
+            <option value="">Select an option...</option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="test-checkbox"> Agree to terms
+          </label>
+        </div>
+      </div>
+
+      <!-- Right Card -->
+      <div class="card">
+        <h2 class="card-title">Function Testing Area</h2>
+        
+        <label>Long Task Test:</label>
+        <div class="operation-grid">
+          <button class="btn btn-warning" delay="10">10ms</button>
+          <button class="btn btn-warning" delay="500">500ms</button>
+          <button class="btn btn-warning" delay="1000">1s</button>
+          <button class="btn btn-warning" delay="2000">2s</button>
+        </div>
+        <div id="long-task-result">Waiting for task execution...</div>
+
+        <label>HTTP Request Test:</label>
+        <button class="btn btn-primary" id="http-request-btn">Send HTTP Request</button>
+        <div id="http-result"></div>
+
+        <label>Error Test:</label>
+        <button class="btn btn-danger" id="error-btn">Throw Exception</button>
+        <div id="error-result">Waiting for error...</div>
+
+        <label>Notification Test:</label>
+        <button class="btn btn-success" onclick="showNotification('Test notification message!')">Show Notification</button>
+      </div>
     </div>
-    
 
-    <label id="error-result">Error:</label></br>
-    <button id="error-btn">Throw Exception</button></br>
+    <!-- Data Display Area -->
+    <div class="card">
+      <h2 class="card-title">Data Table Test</h2>
+      <table class="data-table" id="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <tr>
+            <td>1</td>
+            <td>Test Item 1</td>
+            <td><span class="status-active">Active</span></td>
+            <td><button class="btn btn-primary" onclick="editItem(1)">Edit</button></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Test Item 2</td>
+            <td><span class="status-inactive">Inactive</span></td>
+            <td><button class="btn btn-primary" onclick="editItem(2)">Edit</button></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Test Item 3</td>
+            <td><span class="status-pending">Pending</span></td>
+            <td><button class="btn btn-primary" onclick="editItem(3)">Edit</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="btn btn-success" onclick="addNewRow()">Add New Row</button>
+    </div>
 
-    <script>
-      var xx = notDefineVariable
-    </script>
+    <!-- Resource Loading Test Area -->
+    <div class="card">
+      <h2 class="card-title">Resource Loading Test</h2>
+      <label>Image Loading Test:</label>
+      <img src="missing.jpg" alt="Missing Image" onerror="handleImageError()">
+      <div id="image-status">Loading image...</div>
+      
+      <label>Script Loading Test:</label>
+      <button class="btn btn-primary" onclick="loadScript()">Load External Script</button>
+      <div id="script-status">Script not loaded</div>
+    </div>
+  </div>
 
-    <script>
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Help Information</h2>
+      <p>This is a complex page for Session Replay testing, containing various interactive elements:</p>
+      <ul>
+        <li>Color changes and animation effects</li>
+        <li>Form input and validation</li>
+        <li>HTTP request testing</li>
+        <li>Error handling testing</li>
+        <li>Data table operations</li>
+        <li>Modals and notifications</li>
+      </ul>
+      <button class="btn btn-primary" onclick="closeModal()">Close</button>
+    </div>
+  </div>
 
-    // long task
-  function random(n, m) {
-    const len = m - n;
-    return Math.floor(n + Math.random() * len);
-  }
+  <!-- Notification Component -->
+  <div id="notification" class="notification">
+    <span id="notification-text"></span>
+  </div>
 
-  function getRandomColor() {
-    const rowColors = '0123456789abcdef';
-    let colors = '#';
-    let i = 6;
-    let len = rowColors.length;
-    while (i--) {
-      const n = random(0, len);
-      colors += rowColors.charAt(n);
+  <script>
+    var xx = notDefineVariable
+  </script>
+
+  <script>
+    // 工具函数
+    function random(n, m) {
+      const len = m - n;
+      return Math.floor(n + Math.random() * len);
     }
-    return colors;
-  }
 
-  function switchColor() {
-    var  test = document.getElementById('color-cube')
-    test.style.backgroundColor = getRandomColor()
-  }
-
-  function sleep(delay) {
-    var end = performance.now() + delay
-    while(performance.now() < end) {
-
+    function getRandomColor() {
+      const rowColors = '0123456789abcdef';
+      let colors = '#';
+      let i = 6;
+      let len = rowColors.length;
+      while (i--) {
+        const n = random(0, len);
+        colors += rowColors.charAt(n);
+      }
+      return colors;
     }
-  }
 
-  function buttonsClickHandle(event) {
-    const target = event.target;
-    const tagName = target.tagName.toLowerCase();
-    if (tagName !== 'button') return;
-    const delay = target.getAttribute('delay');
-    document.getElementById('long-task-result').textContent = 'Longtask: '+target.textContent+' (TS:'+new Date().getTime()+')'
+    function sleep(delay) {
+      var end = performance.now() + delay
+      while(performance.now() < end) {
+        // 阻塞主线程
+      }
+    }
 
-    sleep(Number(delay) - 5);
+    // Color change function
+    function switchColor() {
+      var test = document.getElementById('color-cube')
+      test.style.background = `linear-gradient(45deg, ${getRandomColor()}, ${getRandomColor()})`
+      test.textContent = 'Color changed!'
+      setTimeout(() => {
+        test.textContent = 'Click to Change'
+      }, 1000)
+    }
 
+    // Progress bar animation
+    function animateProgress() {
+      const progressFill = document.getElementById('progress-fill');
+      let width = 0;
+      const interval = setInterval(() => {
+        if (width >= 100) {
+          clearInterval(interval);
+          showNotification('Progress completed!');
+        } else {
+          width += 2;
+          progressFill.style.width = width + '%';
+        }
+      }, 50);
+    }
 
-  }
+    // Long task handling
+    function buttonsClickHandle(event) {
+      const target = event.target;
+      const tagName = target.tagName.toLowerCase();
+      if (tagName !== 'button') return;
+      const delay = target.getAttribute('delay');
+      
+      // Show loading state
+      const resultDiv = document.getElementById('long-task-result');
+      resultDiv.innerHTML = `<div class="loading"></div> Executing: ${target.textContent}...`;
+      
+      // Simulate async task
+      setTimeout(() => {
+        sleep(Number(delay) - 5);
+        resultDiv.textContent = `Task completed: ${target.textContent} (Timestamp: ${new Date().getTime()})`;
+        showNotification(`Task ${target.textContent} completed`);
+      }, 100);
+    }
 
+    // Error handling
+    function errorFunction(event) {
+      const resultDiv = document.getElementById('error-result');
+      resultDiv.textContent = `Error thrown (Timestamp: ${new Date().getTime()})`;
+      resultDiv.style.color = '#e74c3c';
+      showNotification('Error thrown!', 'error');
+      throw Error("Custom error - Session Replay test");
+    }
 
-  function errorFunction(event){
-    document.getElementById('error-result').textContent = 'Error: (TS:'+new Date().getTime()+')'
-    throw Error("custom error")
-  }
-
-
-  function httpRequest(event){
-    const queryString = window.location.search;
-    const params = new URLSearchParams(queryString);
-    const requestUrl = params.get('requestUrl')
-    if (requestUrl) {
+    // HTTP request handling
+    function httpRequest(event) {
+      const resultDiv = document.getElementById('http-result');
+      resultDiv.innerHTML = '<div class="loading"></div> Sending request...';
+      
+      const requestUrl = 'http://10.100.64.166:8000/api/user';
       const xhr = new XMLHttpRequest();
 
       xhr.open('GET', requestUrl);
+      xhr.timeout = 5000; // 5 second timeout
 
       xhr.onload = function () {
         if (xhr.status >= 200 && xhr.status < 300) {
-          alert("Http Request Send");
+          resultDiv.innerHTML = '<span style="color: #27ae60;">✓ Request sent successfully</span>';
+          showNotification('HTTP request successful!');
         } else {
-          alert("HTTP request failed with status: " + xhr.status);
+          resultDiv.innerHTML = `<span style="color: #e74c3c;">✗ Request failed (Status: ${xhr.status})</span>`;
+          showNotification('HTTP request failed', 'error');
         }
       };
 
       xhr.onerror = function () {
-        alert("An error occurred during the HTTP request.");
+        resultDiv.innerHTML = '<span style="color: #e74c3c;">✗ Network error</span>';
+        showNotification('Network error', 'error');
+      };
+
+      xhr.ontimeout = function () {
+        resultDiv.innerHTML = '<span style="color: #f39c12;">⏰ Request timeout</span>';
+        showNotification('Request timeout', 'warning');
       };
 
       xhr.send();
-    } else {
-      alert("Missing requestUrl parameter.");
     }
-  } 
 
-  function init() {
-    const operationDiv = document.getElementById('operation');
-    const buttons = operationDiv.getElementsByTagName('button');
-    for (let i = 0; i < buttons.length; i++) {
-      buttons[i].addEventListener('click',buttonsClickHandle,false);
+    // Modal functions
+    function openModal() {
+      document.getElementById('modal').style.display = 'block';
     }
-    document.getElementById('http-request-btn').addEventListener('click',httpRequest,false)
-    document.getElementById('error-btn').addEventListener('click',errorFunction,false)
-    document.getElementById('color-cube').addEventListener('click', switchColor, false)
-  }
 
-  init()
-</script>
-  </body>
-  </html>
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+
+    // Notification function
+    function showNotification(message, type = 'success') {
+      const notification = document.getElementById('notification');
+      const notificationText = document.getElementById('notification-text');
+      
+      notificationText.textContent = message;
+      notification.className = `notification show ${type}`;
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    // Table operations
+    function editItem(id) {
+      showNotification(`Edit item ${id}`);
+      // Simulate edit operation
+      const row = document.querySelector(`tr:nth-child(${id + 1})`);
+      if (row) {
+        row.style.backgroundColor = '#fff3cd';
+        setTimeout(() => {
+          row.style.backgroundColor = '';
+        }, 2000);
+      }
+    }
+
+    function addNewRow() {
+      const tableBody = document.getElementById('table-body');
+      const newRow = document.createElement('tr');
+      const rowCount = tableBody.children.length + 1;
+      
+      newRow.innerHTML = `
+        <td>${rowCount}</td>
+        <td>New Test Item ${rowCount}</td>
+        <td><span class="status-pending">Pending</span></td>
+        <td><button class="btn btn-primary" onclick="editItem(${rowCount})">Edit</button></td>
+      `;
+      
+      tableBody.appendChild(newRow);
+      showNotification(`Added new row ${rowCount}`);
+    }
+
+    // Image error handling
+    function handleImageError() {
+      document.getElementById('image-status').innerHTML = '<span style="color: #e74c3c;">✗ Image loading failed</span>';
+      showNotification('Image loading failed', 'error');
+    }
+
+    // Script loading
+    function loadScript() {
+      const statusDiv = document.getElementById('script-status');
+      statusDiv.innerHTML = '<div class="loading"></div> Loading script...';
+      
+      const script = document.createElement('script');
+      script.src = 'http://localhost/missing.js';
+      
+      script.onload = function() {
+        statusDiv.innerHTML = '<span style="color: #27ae60;">✓ Script loaded successfully</span>';
+        showNotification('Script loaded successfully');
+      };
+      
+      script.onerror = function() {
+        statusDiv.innerHTML = '<span style="color: #e74c3c;">✗ Script loading failed</span>';
+        showNotification('Script loading failed', 'error');
+      };
+      
+      document.head.appendChild(script);
+    }
+
+    // Navigation function
+    function showSection(section) {
+      showNotification(`Switched to ${section} section`);
+      // Add actual page switching logic here
+    }
+
+    // Form validation
+    function validateForm() {
+      const input = document.getElementById('test-input');
+      const select = document.getElementById('test-select');
+      const checkbox = document.getElementById('test-checkbox');
+      
+      if (!input.value.trim()) {
+        showNotification('Please enter test content', 'error');
+        return false;
+      }
+      
+      if (!select.value) {
+        showNotification('Please select an option', 'error');
+        return false;
+      }
+      
+      if (!checkbox.checked) {
+        showNotification('Please agree to terms', 'error');
+        return false;
+      }
+      
+      showNotification('Form validation passed!');
+      return true;
+    }
+
+    // Initialization function
+    function init() {
+      // Bind long task buttons
+      const operationDiv = document.querySelector('.operation-grid');
+      const buttons = operationDiv.getElementsByTagName('button');
+      for (let i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', buttonsClickHandle, false);
+      }
+      
+      // Bind other events
+      document.getElementById('http-request-btn').addEventListener('click', httpRequest, false);
+      document.getElementById('error-btn').addEventListener('click', errorFunction, false);
+      document.getElementById('color-cube').addEventListener('click', switchColor, false);
+      
+      // Form validation
+      document.getElementById('test-input').addEventListener('blur', validateForm);
+      document.getElementById('test-select').addEventListener('change', validateForm);
+      document.getElementById('test-checkbox').addEventListener('change', validateForm);
+      
+      // Modal click outside to close
+      window.onclick = function(event) {
+        const modal = document.getElementById('modal');
+        if (event.target === modal) {
+          closeModal();
+        }
+      }
+      
+      // Keyboard events
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          closeModal();
+        }
+      });
+      
+      // Page load completion notification
+      setTimeout(() => {
+        showNotification('Page loaded, start testing!');
+      }, 1000);
+    }
+
+    // Initialize after page load
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

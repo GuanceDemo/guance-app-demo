@@ -4,18 +4,16 @@ plugins {
 
 android {
     namespace 'com.ft.mobile.sdk.demo.nativelib'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         minSdk 23
-        ndkVersion '22.1.7171670'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
         externalNativeBuild {
             cmake {
                 abiFilters "armeabi-v7a","arm64-v8a","x86","x86_64"
-                cppFlags ""
             }
         }
     }
