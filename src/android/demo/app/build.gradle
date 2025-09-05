@@ -108,6 +108,7 @@ FTExt {
     datawayToken = ft_env.datawayToken
     appId = ft_env.rumAppid
     env = 'common'
+//    ignorePackages= ['com.ft.mobile.sdk.demo.WebViewActivity']
 //    generateSourceMapOnly = true
 
     prodFlavors {
