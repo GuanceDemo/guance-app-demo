@@ -5,6 +5,10 @@ from ddtrace import tracer, patch
 # Enable ddtrace auto-instrumentation for Flask
 patch(flask=True)
 
+# Server version information
+SERVER_VERSION = "1.0.0"
+BUILD_DATE = "2025-09-10"
+
 app = Flask(__name__)
 
 # @app.before_request
@@ -87,6 +91,16 @@ def connect():
         'success': True
     }
     return jsonify(result), 200
+
+@app.route('/api/version', methods=['GET'])
+def get_version():
+    """server information"""
+    version_info = {
+        'version': SERVER_VERSION,
+        'build_date': BUILD_DATE,
+        'service': 'FT SDK Demo Server'
+    }
+    return jsonify(version_info), 200
 
 # HTML page rendering, used for mobile WebView display
 @app.route('/')
