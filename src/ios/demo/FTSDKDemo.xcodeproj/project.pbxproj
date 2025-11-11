@@ -481,13 +481,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FTSDKDemo/Pods-FTSDKDemo-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FTSDKDemo/Pods-FTSDKDemo-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -736,7 +732,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.10;
+				MARKETING_VERSION = 1.0.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.guance.GuanceDemo;
 				PRODUCT_NAME = FTSDKDemo;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -777,7 +773,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.10;
+				MARKETING_VERSION = 1.0.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.guance.GuanceDemo;
 				PRODUCT_NAME = FTSDKDemo;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -951,7 +947,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.10;
+				MARKETING_VERSION = 1.0.11;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xcc -fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/SnapKit/SnapKit.modulemap\" -Xcc -fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/Toast-Swift/Toast_Swift.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/FTMobileSDK/FTMobileSDK-0e74e980.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MBProgressHUD/MBProgressHUD.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/SDWebImage/SDWebImage.modulemap\" -D PRE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.guance.GuanceDemo;
 				PRODUCT_NAME = FTSDKDemo;
