@@ -35,6 +35,13 @@
 -keepclassmembers class com.google.android.material.tabs.TabLayout$Tab {
     *;
 }
+
+### keep Class.forName(“okhttp3.OkHttpClient”)
+-keepnames class okhttp3.OkHttpClient
+
+### keep Class.forName(“com.tencent.smtt.sdk.WebView”)
+#-keepnames class com.tencent.smtt.sdk.WebView
+
 #====================
 
 -dontwarn org.bouncycastle.jsse.BCSSLParameters
