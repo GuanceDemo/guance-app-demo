@@ -17,17 +17,24 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".ManualActivity" />
-        <activity android:name=".NativeActivity" />
+        <activity 
+            android:name=".NativeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".WebViewActivity" />
-        <activity android:name=".SettingActivity" />
+        <activity 
+            android:name=".WebViewActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity 
+            android:name=".SettingActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SessionReplayActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />

@@ -16,14 +16,14 @@ android {
     }
 
     namespace 'com.ft.mobile.sdk.demo'
-    compileSdk 35
+    compileSdk 36
     
     defaultConfig {
         applicationId "com.guance.mobile.sdk.demo"
         minSdkVersion 23
-        targetSdkVersion 35
-        versionCode 17
-        versionName "1.2.9"
+        targetSdkVersion 36
+        versionCode 18
+        versionName "1.2.10"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
 //        buildConfigField "String", "CUSTOM_VALUE", "\"Custom value\""

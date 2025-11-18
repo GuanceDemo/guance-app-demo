@@ -4,12 +4,20 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import android.view.WindowInsetsController
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
@@ -41,13 +49,33 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Enable edge-to-edge display (only on Android 12+)
+//        WindowInsetsHelper.enableEdgeToEdge(this)
         setContentView(R.layout.activity_loading)
+        setupStatusBar()
         if (AccountManager.checkLogin(this@MainActivity)) {
             setUpView()
             FTLogger.getInstance().logBackground("Account Exists", Status.INFO)
         } else {
             goToLogin()
         }
+    }
+
+    private fun setupStatusBar() {
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        // Force light theme: always use dark icons on light background
+        windowInsetsController.isAppearanceLightStatusBars = true
+        window.statusBarColor = android.graphics.Color.TRANSPARENT
+    }
+
+    /**
+     * Setup Toolbar with white title and navigation icon
+     * Call this after setSupportActionBar(toolbar)
+     */
+    private fun setupToolbar(toolbar: androidx.appcompat.widget.Toolbar) {
+        toolbar.setTitleTextColor(Color.WHITE)
+        val navIcon = toolbar.navigationIcon
+        navIcon?.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
     }
 
     fun goToLogin() {
@@ -57,6 +85,11 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
     private fun setUpView() {
         title = getString(R.string.main_index_home)
         setContentView(R.layout.activity_main)
+
+        // Setup Toolbar
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        setupToolbar(toolbar)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.setOnItemSelectedListener(this)

@@ -17,6 +17,11 @@ class WebViewActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_webview)
+        
+        // Setup Toolbar
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        setupToolbar(toolbar)
 
         WebView.setWebContentsDebuggingEnabled(true)
         val data = SettingConfigManager.readSetting(this@WebViewActivity)
