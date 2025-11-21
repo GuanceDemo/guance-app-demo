@@ -6,8 +6,8 @@ from ddtrace import tracer, patch
 patch(flask=True)
 
 # Server version information
-SERVER_VERSION = "1.0.0"
-BUILD_DATE = "2025-09-10"
+SERVER_VERSION = "1.0.1"
+BUILD_DATE = "2025-11-21"
 
 app = Flask(__name__)
 
