@@ -321,7 +321,7 @@
         </div>
         <div class="form-group">
           <label>OTEL URL:</label>
-          <input id="demo-otel-url-input" type="text" value="http://10.100.64.166:8000/api/user"/>
+          <input id="demo-otel-url-input" type="text" value="http://10.100.64.166:9529/otel/v1/traces"/>
         </div>
       </div>
     </div>
@@ -376,7 +376,7 @@
           demoApiAddress: demoApiAddress,
           demoAndroidAppId: demoAndroidAppId,
           demoIOSAppId: demoIosAppId,
-          demoOtelUrl: demoOtelUrl,
+          otelAddress: otelAddress,
         };
       } else {
         importData = {
@@ -385,7 +385,7 @@
           demoApiAddress: demoApiAddress,
           demoAndroidAppId: demoAndroidAppId,
           demoIOSAppId: demoIosAppId,
-          demoOtelUrl: demoOtelUrl,
+          otelAddress: otelAddress,
         };
       }
 

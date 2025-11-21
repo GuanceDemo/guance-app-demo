@@ -13,8 +13,6 @@ open class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupStatusBar()
-        val actionBar: ActionBar? = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     protected fun setupStatusBar() {
@@ -29,7 +27,11 @@ open class BaseActivity : AppCompatActivity() {
      * Call this after setSupportActionBar(toolbar)
      */
     protected fun setupToolbar(toolbar: Toolbar) {
+        // Enable home button (back arrow)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        // Set white title text color
         toolbar.setTitleTextColor(Color.WHITE)
+        // Set white navigation icon
         val navIcon = toolbar.navigationIcon
         navIcon?.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
     }

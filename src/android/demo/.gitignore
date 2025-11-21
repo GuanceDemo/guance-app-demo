@@ -2,4 +2,5 @@ build/
 /app/src/main/assets/testaccount.properties
 /local.properties
 *.keystore
+*.jks
 .cxx
