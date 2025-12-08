@@ -5,9 +5,13 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.UnderlineSpan
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import com.ft.mobile.sdk.demo.data.DEFAULT_PASSWORD
 import com.ft.mobile.sdk.demo.data.DEFAULT_USER_NAME
 import com.ft.mobile.sdk.demo.manager.AccountManager
@@ -20,7 +24,17 @@ class LoginActivity : AppCompatActivity(), AccountManager.Callback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupStatusBar()
         setContentView(R.layout.activity_login)
+
+        // Apply window insets to handle edge-to-edge display
+        val rootView = findViewById<View>(android.R.id.content)
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         val usernameEt = findViewById<TextInputEditText>(R.id.login_username)
         val passwordEt = findViewById<TextInputEditText>(R.id.login_password)
 
@@ -71,5 +85,11 @@ class LoginActivity : AppCompatActivity(), AccountManager.Callback {
         finishAffinity()
     }
 
+    private fun setupStatusBar() {
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        // Force light theme: always use dark icons on light background
+        windowInsetsController.isAppearanceLightStatusBars = true
+        window.statusBarColor = android.graphics.Color.TRANSPARENT
+    }
 
 }

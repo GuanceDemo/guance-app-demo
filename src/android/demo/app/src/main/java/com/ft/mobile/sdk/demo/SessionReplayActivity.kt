@@ -1,7 +1,5 @@
 package com.ft.mobile.sdk.demo
 
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -19,11 +17,9 @@ class SessionReplayActivity : BaseActivity() {
         setContentView(R.layout.activity_session_replay)
         // Setup Toolbar
         val toolbar: Toolbar = findViewById(R.id.toolbar)
-        toolbar.setTitleTextColor(getColor(R.color.white))
         setSupportActionBar(toolbar)
         super.onCreate(savedInstanceState)
-        val navIcon = toolbar.navigationIcon
-        navIcon?.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+        setupToolbar(toolbar)
 
         title = "Session Replay"
 

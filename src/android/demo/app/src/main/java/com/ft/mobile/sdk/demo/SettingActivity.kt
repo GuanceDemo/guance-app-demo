@@ -46,6 +46,11 @@ class SettingActivity : com.ft.mobile.sdk.demo.BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
         setTitle(R.string.edit_setting)
+        
+        // Setup Toolbar
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        setupToolbar(toolbar)
         datakitAddressEt = findViewById(R.id.setting_datakit_et)
         datawayAddressEt = findViewById(R.id.setting_dataway_et)
         datawayClientTokenEt = findViewById(R.id.setting_dataway_client_token_et)

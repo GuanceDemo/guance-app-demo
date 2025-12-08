@@ -21,6 +21,11 @@ class NativeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         title = "Native View"
         setContentView(R.layout.activity_native_view)
+        
+        // Setup Toolbar
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        setupToolbar(toolbar)
 
         findViewById<Button>(R.id.native_dynamic_rum_tag_btn).setOnClickListener {
             val intent = Intent(this@NativeActivity, MainActivity::class.java)
