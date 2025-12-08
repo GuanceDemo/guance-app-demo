@@ -22,8 +22,8 @@ android {
         applicationId "com.guance.mobile.sdk.demo"
         minSdkVersion 23
         targetSdkVersion 36
-        versionCode 19
-        versionName "1.2.11"
+        versionCode 20
+        versionName "1.2.12"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
 //        buildConfigField "String", "CUSTOM_VALUE", "\"Custom value\""
