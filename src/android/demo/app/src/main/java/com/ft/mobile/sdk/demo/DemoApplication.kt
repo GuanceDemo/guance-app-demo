@@ -101,7 +101,7 @@ open class DemoApplication : Application() {
             // Configure Trace
             FTSdk.initTraceWithConfig(
                 FTTraceConfig()
-                    .setSamplingRate(1f)
+//                    .setSamplingRate(1f)
                     .setEnableAutoTrace(true)
                     .setEnableLinkRUMData(true)
             )
