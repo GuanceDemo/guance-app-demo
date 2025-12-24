@@ -12,6 +12,7 @@ let  DEFAULT_DATAWAY_URL = "http://127.0.0.1:9529"
 let  DEFAULT_DATAKIT_URL = "http://127.0.0.1:9529"
 let  DEFAULT_CLIENT_ID = "[Dataway Client Token]"
 let  DEFAULT_BASE_URL = "http://127.0.0.1:8000"
+let  DEFAULT_OTEL_URL = "http://10.0.0.1:9529/otel/v1/traces"
 let  DEFAULT_SR_TEXT_PRIVACY = 2
 
 let  DEFAULT_USER_ACCOUNT = "guance"
@@ -31,6 +32,7 @@ let  KEY_RUM_APP_ID = "key_rum_app_id"
 let  KEY_DATAKIT_URL = "key_dataKit_url"
 let  KEY_DATAWAY_URL = "key_dataWay_url"
 let  KEY_CLIENT_TOKEN = "key_clientToken_url"
+let  KEY_OTEL_URL = "key_otel_url"
 
 let  REFRESH_BTN_TITLE =  NSLocalizedString("refresh_btn_title", comment: "Refresh button title")
 ///UserDefaults property wrapper
@@ -104,6 +106,8 @@ public extension UserDefaults {
     @UserDefaultsWrapper(key: KEY_CLIENT_TOKEN,defaultValue: DEFAULT_CLIENT_ID,storage: .shared)  static var clientToken: String
     // Network request address
     @UserDefaultsWrapper(key: KEY_BASE_URL,defaultValue:DEFAULT_BASE_URL,storage: .shared)  static var baseUrl: String
+    // Otel address
+    @UserDefaultsWrapper(key: KEY_OTEL_URL,defaultValue:DEFAULT_OTEL_URL,storage: .shared)  static var otelURL: String
     
     ///UserDefaults shared with the app
     @objc

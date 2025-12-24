@@ -90,6 +90,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             srConfig.sampleRate = 100
             FTRumSessionReplay.shared().start(with: srConfig)
         }
+        otelSdkInit()
         return true
     }
     

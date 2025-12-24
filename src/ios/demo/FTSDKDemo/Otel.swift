@@ -12,7 +12,8 @@ import OpenTelemetryProtocolExporterHttp
 
 func otelSdkInit(){
     // 1. Create OTLP Exporter, fill in APM server address
-    guard let endpoint = URL(string:"http://10.0.0.1:9529/otel/v1/traces") else {
+    let otelURL = UserDefaults.otelURL
+    guard let endpoint = URL(string: otelURL) else {
         fatalError("Invalid endpoint URL")
     }
     

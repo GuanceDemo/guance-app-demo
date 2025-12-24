@@ -13,7 +13,7 @@ import RxSwift
 import RxCocoa
 import FTMobileSDK
 enum CellInfoType{
-    case rum,dataKit,dataWay,clientToken,demoAPI
+    case rum,dataKit,dataWay,clientToken,demoAPI,otel
 }
 class CellInfo:NSObject{
     let title:String
@@ -152,8 +152,9 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         let dataKitItem = CellInfo(title: "DataKit Address", hint: "Please enter DataKit Address",type:.dataKit, detail: UserDefaults.datakitURL)
         let dataWayItem = CellInfo(title: "DataWay Address", hint: "Please enter DataWay Address",type:.dataWay, detail: UserDefaults.dataWayURL)
         let clientTokenItem = CellInfo(title: "ClientToken", hint: "Please enter ClientToken",type:.clientToken, detail: UserDefaults.clientToken)
-        dataKitArray = [rumItem,dataKitItem,demoApiItem]
-        dataWayArray = [rumItem,dataWayItem,clientTokenItem,demoApiItem]
+        let otelItem = CellInfo(title: "Otel Address(Optional)", hint: "Please enter Otel Address",type:.otel, detail: UserDefaults.otelURL)
+        dataKitArray = [rumItem,dataKitItem,demoApiItem,otelItem]
+        dataWayArray = [rumItem,dataWayItem,clientTokenItem,demoApiItem,otelItem]
         isDataKit = UserDefaults.isDataKit
         self.view.addSubview(tableView)
     }
@@ -188,6 +189,8 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
                     UserDefaults.baseUrl = item.detail!
                 case .clientToken:
                     UserDefaults.clientToken = item.detail!
+                case .otel:
+                    UserDefaults.otelURL = item.detail!
                 }
                 FTLogInfo("\(item.type):\(item.detail!)")
             }
@@ -221,6 +224,10 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
                 if let clientToken = config.datawayClientToken {
                     dataWayArray[2].detail = clientToken
                 }
+                if let otelAddress = config.otelAddress {
+                    dataKitArray[3].detail = otelAddress
+                    dataWayArray[4].detail = otelAddress
+                }
                 self.isDataKit = config.isDataKit()
                 toast = "Data replication succeeds"
             }
@@ -252,6 +259,9 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
                 connect = [(self.dataWayArray[1],self.dataWayArray[2]),(self.dataWayArray[3],nil)]
             }
             for (item,tokenItem) in connect {
+                if item.type == .otel {
+                    continue
+                }
                 do{
                     _ = await self.connect(item: item,tokenItem: tokenItem)
                 }

@@ -31,6 +31,7 @@ struct Configuration:Codable,Hashable{
     var datawayClientToken: String?
     var demoApiAddress: String?
     var demoIOSAppId: String?
+    var otelAddress: String?
     
     func check()->Bool{
         guard let _ = demoIOSAppId,let _ = demoApiAddress else {
