@@ -11,6 +11,11 @@ cmake_minimum_required(VERSION 3.22.1)
 # build script scope).
 project("nativelib")
 
+if(${ANDROID_ABI} STREQUAL "arm64-v8a" OR ${ANDROID_ABI} STREQUAL "x86_64")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,max-page-size=16384")
+    message(STATUS "Enabling 16KB page alignment for ${ANDROID_ABI}")
+endif()
+
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
@@ -35,6 +40,4 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         # List libraries link to the target library
         android
         log
-        "-Wl,-z,max-page-size=16384"
-        "-Wl,-z,common-page-size=16384"
 )
