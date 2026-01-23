@@ -1,0 +1,31 @@
+# HarmonyOS / OpenHarmony build outputs
+build/
+oh_modules/.preview/
+oh_modules/.hvigor/
+.cxx/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+*.tmp
+*.temp
+.local.*
+
+# Node modules (if using npm)
+node_modules/
+
+# Oh modules (if using npm)
+oh_modules/
+
+# HarmonyOS specific
+.hvigor/
+.local/
+oh-package-lock.json5

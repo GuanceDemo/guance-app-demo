@@ -1,0 +1,414 @@
+import { router } from '@kit.ArkUI';
+import { promptAction } from '@kit.ArkUI';
+import { FTRUMGlobalManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
+import { FTSDK } from 'ft_sdk/src/main/ets/components/FTSDK';
+import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
+import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
+import { ErrorType, AppState } from 'ft_sdk/src/main/ets/components/rum/enum/RUMEnums';
+import { rcp } from '@kit.RemoteCommunicationKit';
+import { FTHttpAutoTrack } from 'ft_sdk/src/main/ets/components/network/FTHttpAutoTrack';
+
+/**
+ * Property wrapper class - For ArkTS compatibility
+ */
+class PropertyWrapper {
+  value: string | number | boolean;
+  constructor(v: string | number | boolean) {
+    this.value = v;
+  }
+}
+
+/**
+ * Property builder
+ */
+class RumPropertyBuilder {
+  private properties: Record<string, object> = {} as Record<string, object>;
+
+  set(key: string, value: string | number | boolean): void {
+    this.properties[key] = new PropertyWrapper(value) as object;
+  }
+
+  toObject(): Record<string, object> {
+    return this.properties;
+  }
+}
+
+/**
+ * Native page - Various test features
+ */
+@Entry
+@Component
+struct NativePage {
+  aboutToAppear(): void {
+    // Start View tracking when page appears
+    FTRUMGlobalManager.getInstance().startView('NativePage');
+  }
+
+  aboutToDisappear(): void {
+    // Stop View tracking when page disappears
+    FTRUMGlobalManager.getInstance().stopView();
+  }
+
+  build() {
+    Column() {
+      // Title bar
+      Row() {
+        // Back arrow
+        Image($r('app.media.arrow_left'))
+          .width(24)
+          .height(24)
+          .onClick(() => {
+            router.back();
+          })
+
+        Text('Native View')
+          .fontSize(20)
+          .fontWeight(FontWeight.Bold)
+          .fontColor('#333333')
+          .layoutWeight(1)
+          .textAlign(TextAlign.Center)
+
+        // Placeholder to keep title centered
+        Row()
+          .width(24)
+          .height(24)
+      }
+      .width('100%')
+      .height(56)
+      .padding({ left: 16, right: 16 })
+      .backgroundColor('#FFFFFF')
+
+      Scroll() {
+        Column() {
+          // ===== RUM View Test =====
+          Text('RUM View Test')
+            .fontSize(14)
+            .fontColor('#666666')
+            .width('100%')
+            .margin({ top: 16, left: 16, bottom: 8 })
+
+          Button('Custom View Tracking')
+            .width('calc(100% - 32vp)')
+            .fontSize(16)
+            .backgroundColor('#4CAF50')
+            .fontColor('#FFFFFF')
+            .borderRadius(8)
+            .margin({ left: 16, right: 16 })
+            .onClick(() => {
+              this.handleCustomView();
+            })
+
+          // ===== RUM Action Test =====
+          Text('RUM Action Test')
+            .fontSize(14)
+            .fontColor('#666666')
+            .width('100%')
+            .margin({ top: 16, left: 16, bottom: 8 })
+
+          Button('Add Custom Action')
+            .width('calc(100% - 32vp)')
+            .fontSize(16)
+            .backgroundColor('#2196F3')
+            .fontColor('#FFFFFF')
+            .borderRadius(8)
+            .margin({ left: 16, right: 16 })
+            .onClick(() => {
+              this.handleCustomAction();
+            })
+
+          Button('Action Start/Stop')
+            .width('calc(100% - 32vp)')
+            .fontSize(16)
+            .backgroundColor('#2196F3')
+            .fontColor('#FFFFFF')
+            .borderRadius(8)
+            .margin({ top: 12, left: 16, right: 16 })
+            .onClick(() => {
+              this.handleActionStartStop();
+            })
+
+          // ===== RUM Error Test =====
+          Text('RUM Error Test')
+            .fontSize(14)
+            .fontColor('#666666')
+            .width('100%')
+            .margin({ top: 16, left: 16, bottom: 8 })
+
+          Button('Add Custom Error')
+            .width('calc(100% - 32vp)')
+            .fontSize(16)
+            .backgroundColor('#F44336')
+            .fontColor('#FFFFFF')
+            .borderRadius(8)
+            .margin({ left: 16, right: 16 })
+            .onClick(() => {
+              this.handleCustomError();
+            })
+
+          Button('Crash Java/Kotlin')
+            .width('calc(100% - 32vp)')
+            .fontSize(16)
+            .backgroundColor('#F44336')
+            .fontColor('#FFFFFF')
+            .borderRadius(8)
+            .margin({ top: 12, left: 16, right: 16 })
+            .onClick(() => {
+              this.handleJavaCrash();
+            })
+
+          // ===== RUM LongTask Test =====
+          Text('RUM LongTask Test')
+            .fontSize(14)
+            .fontColor('#666666')
+            .width('100%')
+            .margin({ top: 16, left: 16, bottom: 8 })
+
+          Button('UIBlock(Longtask)')
+            .width('calc(100% - 32vp)')
+            .fontSize(16)
+            .backgroundColor('#FF9800')
+            .fontColor('#FFFFFF')
+            .borderRadius(8)
+            .margin({ left: 16, right: 16 })
+            .onClick(() => {
+              this.handleLongTask();
+            })
+
+          // ===== Log Test =====
+          Text('Log Test')
+            .fontSize(14)
+            .fontColor('#666666')
+            .width('100%')
+            .margin({ top: 16, left: 16, bottom: 8 })
+
+          Button('Add Custom Log')
+            .width('calc(100% - 32vp)')
+            .fontSize(16)
+            .backgroundColor('#9C27B0')
+            .fontColor('#FFFFFF')
+            .borderRadius(8)
+            .margin({ left: 16, right: 16 })
+            .onClick(() => {
+              this.handleCustomLog();
+            })
+
+          // ===== Global Tag Test =====
+          Text('Global Tag Test')
+            .fontSize(14)
+            .fontColor('#666666')
+            .width('100%')
+            .margin({ top: 16, left: 16, bottom: 8 })
+
+          Button('Add Global Tag')
+            .width('calc(100% - 32vp)')
+            .fontSize(16)
+            .backgroundColor('#00BCD4')
+            .fontColor('#FFFFFF')
+            .borderRadius(8)
+            .margin({ left: 16, right: 16 })
+            .onClick(() => {
+              this.handleGlobalTag();
+            })
+
+          // ===== Network Request Test =====
+          Text('Network Request Test (Auto Track)')
+            .fontSize(14)
+            .fontColor('#666666')
+            .width('100%')
+            .margin({ top: 16, left: 16, bottom: 8 })
+
+          Button('Send Network Request')
+            .width('calc(100% - 32vp)')
+            .fontSize(16)
+            .backgroundColor('#3F51B5')
+            .fontColor('#FFFFFF')
+            .borderRadius(8)
+            .margin({ left: 16, right: 16, bottom: 16 })
+            .onClick(() => {
+              this.handleNetworkRequest();
+            })
+        }
+        .width('100%')
+      }
+      .layoutWeight(1)
+    }
+    .width('100%')
+    .height('100%')
+    .backgroundColor('#F5F5F5')
+  }
+
+  /**
+   * Handle custom View tracking
+   */
+  async handleCustomView(): Promise<void> {
+    const property = new RumPropertyBuilder();
+    property.set('page_category', 'test');
+    property.set('page_id', 'native_page_001');
+
+    FTRUMGlobalManager.getInstance().startView('CustomView', property.toObject());
+    promptAction.showToast({ message: 'Custom View tracking started', duration: 1500 });
+
+    // Stop after 3 seconds
+    setTimeout(() => {
+      FTRUMGlobalManager.getInstance().stopView();
+      promptAction.showToast({ message: 'View tracking stopped', duration: 1000 });
+    }, 3000);
+  }
+
+  /**
+   * Handle custom Action
+   */
+  handleCustomAction(): void {
+    const property = new RumPropertyBuilder();
+    property.set('button_name', 'custom_action');
+    property.set('action_category', 'test');
+
+    FTRUMGlobalManager.getInstance().addActionWithProperty('test_button_click', 'click', property.toObject());
+    promptAction.showToast({ message: 'Custom Action added', duration: 1500 });
+  }
+
+  /**
+   * Handle Action start/stop
+   */
+  handleActionStartStop(): void {
+    FTRUMGlobalManager.getInstance().startAction('long_operation', 'custom');
+    promptAction.showToast({ message: 'Action started', duration: 1000 });
+
+    // Simulate time-consuming operation
+    setTimeout(() => {
+      FTRUMGlobalManager.getInstance().stopAction();
+      promptAction.showToast({ message: 'Action stopped', duration: 1500 });
+    }, 2000);
+  }
+
+  /**
+   * Handle custom Error
+   */
+  handleCustomError(): void {
+    const property = new RumPropertyBuilder();
+    property.set('error_code', 'TEST_001');
+    property.set('error_category', 'custom');
+
+    const stackTrace = `Error: Custom test error
+    at NativePage.handleCustomError (NativePage.ets:175)
+    at Button.onClick (NativePage.ets:125)`;
+
+    FTRUMGlobalManager.getInstance().addError(
+      stackTrace,
+      'This is a custom error for testing',
+      ErrorType.CUSTOM,
+      AppState.RUN,
+      property.toObject()
+    );
+    promptAction.showToast({ message: 'Custom Error added', duration: 1500 });
+  }
+
+  /**
+   * Handle Java/Kotlin crash test
+   */
+  handleJavaCrash(): void {
+    promptAction.showToast({ message: 'Triggering crash test', duration: 1000 });
+    // Actually trigger division by zero error causing app crash
+    setTimeout(() => {
+      const result = 1 / 0;
+      console.info('Crash test result:', result.toString());
+    }, 500);
+  }
+
+  /**
+   * Handle long task test
+   */
+  handleLongTask(): void {
+    promptAction.showToast({ message: 'Starting long task execution...', duration: 1000 });
+
+    const startTime = Date.now();
+
+    // Simulate 2-second long task, blocking main thread
+    const start = Date.now();
+    while (Date.now() - start < 2000) {
+      // Block waiting for 2 seconds
+    }
+
+    const duration = (Date.now() - startTime) * 1000000; // Convert to nanoseconds
+
+    // Manually add LongTask
+    const longTaskProperty: Record<string, string | number | boolean> = {
+      'task_type': 'ui_block',
+      'task_duration': duration.toString()
+    };
+
+    FTRUMGlobalManager.getInstance().addLongTask('UI Block Task', duration, longTaskProperty);
+
+    promptAction.showToast({ message: 'Long task completed', duration: 1500 });
+  }
+
+  /**
+   * Handle custom log
+   */
+  handleCustomLog(): void {
+    // Test different log levels
+    FTLogger.logBackground('This is an INFO level log', Status.INFO);
+    FTLogger.logBackground('This is a WARNING level log', Status.WARN);
+    FTLogger.logBackground('This is an ERROR level log', Status.ERROR);
+    FTLogger.logBackground('This is a DEBUG level log', Status.DEBUG);
+
+    // Log with properties - using Map<string, object>
+    const property = new Map<string, object>();
+    property.set('log_category', new PropertyWrapper('test') as object);
+    property.set('log_source', new PropertyWrapper('native_page') as object);
+    FTLogger.logBackground('Log with properties', Status.INFO, property);
+
+    promptAction.showToast({ message: 'Custom log added', duration: 1500 });
+  }
+
+  /**
+   * Handle global tag
+   */
+  handleGlobalTag(): void {
+    // Add global context tags
+    const globalContext = new Map<string, string>();
+    globalContext.set('platform', 'harmonyos');
+    globalContext.set('version', '1.0.0');
+    globalContext.set('build_type', 'debug');
+    FTSDK.appendGlobalContext(globalContext);
+
+    // Add RUM global tags
+    const rumContext = new Map<string, string>();
+    rumContext.set('user_type', 'vip');
+    rumContext.set('channel', 'official');
+    FTSDK.appendRUMGlobalContext(rumContext);
+
+    promptAction.showToast({ message: 'Global tags added', duration: 1500 });
+  }
+
+  /**
+   * Handle network request test (using RCP auto tracking)
+   */
+  async handleNetworkRequest(): Promise<void> {
+    promptAction.showToast({ message: 'Sending network request...', duration: 1000 });
+
+    try {
+      // Get configured interceptor Session
+      const session = FTHttpAutoTrack.getInstance().getDefaultSession();
+
+      if (!session) {
+        promptAction.showToast({ message: 'RCP Session not available, please check RUM configuration', duration: 2000 });
+        return;
+      }
+
+      // Send GET request
+      const request = new rcp.Request('https://httpbin.org/get', 'GET');
+      const response = await session.fetch(request);
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        promptAction.showToast({ message: `Request successful: ${response.statusCode}`, duration: 1500 });
+      } else {
+        promptAction.showToast({ message: `Request failed: ${response.statusCode}`, duration: 1500 });
+      }
+    } catch (error) {
+      const errorObj: Error = error as Error;
+      console.error('Network request failed:', errorObj.message);
+      promptAction.showToast({ message: 'Network request failed', duration: 1500 });
+    }
+  }
+}

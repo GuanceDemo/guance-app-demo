@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "GuanceDemo"
+    },
+    {
+      "name": "request_paste_reason",
+      "value": "需要获取系统剪切板权限进行业务处理！"
+    },
+    {
+      "name": "network_reason",
+      "value": "此应用需要访问网络以加载内容！"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/LoginPage",
+    "pages/MainPage",
+    "pages/SettingPage",
+    "pages/NativePage",
+    "pages/WebViewPage"
+  ]
+}

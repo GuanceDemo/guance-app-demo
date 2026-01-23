@@ -1,0 +1,69 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "/Users/chensen/Downloads/Guance Harmony SDK Demo.cer",
+          "keyAlias": "GuanceSdkDemo",
+          "keyPassword": "0000001D1F48342B7D71A2CFA7AF2C74222E62C8C875D5DD825515D48DE37CD6C72246A5113BC16671D1F3349E",
+          "profile": "/Users/chensen/Downloads/GuanceDemoProfileRelease.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "/Users/chensen/Downloads/guancekey.p12",
+          "storePassword": "0000001D4E8516A2A2F00153FB063D746064D0F23B6EE205D356B3D3E81CF1E1AAA621CE83C6A93065587A7781"
+        }
+      },
+      {
+        "name": "release",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "/Users/chensen/Downloads/Guance Harmony SDK Demo.cer",
+          "keyAlias": "GuanceSdkDemo",
+          "keyPassword": "0000001D61C9B0450E2557ADDBA1B359000F47D3799C9B48FE9E5D2290A5D2496F5DCCD9A86008D0672BF9172E",
+          "profile": "/Users/chensen/Downloads/GuanceDemoProfileRelease.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "/Users/chensen/Downloads/guancekey.p12",
+          "storePassword": "0000001D2FEE95BBA1CA60E4BF4FDD8B272E4E55936DA309A653A615B65D7316F11160C5BE6EAFF0997011D81A"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "release",
+        "targetSdkVersion": "6.0.0(20)",
+        "compatibleSdkVersion": "5.0.0(12)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug",
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}
