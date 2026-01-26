@@ -320,6 +320,10 @@
           <input id="demo-ios-app-id" type="text" value="gc_app_ios_demo"/>
         </div>
         <div class="form-group">
+          <label>HarmonyOS App ID:</label>
+          <input id="demo-harmonyos-app-id" type="text" value="gc_app_harmonyos_demo"/>
+        </div>
+        <div class="form-group">
           <label>OTEL URL:</label>
           <input id="demo-otel-url-input" type="text" value="http://10.100.64.166:9529/otel/v1/traces"/>
         </div>
@@ -366,6 +370,7 @@
       const demoApiAddress = document.getElementById('demo-api-address-input').value;
       const demoAndroidAppId = document.getElementById('demo-android-app-id').value;
       const demoIosAppId = document.getElementById('demo-ios-app-id').value;
+      const demoHarmonyosAppId = document.getElementById('demo-harmonyos-app-id').value;
       const demoOtelUrl = document.getElementById('demo-otel-url-input').value;
 
       // Construct JSON object
@@ -376,7 +381,8 @@
           demoApiAddress: demoApiAddress,
           demoAndroidAppId: demoAndroidAppId,
           demoIOSAppId: demoIosAppId,
-          otelAddress: otelAddress,
+          demoHarmonyOSAppId: demoHarmonyosAppId,
+          otelAddress: demoOtelUrl,
         };
       } else {
         importData = {
@@ -385,7 +391,8 @@
           demoApiAddress: demoApiAddress,
           demoAndroidAppId: demoAndroidAppId,
           demoIOSAppId: demoIosAppId,
-          otelAddress: otelAddress,
+          demoHarmonyOSAppId: demoHarmonyosAppId,
+          otelAddress: demoOtelUrl,
         };
       }
 
@@ -420,7 +427,7 @@
       makeCode();
     });
 
-    $("#dataway-client-token-input,#dataway-address-input,#datakit-address-input,#demo-api-address-input,#demo-android-app-id,#demo-ios-app-id,#demo-otel-url-input").
+    $("#dataway-client-token-input,#dataway-address-input,#datakit-address-input,#demo-api-address-input,#demo-android-app-id,#demo-ios-app-id,#demo-harmonyos-app-id,#demo-otel-url-input").
     on("blur", function() {
       makeCode();
     }).
