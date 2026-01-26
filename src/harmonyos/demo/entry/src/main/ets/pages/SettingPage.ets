@@ -290,79 +290,80 @@ struct SettingPage {
                 this.otelAddress = value;
               })
 
+            // TODO: Session Replay feature - temporarily hidden, enable when feature is ready
             // Session replay toggle
-            Row() {
-              Text('Enable Session Replay')
-                .fontSize(16)
-                .fontColor('#333333')
-                .layoutWeight(1)
-
-              Toggle({ type: ToggleType.Switch, isOn: this.enableSessionReplay })
-                .selectedColor('#FF6600')
-                .onChange((isOn: boolean) => {
-                  this.enableSessionReplay = isOn;
-                })
-            }
-            .width('100%')
-            .margin({ top: 16 })
-
-            // Privacy type
-            Text('Text Privacy Masking Option')
-              .fontSize(14)
-              .fontColor('#666666')
-              .width('100%')
-              .margin({ top: 16, bottom: 8 })
-
-            Row() {
-              Radio({ value: 'allow', group: 'privacyType' })
-                .checked(this.sessionReplayPrivacy === SessionReplayPrivacy.ALLOW)
-                .onChange((isChecked: boolean) => {
-                  if (isChecked) {
-                    this.sessionReplayPrivacy = SessionReplayPrivacy.ALLOW;
-                  }
-                })
-
-              Text('allow')
-                .fontSize(14)
-                .fontColor('#333333')
-                .margin({ left: 4, right: 16 })
-                .onClick(() => {
-                  this.sessionReplayPrivacy = SessionReplayPrivacy.ALLOW;
-                })
-
-              Radio({ value: 'mask', group: 'privacyType' })
-                .checked(this.sessionReplayPrivacy === SessionReplayPrivacy.MASK)
-                .onChange((isChecked: boolean) => {
-                  if (isChecked) {
-                    this.sessionReplayPrivacy = SessionReplayPrivacy.MASK;
-                  }
-                })
-
-              Text('mask all')
-                .fontSize(14)
-                .fontColor('#333333')
-                .margin({ left: 4, right: 16 })
-                .onClick(() => {
-                  this.sessionReplayPrivacy = SessionReplayPrivacy.MASK;
-                })
-
-              Radio({ value: 'only input', group: 'privacyType' })
-                .checked(this.sessionReplayPrivacy === SessionReplayPrivacy.MASK_USER_INPUT)
-                .onChange((isChecked: boolean) => {
-                  if (isChecked) {
-                    this.sessionReplayPrivacy = SessionReplayPrivacy.MASK_USER_INPUT;
-                  }
-                })
-
-              Text('only input')
-                .fontSize(14)
-                .fontColor('#333333')
-                .margin({ left: 4 })
-                .onClick(() => {
-                  this.sessionReplayPrivacy = SessionReplayPrivacy.MASK_USER_INPUT;
-                })
-            }
-            .width('100%')
+            // Row() {
+            //   Text('Enable Session Replay')
+            //     .fontSize(16)
+            //     .fontColor('#333333')
+            //     .layoutWeight(1)
+            //
+            //   Toggle({ type: ToggleType.Switch, isOn: this.enableSessionReplay })
+            //     .selectedColor('#FF6600')
+            //     .onChange((isOn: boolean) => {
+            //       this.enableSessionReplay = isOn;
+            //     })
+            // }
+            // .width('100%')
+            // .margin({ top: 16 })
+            //
+            // // Privacy type
+            // Text('Text Privacy Masking Option')
+            //   .fontSize(14)
+            //   .fontColor('#666666')
+            //   .width('100%')
+            //   .margin({ top: 16, bottom: 8 })
+            //
+            // Row() {
+            //   Radio({ value: 'allow', group: 'privacyType' })
+            //     .checked(this.sessionReplayPrivacy === SessionReplayPrivacy.ALLOW)
+            //     .onChange((isChecked: boolean) => {
+            //       if (isChecked) {
+            //         this.sessionReplayPrivacy = SessionReplayPrivacy.ALLOW;
+            //       }
+            //     })
+            //
+            //   Text('allow')
+            //     .fontSize(14)
+            //     .fontColor('#333333')
+            //     .margin({ left: 4, right: 16 })
+            //     .onClick(() => {
+            //       this.sessionReplayPrivacy = SessionReplayPrivacy.ALLOW;
+            //     })
+            //
+            //   Radio({ value: 'mask', group: 'privacyType' })
+            //     .checked(this.sessionReplayPrivacy === SessionReplayPrivacy.MASK)
+            //     .onChange((isChecked: boolean) => {
+            //       if (isChecked) {
+            //         this.sessionReplayPrivacy = SessionReplayPrivacy.MASK;
+            //       }
+            //     })
+            //
+            //   Text('mask all')
+            //     .fontSize(14)
+            //     .fontColor('#333333')
+            //     .margin({ left: 4, right: 16 })
+            //     .onClick(() => {
+            //       this.sessionReplayPrivacy = SessionReplayPrivacy.MASK;
+            //     })
+            //
+            //   Radio({ value: 'only input', group: 'privacyType' })
+            //     .checked(this.sessionReplayPrivacy === SessionReplayPrivacy.MASK_USER_INPUT)
+            //     .onChange((isChecked: boolean) => {
+            //       if (isChecked) {
+            //         this.sessionReplayPrivacy = SessionReplayPrivacy.MASK_USER_INPUT;
+            //       }
+            //     })
+            //
+            //   Text('only input')
+            //     .fontSize(14)
+            //     .fontColor('#333333')
+            //     .margin({ left: 4 })
+            //     .onClick(() => {
+            //       this.sessionReplayPrivacy = SessionReplayPrivacy.MASK_USER_INPUT;
+            //     })
+            // }
+            // .width('100%')
           }
           .width('100%')
           .padding(16)
@@ -715,14 +716,14 @@ struct SettingPage {
       console.info('JSON parsed successfully:', JSON.stringify(jsonObj));
 
       // Validate required fields
-      if (!jsonObj.demoApiAddress || !jsonObj.demoIOSAppId) {
+      if (!jsonObj.demoApiAddress || !jsonObj.demoHarmonyOSAppId) {
         promptAction.showToast({ message: 'Configuration parsing failed', duration: 2000 });
         return false;
       }
 
       // Fill configuration
-      if (jsonObj.demoIOSAppId) {
-        this.appId = jsonObj.demoIOSAppId;
+      if (jsonObj.demoHarmonyOSAppId) {
+        this.appId = jsonObj.demoHarmonyOSAppId;
       }
       if (jsonObj.demoApiAddress) {
         this.demoAPIAddress = jsonObj.demoApiAddress;
@@ -734,6 +735,9 @@ struct SettingPage {
         this.datawayAddress = jsonObj.datawayAddress;
         this.datawayClientToken = jsonObj.datawayClientToken;
         this.accessType = AccessType.DATAWAY;
+      }
+      if (jsonObj.otelAddress) {
+        this.otelAddress = jsonObj.otelAddress;
       }
 
       console.info('Configuration imported successfully');
