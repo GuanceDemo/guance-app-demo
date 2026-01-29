@@ -7,7 +7,8 @@
   "license": "",
   "dependencies": {
     "ft_sdk": "file:../libs/ft_sdk.har"
-  }
+  },
+  "types": "./src/main/ts"
 }
 
 

@@ -715,11 +715,7 @@ struct SettingPage {
       const jsonObj: Record<string, string> = JSON.parse(decodedStr);
       console.info('JSON parsed successfully:', JSON.stringify(jsonObj));
 
-      // Validate required fields
-      if (!jsonObj.demoApiAddress || !jsonObj.demoHarmonyOSAppId) {
-        promptAction.showToast({ message: 'Configuration parsing failed', duration: 2000 });
-        return false;
-      }
+
 
       // Fill configuration
       if (jsonObj.demoHarmonyOSAppId) {

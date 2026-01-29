@@ -1,5 +1,6 @@
 import { router } from '@kit.ArkUI';
 import { promptAction } from '@kit.ArkUI';
+import * as ftcrash from 'libftcrash.so';
 import { FTRUMGlobalManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
 import { FTSDK } from 'ft_sdk/src/main/ets/components/FTSDK';
 import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
@@ -145,7 +146,7 @@ struct NativePage {
               this.handleCustomError();
             })
 
-          Button('Crash Java/Kotlin')
+          Button('Crash Cpp')
             .width('calc(100% - 32vp)')
             .fontSize(16)
             .backgroundColor('#F44336')
@@ -153,7 +154,7 @@ struct NativePage {
             .borderRadius(8)
             .margin({ top: 12, left: 16, right: 16 })
             .onClick(() => {
-              this.handleJavaCrash();
+              this.handleCppCrash();
             })
 
           // ===== RUM LongTask Test =====
@@ -312,6 +313,23 @@ struct NativePage {
     setTimeout(() => {
       const result = 1 / 0;
       console.info('Crash test result:', result.toString());
+    }, 500);
+  }
+
+  /**
+   * Handle C++ crash test
+   */
+  handleCppCrash(): void {
+    promptAction.showToast({ message: 'Triggering C++ crash...', duration: 1000 });
+
+    // Trigger C++ crash after a short delay
+    setTimeout(() => {
+      try {
+        // Trigger null pointer dereference crash
+        ftcrash.triggerNullPointerCrash();
+      } catch (e) {
+        console.error('C++ crash error:', e);
+      }
     }, 500);
   }
 
