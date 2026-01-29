@@ -107,6 +107,7 @@ export default class EntryAbility extends UIAbility {
         .setEnableTrackAppANR(true) // Enable ANR tracking
         .setEnableTrackAppUIBlock(true) // Enable UI block tracking
         .setEnableTraceWebView(true) // Enable WebView tracking
+        .setEnableTrackNativeCrash(true)
         .setExtraMonitorTypeWithError(ErrorMonitorType.ALL) // All error monitor types
         .setDeviceMetricsMonitorType(DeviceMetricsMonitorType.ALL); // All device metrics monitor types
 
