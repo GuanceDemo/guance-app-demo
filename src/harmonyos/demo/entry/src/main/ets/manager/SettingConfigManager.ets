@@ -33,6 +33,7 @@ export class SettingConfigManager {
    * Save settings
    */
   static async saveSetting(settingData: SettingData): Promise<void> {
+    console.info('SettingConfigManager: Starting to save settings');
     SettingConfigManager.data = settingData;
     try {
       await PreferencesUtil.putString(KEY_DATAKIT_ADDRESS, settingData.datakitAddress);
@@ -44,8 +45,9 @@ export class SettingConfigManager {
       await PreferencesUtil.putInt(KEY_APP_ACCESS_TYPE, settingData.type);
       await PreferencesUtil.putBoolean(KEY_ENABLE_SESSION_REPLAY, settingData.enableSessionReplay);
       await PreferencesUtil.putInt(KEY_SESSION_REPLAY_PRIVACY_TYPE, settingData.sessionReplayPrivacyType);
+      console.info('SettingConfigManager: All settings saved successfully');
     } catch (err) {
-      console.error('Failed to save setting:', JSON.stringify(err));
+      console.error('SettingConfigManager: Failed to save setting:', JSON.stringify(err));
     }
   }
 
@@ -54,9 +56,11 @@ export class SettingConfigManager {
    */
   static async readSetting(): Promise<SettingData> {
     if (SettingConfigManager.data !== null) {
+      console.info('SettingConfigManager: Returning cached data');
       return SettingConfigManager.data;
     }
 
+    console.info('SettingConfigManager: Starting to read settings');
     try {
       const datakitAddress = await PreferencesUtil.getString(KEY_DATAKIT_ADDRESS, DEFAULT_DATAKIT_ADDRESS);
       const demoApiAddress = await PreferencesUtil.getString(KEY_API_ADDRESS, DEFAULT_API_ADDRESS);
@@ -82,9 +86,10 @@ export class SettingConfigManager {
         privacyType
       );
 
+      console.info('SettingConfigManager: Settings loaded successfully');
       return SettingConfigManager.data;
     } catch (err) {
-      console.error('Failed to read setting:', JSON.stringify(err));
+      console.error('SettingConfigManager: Failed to read setting:', JSON.stringify(err));
       // Use DataKit by default (aligned with Android)
       return new SettingData(
         DEFAULT_DATAKIT_ADDRESS,

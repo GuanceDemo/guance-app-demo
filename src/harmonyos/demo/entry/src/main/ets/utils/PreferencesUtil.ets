@@ -13,8 +13,13 @@ export class PreferencesUtil {
   static async init(context: Context): Promise<void> {
     try {
       PreferencesUtil.preferences = await preferences.getPreferences(context, 'FT_SDK_DEMO');
+      console.info('PreferencesUtil: Preferences initialized successfully');
+      // Verify preferences is working by doing a test get
+      if (PreferencesUtil.preferences) {
+        console.info('PreferencesUtil: Preferences object is ready');
+      }
     } catch (err) {
-      console.error('Failed to get preferences:', JSON.stringify(err));
+      console.error('PreferencesUtil: Failed to get preferences:', JSON.stringify(err));
     }
   }
 
@@ -26,9 +31,12 @@ export class PreferencesUtil {
       try {
         await PreferencesUtil.preferences.put(key, value);
         await PreferencesUtil.preferences.flush();
+        console.info(`PreferencesUtil: Saved key=${key}, value=${value}`);
       } catch (err) {
-        console.error('Failed to put string:', JSON.stringify(err));
+        console.error('PreferencesUtil: Failed to put string:', JSON.stringify(err));
       }
+    } else {
+      console.error('PreferencesUtil: Preferences not initialized, cannot save key=', key);
     }
   }
 
@@ -38,12 +46,15 @@ export class PreferencesUtil {
   static async getString(key: string, defaultValue: string): Promise<string> {
     if (PreferencesUtil.preferences) {
       try {
-        return await PreferencesUtil.preferences.get(key, defaultValue) as string;
+        const value = await PreferencesUtil.preferences.get(key, defaultValue) as string;
+        console.info(`PreferencesUtil: Retrieved key=${key}, value=${value}`);
+        return value;
       } catch (err) {
-        console.error('Failed to get string:', JSON.stringify(err));
+        console.error('PreferencesUtil: Failed to get string:', JSON.stringify(err));
         return defaultValue;
       }
     }
+    console.warn('PreferencesUtil: Preferences not initialized, returning default value for key=', key);
     return defaultValue;
   }
 

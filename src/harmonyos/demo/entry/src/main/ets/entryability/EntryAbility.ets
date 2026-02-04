@@ -35,8 +35,9 @@ export default class EntryAbility extends UIAbility {
     // Main window is created, set main page for this ability
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
 
-    // Initialize Preferences
-    PreferencesUtil.init(this.context);
+    // Initialize Preferences - must await to ensure it completes before reading settings
+    await PreferencesUtil.init(this.context);
+    hilog.info(DOMAIN, 'Preferences', 'PreferencesUtil initialized successfully');
 
     // Initialize FT SDK
     await this.initFTSDK();

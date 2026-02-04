@@ -506,8 +506,9 @@ struct SettingPage {
    * Load settings
    */
   async loadSettings(): Promise<void> {
+    console.info('SettingPage: Starting to load settings');
     const setting = await SettingConfigManager.readSetting();
-    console.info("setting", JSON.stringify(setting))
+    console.info('SettingPage: Settings loaded, updating UI');
     this.datakitAddress = setting.datakitAddress;
     this.datawayAddress = setting.datawayAddress;
     this.datawayClientToken = setting.datawayClientToken;
@@ -517,6 +518,7 @@ struct SettingPage {
     this.accessType = setting.type;
     this.enableSessionReplay = setting.enableSessionReplay;
     this.sessionReplayPrivacy = setting.sessionReplayPrivacyType;
+    console.info('SettingPage: UI updated with loaded settings');
   }
 
   /**
