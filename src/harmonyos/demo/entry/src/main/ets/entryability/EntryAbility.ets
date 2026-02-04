@@ -13,6 +13,7 @@ import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
 import { FTRUMConfigManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMConfigManager';
 import { ErrorMonitorType } from 'ft_sdk/src/main/ets/components/rum/enum/ErrorMonitorType';
 import { DeviceMetricsMonitorType } from 'ft_sdk/src/main/ets/components/rum/enum/DeviceMetricsMonitorType';
+import OpenTelemetry from 'otel_sdk';
 
 const DOMAIN: number = 0x0000;
 
@@ -124,12 +125,38 @@ export default class EntryAbility extends UIAbility {
       FTSDK.installTraceConfig(traceConfig);
       hilog.info(DOMAIN, 'FTSDK', 'FTTraceConfig installed successfully');
 
+      // 5. Initialize OTEL SDK (similar to Android's setOtelSDK)
+      this.initOtelSDK(setting.otelAddress);
+
       // Log initialization (using static method)
       FTLogger.logBackground('FT SDK initialized successfully', Status.INFO);
 
     } catch (error) {
       const errorObj: Error = error as Error;
       hilog.error(DOMAIN, 'FTSDK', `Failed to initialize FT SDK: ${errorObj.message}`);
+    }
+  }
+
+  /**
+   * Initialize OTEL SDK
+   * Similar to Android's setOtelSDK method
+   */
+  private initOtelSDK(otelAddress: string): void {
+    try {
+      if (!otelAddress || otelAddress.length === 0) {
+        hilog.warn(DOMAIN, 'OTEL', 'OTEL address is empty, skipping OTEL SDK initialization');
+        return;
+      }
+
+      const success = OpenTelemetry.initialize(otelAddress, 'ft-sdk-demo');
+      if (success) {
+        hilog.info(DOMAIN, 'OTEL', 'OTEL SDK initialized successfully');
+      } else {
+        hilog.error(DOMAIN, 'OTEL', 'Failed to initialize OTEL SDK');
+      }
+    } catch (error) {
+      const errorObj: Error = error as Error;
+      hilog.error(DOMAIN, 'OTEL', `Failed to initialize OTEL SDK: ${errorObj.message}`);
     }
   }
 

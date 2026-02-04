@@ -65,8 +65,8 @@ export class SettingConfigManager {
       const datawayAddress = await PreferencesUtil.getString(KEY_DATAWAY_ADDRESS, PUBLIC_DATAWAY_ADDRESS);
       const datawayClientToken = await PreferencesUtil.getString(KEY_DATAWAY_CLIENT_TOKEN, PUBLIC_DATAWAY_CLIENT_TOKEN);
       const otelAddress = await PreferencesUtil.getString(KEY_OTEL_ADDRESS, DEFAULT_OTEL_ADDRESS);
-      // Use public DataWay by default
-      const accessType = await PreferencesUtil.getInt(KEY_APP_ACCESS_TYPE, AccessType.DATAWAY);
+      // Use DataKit by default (aligned with Android)
+      const accessType = await PreferencesUtil.getInt(KEY_APP_ACCESS_TYPE, AccessType.DATAKIT);
       const enableSessionReplay = await PreferencesUtil.getBoolean(KEY_ENABLE_SESSION_REPLAY, false);
       const privacyType = await PreferencesUtil.getInt(KEY_SESSION_REPLAY_PRIVACY_TYPE, SessionReplayPrivacy.ALLOW);
 
@@ -85,7 +85,7 @@ export class SettingConfigManager {
       return SettingConfigManager.data;
     } catch (err) {
       console.error('Failed to read setting:', JSON.stringify(err));
-      // Use Guance public DataWay official configuration by default
+      // Use DataKit by default (aligned with Android)
       return new SettingData(
         DEFAULT_DATAKIT_ADDRESS,
         DEFAULT_API_ADDRESS,
@@ -93,7 +93,7 @@ export class SettingConfigManager {
         PUBLIC_DATAWAY_ADDRESS,
         PUBLIC_DATAWAY_CLIENT_TOKEN,
         DEFAULT_OTEL_ADDRESS,
-        AccessType.DATAWAY,
+        AccessType.DATAKIT,
         false,
         SessionReplayPrivacy.ALLOW
       );

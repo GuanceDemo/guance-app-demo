@@ -1,0 +1,89 @@
+# Android
+*.apk
+*.ap_
+*.dex
+*.class
+*.dex
+**/build/
+**/.gradle/
+**/local.properties
+**/.externalNativeBuild
+**/captures/
+.gradle/
+local.properties
+
+# HarmonyOS
+*.har
+*.hap
+**/.idea/
+**/.clangd/
+**/.clang-tidy
+**/.hvigor/
+**/build/
+**/oh_modules/
+**/local.properties
+.idea/
+
+# iOS
+*.ipa
+*.dSYM.zip
+*.dSYM
+Pods/
+**/Pods/
+**/*.pbxuser
+**/*.mode1v3
+**/*.mode2v3
+**/*.perspectivev3
+xcuserdata/
+*.xcworkspace
+**/xcuserdata/
+**/*.xccheckout
+**/*.moved-aside
+**/DerivedData/
+**/build/
+**/Pods/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+.pnpm-debug.log*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# Build outputs
+build/
+dist/
+out/
+target/
+*.o
+*.so
+*.a
+*.dylib
+*.lib
+*.dll
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.cache

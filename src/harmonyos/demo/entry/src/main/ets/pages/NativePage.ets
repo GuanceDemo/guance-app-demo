@@ -8,6 +8,9 @@ import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
 import { ErrorType, AppState } from 'ft_sdk/src/main/ets/components/rum/enum/RUMEnums';
 import { rcp } from '@kit.RemoteCommunicationKit';
 import { FTHttpAutoTrack } from 'ft_sdk/src/main/ets/components/network/FTHttpAutoTrack';
+import OpenTelemetry from 'otel_sdk';
+import { SettingConfigManager } from '../manager/SettingConfigManager';
+import { API_USER_INFO } from '../constants/Constant';
 
 /**
  * Property wrapper class - For ArkTS compatibility
@@ -224,9 +227,27 @@ struct NativePage {
             .backgroundColor('#3F51B5')
             .fontColor('#FFFFFF')
             .borderRadius(8)
-            .margin({ left: 16, right: 16, bottom: 16 })
+            .margin({ left: 16, right: 16 })
             .onClick(() => {
               this.handleNetworkRequest();
+            })
+
+          // ===== OTEL Test =====
+          Text('OpenTelemetry Test')
+            .fontSize(14)
+            .fontColor('#666666')
+            .width('100%')
+            .margin({ top: 16, left: 16, bottom: 8 })
+
+          Button('Create OTEL Span')
+            .width('calc(100% - 32vp)')
+            .fontSize(16)
+            .backgroundColor('#673AB7')
+            .fontColor('#FFFFFF')
+            .borderRadius(8)
+            .margin({ left: 16, right: 16, bottom: 16 })
+            .onClick(() => {
+              this.handleCreateOtelSpan();
             })
         }
         .width('100%')
@@ -428,5 +449,197 @@ struct NativePage {
       console.error('Network request failed:', errorObj.message);
       promptAction.showToast({ message: 'Network request failed', duration: 1500 });
     }
+  }
+
+  /**
+   * Handle create OTEL span test
+   * Similar to Android's createSpanWithOtel functionality
+   */
+  async handleCreateOtelSpan(): Promise<void> {
+    promptAction.showToast({ message: 'Sending request with OTEL headers...', duration: 1500 });
+
+    try {
+      // Get configured session
+      const session = FTHttpAutoTrack.getInstance().getDefaultSession();
+
+      if (!session) {
+        // Fallback to default session
+        const baseSession = rcp.createSession();
+        await this.sendRequestAndCreateSpan(baseSession);
+      } else {
+        await this.sendRequestAndCreateSpan(session);
+      }
+    } catch (error) {
+      const errorObj: Error = error as Error;
+      console.error('OTEL span creation failed:', errorObj.message);
+      promptAction.showToast({ message: 'OTEL span creation failed', duration: 1500 });
+    }
+  }
+
+  /**
+   * Send request and create span with trace context
+   */
+  private async sendRequestAndCreateSpan(session: rcp.Session): Promise<void> {
+    try {
+      // Read configuration from settings
+      const setting = await SettingConfigManager.readSetting();
+
+      // Get OTEL address from settings
+      const otelEndpoint = setting.otelAddress || 'http://localhost:4318/v1/traces';
+
+      // Build user info URL from Demo API address
+      const userInfoUrl = setting.demoApiAddress + API_USER_INFO;
+
+      console.info('OTEL Endpoint:', otelEndpoint);
+      console.info('User Info URL:', userInfoUrl);
+
+      // Initialize OTEL SDK with configured endpoint
+      OpenTelemetry.initialize(otelEndpoint, 'ft-sdk-demo');
+
+      // Send request to user info endpoint (similar to Android's userinfoWithOtel)
+      const request = new rcp.Request(userInfoUrl, 'GET');
+      const response = await session.fetch(request);
+
+      console.info('Response status:', response.statusCode);
+      console.info('Response headers:', JSON.stringify(response.headers));
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        // Get trace_id and span_id from response headers
+        const headers = response.headers as Record<string, string>;
+        let traceId = headers['trace_id'];
+        let parentId = headers['span_id'];
+
+        // Store original decimal values for logging and attributes
+        let originalTraceId = traceId;
+        let originalParentId = parentId;
+
+        // If using ddtrace, convert IDs to proper format (hex format for OpenTelemetry)
+        if (traceId && parentId) {
+          traceId = this.convert64To128Bit(traceId);
+          parentId = this.convertHex(parentId);
+        }
+
+        // If no trace headers, generate mock IDs for testing
+        if (!originalTraceId || !originalParentId) {
+          console.warn('No trace headers in response, using mock IDs');
+          originalTraceId = this.generateMockTraceIdDecimal();
+          originalParentId = this.generateMockParentSpanIdDecimal();
+          // Convert mock IDs to hex format for OpenTelemetry
+          traceId = this.convert64To128Bit(originalTraceId);
+          parentId = this.convertHex(originalParentId);
+        }
+
+        // Log trace info in decimal format (like Android)
+        console.info('FT_SDK_< originalTraceId:', originalTraceId);
+        console.info('< span_id:', originalParentId);
+
+
+        console.info('FT_SDK_< traceId:', traceId);
+        console.info('< span_id:', originalParentId);
+
+
+
+        // Create span with backend's trace_id and parent_span_id
+        // Matches Android's createSpanWithOtel: simple child span creation
+        let spanId: string = '';
+        try {
+          spanId = OpenTelemetry.startSpanWithParent('add.action.after_request', traceId, parentId);
+          console.info('Created span with backend trace_id:', traceId, 'parent_span_id:', parentId);
+        } catch (e) {
+          // Fallback: use startSpan (independent span)
+          const errorObj = e as Error;
+          console.warn('startSpanWithParent failed, error:', errorObj.message);
+          console.warn('Fallback: using startSpan (independent span)');
+          spanId = OpenTelemetry.startSpan('add.action.after_request');
+        }
+
+        if (spanId && spanId.length > 0) {
+          // Add additional attributes
+          OpenTelemetry.setSpanAttribute(spanId, 'custom.has_parent', 'true');
+          OpenTelemetry.setSpanAttribute(spanId, 'action.type', 'after_request');
+          OpenTelemetry.setSpanAttribute(spanId, 'platform', 'harmonyos');
+
+          // End the span
+          OpenTelemetry.endSpan(spanId);
+
+          promptAction.showToast({ message: 'OTEL Span created!', duration: 1500 });
+        } else {
+          promptAction.showToast({ message: 'Failed to create OTEL Span', duration: 1500 });
+        }
+      } else {
+        promptAction.showToast({ message: `Request failed: ${response.statusCode}`, duration: 1500 });
+      }
+    } catch (error) {
+      const errorObj: Error = error as Error;
+      console.error('Send request failed:', errorObj.message);
+      throw new Error(`OTEL request failed: ${errorObj.message}`);
+    }
+  }
+
+  /**
+   * Convert 64-bit trace ID to 128-bit hex format
+   * Similar to Android's convert64To128Bit method
+   */
+  private convert64To128Bit(traceId64: string): string {
+    try {
+      // Convert to big integer and pad to 16 hex chars
+      const bigIntVal = BigInt(traceId64);
+      const hexPart = bigIntVal.toString(16).padStart(16, '0');
+      // Prefix with 16 zeros to make 32 chars (128-bit)
+      return '0000000000000000' + hexPart;
+    } catch (e) {
+      console.error('Failed to convert trace ID:', e);
+      return this.generateMockTraceId();
+    }
+  }
+
+  /**
+   * Convert span ID to hex format
+   * Similar to Android's convertHex method
+   */
+  private convertHex(spanId: string): string {
+    try {
+      const bigIntVal = BigInt(spanId);
+      return bigIntVal.toString(16).padStart(16, '0');
+    } catch (e) {
+      console.error('Failed to convert span ID:', e);
+      return this.generateMockParentSpanId();
+    }
+  }
+
+  /**
+   * Generate mock 128-bit trace ID (32 hex characters)
+   * For fallback when conversion fails
+   */
+  private generateMockTraceId(): string {
+    // Generate a random 128-bit trace ID
+    // Format: 0000000000000000 + 16 hex chars
+    const randomPart = Math.floor(Math.random() * 0xFFFFFFFFFFFFFFFF).toString(16).padStart(16, '0');
+    return '0000000000000000' + randomPart;
+  }
+
+  /**
+   * Generate mock 64-bit parent span ID (16 hex characters)
+   * For fallback when conversion fails
+   */
+  private generateMockParentSpanId(): string {
+    // Generate a random 64-bit span ID
+    return Math.floor(Math.random() * 0xFFFFFFFFFFFFFFFF).toString(16).padStart(16, '0');
+  }
+
+  /**
+   * Generate mock trace ID in decimal format (for logging)
+   */
+  private generateMockTraceIdDecimal(): string {
+    // Generate a random 64-bit trace ID in decimal format
+    return Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString();
+  }
+
+  /**
+   * Generate mock parent span ID in decimal format (for logging)
+   */
+  private generateMockParentSpanIdDecimal(): string {
+    // Generate a random 64-bit span ID in decimal format
+    return Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString();
   }
 }
