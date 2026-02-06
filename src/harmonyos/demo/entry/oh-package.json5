@@ -6,6 +6,7 @@
   "author": "",
   "license": "",
   "dependencies": {
+    "ft_native_crash": "file:../libs/ft_native_crash.har",
     "ft_sdk": "file:../libs/ft_sdk.har",
     "otel_sdk": "file:../libs/otel_sdk.har"
   },

@@ -14,6 +14,7 @@ import { FTRUMConfigManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMConf
 import { ErrorMonitorType } from 'ft_sdk/src/main/ets/components/rum/enum/ErrorMonitorType';
 import { DeviceMetricsMonitorType } from 'ft_sdk/src/main/ets/components/rum/enum/DeviceMetricsMonitorType';
 import OpenTelemetry from 'otel_sdk';
+import { FTNativeCrashHandler } from 'ft_native_crash';
 
 const DOMAIN: number = 0x0000;
 
@@ -105,11 +106,11 @@ export default class EntryAbility extends UIAbility {
         .setEnableTraceUserAction(true)
         .setEnableTraceUserView(true)
         .setEnableTraceUserResource(true)
-        .setEnableTrackAppCrash(true) // Enable crash tracking
+        .setEnableTrackAppCrash(true) // Enable cras--0h tracking
+        .setEnableTrackNativeCrash(new FTNativeCrashHandler()) // Native(C++) Crash
         .setEnableTrackAppANR(true) // Enable ANR tracking
         .setEnableTrackAppUIBlock(true) // Enable UI block tracking
         .setEnableTraceWebView(true) // Enable WebView tracking
-        .setEnableTrackNativeCrash(true)
         .setExtraMonitorTypeWithError(ErrorMonitorType.ALL) // All error monitor types
         .setDeviceMetricsMonitorType(DeviceMetricsMonitorType.ALL); // All device metrics monitor types
 
