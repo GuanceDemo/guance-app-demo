@@ -4,10 +4,7 @@ import { AccessType } from '../constants/AccessType';
 import { SessionReplayPrivacy } from '../constants/SessionReplayPrivacy';
 import {
   DEFAULT_API_ADDRESS,
-  DEFAULT_APP_ID,
   DEFAULT_DATAKIT_ADDRESS,
-  DEFAULT_DATAWAY_ADDRESS,
-  DEFAULT_DATAWAY_CLIENT_TOKEN,
   DEFAULT_OTEL_ADDRESS,
   PUBLIC_DATAWAY_ADDRESS,
   PUBLIC_DATAWAY_CLIENT_TOKEN,

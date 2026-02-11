@@ -110,15 +110,4 @@ export class UserData {
   isEmpty(): boolean {
     return !this.username && !this.email && !this.avatar;
   }
-
-  /**
-   * Convert to JSON object
-   */
-  toJson(): JsonObject {
-    const obj = new JsonObject();
-    obj.set('username', this.username);
-    obj.set('email', this.email);
-    obj.set('avatar', this.avatar);
-    return obj;
-  }
 }

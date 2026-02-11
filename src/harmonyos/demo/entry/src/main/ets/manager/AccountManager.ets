@@ -137,23 +137,6 @@ export class AccountManager {
   }
 
   /**
-   * Initialize HttpEngine
-   */
-  static async initHttpEngine(): Promise<void> {
-    try {
-      const setting = await SettingConfigManager.readSetting();
-      if (setting.demoApiAddress) {
-        HttpEngine.initAPIAddress(setting.demoApiAddress);
-      } else {
-        HttpEngine.initAPIAddress(DEFAULT_API_ADDRESS);
-      }
-    } catch (err) {
-      console.error('Failed to init HttpEngine:', JSON.stringify(err));
-      HttpEngine.initAPIAddress(DEFAULT_API_ADDRESS);
-    }
-  }
-
-  /**
    * Save user data
    */
   private static async saveUserData(data: LocalUserData): Promise<void> {

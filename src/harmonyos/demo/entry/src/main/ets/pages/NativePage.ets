@@ -326,18 +326,6 @@ struct NativePage {
   }
 
   /**
-   * Handle Java/Kotlin crash test
-   */
-  handleJavaCrash(): void {
-    promptAction.showToast({ message: 'Triggering crash test', duration: 1000 });
-    // Actually trigger division by zero error causing app crash
-    setTimeout(() => {
-      const result = 1 / 0;
-      console.info('Crash test result:', result.toString());
-    }, 500);
-  }
-
-  /**
    * Handle C++ crash test
    */
   handleCppCrash(): void {

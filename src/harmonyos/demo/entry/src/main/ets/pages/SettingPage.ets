@@ -11,7 +11,6 @@ import {
   DEFAULT_DATAWAY_ADDRESS,
   DEFAULT_DATAWAY_CLIENT_TOKEN,
   DEFAULT_API_ADDRESS,
-  DEFAULT_APP_ID,
   DEFAULT_OTEL_ADDRESS
 } from '../constants/Constant';
 import { FTRUMGlobalManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';

@@ -3,22 +3,18 @@
  */
 // Guance public DataWay official configuration
 export const PUBLIC_DATAWAY_ADDRESS: string = 'https://rum-openway.guance.com';
-export const PUBLIC_DATAWAY_CLIENT_TOKEN: string = 'client_token';
-export const PUBLIC_APP_ID: string = 'com_harmonyos_demo';
+export const PUBLIC_DATAWAY_CLIENT_TOKEN: string = '';
+export const PUBLIC_APP_ID: string = '';
 
-export const DEFAULT_APP_ID: string = 'com_harmonyos_demo';
-export const DEFAULT_API_ADDRESS: string = 'http://127.0.0.1:8000';
-export const DEFAULT_DATAKIT_ADDRESS: string = 'http://127.0.0.1:9529';
-export const DEFAULT_OTEL_ADDRESS: string = 'http://127.0.0.1:9529/otel/v1/traces';
+export const DEFAULT_API_ADDRESS: string = '';
+export const DEFAULT_DATAKIT_ADDRESS: string = '';
+export const DEFAULT_OTEL_ADDRESS: string = '';
 export const DEFAULT_DATAWAY_ADDRESS: string = 'http://dataway.com';
 export const DEFAULT_DATAWAY_CLIENT_TOKEN: string = 'gc_client_token';
 export const DEFAULT_USER_NAME: string = 'guance';
 export const DEFAULT_PASSWORD: string = 'admin';
-export const GC_SCHEME_URL: string = 'gc-demo://';
-export const APP_NAME: string = 'FT SDK Demo';
 
 // API paths
-export const API_SEGMENT: string = '/api';
 export const API_LOGIN: string = '/api/login';
 export const API_USER_INFO: string = '/api/user';
 export const API_CONNECT: string = '/connect';
@@ -41,12 +37,3 @@ export const KEY_API_ADDRESS: string = 'demoApiAddress';
 export const KEY_APP_ID: string = 'demoAppId';
 export const KEY_ENABLE_SESSION_REPLAY: string = 'demoEnableSessionReplay';
 export const KEY_SESSION_REPLAY_PRIVACY_TYPE: string = 'demoEnableSessionReplayPrivacyType';
-
-// Error codes
-export const ERROR_CODE_LOCAL: number = 0;
-export const ERROR_CODE_BODY_EMPTY: number = 100;
-export const ERROR_CODE_NET_WORK_NO_AVAILABLE: number = 101;
-export const ERROR_CODE_NET_WORK_CONNECT_ERROR: number = 102;
-
-// HTTP status codes
-export const HTTP_OK: number = 200;

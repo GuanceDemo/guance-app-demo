@@ -19,7 +19,6 @@ export struct MinePage {
   @State isRefreshing: boolean = false;
   @State isLoading: boolean = false;
   @State appVersion: string = '1.2.13 (21)';
-  @State isDebug: boolean = false;
 
   aboutToAppear(): void {
     this.loadUserData();

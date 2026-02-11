@@ -7,8 +7,7 @@ import {
   API_DATAKIT_PING,
   API_DATAWAY_CHECK_LOG,
   API_LOGIN,
-  API_USER_INFO,
-  ERROR_CODE_NET_WORK_CONNECT_ERROR
+  API_USER_INFO
 } from '../constants/Constant';
 
 /**
@@ -108,7 +107,7 @@ export class HttpEngine {
       }
     } catch (err) {
       console.error('HTTP request failed:', JSON.stringify(err));
-      return new ReturnResult(ERROR_CODE_NET_WORK_CONNECT_ERROR);
+      return new ReturnResult(BaseData.ERROR_CODE_NET_WORK_CONNECT_ERROR);
     }
   }
 
