@@ -2,6 +2,7 @@ import { router } from '@kit.ArkUI';
 import { promptAction } from '@kit.ArkUI';
 import { SettingData } from '../model/SettingData';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
+import { FTSDKManager } from '../manager/FTSDKManager';
 import { AccessType } from '../constants/AccessType';
 import { SessionReplayPrivacy } from '../constants/SessionReplayPrivacy';
 import { Utils } from '../utils/Utils';
@@ -626,8 +627,11 @@ struct SettingPage {
     // Log configuration save
     FTLogger.logBackground(`Settings saved: accessType=${this.accessType}, appId=${this.appId}`, Status.INFO);
 
+    // Re-initialize FT SDK with new configuration
+    await FTSDKManager.getInstance().reInitSDK();
+
     promptAction.showToast({
-      message: 'App needs to be restarted for settings to take effect',
+      message: 'Settings saved and SDK re-initialized',
       duration: 2000
     });
 
