@@ -3,6 +3,7 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { PreferencesUtil } from '../utils/PreferencesUtil';
 import { FTSDKManager } from '../manager/FTSDKManager';
+import { FTSDK } from 'ft_sdk/src/main/ets/components/FTSDK';
 import {
   KEY_DATAKIT_ADDRESS,
   KEY_DATAWAY_ADDRESS,
@@ -65,6 +66,19 @@ export default class EntryAbility extends UIAbility {
         return;
       }
       hilog.info(DOMAIN, 'testTag', 'Succeeded in loading the content.');
+
+      // Initialize auto-tracking for View and Action
+      try {
+        const uiContext = windowStage.getMainWindowSync().getUIContext();
+        if (uiContext) {
+          FTSDK.setAutoActionTrackingEnabled(true);
+          FTSDK.initializeUIFeatures(uiContext)
+            .then(() => hilog.info(DOMAIN, 'testTag', 'UI features initialized'))
+            .catch((error: Error) => hilog.error(DOMAIN, 'testTag', 'UI features init failed: %{public}s', error.message));
+        }
+      } catch (error) {
+        hilog.error(DOMAIN, 'testTag', 'Failed to init UI features: %{public}s', JSON.stringify(error));
+      }
     });
   }
 
@@ -127,6 +141,14 @@ export default class EntryAbility extends UIAbility {
   onWindowStageDestroy(): void {
     // Main window is destroyed, release UI related resources
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onWindowStageDestroy');
+
+    // Cleanup auto-tracking resources
+    try {
+      FTSDK.cleanupUIFeatures();
+      hilog.info(DOMAIN, 'testTag', 'UI features cleaned up');
+    } catch (error) {
+      hilog.error(DOMAIN, 'testTag', 'Failed to cleanup UI features: %{public}s', JSON.stringify(error));
+    }
   }
 
   onForeground(): void {

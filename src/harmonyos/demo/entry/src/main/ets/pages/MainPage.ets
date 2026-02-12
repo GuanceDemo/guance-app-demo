@@ -2,7 +2,6 @@ import { router } from '@kit.ArkUI';
 import { AccountManager } from '../manager/AccountManager';
 import { HomePage } from './HomePage';
 import { MinePage } from './MinePage';
-import { FTRUMGlobalManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
 import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
 import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
 
@@ -15,8 +14,6 @@ struct MainPage {
   @State currentTabIndex: number = 0;
 
   aboutToAppear(): void {
-    // Start View tracking when page appears
-    FTRUMGlobalManager.getInstance().startView('MainPage');
     // Log page visit
     FTLogger.logBackground('MainPage appeared', Status.INFO);
 
@@ -26,11 +23,6 @@ struct MainPage {
         router.replaceUrl({ url: 'pages/LoginPage' });
       }
     });
-  }
-
-  aboutToDisappear(): void {
-    // Stop View tracking when page disappears
-    FTRUMGlobalManager.getInstance().stopView();
   }
 
   build() {
@@ -51,9 +43,6 @@ struct MainPage {
     .height('100%')
     .barHeight(56)
     .onChange((index: number) => {
-      // Log tab switch action
-      const tabName = index === 0 ? 'Home' : 'Mine';
-      FTRUMGlobalManager.getInstance().addAction(`tab_switch_${tabName}`, 'click');
       this.currentTabIndex = index;
     })
   }

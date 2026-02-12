@@ -2,7 +2,6 @@ import { router } from '@kit.ArkUI';
 import { webview } from '@kit.ArkWeb';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
 import { FTWebViewHandler } from 'ft_sdk/src/main/ets/components/web/FTWebViewHandler';
-import { FTRUMGlobalManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
 import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
 import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
 import { FTSDK } from 'ft_sdk/src/main/ets/components/FTSDK';
@@ -20,9 +19,6 @@ struct WebViewPage {
   private webViewHandler: FTWebViewHandler = new FTWebViewHandler();
 
   aboutToAppear(): void {
-    // Start View tracking when page appears
-    FTRUMGlobalManager.getInstance().startView('WebViewPage');
-
     // Set up WebView Handler for RUM data collection within WebView
     // Get current RUM configuration
     const rumConfig = FTSDK.getRumConfig();
@@ -34,9 +30,6 @@ struct WebViewPage {
   }
 
   aboutToDisappear(): void {
-    // Stop View tracking when page disappears
-    FTRUMGlobalManager.getInstance().stopView();
-
     // Clean up WebViewController
     this.webViewHandler.clearWebController();
   }
@@ -135,8 +128,6 @@ struct WebViewPage {
    * Refresh page
    */
   refresh(): void {
-    // Log refresh action
-    FTRUMGlobalManager.getInstance().addAction('webview_refresh', 'click');
     this.webViewController.refresh();
   }
 }

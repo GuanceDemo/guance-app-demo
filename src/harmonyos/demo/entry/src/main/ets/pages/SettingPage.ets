@@ -14,7 +14,6 @@ import {
   DEFAULT_API_ADDRESS,
   DEFAULT_OTEL_ADDRESS
 } from '../constants/Constant';
-import { FTRUMGlobalManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
 import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
 import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
 
@@ -45,16 +44,9 @@ struct SettingPage {
   @State configInputText: string = '';
 
   aboutToAppear(): void {
-    // Start View tracking when page appears
-    FTRUMGlobalManager.getInstance().startView('SettingPage');
     // Log page visit
     FTLogger.logBackground('SettingPage appeared', Status.INFO);
     this.loadSettings();
-  }
-
-  aboutToDisappear(): void {
-    // Stop View tracking when page disappears
-    FTRUMGlobalManager.getInstance().stopView();
   }
 
   build() {
@@ -525,9 +517,6 @@ struct SettingPage {
    * Test connection
    */
   async testConnection(): Promise<void> {
-    // Log test connection action
-    FTRUMGlobalManager.getInstance().startAction('test_connection', 'click');
-
     // Clear error messages
     this.datakitAddressError = '';
     this.datawayAddressError = '';
@@ -535,7 +524,6 @@ struct SettingPage {
     this.demoAPIAddressError = '';
 
     if (!this.validateInputs()) {
-      FTRUMGlobalManager.getInstance().stopAction();
       return;
     }
 
@@ -588,13 +576,11 @@ struct SettingPage {
       } else {
         promptAction.showToast({ message: 'Some connections failed, please check configuration', duration: 2000 });
       }
-      FTRUMGlobalManager.getInstance().stopAction();
     } catch (err) {
       this.isLoading = false;
       console.error('Test connection failed:', JSON.stringify(err));
       FTLogger.logBackground(`Test connection error: ${JSON.stringify(err)}`, Status.ERROR);
       promptAction.showToast({ message: 'Connection failed: ' + JSON.stringify(err), duration: 2000 });
-      FTRUMGlobalManager.getInstance().stopAction();
     }
   }
 
@@ -602,11 +588,7 @@ struct SettingPage {
    * Save configuration
    */
   async saveConfig(): Promise<void> {
-    // Log save configuration action
-    FTRUMGlobalManager.getInstance().startAction('save_config', 'click');
-
     if (!this.validateInputs()) {
-      FTRUMGlobalManager.getInstance().stopAction();
       return;
     }
 
@@ -636,7 +618,6 @@ struct SettingPage {
     });
 
     setTimeout(() => {
-      FTRUMGlobalManager.getInstance().stopAction();
       router.replaceUrl({ url: 'pages/MainPage' });
     }, 2000);
   }
@@ -679,8 +660,6 @@ struct SettingPage {
    * Import configuration from dialog
    */
   importFromClipboard(): void {
-    // Log import action
-    FTRUMGlobalManager.getInstance().addAction('import_config', 'click');
     this.showConfigDialog = true;
     this.configInputText = '';
   }

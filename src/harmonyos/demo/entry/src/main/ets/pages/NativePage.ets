@@ -44,13 +44,7 @@ class RumPropertyBuilder {
 @Component
 struct NativePage {
   aboutToAppear(): void {
-    // Start View tracking when page appears
-    FTRUMGlobalManager.getInstance().startView('NativePage');
-  }
-
-  aboutToDisappear(): void {
-    // Stop View tracking when page disappears
-    FTRUMGlobalManager.getInstance().stopView();
+    // View tracking is now handled automatically by FTSDK
   }
 
   build() {

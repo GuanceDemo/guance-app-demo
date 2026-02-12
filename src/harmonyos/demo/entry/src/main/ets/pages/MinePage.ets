@@ -5,7 +5,6 @@ import { SettingConfigManager } from '../manager/SettingConfigManager';
 import { UserData } from '../model/UserData';
 import { AccessType } from '../constants/AccessType';
 import { bundleManager } from '@kit.AbilityKit';
-import { FTRUMGlobalManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
 import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
 import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
 
@@ -215,9 +214,6 @@ export struct MinePage {
    * Refresh user info
    */
   async refreshUserInfo(): Promise<void> {
-    // Log refresh action
-    FTRUMGlobalManager.getInstance().startAction('refresh_user_info', 'click');
-
     this.isLoading = true;
     this.isRefreshing = true;
 
@@ -234,12 +230,10 @@ export struct MinePage {
       // Log refresh success
       FTLogger.logBackground('User info refreshed successfully', Status.INFO);
       promptAction.showToast({ message: 'Refresh successful', duration: 1500 });
-      FTRUMGlobalManager.getInstance().stopAction();
     } else {
       // Log refresh failure
       FTLogger.logBackground('Failed to refresh user info', Status.ERROR);
       promptAction.showToast({ message: 'Refresh failed', duration: 1500 });
-      FTRUMGlobalManager.getInstance().stopAction();
     }
   }
 
@@ -247,8 +241,6 @@ export struct MinePage {
    * Handle logout
    */
   async handleLogout(): Promise<void> {
-    // Log logout action
-    FTRUMGlobalManager.getInstance().addAction('logout', 'click');
     // Log logout
     FTLogger.logBackground('User logged out', Status.INFO);
 

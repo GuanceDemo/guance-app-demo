@@ -1,6 +1,5 @@
 import { router } from '@kit.ArkUI';
 import { MenuItem } from '../model/ListItem';
-import { FTRUMGlobalManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
 
 /**
  * Home page - Feature list page
@@ -93,9 +92,6 @@ export struct HomePage {
    * Handle list item click
    */
   handleItemClick(item: MenuItem): void {
-    // Log menu item click action
-    FTRUMGlobalManager.getInstance().addAction(`menu_${item.title.replace(/\s+/g, '_').toLowerCase()}`, 'click');
-
     switch (item.title) {
       case 'Native View':
         router.pushUrl({ url: 'pages/NativePage' });

@@ -2,7 +2,6 @@ import { router } from '@kit.ArkUI';
 import { promptAction } from '@kit.ArkUI';
 import { AccountManager } from '../manager/AccountManager';
 import { DEFAULT_USER_NAME, DEFAULT_PASSWORD } from '../constants/Constant';
-import { FTRUMGlobalManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
 import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
 import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
 
@@ -17,15 +16,8 @@ struct LoginPage {
   @State isLoading: boolean = false;
 
   aboutToAppear(): void {
-    // Start View tracking when page appears
-    FTRUMGlobalManager.getInstance().startView('LoginPage');
     // Log page visit
     FTLogger.logBackground('LoginPage appeared', Status.INFO);
-  }
-
-  aboutToDisappear(): void {
-    // Stop View tracking when page disappears
-    FTRUMGlobalManager.getInstance().stopView();
   }
 
   build() {
@@ -108,15 +100,11 @@ struct LoginPage {
    * Handle login
    */
   async handleLogin() {
-    // Log login action
-    FTRUMGlobalManager.getInstance().startAction('login', 'click');
-
     if (!this.username || !this.password) {
       promptAction.showToast({
         message: 'Please enter username and password',
         duration: 2000
       });
-      FTRUMGlobalManager.getInstance().stopAction();
       return;
     }
 
@@ -136,7 +124,6 @@ struct LoginPage {
       });
 
       setTimeout(() => {
-        FTRUMGlobalManager.getInstance().stopAction();
         router.replaceUrl({ url: 'pages/MainPage' });
       }, 500);
     } else {
@@ -147,7 +134,6 @@ struct LoginPage {
         message: result.errorMessage || 'Login failed',
         duration: 2000
       });
-      FTRUMGlobalManager.getInstance().stopAction();
     }
   }
 }
