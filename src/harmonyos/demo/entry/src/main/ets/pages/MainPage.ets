@@ -4,6 +4,8 @@ import { HomePage } from './HomePage';
 import { MinePage } from './MinePage';
 import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
 import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
+import { PageTrackingHelper } from '../utils/PageTrackingHelper';
+import { AppColors, FontSizes, Spacing, IconSizes, Heights } from '../constants/UIConstants';
 
 /**
  * Main page - Contains bottom navigation bar
@@ -14,8 +16,7 @@ struct MainPage {
   @State currentTabIndex: number = 0;
 
   aboutToAppear(): void {
-    // Log page visit
-    FTLogger.logBackground('MainPage appeared', Status.INFO);
+    PageTrackingHelper.trackPageAppear('MainPage');
 
     // Check login status
     AccountManager.checkLogin().then((isLogin) => {
@@ -23,6 +24,10 @@ struct MainPage {
         router.replaceUrl({ url: 'pages/LoginPage' });
       }
     });
+  }
+
+  aboutToDisappear(): void {
+    PageTrackingHelper.trackPageDisappear();
   }
 
   build() {
@@ -41,8 +46,11 @@ struct MainPage {
     }
     .width('100%')
     .height('100%')
-    .barHeight(56)
+    .barHeight(Heights.TOOLBAR)
     .onChange((index: number) => {
+      // Log tab switch action
+      const tabName = index === 0 ? 'Home' : 'Mine';
+      PageTrackingHelper.trackAction(`tab_switch_${tabName}`, 'click');
       this.currentTabIndex = index;
     })
   }
@@ -54,14 +62,14 @@ struct MainPage {
       Image(this.currentTabIndex === index
         ? $r(`app.media.${iconName}_activity`)
         : $r(`app.media.${iconName}`))
-        .width(24)
-        .height(24)
-        .margin({ top: 4 })
+        .width(IconSizes.LARGE)
+        .height(IconSizes.LARGE)
+        .margin({ top: Spacing.XS })
 
       Text(title)
-        .fontSize(12)
-        .fontColor(this.currentTabIndex === index ? '#FF6600' : '#999999')
-        .margin({ top: 4 })
+        .fontSize(FontSizes.SMALL)
+        .fontColor(this.currentTabIndex === index ? AppColors.PRIMARY : AppColors.TEXT_HINT)
+        .margin({ top: Spacing.XS })
     }
     .width('100%')
     .height('100%')

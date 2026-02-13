@@ -1,5 +1,7 @@
 import { router } from '@kit.ArkUI';
 import { MenuItem } from '../model/ListItem';
+import { FTRUMGlobalManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
+import { AppColors, FontSizes, Spacing, BorderRadius, Heights, IconSizes } from '../constants/UIConstants';
 
 /**
  * Home page - Feature list page
@@ -17,21 +19,21 @@ export struct HomePage {
       Row() {
 
         Text('Home')
-          .fontSize(20)
+          .fontSize(FontSizes.TITLE)
           .fontWeight(FontWeight.Bold)
-          .fontColor('#333333')
+          .fontColor(AppColors.TEXT_PRIMARY)
           .layoutWeight(1)
           .textAlign(TextAlign.Center)
 
         // Placeholder to keep title centered
         Row()
-          .width(24)
-          .height(24)
+          .width(Spacing.XXL)
+          .height(Spacing.XXL)
       }
       .width('100%')
-      .height(56)
-      .padding({ left: 16, right: 16 })
-      .backgroundColor('#FFFFFF')
+      .height(Heights.TOOLBAR)
+      .padding({ left: Spacing.LG, right: Spacing.LG })
+      .backgroundColor(AppColors.WHITE)
 
       // Feature list
       List() {
@@ -43,12 +45,12 @@ export struct HomePage {
       }
       .width('100%')
       .layoutWeight(1)
-      .backgroundColor('#F5F5F5')
-      .divider({ strokeWidth: 1, color: '#E0E0E0' })
+      .backgroundColor(AppColors.BACKGROUND)
+      .divider({ strokeWidth: 1, color: AppColors.DIVIDER })
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F5F5')
+    .backgroundColor(AppColors.BACKGROUND)
   }
 
   @Builder
@@ -56,33 +58,33 @@ export struct HomePage {
     Row() {
       // Left icon
       Image(item.icon)
-        .width(48)
+        .width(IconSizes.XLARGE)
         .aspectRatio(1)
-        .margin({right:8})
+        .margin({right: Spacing.SM})
 
       // Center title and description
       Column() {
         Text(item.title)
-          .fontSize(16)
-          .fontColor('#333333')
-          .margin({ bottom: 4 })
+          .fontSize(FontSizes.MEDIUM)
+          .fontColor(AppColors.TEXT_PRIMARY)
+          .margin({ bottom: Spacing.XS })
 
         Text(item.description)
-          .fontSize(14)
-          .fontColor('#999999')
+          .fontSize(FontSizes.NORMAL)
+          .fontColor(AppColors.TEXT_HINT)
       }
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)
 
       // Right arrow
       Text('\uE63C')
-        .fontSize(16)
-        .fontColor('#CCCCCC')
+        .fontSize(IconSizes.SMALL)
+        .fontColor(AppColors.TEXT_DISABLED)
     }
     .width('100%')
-    .height(64)
-    .padding({ left: 16, right: 16 })
-    .backgroundColor('#FFFFFF')
+    .height(Heights.LIST_ITEM)
+    .padding({ left: Spacing.LG, right: Spacing.LG })
+    .backgroundColor(AppColors.WHITE)
     .onClick(() => {
       this.handleItemClick(item);
     })

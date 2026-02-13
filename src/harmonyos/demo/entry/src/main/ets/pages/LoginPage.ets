@@ -4,6 +4,8 @@ import { AccountManager } from '../manager/AccountManager';
 import { DEFAULT_USER_NAME, DEFAULT_PASSWORD } from '../constants/Constant';
 import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
 import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
+import { AppColors, FontSizes, Spacing, BorderRadius, Heights, ToastDuration } from '../constants/UIConstants';
+import { PageTrackingHelper } from '../utils/PageTrackingHelper';
 
 /**
  * Login page
@@ -16,8 +18,11 @@ struct LoginPage {
   @State isLoading: boolean = false;
 
   aboutToAppear(): void {
-    // Log page visit
-    FTLogger.logBackground('LoginPage appeared', Status.INFO);
+    PageTrackingHelper.trackPageAppear('LoginPage');
+  }
+
+  aboutToDisappear(): void {
+    PageTrackingHelper.trackPageDisappear();
   }
 
   build() {
@@ -37,39 +42,39 @@ struct LoginPage {
         Column() {
           TextInput({ placeholder: 'Please enter username', text: this.username })
             .width('100%')
-            .height(50)
-            .backgroundColor('#F5F5F5')
-            .borderRadius(8)
+            .height(Heights.INPUT_TALL)
+            .backgroundColor(AppColors.INPUT_BG)
+            .borderRadius(BorderRadius.SMALL)
             .onChange((value: string) => {
               this.username = value;
             })
         }
         .width('100%')
-        .margin({ bottom: 16 })
+        .margin({ bottom: Spacing.MD })
 
         // Password input
         Column() {
           TextInput({ placeholder: 'Please enter password', text: this.password })
             .width('100%')
-            .height(50)
+            .height(Heights.INPUT_TALL)
             .type(InputType.Password)
-            .backgroundColor('#F5F5F5')
-            .borderRadius(8)
+            .backgroundColor(AppColors.INPUT_BG)
+            .borderRadius(BorderRadius.SMALL)
             .onChange((value: string) => {
               this.password = value;
             })
         }
         .width('100%')
-        .margin({ bottom: 24 })
+        .margin({ bottom: Spacing.LG })
 
         // Login button
         Button(this.isLoading ? 'Logging in...' : 'Login')
           .width('100%')
-          .height(50)
-          .fontSize(16)
+          .height(Heights.BUTTON_TALL)
+          .fontSize(FontSizes.MEDIUM)
           .fontWeight(FontWeight.Medium)
-          .backgroundColor('#FF6600')
-          .borderRadius(8)
+          .backgroundColor(AppColors.PRIMARY)
+          .borderRadius(BorderRadius.SMALL)
           .enabled(!this.isLoading)
           .opacity(this.isLoading ? 0.6 : 1)
           .onClick(() => {
@@ -78,15 +83,15 @@ struct LoginPage {
 
         // Edit settings
         Text('Edit Settings')
-          .fontSize(14)
-          .fontColor('#FF6600')
-          .margin({ top: 16 })
+          .fontSize(FontSizes.NORMAL)
+          .fontColor(AppColors.PRIMARY)
+          .margin({ top: Spacing.MD })
           .onClick(() => {
             router.pushUrl({ url: 'pages/SettingPage' });
           })
       }
       .width('100%')
-      .padding({ left: 24, right: 24 })
+      .padding({ left: Spacing.XL, right: Spacing.XL })
       .margin({ top: 40 })
 
       Blank()
@@ -100,11 +105,14 @@ struct LoginPage {
    * Handle login
    */
   async handleLogin() {
+    const stopTracking = PageTrackingHelper.trackActionWithTiming('login', 'click');
+
     if (!this.username || !this.password) {
       promptAction.showToast({
         message: 'Please enter username and password',
-        duration: 2000
+        duration: ToastDuration.LONG
       });
+      stopTracking();
       return;
     }
 
@@ -115,25 +123,25 @@ struct LoginPage {
     this.isLoading = false;
 
     if (result.success) {
-      // Log login success
       FTLogger.logBackground(`Login successful for user: ${this.username}`, Status.INFO);
 
       promptAction.showToast({
         message: 'Login successful',
-        duration: 1500
+        duration: ToastDuration.MEDIUM
       });
 
       setTimeout(() => {
+        stopTracking();
         router.replaceUrl({ url: 'pages/MainPage' });
       }, 500);
     } else {
-      // Log login failure
       FTLogger.logBackground(`Login failed for user: ${this.username}, error: ${result.errorMessage}`, Status.ERROR);
 
       promptAction.showToast({
         message: result.errorMessage || 'Login failed',
-        duration: 2000
+        duration: ToastDuration.LONG
       });
+      stopTracking();
     }
   }
 }
