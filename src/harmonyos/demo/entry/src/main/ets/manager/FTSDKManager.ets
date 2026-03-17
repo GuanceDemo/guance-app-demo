@@ -11,7 +11,6 @@ import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
 import { ErrorMonitorType } from 'ft_sdk/src/main/ets/components/rum/enum/ErrorMonitorType';
 import { DeviceMetricsMonitorType } from 'ft_sdk/src/main/ets/components/rum/enum/DeviceMetricsMonitorType';
 import OpenTelemetry from 'otel_sdk';
-import { FTNativeCrashHandler } from 'ft_native';
 
 const DOMAIN: number = 0x0000;
 const TAG: string = 'FTSDKManager';
@@ -107,14 +106,13 @@ export class FTSDKManager {
         .setEnableTraceUserView(true)
         .setEnableTraceUserResource(true)
         .setEnableTrackAppCrash(true) // Enable crash tracking
-        .setNativeCrashHandler(new FTNativeCrashHandler()) // Native(C++) Crash
         .setEnableTrackAppANR(true) // Enable ANR tracking
         .setEnableTrackAppUIBlock(true) // Enable UI block tracking
         .setEnableTraceWebView(true) // Enable WebView tracking
         .setExtraMonitorTypeWithError(ErrorMonitorType.ALL) // All error monitor types
         .setDeviceMetricsMonitorType(DeviceMetricsMonitorType.ALL); // All device metrics monitor types
 
-      await FTSDK.installRUMConfig(rumConfig);
+      FTSDK.installRUMConfig(rumConfig);
       hilog.info(DOMAIN, TAG, 'FTRUMConfig installed successfully');
 
       // 4. Configure FTTraceConfig (Trace configuration)

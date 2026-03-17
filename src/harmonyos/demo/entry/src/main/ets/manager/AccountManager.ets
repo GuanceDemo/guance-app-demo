@@ -123,13 +123,7 @@ export class AccountManager {
       userData.setExts(exts);
 
       // Bind user data (async operation)
-      FTSDK.bindRumUserData(userData).then(() => {
-        console.info('User data bound to RUM successfully');
-        FTLogger.logBackground('User bound: ' + data.username, Status.INFO);
-      }).catch((error: Error) => {
-        console.error('Failed to bind user data to RUM:', error.message);
-        FTLogger.logBackground('Failed to bind user data: ' + error.message, Status.ERROR);
-      });
+      FTSDK.bindRumUserData(userData);
 
     } catch (error) {
       console.error('Error binding user data to RUM:', JSON.stringify(error));
