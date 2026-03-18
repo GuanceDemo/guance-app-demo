@@ -167,11 +167,11 @@ dependencies {
     //FT-SDK dependency
 
     // RUM, Log, Trace，
-    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.7.0-alpha38')
+    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.7.0-alpha40')
     // RUM Error Native Crash
     implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-native:1.1.2'
     // Session Replay
-    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay:0.1.3-alpha12'
+    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay:0.1.3-alpha14'
     // Session Replay Material
     implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay-material:0.1.1-alpha01'
 
