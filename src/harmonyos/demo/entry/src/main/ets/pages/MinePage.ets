@@ -17,11 +17,12 @@ export struct MinePage {
   @State accessType: string = 'Datakit';
   @State isRefreshing: boolean = false;
   @State isLoading: boolean = false;
-  @State appVersion: string = '1.2.13 (21)';
+  @State appVersion: string = '';
 
   aboutToAppear(): void {
     this.loadUserData();
     this.loadAccessType();
+    this.getAppVersion();
   }
 
   build() {
@@ -234,6 +235,19 @@ export struct MinePage {
       // Log refresh failure
       FTLogger.logBackground('Failed to refresh user info', Status.ERROR);
       promptAction.showToast({ message: 'Refresh failed', duration: 1500 });
+    }
+  }
+
+  /**
+   * Get app version
+   */
+  getAppVersion(): void {
+    try {
+      const bundleInfo = bundleManager.getBundleInfoForSelfSync(bundleManager.BundleFlag.GET_BUNDLE_INFO_DEFAULT);
+      this.appVersion = `${bundleInfo.versionName} (${bundleInfo.versionCode})`;
+    } catch (error) {
+      console.error('Failed to get app version:', JSON.stringify(error));
+      this.appVersion = ''; // Fallback to default version
     }
   }
 
