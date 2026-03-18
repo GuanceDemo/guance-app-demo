@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, render_template, url_for
 from ddtrace import tracer, patch
-#from flask_cors import CORS
+from flask_cors import CORS
 
 # Enable ddtrace auto-instrumentation for Flask
 patch(flask=True)
@@ -10,6 +10,7 @@ SERVER_VERSION = "1.0.1"
 BUILD_DATE = "2025-11-21"
 
 app = Flask(__name__)
+CORS(app)
 
 # @app.before_request
 # def extract_trace_info():
