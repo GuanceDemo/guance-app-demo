@@ -1,5 +1,6 @@
 import { router } from '@kit.ArkUI';
 import { promptAction } from '@kit.ArkUI';
+import { BusinessError } from '@kit.BasicServicesKit';
 import * as ftcrash from 'libftcrash.so';
 import { FTRUMGlobalManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
 import { FTSDK } from 'ft_sdk/src/main/ets/components/FTSDK';
@@ -7,7 +8,13 @@ import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
 import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
 import { ErrorType, AppState } from 'ft_sdk/src/main/ets/components/rum/enum/RUMEnums';
 import { rcp } from '@kit.RemoteCommunicationKit';
-import { FTHttpAutoTrack } from 'ft_sdk/src/main/ets/components/network/FTHttpAutoTrack';
+import { http } from '@kit.NetworkKit';
+import axios, { AxiosInstance, AxiosResponse } from '@ohos/axios';
+import {
+  applyFTHttpTrack,
+  createFTHttpInterceptorChain,
+  createFTRCPTrackConfig
+} from 'ft_sdk/src/main/ets/components/network/FTHttpAutoTrack';
 import OpenTelemetry from 'otel_sdk';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
 import { API_USER_INFO } from '../constants/Constant';
@@ -35,6 +42,12 @@ class RumPropertyBuilder {
   toObject(): Record<string, object> {
     return this.properties;
   }
+}
+
+interface AxiosStylePostData {
+  source: string;
+  message: string;
+  timestamp: number;
 }
 
 /**
@@ -226,6 +239,28 @@ struct NativePage {
               this.handleNetworkRequest();
             })
 
+          Button('Send HTTP Interceptor Request')
+            .width('calc(100% - 32vp)')
+            .fontSize(16)
+            .backgroundColor('#3F51B5')
+            .fontColor('#FFFFFF')
+            .borderRadius(8)
+            .margin({ top: 12, left: 16, right: 16 })
+            .onClick(() => {
+              this.handleHttpInterceptorRequest();
+            })
+
+          Button('Send Axios Request')
+            .width('calc(100% - 32vp)')
+            .fontSize(16)
+            .backgroundColor('#3F51B5')
+            .fontColor('#FFFFFF')
+            .borderRadius(8)
+            .margin({ top: 12, left: 16, right: 16 })
+            .onClick(() => {
+              this.handleAxiosRequest();
+            })
+
           // ===== OTEL Test =====
           Text('OpenTelemetry Test')
             .fontSize(14)
@@ -409,15 +444,8 @@ struct NativePage {
     promptAction.showToast({ message: 'Sending network request...', duration: 1000 });
 
     try {
-      // Get configured interceptor Session
-      const session = FTHttpAutoTrack.getInstance().getDefaultSession();
+      const session = this.createRCPSession();
 
-      if (!session) {
-        promptAction.showToast({ message: 'RCP Session not available, please check RUM configuration', duration: 2000 });
-        return;
-      }
-
-      // Send GET request
       const request = new rcp.Request('https://httpbin.org/get', 'GET');
       const response = await session.fetch(request);
 
@@ -427,9 +455,61 @@ struct NativePage {
         promptAction.showToast({ message: `Request failed: ${response.statusCode}`, duration: 1500 });
       }
     } catch (error) {
-      const errorObj: Error = error as Error;
-      console.error('Network request failed:', errorObj.message);
+      const err = error as BusinessError;
+      console.error('Network request failed:', err.message || String(error));
       promptAction.showToast({ message: 'Network request failed', duration: 1500 });
+    }
+  }
+
+  /**
+   * Handle NetworkKit http request test (using interceptor chain auto tracking)
+   */
+  async handleHttpInterceptorRequest(): Promise<void> {
+    promptAction.showToast({ message: 'Sending http interceptor request...', duration: 1000 });
+
+    try {
+      const response = await this.executeHttpRequest('https://httpbin.org/post', {
+        method: http.RequestMethod.POST,
+        header: {
+          'Content-Type': 'application/json'
+        },
+        extraData: JSON.stringify({
+          source: 'network_kit_http',
+          message: 'Testing FT http interceptor chain',
+          timestamp: Date.now()
+        })
+      });
+
+      if (response.responseCode >= 200 && response.responseCode < 300) {
+        promptAction.showToast({ message: `HTTP request successful: ${response.responseCode}`, duration: 1500 });
+      } else {
+        promptAction.showToast({ message: `HTTP request failed: ${response.responseCode}`, duration: 1500 });
+      }
+    } catch (error) {
+      const err = error as BusinessError;
+      console.error('HTTP interceptor request failed:', err.message || String(error));
+      promptAction.showToast({ message: 'HTTP interceptor request failed', duration: 1500 });
+    }
+  }
+
+  /**
+   * Handle axios request test (using interceptorChain adapter auto tracking)
+   */
+  async handleAxiosRequest(): Promise<void> {
+    promptAction.showToast({ message: 'Sending axios request...', duration: 1000 });
+
+    try {
+      const payload: AxiosStylePostData = {
+        source: 'axios',
+        message: 'Testing FT axios auto track',
+        timestamp: Date.now()
+      };
+      const responseText = await this.executeAxiosRequest('https://httpbin.org/post', payload);
+      promptAction.showToast({ message: `Axios request successful: ${responseText.length} chars`, duration: 1500 });
+    } catch (error) {
+      const err = error as BusinessError;
+      console.error('Axios request failed:', err.message || String(error));
+      promptAction.showToast({ message: 'Axios request failed', duration: 1500 });
     }
   }
 
@@ -441,21 +521,63 @@ struct NativePage {
     promptAction.showToast({ message: 'Sending request with OTEL headers...', duration: 1500 });
 
     try {
-      // Get configured session
-      const session = FTHttpAutoTrack.getInstance().getDefaultSession();
-
-      if (!session) {
-        // Fallback to default session
-        const baseSession = rcp.createSession();
-        await this.sendRequestAndCreateSpan(baseSession);
-      } else {
-        await this.sendRequestAndCreateSpan(session);
-      }
+      const session = this.createRCPSession();
+      await this.sendRequestAndCreateSpan(session);
     } catch (error) {
       const errorObj: Error = error as Error;
       console.error('OTEL span creation failed:', errorObj.message);
       promptAction.showToast({ message: 'OTEL span creation failed', duration: 1500 });
     }
+  }
+
+  private createRCPSession(): rcp.Session {
+    return rcp.createSession(createFTRCPTrackConfig());
+  }
+
+  private async executeHttpRequest(
+    url: string,
+    options: http.HttpRequestOptions = {}
+  ): Promise<http.HttpResponse> {
+    const request = http.createHttp();
+    applyFTHttpTrack(request);
+    try {
+      return await request.request(url, options);
+    } finally {
+      request.destroy();
+    }
+  }
+
+  private createAxiosInstance(): AxiosInstance {
+    return axios.create({
+      interceptorChain: createFTHttpInterceptorChain(),
+      timeout: 10000,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+
+  private async executeAxiosRequest(
+    url: string,
+    data: AxiosStylePostData
+  ): Promise<string> {
+    const client = this.createAxiosInstance();
+    const response: AxiosResponse<string | Object, AxiosStylePostData> = await client.request<
+      string | Object,
+      AxiosResponse<string | Object, AxiosStylePostData>,
+      AxiosStylePostData
+    >({
+      url: url,
+      method: 'post',
+      data: data,
+      responseType: 'string',
+      interceptorChain: createFTHttpInterceptorChain()
+    });
+
+    return typeof response.data === 'string'
+      ? response.data
+      : JSON.stringify(response.data);
   }
 
   /**

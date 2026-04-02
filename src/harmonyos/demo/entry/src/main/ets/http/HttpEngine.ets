@@ -1,4 +1,5 @@
-import http from '@ohos.net.http';
+import { http } from '@kit.NetworkKit';
+import { applyFTHttpTrack } from 'ft_sdk/src/main/ets/components/network/FTHttpAutoTrack';
 import { UserData, JsonObject } from '../model/UserData';
 import { BaseData, ConnectData, ReturnResult } from './BaseData';
 import { Utils } from '../utils/Utils';
@@ -26,7 +27,10 @@ export class HttpEngine {
   /**
    * Login request
    */
-  static async login(username: string, password: string): Promise<ConnectData> {
+  static async login(
+    username: string,
+    password: string
+  ): Promise<ConnectData> {
     const url = `${HttpEngine.apiAddress}${API_LOGIN}`;
     const bodyData: Record<string, string> = {};
     bodyData['username'] = username;
@@ -47,7 +51,9 @@ export class HttpEngine {
   /**
    * DataKit ping test
    */
-  static async datakitPing(datakitUrl: string): Promise<ConnectData> {
+  static async datakitPing(
+    datakitUrl: string
+  ): Promise<ConnectData> {
     const url = `${datakitUrl}${API_DATAKIT_PING}`;
     const result = await HttpEngine.request(url, http.RequestMethod.GET);
     return new ConnectData(result);
@@ -56,7 +62,10 @@ export class HttpEngine {
   /**
    * DataWay ping test
    */
-  static async datawayPing(dataWayUrl: string, clientToken: string): Promise<ConnectData> {
+  static async datawayPing(
+    dataWayUrl: string,
+    clientToken: string
+  ): Promise<ConnectData> {
     const url = `${dataWayUrl}${API_DATAWAY_CHECK_LOG.replace('%s', clientToken)}`;
     const content = `df_rum_ohos_log message="connect test" ${Utils.getCurrentNanoTime()}`;
     const result = await HttpEngine.request(url, http.RequestMethod.POST, content, 'text/plain');
@@ -66,7 +75,9 @@ export class HttpEngine {
   /**
    * API connection test
    */
-  static async apiConnect(demoAPIUrl: string): Promise<ConnectData> {
+  static async apiConnect(
+    demoAPIUrl: string
+  ): Promise<ConnectData> {
     const url = `${demoAPIUrl}${API_CONNECT}`;
     const result = await HttpEngine.request(url, http.RequestMethod.GET);
     return new ConnectData(result);
@@ -81,8 +92,10 @@ export class HttpEngine {
     body?: string,
     contentType: string = 'application/json'
   ): Promise<ReturnResult> {
+    let httpRequest: http.HttpRequest | undefined = undefined;
     try {
-      const httpRequest = http.createHttp();
+      httpRequest = http.createHttp();
+      applyFTHttpTrack(httpRequest);
 
       const options: http.HttpRequestOptions = {
         method: method,
@@ -108,6 +121,10 @@ export class HttpEngine {
     } catch (err) {
       console.error('HTTP request failed:', JSON.stringify(err));
       return new ReturnResult(BaseData.ERROR_CODE_NET_WORK_CONNECT_ERROR);
+    } finally {
+      if (httpRequest) {
+        httpRequest.destroy();
+      }
     }
   }
 

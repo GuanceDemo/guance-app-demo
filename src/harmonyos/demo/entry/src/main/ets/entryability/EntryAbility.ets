@@ -69,11 +69,6 @@ export default class EntryAbility extends UIAbility {
 
       // Initialize auto-tracking for View and Action
       try {
-        const uiContext = windowStage.getMainWindowSync().getUIContext();
-        if (uiContext) {
-          FTSDK.setAutoActionTrackingEnabled(true);
-          FTSDK.initializeUIFeatures(uiContext);
-        }
       } catch (error) {
         hilog.error(DOMAIN, 'testTag', 'Failed to init UI features: %{public}s', JSON.stringify(error));
       }

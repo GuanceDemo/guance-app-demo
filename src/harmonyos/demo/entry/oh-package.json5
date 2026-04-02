@@ -6,12 +6,12 @@
   "author": "",
   "license": "",
   "dependencies": {
+    "@ohos/axios": "2.2.8",
     "ft_native": "file:../libs/ft_native.har",
     "ft_sdk": "file:../libs/ft_sdk.har",
     "otel_sdk": "file:../libs/otel_sdk.har"
   },
   "types": "./src/main/ts"
 }
-
 
 
