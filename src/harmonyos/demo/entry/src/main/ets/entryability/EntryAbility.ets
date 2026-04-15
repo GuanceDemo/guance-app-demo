@@ -23,7 +23,7 @@ export default class EntryAbility extends UIAbility {
    *   Method 1: Configure DataKit mode
                --ps datakitUrl http://...... --ps demoApiUrl http://...... --ps appId com_example_demo --pi accessType 0
        Method 1: Configure DataWay mode
-               --ps datawayUrl https://rum-openway.guance.com --ps datawayClientToken 59153e0dd64a4edxxxxxxxxx --ps appId com_example_demo --ps demoApiUrl http://...... --pi accessType 1
+               --ps datawayUrl https://rum-openway.guance.com --ps clientToken 59153e0dd64a4edxxxxxxxxx --ps appId com_example_demo --ps demoApiUrl http://...... --pi accessType 1
    */
   private initialWant: Want | null = null;
 
@@ -106,7 +106,7 @@ export default class EntryAbility extends UIAbility {
       // Process each supported parameter
       await saveIfNotExists(KEY_DATAKIT_ADDRESS, 'datakitUrl');
       await saveIfNotExists(KEY_DATAWAY_ADDRESS, 'datawayUrl');
-      await saveIfNotExists(KEY_DATAWAY_CLIENT_TOKEN, 'datawayClientToken');
+      await saveIfNotExists(KEY_DATAWAY_CLIENT_TOKEN, 'clientToken');
       await saveIfNotExists(KEY_APP_ID, 'appId');
       await saveIfNotExists(KEY_OTEL_ADDRESS, 'otelAddress');
       await saveIfNotExists(KEY_API_ADDRESS, 'demoApiUrl');

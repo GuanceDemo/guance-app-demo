@@ -11,10 +11,13 @@ import { rcp } from '@kit.RemoteCommunicationKit';
 import { http } from '@kit.NetworkKit';
 import axios, { AxiosInstance, AxiosResponse } from '@ohos/axios';
 import {
-  applyFTHttpTrack,
-  createFTHttpInterceptorChain,
-  createFTRCPTrackConfig
+  createFTRCPTrackConfig,
+  applyFTAxiosTrack
 } from 'ft_sdk/src/main/ets/components/network/FTHttpAutoTrack';
+import {
+  applyFTHttpTrack,
+  createFTHttpInterceptorChain
+} from 'ft_sdk_ext/src/main/ets/components/network/FTHttpAutoTrackExt';
 import OpenTelemetry from 'otel_sdk';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
 import { API_USER_INFO } from '../constants/Constant';
@@ -228,7 +231,7 @@ struct NativePage {
             .width('100%')
             .margin({ top: 16, left: 16, bottom: 8 })
 
-          Button('Send Network Request')
+          Button('Send RCP Network Request')
             .width('calc(100% - 32vp)')
             .fontSize(16)
             .backgroundColor('#3F51B5')
@@ -548,14 +551,15 @@ struct NativePage {
   }
 
   private createAxiosInstance(): AxiosInstance {
-    return axios.create({
-      interceptorChain: createFTHttpInterceptorChain(),
+    const client =  axios.create({
       timeout: 10000,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
     });
+    applyFTAxiosTrack(client);
+    return client
   }
 
   private async executeAxiosRequest(

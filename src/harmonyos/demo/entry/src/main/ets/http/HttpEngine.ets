@@ -1,5 +1,5 @@
 import { http } from '@kit.NetworkKit';
-import { applyFTHttpTrack } from 'ft_sdk/src/main/ets/components/network/FTHttpAutoTrack';
+import { applyFTHttpTrack } from 'ft_sdk_ext/src/main/ets/components/network/FTHttpAutoTrackExt';
 import { UserData, JsonObject } from '../model/UserData';
 import { BaseData, ConnectData, ReturnResult } from './BaseData';
 import { Utils } from '../utils/Utils';
