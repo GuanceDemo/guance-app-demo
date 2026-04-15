@@ -2,14 +2,14 @@ import { Context, common } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
 import { AccessType } from '../constants/AccessType';
-import { FTSDK } from 'ft_sdk/src/main/ets/components/FTSDK';
-import { FTSDKConfig, FTRUMConfig, FTLoggerConfig, FTTraceConfig } from 'ft_sdk/src/main/ets/components/Configs';
-import { EnvType, SyncPageSize, DBCacheDiscard } from 'ft_sdk/src/main/ets/components/enum/Enums';
-import { TraceType } from 'ft_sdk/src/main/ets/components/trace/TraceType';
-import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
-import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
-import { ErrorMonitorType } from 'ft_sdk/src/main/ets/components/rum/enum/ErrorMonitorType';
-import { DeviceMetricsMonitorType } from 'ft_sdk/src/main/ets/components/rum/enum/DeviceMetricsMonitorType';
+import { FTSDK } from '@guancecloud/ft_sdk/src/main/ets/components/FTSDK';
+import { FTSDKConfig, FTRUMConfig, FTLoggerConfig, FTTraceConfig } from '@guancecloud/ft_sdk/src/main/ets/components/Configs';
+import { EnvType, SyncPageSize, DBCacheDiscard } from '@guancecloud/ft_sdk/src/main/ets/components/enum/Enums';
+import { TraceType } from '@guancecloud/ft_sdk/src/main/ets/components/trace/TraceType';
+import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
+import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
+import { ErrorMonitorType } from '@guancecloud/ft_sdk/src/main/ets/components/rum/enum/ErrorMonitorType';
+import { DeviceMetricsMonitorType } from '@guancecloud/ft_sdk/src/main/ets/components/rum/enum/DeviceMetricsMonitorType';
 import OpenTelemetry from 'otel_sdk';
 
 const DOMAIN: number = 0x0000;
@@ -80,7 +80,7 @@ export class FTSDKManager {
       hilog.info(DOMAIN, TAG, 'FTSDK installed successfully');
 
       // 2. Configure FTLoggerConfig (Log configuration)
-      const logConfig = new FTLoggerConfig()
+      const logConfig: FTLoggerConfig = new FTLoggerConfig()
         .setSamplingRate(1.0) // 100% sampling rate
         .setEnableCustomLog(true)
         .setEnableLinkRumData(true)
@@ -98,7 +98,7 @@ export class FTSDKManager {
       hilog.info(DOMAIN, TAG, 'FTLoggerConfig installed successfully');
 
       // 3. Configure FTRUMConfig (RUM configuration)
-      const rumConfig = new FTRUMConfig()
+      const rumConfig: FTRUMConfig = new FTRUMConfig()
         .setRumAppId(setting.appId)
         .setSamplingRate(1.0) // 100% RUM sampling rate
         .setSessionErrorSampleRate(1.0) // 100% error sampling rate
@@ -116,7 +116,7 @@ export class FTSDKManager {
       hilog.info(DOMAIN, TAG, 'FTRUMConfig installed successfully');
 
       // 4. Configure FTTraceConfig (Trace configuration)
-      const traceConfig = new FTTraceConfig()
+      const traceConfig: FTTraceConfig = new FTTraceConfig()
         .setSamplingRate(1.0)
         .setTraceType(TraceType.DDTRACE)
         .setEnableAutoTrace(true)

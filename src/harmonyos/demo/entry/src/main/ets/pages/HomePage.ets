@@ -1,6 +1,5 @@
 import { router } from '@kit.ArkUI';
 import { MenuItem } from '../model/ListItem';
-import { FTRUMGlobalManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
 import { AppColors, FontSizes, Spacing, BorderRadius, Heights, IconSizes } from '../constants/UIConstants';
 
 /**

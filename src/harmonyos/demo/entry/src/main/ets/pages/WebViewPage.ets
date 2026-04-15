@@ -1,10 +1,10 @@
 import { router } from '@kit.ArkUI';
 import { webview } from '@kit.ArkWeb';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
-import { FTWebViewHandler } from 'ft_sdk/src/main/ets/components/web/FTWebViewHandler';
-import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
-import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
-import { FTSDK } from 'ft_sdk/src/main/ets/components/FTSDK';
+import { FTWebViewHandler } from '@guancecloud/ft_sdk/src/main/ets/components/web/FTWebViewHandler';
+import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
+import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
+import { FTSDK } from '@guancecloud/ft_sdk/src/main/ets/components/FTSDK';
 
 /**
  * WebView page - Supports WebView RUM monitoring

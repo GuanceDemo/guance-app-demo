@@ -7,9 +7,9 @@
   "license": "",
   "dependencies": {
     "@ohos/axios": "2.2.8",
-    "ft_native": "file:../libs/ft_native.har",
-    "ft_sdk": "file:../libs/ft_sdk.har",
-    "ft_sdk_ext": "file:../libs/ft_sdk_ext.har",
+    "@guancecloud/ft_native": "0.1.0-alpha02",
+    "@guancecloud/ft_sdk": "0.1.14-alpha03",
+    "@guancecloud/ft_sdk_ext": "0.1.14-alpha03",
     "otel_sdk": "file:../libs/otel_sdk.har"
   },
   "types": "./src/main/ts"

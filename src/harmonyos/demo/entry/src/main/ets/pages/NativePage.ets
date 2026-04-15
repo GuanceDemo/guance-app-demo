@@ -2,22 +2,22 @@ import { router } from '@kit.ArkUI';
 import { promptAction } from '@kit.ArkUI';
 import { BusinessError } from '@kit.BasicServicesKit';
 import * as ftcrash from 'libftcrash.so';
-import { FTRUMGlobalManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
-import { FTSDK } from 'ft_sdk/src/main/ets/components/FTSDK';
-import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
-import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
-import { ErrorType, AppState } from 'ft_sdk/src/main/ets/components/rum/enum/RUMEnums';
+import { FTRUMGlobalManager } from '@guancecloud/ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
+import { FTSDK } from '@guancecloud/ft_sdk/src/main/ets/components/FTSDK';
+import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
+import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
+import { ErrorType, AppState } from '@guancecloud/ft_sdk/src/main/ets/components/rum/enum/RUMEnums';
 import { rcp } from '@kit.RemoteCommunicationKit';
 import { http } from '@kit.NetworkKit';
 import axios, { AxiosInstance, AxiosResponse } from '@ohos/axios';
 import {
   createFTRCPTrackConfig,
   applyFTAxiosTrack
-} from 'ft_sdk/src/main/ets/components/network/FTHttpAutoTrack';
+} from '@guancecloud/ft_sdk/src/main/ets/components/network/FTHttpAutoTrack';
 import {
   applyFTHttpTrack,
   createFTHttpInterceptorChain
-} from 'ft_sdk_ext/src/main/ets/components/network/FTHttpAutoTrackExt';
+} from '@guancecloud/ft_sdk_ext/src/main/ets/components/network/FTHttpAutoTrackExt';
 import OpenTelemetry from 'otel_sdk';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
 import { API_USER_INFO } from '../constants/Constant';

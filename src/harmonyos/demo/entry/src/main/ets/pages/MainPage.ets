@@ -2,8 +2,6 @@ import { router } from '@kit.ArkUI';
 import { AccountManager } from '../manager/AccountManager';
 import { HomePage } from './HomePage';
 import { MinePage } from './MinePage';
-import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
-import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
 import { PageTrackingHelper } from '../utils/PageTrackingHelper';
 import { AppColors, FontSizes, Spacing, IconSizes, Heights } from '../constants/UIConstants';
 

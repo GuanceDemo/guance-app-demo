@@ -3,7 +3,7 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { PreferencesUtil } from '../utils/PreferencesUtil';
 import { FTSDKManager } from '../manager/FTSDKManager';
-import { FTSDK } from 'ft_sdk/src/main/ets/components/FTSDK';
+import { FTSDK } from '@guancecloud/ft_sdk/src/main/ets/components/FTSDK';
 import {
   KEY_DATAKIT_ADDRESS,
   KEY_DATAWAY_ADDRESS,

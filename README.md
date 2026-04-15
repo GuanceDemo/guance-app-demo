@@ -2,6 +2,7 @@
 * [Server](./src/server)
 * [Android](./src/android/demo)
 * [iOS](./src/ios/demo)
+* [HarmonyOS](./src/harmonyos/demo)
 
 # 
 # Guance Cloud Demo Usage and Deployment Instructions

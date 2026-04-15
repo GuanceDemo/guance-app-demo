@@ -2,8 +2,8 @@ import { router } from '@kit.ArkUI';
 import { promptAction } from '@kit.ArkUI';
 import { AccountManager } from '../manager/AccountManager';
 import { DEFAULT_USER_NAME, DEFAULT_PASSWORD } from '../constants/Constant';
-import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
-import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
+import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
+import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
 import { AppColors, FontSizes, Spacing, BorderRadius, Heights, ToastDuration } from '../constants/UIConstants';
 import { PageTrackingHelper } from '../utils/PageTrackingHelper';
 

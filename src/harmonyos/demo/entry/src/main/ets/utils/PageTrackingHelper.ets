@@ -1,6 +1,6 @@
-import { FTRUMGlobalManager } from 'ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
-import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
-import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
+import { FTRUMGlobalManager } from '@guancecloud/ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
+import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
+import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
 
 /**
  * Page tracking helper
@@ -37,6 +37,8 @@ export class PageTrackingHelper {
    */
   static trackActionWithTiming(actionName: string, actionType: string = 'click'): () => void {
     FTRUMGlobalManager.getInstance().startAction(actionName, actionType);
-    return () => FTRUMGlobalManager.getInstance().stopAction();
+    return (): void => {
+      FTRUMGlobalManager.getInstance().stopAction();
+    };
   }
 }

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig, AxiosHeaders } from '@ohos/axios';
-import { applyFTAxiosTrack } from 'ft_sdk/src/main/ets/components/network/FTHttpAutoTrack';
+import { applyFTAxiosTrack } from '@guancecloud/ft_sdk/src/main/ets/components/network/FTHttpAutoTrack';
 import { UserData, JsonObject } from '../model/UserData';
 import { BaseData, ConnectData, ReturnResult } from './BaseData';
 import { Utils } from '../utils/Utils';

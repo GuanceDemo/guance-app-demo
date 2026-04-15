@@ -14,8 +14,8 @@ import {
   DEFAULT_API_ADDRESS,
   DEFAULT_OTEL_ADDRESS
 } from '../constants/Constant';
-import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
-import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
+import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
+import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
 
 // Clipboard configuration prefix
 const CONFIG_PREFIX = 'gc-demo://';

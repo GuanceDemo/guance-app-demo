@@ -2,10 +2,10 @@ import { UserData as LocalUserData } from '../model/UserData';
 import { PreferencesUtil } from '../utils/PreferencesUtil';
 import { HttpEngine } from '../http/HttpEngine';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
-import { FTSDK } from 'ft_sdk/src/main/ets/components/FTSDK';
-import { FTLogger } from 'ft_sdk/src/main/ets/components/log/FTLogger';
-import { Status } from 'ft_sdk/src/main/ets/components/bean/Status';
-import { UserData as FTUserData } from 'ft_sdk/src/main/ets/components/rum/bean/UserData';
+import { FTSDK } from '@guancecloud/ft_sdk/src/main/ets/components/FTSDK';
+import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
+import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
+import { UserData as FTUserData } from '@guancecloud/ft_sdk/src/main/ets/components/rum/bean/UserData';
 import {
   KEY_USER_AVATAR,
   KEY_USER_EMAIL,
@@ -107,7 +107,7 @@ export class AccountManager {
       }
 
       // Use SDK's UserData class for binding
-      const userData = new FTUserData();
+      const userData: FTUserData = new FTUserData();
       userData.setId(data.username);
       userData.setName(data.username);
       if (data.email) {
