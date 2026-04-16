@@ -32,48 +32,99 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/native_crash_java_kotlin_data_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/crash_java_kotlin" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/native_page_intro"
+                android:textColor="#666666"
+                android:textSize="14sp" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/native_crash_c_cpp_data_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/crash_c_cpp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/native_long_task_data_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/uiblock_longtask" />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/native_business_tab"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/native_business_tab" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/native_compose_activity_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/compose_activity" />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/native_lab_tab"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:text="@string/native_lab_tab" />
+            </LinearLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/native_dynamic_rum_tag_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tag_dynamic_setting" />
+            <LinearLayout
+                android:id="@+id/native_business_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/native_session_replay_compat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/session_replay" />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/native_compose_activity_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/compose_activity_story" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/native_dynamic_create_otel_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create_otel_span" />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/native_session_replay_compat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/session_replay_story" />
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/native_dynamic_rum_tag_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tag_dynamic_setting_story" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/native_dynamic_create_otel_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/create_otel_span_story" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/native_manual_demo_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/manual_demo_story" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/native_lab_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/native_crash_java_kotlin_data_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/crash_java_kotlin_story" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/native_crash_c_cpp_data_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/crash_c_cpp_story" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/native_long_task_data_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/uiblock_longtask_story" />
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

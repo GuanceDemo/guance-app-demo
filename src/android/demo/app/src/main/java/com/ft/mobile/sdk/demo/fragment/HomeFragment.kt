@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ft.mobile.sdk.demo.NativeActivity
 import com.ft.mobile.sdk.demo.R
+import com.ft.mobile.sdk.demo.RealScenarioListActivity
+import com.ft.mobile.sdk.demo.TechnicalVerificationActivity
 import com.ft.mobile.sdk.demo.WebViewActivity
 import com.ft.mobile.sdk.demo.adapter.DividerItemDecoration
 import com.ft.mobile.sdk.demo.adapter.ListItem
@@ -27,8 +29,16 @@ class HomeFragment : Fragment(), SimpleAdapter.OnItemClickListener {
 
         // Initialize dataList with context available
         dataList = listOf(
-            ListItem("Native View", getString(R.string.native_view_description), R.drawable.ic_android),
-            ListItem("WebView", getString(R.string.webview_description), R.drawable.ic_web)
+            ListItem(
+                getString(R.string.real_scenario_entry_title),
+                getString(R.string.real_scenario_entry_description),
+                R.drawable.ic_real_scene
+            ),
+            ListItem(
+                getString(R.string.technical_verification_entry_title),
+                getString(R.string.technical_verification_entry_description),
+                R.drawable.ic_test_scene
+            )
         )
 
         val rootView = inflater.inflate(
@@ -48,13 +58,13 @@ class HomeFragment : Fragment(), SimpleAdapter.OnItemClickListener {
 
     override fun onItemClick(data: String) {
         when (data) {
-            "Native View" -> {
-                startActivity(Intent(context, NativeActivity::class.java))
+            getString(R.string.real_scenario_entry_title) -> {
+                startActivity(Intent(context, RealScenarioListActivity::class.java))
 
             }
 
-            "WebView" -> {
-                startActivity(Intent(context, WebViewActivity::class.java))
+            getString(R.string.technical_verification_entry_title) -> {
+                startActivity(Intent(context, TechnicalVerificationActivity::class.java))
 
             }
 

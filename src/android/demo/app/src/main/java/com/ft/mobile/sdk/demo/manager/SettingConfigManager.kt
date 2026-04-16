@@ -10,8 +10,10 @@ import com.ft.mobile.sdk.demo.data.DEFAULT_DATAWAY_ADDRESS
 import com.ft.mobile.sdk.demo.data.DEFAULT_DATAWAY_CLIENT_TOKEN
 import com.ft.mobile.sdk.demo.data.DEFAULT_OTEL_ADDRESS
 import com.ft.mobile.sdk.demo.http.HttpEngine
-import com.ft.sdk.FTApplication
+import com.ft.sdk.sessionreplay.ImagePrivacy
 import com.ft.sdk.sessionreplay.SessionReplayPrivacy
+import com.ft.sdk.sessionreplay.TextAndInputPrivacy
+import com.ft.sdk.sessionreplay.TouchPrivacy
 import org.json.JSONObject
 
 private const val PREFS_USER_DATA_NAME = "gc_demo_sdk_setting"
@@ -24,6 +26,9 @@ private const val KEY_DEMO_API_ADDRESS = "demoApiAddress"
 private const val KEY_DEMO_APP_ID = "demoAndroidAppId"
 private const val KEY_DEMO_ENABLE_SESSION_REPLAY = "demoEnableSessionReplay"
 private const val KEY_DEMO_ENABLE_SESSION_REPLAY_PRIVACY_TYPE = "demoEnableSessionReplayPrivacyType"
+private const val KEY_DEMO_ENABLE_SESSION_REPLAY_IMAGE_PRIVACY = "demoEnableSessionReplayImagePrivacy"
+private const val KEY_DEMO_ENABLE_SESSION_REPLAY_TOUCH_PRIVACY = "demoEnableSessionReplayTouchPrivacy"
+private const val KEY_DEMO_ENABLE_SESSION_REPLAY_TEXT_AND_INPUT_PRIVACY = "demoEnableSessionReplayTextAndInputPrivacy"
 
 data class SettingData(
     val datakitAddress: String,
@@ -34,7 +39,9 @@ data class SettingData(
     val otelAddress: String,
     val type: Int,
     val enableSessionReplay: Boolean,
-    val sessionReplayPrivacyType: SessionReplayPrivacy
+    val sessionReplayImagePrivacy: ImagePrivacy,
+    val sessionReplayTouchPrivacy: TouchPrivacy,
+    val sessionReplayTextAndInputPrivacy: TextAndInputPrivacy
 ) {
     fun getUserInfoUrl(): String {
         return demoApiAddress + HttpEngine.API_USER_INFO
@@ -53,6 +60,8 @@ data class SettingData(
                 val type = json.optInt(KEY_DEMO_APP_ACCESS_TYPE, 0)
                 val enableSessionReplay = json.optBoolean(KEY_DEMO_ENABLE_SESSION_REPLAY, false)
                 val sessionReplayType = json.optInt(KEY_DEMO_ENABLE_SESSION_REPLAY_PRIVACY_TYPE, 0)
+                val legacyPrivacy = SessionReplayPrivacy.values()
+                    .getOrElse(sessionReplayType) { SessionReplayPrivacy.ALLOW }
                 return SettingData(
                     datakitAddress,
                     demoApiAddress,
@@ -62,7 +71,21 @@ data class SettingData(
                     otelAddress,
                     type,
                     enableSessionReplay,
-                    SessionReplayPrivacy.values()[sessionReplayType]
+                    json.optInt(
+                        KEY_DEMO_ENABLE_SESSION_REPLAY_IMAGE_PRIVACY,
+                        legacyPrivacy.toImagePrivacy().ordinal
+                    ).toEnumOrDefault(ImagePrivacy.values(), legacyPrivacy.toImagePrivacy()),
+                    json.optInt(
+                        KEY_DEMO_ENABLE_SESSION_REPLAY_TOUCH_PRIVACY,
+                        legacyPrivacy.toTouchPrivacy().ordinal
+                    ).toEnumOrDefault(TouchPrivacy.values(), legacyPrivacy.toTouchPrivacy()),
+                    json.optInt(
+                        KEY_DEMO_ENABLE_SESSION_REPLAY_TEXT_AND_INPUT_PRIVACY,
+                        legacyPrivacy.toTextAndInputPrivacy().ordinal
+                    ).toEnumOrDefault(
+                        TextAndInputPrivacy.values(),
+                        legacyPrivacy.toTextAndInputPrivacy()
+                    )
                 )
             } catch (_: Exception) {
 
@@ -134,7 +157,18 @@ object SettingConfigManager {
         editor.putString(KEY_OTEL_ADDRESS, data.otelAddress.ifEmpty { defaultOtelUrl })
         editor.putInt(KEY_DEMO_APP_ACCESS_TYPE, data.type)
         editor.putBoolean(KEY_DEMO_ENABLE_SESSION_REPLAY, data.enableSessionReplay)
-        editor.putInt(KEY_DEMO_ENABLE_SESSION_REPLAY_PRIVACY_TYPE, data.sessionReplayPrivacyType.ordinal)
+        editor.putInt(
+            KEY_DEMO_ENABLE_SESSION_REPLAY_IMAGE_PRIVACY,
+            data.sessionReplayImagePrivacy.ordinal
+        )
+        editor.putInt(
+            KEY_DEMO_ENABLE_SESSION_REPLAY_TOUCH_PRIVACY,
+            data.sessionReplayTouchPrivacy.ordinal
+        )
+        editor.putInt(
+            KEY_DEMO_ENABLE_SESSION_REPLAY_TEXT_AND_INPUT_PRIVACY,
+            data.sessionReplayTextAndInputPrivacy.ordinal
+        )
         editor.apply()
 
     }
@@ -146,6 +180,11 @@ object SettingConfigManager {
         }
         val sharedPreferences = context
             .getSharedPreferences(PREFS_USER_DATA_NAME, Context.MODE_PRIVATE)
+
+        val legacyPrivacy = sharedPreferences.getInt(
+            KEY_DEMO_ENABLE_SESSION_REPLAY_PRIVACY_TYPE,
+            SessionReplayPrivacy.ALLOW.ordinal
+        ).toEnumOrDefault(SessionReplayPrivacy.values(), SessionReplayPrivacy.ALLOW)
 
         data = SettingData(
             sharedPreferences.getString(KEY_DEMO_DATAKIT_ADDRESS, defaultDatakitUrl)!!,
@@ -159,13 +198,52 @@ object SettingConfigManager {
                 KEY_DEMO_ENABLE_SESSION_REPLAY,
                 false
             ),
-            SessionReplayPrivacy.values()[sharedPreferences.getInt(
-                KEY_DEMO_ENABLE_SESSION_REPLAY_PRIVACY_TYPE,
-                0
-            )]
+            sharedPreferences.getInt(
+                KEY_DEMO_ENABLE_SESSION_REPLAY_IMAGE_PRIVACY,
+                legacyPrivacy.toImagePrivacy().ordinal
+            ).toEnumOrDefault(ImagePrivacy.values(), legacyPrivacy.toImagePrivacy()),
+            sharedPreferences.getInt(
+                KEY_DEMO_ENABLE_SESSION_REPLAY_TOUCH_PRIVACY,
+                legacyPrivacy.toTouchPrivacy().ordinal
+            ).toEnumOrDefault(TouchPrivacy.values(), legacyPrivacy.toTouchPrivacy()),
+            sharedPreferences.getInt(
+                KEY_DEMO_ENABLE_SESSION_REPLAY_TEXT_AND_INPUT_PRIVACY,
+                legacyPrivacy.toTextAndInputPrivacy().ordinal
+            ).toEnumOrDefault(
+                TextAndInputPrivacy.values(),
+                legacyPrivacy.toTextAndInputPrivacy()
+            )
         )
         return data!!
     }
 
 
+}
+
+private fun SessionReplayPrivacy.toImagePrivacy(): ImagePrivacy {
+    return when (this) {
+        SessionReplayPrivacy.ALLOW -> ImagePrivacy.MASK_NONE
+        SessionReplayPrivacy.MASK_USER_INPUT -> ImagePrivacy.MASK_LARGE_ONLY
+        SessionReplayPrivacy.MASK -> ImagePrivacy.MASK_ALL
+    }
+}
+
+private fun SessionReplayPrivacy.toTouchPrivacy(): TouchPrivacy {
+    return when (this) {
+        SessionReplayPrivacy.ALLOW -> TouchPrivacy.SHOW
+        SessionReplayPrivacy.MASK_USER_INPUT,
+        SessionReplayPrivacy.MASK -> TouchPrivacy.HIDE
+    }
+}
+
+private fun SessionReplayPrivacy.toTextAndInputPrivacy(): TextAndInputPrivacy {
+    return when (this) {
+        SessionReplayPrivacy.ALLOW -> TextAndInputPrivacy.MASK_SENSITIVE_INPUTS
+        SessionReplayPrivacy.MASK_USER_INPUT -> TextAndInputPrivacy.MASK_ALL_INPUTS
+        SessionReplayPrivacy.MASK -> TextAndInputPrivacy.MASK_ALL
+    }
+}
+
+private fun <T> Int.toEnumOrDefault(values: Array<T>, defaultValue: T): T {
+    return values.getOrElse(this) { defaultValue }
 }

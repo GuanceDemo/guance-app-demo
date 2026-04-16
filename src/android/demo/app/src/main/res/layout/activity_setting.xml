@@ -179,11 +179,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/setting_privacy_option"
+            android:text="@string/setting_image_privacy_option"
             android:textColor="#000" />
 
         <RadioGroup
-            android:id="@+id/setting_session_privacy_rg"
+            android:id="@+id/setting_session_image_privacy_rg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -191,21 +191,88 @@
             android:padding="8dp">
 
             <RadioButton
-                android:id="@+id/setting_session_privacy_allow_rb"
+                android:id="@+id/setting_session_image_privacy_allow_rb"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/setting_privacy_allow" />
 
             <RadioButton
-                android:id="@+id/setting_session_privacy_only_input_rb"
+                android:id="@+id/setting_session_image_privacy_large_only_rb"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/setting_privacy_only_input" />
+                android:text="@string/setting_image_privacy_large_only" />
 
             <RadioButton
-                android:id="@+id/setting_session_privacy_mask_rb"
+                android:id="@+id/setting_session_image_privacy_mask_rb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/setting_privacy_mask" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/setting_touch_privacy_option"
+            android:textColor="#000" />
+
+        <RadioGroup
+            android:id="@+id/setting_session_touch_privacy_rg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <RadioButton
+                android:id="@+id/setting_session_touch_privacy_show_rb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/setting_touch_privacy_show" />
+
+            <RadioButton
+                android:id="@+id/setting_session_touch_privacy_hide_rb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/setting_touch_privacy_hide" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/setting_text_input_privacy_option"
+            android:textColor="#000" />
+
+        <RadioGroup
+            android:id="@+id/setting_session_text_input_privacy_rg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <RadioButton
+                android:id="@+id/setting_session_text_input_privacy_sensitive_rb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/setting_text_input_privacy_sensitive" />
+
+            <RadioButton
+                android:id="@+id/setting_session_text_input_privacy_input_rb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/setting_text_input_privacy_input" />
+
+            <RadioButton
+                android:id="@+id/setting_session_text_input_privacy_mask_rb"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -215,4 +282,3 @@
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
-

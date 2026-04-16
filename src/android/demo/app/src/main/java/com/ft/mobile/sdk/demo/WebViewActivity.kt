@@ -25,6 +25,7 @@ class WebViewActivity : BaseActivity() {
 
         WebView.setWebContentsDebuggingEnabled(true)
         val data = SettingConfigManager.readSetting(this@WebViewActivity)
+        title = intent.getStringExtra(EXTRA_TITLE) ?: getString(R.string.technical_webview_entry_title)
 
         webView = findViewById<WebView>(R.id.webView)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
@@ -52,7 +53,9 @@ class WebViewActivity : BaseActivity() {
         }
 
         // Load web page
-        webView!!.loadUrl("${data.demoApiAddress}?requestUrl=${data.getUserInfoUrl()}")
+        val targetUrl = intent.getStringExtra(EXTRA_URL)
+            ?: "${data.demoApiAddress}?requestUrl=${data.getUserInfoUrl()}"
+        webView!!.loadUrl(targetUrl)
 
     }
 
@@ -70,6 +73,17 @@ class WebViewActivity : BaseActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        private const val EXTRA_URL = "extra_url"
+        private const val EXTRA_TITLE = "extra_title"
+
+        fun newIntent(context: android.content.Context, title: String, url: String): android.content.Intent {
+            return android.content.Intent(context, WebViewActivity::class.java)
+                .putExtra(EXTRA_TITLE, title)
+                .putExtra(EXTRA_URL, url)
+        }
     }
 
 }

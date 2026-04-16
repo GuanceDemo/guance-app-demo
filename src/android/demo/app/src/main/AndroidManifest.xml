@@ -25,6 +25,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".ManualActivity" />
+        <activity
+            android:name=".TechnicalVerificationActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RealScenarioListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RealScenarioDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity 
             android:name=".NativeActivity"
             android:theme="@style/AppTheme.NoActionBar" />

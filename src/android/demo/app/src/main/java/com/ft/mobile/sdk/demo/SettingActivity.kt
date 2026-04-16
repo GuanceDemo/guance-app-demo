@@ -19,7 +19,9 @@ import com.ft.mobile.sdk.demo.manager.SettingData
 import com.ft.mobile.sdk.demo.utils.Utils
 import com.ft.mobile.sdk.demo.utils.UtilsDialog
 import com.ft.sdk.FTSdk
-import com.ft.sdk.sessionreplay.SessionReplayPrivacy
+import com.ft.sdk.sessionreplay.ImagePrivacy
+import com.ft.sdk.sessionreplay.TextAndInputPrivacy
+import com.ft.sdk.sessionreplay.TouchPrivacy
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +42,9 @@ class SettingActivity : com.ft.mobile.sdk.demo.BaseActivity() {
     private var appIDEt: TextInputEditText? = null
     private var settingData: SettingData? = null
     private var deployTypeRG: RadioGroup? = null
-    private var privacyTypeRG: RadioGroup? = null
+    private var imagePrivacyTypeRG: RadioGroup? = null
+    private var touchPrivacyTypeRG: RadioGroup? = null
+    private var textAndInputPrivacyTypeRG: RadioGroup? = null
     private var switch: SwitchCompat? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +63,9 @@ class SettingActivity : com.ft.mobile.sdk.demo.BaseActivity() {
         appIDEt = findViewById(R.id.setting_app_id_et)
 
         deployTypeRG = findViewById(R.id.setting_access_type_rg)
-        privacyTypeRG = findViewById(R.id.setting_session_privacy_rg)
+        imagePrivacyTypeRG = findViewById(R.id.setting_session_image_privacy_rg)
+        touchPrivacyTypeRG = findViewById(R.id.setting_session_touch_privacy_rg)
+        textAndInputPrivacyTypeRG = findViewById(R.id.setting_session_text_input_privacy_rg)
         switch = findViewById(R.id.setting_session_switch)
 
         deployTypeRG?.setOnCheckedChangeListener { radioGroup, id ->
@@ -94,13 +100,7 @@ class SettingActivity : com.ft.mobile.sdk.demo.BaseActivity() {
                 R.id.setting_dataway_deploy_rb
         )
         switch?.isChecked = settingData?.enableSessionReplay ?: false
-        privacyTypeRG?.check(
-            when (settingData!!.sessionReplayPrivacyType) {
-                SessionReplayPrivacy.ALLOW -> R.id.setting_session_privacy_allow_rb
-                SessionReplayPrivacy.MASK -> R.id.setting_session_privacy_mask_rb
-                SessionReplayPrivacy.MASK_USER_INPUT -> R.id.setting_session_privacy_only_input_rb
-            }
-        )
+        applySessionReplayPrivacy(settingData!!)
     }
 
     private fun setSettingView(settingData: SettingData) {
@@ -110,6 +110,30 @@ class SettingActivity : com.ft.mobile.sdk.demo.BaseActivity() {
         datawayClientTokenEt?.setText(settingData.datawayClientToken)
         otelAddressEt?.setText(settingData.otelAddress)
         appIDEt?.setText(settingData.appId)
+        applySessionReplayPrivacy(settingData)
+    }
+
+    private fun applySessionReplayPrivacy(settingData: SettingData) {
+        imagePrivacyTypeRG?.check(
+            when (settingData.sessionReplayImagePrivacy) {
+                ImagePrivacy.MASK_NONE -> R.id.setting_session_image_privacy_allow_rb
+                ImagePrivacy.MASK_LARGE_ONLY -> R.id.setting_session_image_privacy_large_only_rb
+                ImagePrivacy.MASK_ALL -> R.id.setting_session_image_privacy_mask_rb
+            }
+        )
+        touchPrivacyTypeRG?.check(
+            when (settingData.sessionReplayTouchPrivacy) {
+                TouchPrivacy.SHOW -> R.id.setting_session_touch_privacy_show_rb
+                TouchPrivacy.HIDE -> R.id.setting_session_touch_privacy_hide_rb
+            }
+        )
+        textAndInputPrivacyTypeRG?.check(
+            when (settingData.sessionReplayTextAndInputPrivacy) {
+                TextAndInputPrivacy.MASK_SENSITIVE_INPUTS -> R.id.setting_session_text_input_privacy_sensitive_rb
+                TextAndInputPrivacy.MASK_ALL_INPUTS -> R.id.setting_session_text_input_privacy_input_rb
+                TextAndInputPrivacy.MASK_ALL -> R.id.setting_session_text_input_privacy_mask_rb
+            }
+        )
     }
 
     private fun setDatawayView() {
@@ -286,11 +310,22 @@ class SettingActivity : com.ft.mobile.sdk.demo.BaseActivity() {
             if (deployTypeRG?.checkedRadioButtonId == R.id.setting_datakit_deploy_rb)
                 AccessType.DATAKIT.value else AccessType.DATAWAY.value,
             switch?.isChecked ?: false,
-            when (privacyTypeRG?.checkedRadioButtonId) {
-                R.id.setting_session_privacy_allow_rb -> SessionReplayPrivacy.ALLOW
-                R.id.setting_session_privacy_only_input_rb -> SessionReplayPrivacy.MASK_USER_INPUT
-                R.id.setting_session_privacy_mask_rb -> SessionReplayPrivacy.MASK
-                else -> SessionReplayPrivacy.ALLOW
+            when (imagePrivacyTypeRG?.checkedRadioButtonId) {
+                R.id.setting_session_image_privacy_allow_rb -> ImagePrivacy.MASK_NONE
+                R.id.setting_session_image_privacy_large_only_rb -> ImagePrivacy.MASK_LARGE_ONLY
+                R.id.setting_session_image_privacy_mask_rb -> ImagePrivacy.MASK_ALL
+                else -> ImagePrivacy.MASK_NONE
+            },
+            when (touchPrivacyTypeRG?.checkedRadioButtonId) {
+                R.id.setting_session_touch_privacy_show_rb -> TouchPrivacy.SHOW
+                R.id.setting_session_touch_privacy_hide_rb -> TouchPrivacy.HIDE
+                else -> TouchPrivacy.SHOW
+            },
+            when (textAndInputPrivacyTypeRG?.checkedRadioButtonId) {
+                R.id.setting_session_text_input_privacy_sensitive_rb -> TextAndInputPrivacy.MASK_SENSITIVE_INPUTS
+                R.id.setting_session_text_input_privacy_input_rb -> TextAndInputPrivacy.MASK_ALL_INPUTS
+                R.id.setting_session_text_input_privacy_mask_rb -> TextAndInputPrivacy.MASK_ALL
+                else -> TextAndInputPrivacy.MASK_SENSITIVE_INPUTS
             }
 
         )

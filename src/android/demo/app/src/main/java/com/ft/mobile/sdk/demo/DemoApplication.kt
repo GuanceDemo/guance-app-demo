@@ -15,7 +15,10 @@ import com.ft.sdk.FTSdk
 import com.ft.sdk.FTTraceConfig
 import com.ft.sdk.garble.utils.LogUtils
 import com.ft.sdk.sessionreplay.FTSessionReplayConfig
+import com.ft.sdk.sessionreplay.ImagePrivacy
 import com.ft.sdk.sessionreplay.material.MaterialExtensionSupport
+import com.ft.sdk.sessionreplay.TextAndInputPrivacy
+import com.ft.sdk.sessionreplay.TouchPrivacy
 import io.opentelemetry.api.GlobalOpenTelemetry
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
@@ -40,6 +43,7 @@ import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor
 open class DemoApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+//        LogUtils.registerInnerLogCacheToFile()
         setSDK(this)
         setOtelSDK(this)
     }
@@ -108,11 +112,12 @@ open class DemoApplication : Application() {
 
             if (data.enableSessionReplay) {
                 //Configure Session Replay
-                FTSdk.initSessionReplayConfig(
-                    FTSessionReplayConfig().setPrivacy(
-                        data.sessionReplayPrivacyType
-                    ).addExtensionSupport(MaterialExtensionSupport())
-                )
+                val sessionReplayConfig = FTSessionReplayConfig()
+                    .setImagePrivacy(data.sessionReplayImagePrivacy)
+                    .setTouchPrivacy(data.sessionReplayTouchPrivacy)
+                    .setTextAndInputPrivacy(data.sessionReplayTextAndInputPrivacy)
+                    .addExtensionSupport(MaterialExtensionSupport())
+                FTSdk.initSessionReplayConfig(sessionReplayConfig)
             }
         }
 
@@ -210,4 +215,3 @@ open class DemoApplication : Application() {
         }
     }
 }
-
