@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ product.title }}</title>
+  <script src="{{ url_for('static', filename='dataflux-rum.js') }}"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background: #f4f7fb;
+      color: #1f2937;
+    }
+    .hero {
+      background: linear-gradient(145deg, #0f4c81 0%, #1f7a8c 55%, #b8d8ff 100%);
+      color: white;
+      padding: 24px 20px 34px;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 13px;
+    }
+    .hero h1 {
+      margin: 14px 0 8px;
+      font-size: 30px;
+      line-height: 1.2;
+    }
+    .hero p {
+      margin: 0;
+      line-height: 1.6;
+      max-width: 760px;
+    }
+    .container {
+      max-width: 960px;
+      margin: -18px auto 40px;
+      padding: 0 16px;
+    }
+    .card {
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      padding: 18px;
+      margin-top: 18px;
+    }
+    .product-media {
+      width: 100%;
+      border-radius: 16px;
+      object-fit: cover;
+      aspect-ratio: 16 / 10;
+      background: #e2e8f0;
+    }
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .price {
+      color: #cc4e00;
+      font-size: 28px;
+      font-weight: 700;
+    }
+    .rating {
+      color: #0f4c81;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .pill {
+      background: #eef6ff;
+      color: #0f4c81;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .primary { background: #0f4c81; color: white; }
+    .secondary { background: #edf2f7; color: #0f172a; }
+    .danger { background: #f97316; color: white; }
+    .info-box {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 14px;
+      line-height: 1.7;
+      margin-top: 16px;
+    }
+    .spec-list, .highlight-list {
+      padding-left: 18px;
+      line-height: 1.8;
+    }
+    .feedback-form {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 15px;
+    }
+    .status {
+      margin-top: 12px;
+      color: #475569;
+      min-height: 22px;
+    }
+    .recommendations {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .recommendation {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+    .recommendation img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #e2e8f0;
+    }
+    @media (max-width: 720px) {
+      .action-grid, .recommendations { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 24px; }
+      .price-row { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+  <script>
+    DATAFLUX_RUM.init({
+      applicationId: 'app_webview_demo',
+      datakitOrigin: 'http://127.0.0.1:9529',
+      allowedDDTracingOrigins: [window.location.origin],
+      sessionSampleRate: 100,
+      sessionOnErrorSampleRate: 100,
+      trackInteractions: true,
+      traceType: 'ddtrace'
+    });
+    window.DATAFLUX_RUM.startSessionReplayRecording();
+  </script>
+</head>
+<body>
+  <section class="hero">
+    <span class="tag">{{ product.tag }}</span>
+    <h1>{{ product.title }}</h1>
+    <p>{{ product.subtitle }}</p>
+  </section>
+
+  <main class="container">
+    <section class="card">
+      <img class="product-media" src="{{ product.image_url }}" alt="{{ product.title }}">
+      <div class="price-row">
+        <div class="price">{{ product.price }}</div>
+        <div class="rating">Rating {{ product.rating }} · {{ product.stock }}</div>
+      </div>
+      <div class="pill-row">
+        {% for point in product.web_points %}
+        <span class="pill">{{ point }}</span>
+        {% endfor %}
+      </div>
+      <div class="action-grid">
+        <button class="primary" id="favorite-btn">Favorite</button>
+        <button class="primary" id="buy-btn">Buy Now</button>
+        <button class="secondary" id="refresh-btn">Refresh Recommendations</button>
+        <button class="danger" id="error-btn">Trigger JS Error</button>
+      </div>
+      <div class="status" id="action-status">The H5 product page is ready for interaction.</div>
+    </section>
+
+    <section class="card">
+      <h2>Product Overview</h2>
+      <p>{{ product.description }}</p>
+      <div class="info-box">
+        <strong>Why this page works well for SDK demos:</strong><br>
+        The native and H5 layouts stay closely aligned, making it easier to validate view changes, button clicks, network requests, WebView interactions, error capture, and Session Replay continuity.
+      </div>
+      <h3>Highlights</h3>
+      <ul class="highlight-list">
+        {% for item in product.highlights %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      <h3>Specifications</h3>
+      <ul class="spec-list">
+        {% for key, value in product.specs.items() %}
+        <li>{{ key }}: {{ value }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Purchase Inquiry</h2>
+      <form id="feedback-form" class="feedback-form">
+        <input id="buyer-name" type="text" placeholder="Enter your name">
+        <select id="buyer-scene">
+          <option value="">Choose a scenario</option>
+          <option value="commute">Commute</option>
+          <option value="office">Office</option>
+          <option value="travel">Travel</option>
+        </select>
+        <textarea id="buyer-comment" rows="5" placeholder="Share a product question or feedback"></textarea>
+        <button type="submit" class="primary">Submit Inquiry</button>
+      </form>
+      <div class="status" id="feedback-status">Waiting for user input.</div>
+    </section>
+
+    <section class="card">
+      <h2>Recommended Products</h2>
+      <div class="recommendations" id="recommendations">
+        <div class="recommendation">
+          <img src="{{ product.image_url }}" alt="Primary product">
+          <div>{{ product.title }}</div>
+        </div>
+        <div class="recommendation">
+          <img src="{{ url_for('static', filename='images/products/missing-product.png') }}" alt="Missing product image">
+          <div>Intentional broken-resource example</div>
+        </div>
+        <div class="recommendation">
+          <img src="{{ url_for('static', filename='images/demo-icon.png') }}" alt="Static asset">
+          <div>Local static asset</div>
+        </div>
+      </div>
+      <div class="status" id="resource-status">Resource status updates will appear here.</div>
+    </section>
+  </main>
+
+  <script>
+    const actionStatus = document.getElementById('action-status');
+    const feedbackStatus = document.getElementById('feedback-status');
+    const resourceStatus = document.getElementById('resource-status');
+
+    function updateStatus(target, text) {
+      target.textContent = `${text} (${new Date().toLocaleTimeString()})`;
+    }
+
+    document.getElementById('favorite-btn').addEventListener('click', () => {
+      updateStatus(actionStatus, 'The product was added to favorites');
+    });
+
+    document.getElementById('buy-btn').addEventListener('click', () => {
+      updateStatus(actionStatus, 'The buy-now action was triggered');
+    });
+
+    document.getElementById('refresh-btn').addEventListener('click', async () => {
+      updateStatus(actionStatus, 'Refreshing recommendations and stock');
+      try {
+        const response = await fetch('/api/products');
+        const products = await response.json();
+        updateStatus(actionStatus, `Recommendations refreshed with ${products.length} products`);
+      } catch (error) {
+        updateStatus(actionStatus, `Refresh failed: ${error.message}`);
+      }
+    });
+
+    document.getElementById('error-btn').addEventListener('click', () => {
+      updateStatus(actionStatus, 'A Web error is about to be triggered');
+      throw new Error('product-webview-demo-error');
+    });
+
+    document.getElementById('feedback-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      updateStatus(feedbackStatus, 'Submitting the inquiry');
+      try {
+        await fetch('/api/user');
+        const buyerName = document.getElementById('buyer-name').value || 'anonymous user';
+        updateStatus(feedbackStatus, `Inquiry submitted successfully. Thanks, ${buyerName}`);
+      } catch (error) {
+        updateStatus(feedbackStatus, `Inquiry submission failed: ${error.message}`);
+      }
+    });
+
+    document.querySelectorAll('img').forEach((image) => {
+      image.addEventListener('load', () => updateStatus(resourceStatus, `Resource loaded successfully: ${image.alt}`));
+      image.addEventListener('error', () => updateStatus(resourceStatus, `Resource failed to load: ${image.alt}`));
+    });
+  </script>
+</body>
+</html>

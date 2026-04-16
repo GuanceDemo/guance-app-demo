@@ -6,8 +6,8 @@ from flask_cors import CORS
 patch(flask=True)
 
 # Server version information
-SERVER_VERSION = "1.0.1"
-BUILD_DATE = "2025-11-21"
+SERVER_VERSION = "1.1.0"
+BUILD_DATE = "2026-04-16"
 
 app = Flask(__name__)
 CORS(app)

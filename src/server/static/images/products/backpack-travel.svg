@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#052e16"/>
+  <rect x="420" y="180" width="360" height="430" rx="90" fill="#86efac"/><rect x="500" y="300" width="200" height="160" rx="28" fill="#14532d"/>
+  <path d="M500 220c0-70 200-70 200 0" fill="none" stroke="#dcfce7" stroke-width="24"/>
+  <text x="84" y="118" fill="#ffffff" font-family="Arial, sans-serif" font-size="54" font-weight="700">Wayfinder Travel Pack</text>
+  <text x="84" y="182" fill="#dcfce7" font-family="Arial, sans-serif" font-size="28">Weather-ready • Modular Storage • Travel Smart</text>
+</svg>

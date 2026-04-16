@@ -20,7 +20,7 @@ class NativeActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        title = "Native View"
+        title = getString(R.string.technical_native_entry_title)
         setContentView(R.layout.activity_native_view)
         
         // Setup Toolbar
