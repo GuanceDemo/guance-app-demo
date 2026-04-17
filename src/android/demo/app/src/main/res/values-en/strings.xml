@@ -85,9 +85,10 @@
     <string name="session_replay_compat_title">compat title</string>
     <string name="session_replay_material_title">material title</string>
     <string name="session_replay">Session Replay</string>
-    <string name="native_page_intro">The business tab shows normal product flows, while the lab tab is used to verify crashes, long tasks, and edge cases.</string>
-    <string name="native_business_tab">Business Flow</string>
-    <string name="native_lab_tab">Crash Lab</string>
+    <string name="native_section_business">Business Flow</string>
+    <string name="native_section_business_desc">Demonstrates normal SDK features including page navigation, tag setting, and trace linking.</string>
+    <string name="native_section_lab">Crash Lab</string>
+    <string name="native_section_lab_desc">Verifies crashes, UI blocks, and edge cases. A confirmation dialog will appear before each action.</string>
     <string name="compose_activity_story">Explore Compose Screen</string>
     <string name="session_replay_story">Open Session Replay Example</string>
     <string name="tag_dynamic_setting_story">Switch Dynamic User Tag</string>

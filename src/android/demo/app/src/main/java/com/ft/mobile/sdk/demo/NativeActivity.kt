@@ -3,7 +3,6 @@ package com.ft.mobile.sdk.demo
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import com.ft.mobile.sdk.demo.compose.ComposeActivity
 import com.ft.mobile.sdk.demo.http.HttpEngine
@@ -22,36 +21,17 @@ class NativeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         title = getString(R.string.technical_native_entry_title)
         setContentView(R.layout.activity_native_view)
-        
+
         // Setup Toolbar
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         setupToolbar(toolbar)
 
-        val businessGroup = findViewById<View>(R.id.native_business_group)
-        val labGroup = findViewById<View>(R.id.native_lab_group)
-        val businessTab = findViewById<Button>(R.id.native_business_tab)
-        val labTab = findViewById<Button>(R.id.native_lab_tab)
-
-        fun showBusinessTab() {
-            businessGroup.visibility = View.VISIBLE
-            labGroup.visibility = View.GONE
-            businessTab.isEnabled = false
-            labTab.isEnabled = true
+        findViewById<View>(R.id.native_compose_activity_btn).setOnClickListener {
+            startActivity(Intent(this@NativeActivity, ComposeActivity::class.java))
         }
 
-        fun showLabTab() {
-            businessGroup.visibility = View.GONE
-            labGroup.visibility = View.VISIBLE
-            businessTab.isEnabled = true
-            labTab.isEnabled = false
-        }
-
-        businessTab.setOnClickListener { showBusinessTab() }
-        labTab.setOnClickListener { showLabTab() }
-        showBusinessTab()
-
-        findViewById<Button>(R.id.native_dynamic_rum_tag_btn).setOnClickListener {
+        findViewById<View>(R.id.native_dynamic_rum_tag_btn).setOnClickListener {
             val intent = Intent(this@NativeActivity, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)

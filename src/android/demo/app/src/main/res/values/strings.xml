@@ -85,9 +85,10 @@
     <string name="session_replay_compat_title">compat title</string>
     <string name="session_replay_material_title">material title</string>
     <string name="session_replay">Session Replay</string>
-    <string name="native_page_intro">业务体验页放正常链路，异常实验室专门验证崩溃、卡顿与边界场景。</string>
-    <string name="native_business_tab">业务体验</string>
-    <string name="native_lab_tab">异常实验室</string>
+    <string name="native_section_business">业务体验</string>
+    <string name="native_section_business_desc">正常链路功能演示，涵盖页面跳转、标签设置与链路关联等常用场景。</string>
+    <string name="native_section_lab">异常实验室</string>
+    <string name="native_section_lab_desc">专门验证崩溃、卡顿与边界场景，操作前会弹出确认提示。</string>
     <string name="compose_activity_story">体验 Compose 页面</string>
     <string name="session_replay_story">查看 Session Replay 示例</string>
     <string name="tag_dynamic_setting_story">切换动态用户标签</string>

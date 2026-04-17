@@ -35,96 +35,91 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/native_page_intro"
-                android:textColor="#666666"
-                android:textSize="14sp" />
+                android:text="@string/native_section_business"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
+                android:text="@string/native_section_business_desc"
+                android:textColor="#888888"
+                android:textSize="13sp"
+                android:layout_marginBottom="8dp" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/native_business_tab"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/native_business_tab" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/native_lab_tab"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_weight="1"
-                    android:text="@string/native_lab_tab" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/native_business_group"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/native_compose_activity_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="vertical">
+                android:text="@string/compose_activity_story" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/native_compose_activity_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/compose_activity_story" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/native_session_replay_compat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/session_replay_story" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/native_dynamic_rum_tag_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tag_dynamic_setting_story" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/native_dynamic_create_otel_data"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/create_otel_span_story" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/native_manual_demo_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/manual_demo_story" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/native_lab_group"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/native_session_replay_compat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@string/session_replay_story" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/native_dynamic_rum_tag_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tag_dynamic_setting_story" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/native_dynamic_create_otel_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/create_otel_span_story" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/native_manual_demo_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/manual_demo_story" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
                 android:layout_marginTop="16dp"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:layout_marginBottom="12dp"
+                android:background="#DDDDDD" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/native_crash_java_kotlin_data_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/crash_java_kotlin_story" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/native_section_lab"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/native_crash_c_cpp_data_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/crash_c_cpp_story" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/native_section_lab_desc"
+                android:textColor="#888888"
+                android:textSize="13sp"
+                android:layout_marginBottom="8dp" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/native_long_task_data_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/uiblock_longtask_story" />
-            </LinearLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/native_crash_java_kotlin_data_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/crash_java_kotlin_story" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/native_crash_c_cpp_data_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/crash_c_cpp_story" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/native_long_task_data_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/uiblock_longtask_story" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
