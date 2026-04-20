@@ -15,6 +15,44 @@ import FTMobileSDK
 enum CellInfoType{
     case rum,dataKit,dataWay,clientToken,demoAPI,otel
 }
+enum SessionReplayPrivacySection: Int, CaseIterable {
+    case image
+    case touch
+    case textInput
+
+    var title: String {
+        switch self {
+        case .image:
+            return NSLocalizedString("setting_image_privacy_option", comment: "Image privacy options")
+        case .touch:
+            return NSLocalizedString("setting_touch_privacy_option", comment: "Touch privacy options")
+        case .textInput:
+            return NSLocalizedString("setting_text_input_privacy_option", comment: "Text and input privacy options")
+        }
+    }
+
+    var options: [String] {
+        switch self {
+        case .image:
+            return [
+                NSLocalizedString("setting_image_privacy_large_only", comment: "Image privacy large only"),
+                NSLocalizedString("setting_privacy_mask", comment: "Mask all"),
+                NSLocalizedString("setting_privacy_allow", comment: "Allow")
+            ]
+        case .touch:
+            return [
+                NSLocalizedString("setting_touch_privacy_show", comment: "Show touches"),
+                NSLocalizedString("setting_touch_privacy_hide", comment: "Hide touches")
+            ]
+        case .textInput:
+            return [
+                NSLocalizedString("setting_text_input_privacy_sensitive", comment: "Sensitive only"),
+                NSLocalizedString("setting_text_input_privacy_input", comment: "All inputs"),
+                NSLocalizedString("setting_privacy_mask", comment: "Mask all")
+            ]
+        }
+    }
+}
 class CellInfo:NSObject{
     let title:String
     let hint:String
@@ -64,7 +102,7 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         backgroundView.addSubview(view)
         view.backgroundColor = .white
         let label = UILabel.init(frame: CGRect(x: 10, y: 5, width: 250, height: 40))
-        label.text = "Session Replay Privacy"
+        label.text = NSLocalizedString("setting_enable_session_replay", comment: "Enable Session Replay")
         label.font = .systemFont(ofSize: 15)
         view.addSubview(label)
         let switchBtn = UISwitch()
@@ -114,7 +152,9 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var dataSource:Array<Array<Any>> = [[],[]]
     var dataKitArray = Array<CellInfo>()
     var dataWayArray = Array<CellInfo>()
-    var srPrivacy = UserDefaults.sessionReplayPrivacy
+    var imagePrivacy = UserDefaults.sessionReplayImagePrivacy
+    var touchPrivacy = UserDefaults.sessionReplayTouchPrivacy
+    var textPrivacy = UserDefaults.sessionReplayTextPrivacy
     var isDataKit:Bool = UserDefaults.isDataKit {
         didSet {
             if dataSource.count > 0{
@@ -159,13 +199,15 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         self.view.addSubview(tableView)
     }
     func resetPrivacyData(){
-        if dataSource.count > 1{
-            dataSource.remove(at: 1)
+        if dataSource.isEmpty {
+            dataSource = [[], []]
+        } else {
+            dataSource = [dataSource[0], []]
         }
         if enableSessionReplay {
-            dataSource.insert(["Allow","MaskUserInput","Mask"], at: 1)
-        }else{
-            dataSource.insert([], at: 1)
+            dataSource.append(SessionReplayPrivacySection.image.options)
+            dataSource.append(SessionReplayPrivacySection.touch.options)
+            dataSource.append(SessionReplayPrivacySection.textInput.options)
         }
         self.tableView.reloadData()
     }
@@ -173,8 +215,10 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         let alert = UIAlertController(title: NSLocalizedString("attention", comment: "Attention"), message: NSLocalizedString("sdk_config_restart_message", comment: "SDK configuration restart message"), preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: "Cancel"), style: .cancel))
                 alert.addAction(UIAlertAction(title: NSLocalizedString("confirm", comment: "Confirm"), style: .default,handler: { action in
-             UserDefaults.sessionReplayPrivacy = self.srPrivacy
-                        UserDefaults.enableSessionReplay = self.enableSessionReplay
+            UserDefaults.sessionReplayImagePrivacy = self.imagePrivacy
+            UserDefaults.sessionReplayTouchPrivacy = self.touchPrivacy
+            UserDefaults.sessionReplayTextPrivacy = self.textPrivacy
+            UserDefaults.enableSessionReplay = self.enableSessionReplay
             UserDefaults.isDataKit = self.isDataKit
             let itemArray:Array<CellInfo> = self.dataSource[0] as! Array<CellInfo>
             for item in itemArray {
@@ -345,10 +389,12 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
             }
         }else{
             let cell = UITableViewCell(style: .default, reuseIdentifier: "privacyCell")
-            let array:Array<String> =  self.dataSource[1] as! Array<String>
+            let array:Array<String> =  self.dataSource[indexPath.section] as! Array<String>
             cell.textLabel?.text = array[indexPath.row]
-            if indexPath.row == self.srPrivacy {
+            if isPrivacySelected(at: indexPath) {
                 cell.accessoryType = .checkmark
+            } else {
+                cell.accessoryType = .none
             }
             return cell
         }
@@ -360,40 +406,40 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         return dataSource[section].count
     }
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return dataSource.count
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 ,indexPath.row == dataSource[0].count{
             self.confirmClick()
-        }else if indexPath.section == 1 {
-            let oldIndexPath = IndexPath(row: self.srPrivacy, section: 1)
-            let newCell = tableView.cellForRow(at: indexPath)
-            if let cell = newCell {
-                if (cell.accessoryType == .none) {
-                    cell.accessoryType = .checkmark
-                    self.srPrivacy = indexPath.row
-                    let oldCell = tableView.cellForRow(at: oldIndexPath)
-                    if let oldCell = oldCell {
-                        oldCell.accessoryType = .none
-                    }
-                }
-            }
+        }else if enableSessionReplay {
+            updatePrivacySelection(at: indexPath)
+            tableView.reloadSections(IndexSet(integer: indexPath.section), with: .none)
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if(section == 0){
             return self.chooseDeploymentTypeView
-        }else{
+        }else if section == 1 {
             return self.chooseSessionReplayView
         }
+        return nil
+    }
+
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        guard enableSessionReplay, section > 1 else {
+            return nil
+        }
+        return SessionReplayPrivacySection(rawValue: section - 2)?.title
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
             return 65
+        } else if section == 1 {
+            return 60
         }
-        return 60
+        return 30
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
@@ -402,6 +448,32 @@ class ConfigurationVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
             }
         }
         return 44
+    }
+
+    private func isPrivacySelected(at indexPath: IndexPath) -> Bool {
+        switch indexPath.section {
+        case 2:
+            return indexPath.row == imagePrivacy
+        case 3:
+            return indexPath.row == touchPrivacy
+        case 4:
+            return indexPath.row == textPrivacy
+        default:
+            return false
+        }
+    }
+
+    private func updatePrivacySelection(at indexPath: IndexPath) {
+        switch indexPath.section {
+        case 2:
+            imagePrivacy = indexPath.row
+        case 3:
+            touchPrivacy = indexPath.row
+        case 4:
+            textPrivacy = indexPath.row
+        default:
+            break
+        }
     }
 
     

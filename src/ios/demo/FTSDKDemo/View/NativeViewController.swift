@@ -31,7 +31,7 @@ class NativeViewController: UIViewController,UITableViewDataSource,UITableViewDe
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "native"
+        title = NSLocalizedString("technical_native_entry_title", comment: "Technical native entry title")
         // Do any additional setup after loading the view.
         createUI()
     }
@@ -122,4 +122,3 @@ extension UInt64{
         return hexString.padding(toLength: 16, withPad: "0", startingAt: 0)
     }
 }
-

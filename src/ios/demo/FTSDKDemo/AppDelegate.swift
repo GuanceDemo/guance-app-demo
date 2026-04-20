@@ -75,18 +75,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if UserDefaults.enableSessionReplay {
             // Session Replay Configure
             let srConfig = FTSessionReplayConfig()
-            var privacy:FTSRPrivacy = .mask
-            switch UserDefaults.sessionReplayPrivacy {
+            switch UserDefaults.sessionReplayImagePrivacy {
             case 0:
-                privacy = .allow
+                srConfig.imagePrivacy = .maskNonBundledOnly
             case 1:
-                privacy = .maskUserInput
+                srConfig.imagePrivacy = .maskAll
             case 2:
-                privacy = .mask
+                srConfig.imagePrivacy = .maskNone
             default:
-                privacy = .mask
+                srConfig.imagePrivacy = .maskAll
             }
-            srConfig.privacy = privacy
+            switch UserDefaults.sessionReplayTouchPrivacy {
+            case 0:
+                srConfig.touchPrivacy = .show
+            case 1:
+                srConfig.touchPrivacy = .hide
+            default:
+                srConfig.touchPrivacy = .hide
+            }
+            switch UserDefaults.sessionReplayTextPrivacy {
+            case 0:
+                srConfig.textAndInputPrivacy = .maskSensitiveInputs
+            case 1:
+                srConfig.textAndInputPrivacy = .maskAllInputs
+            case 2:
+                srConfig.textAndInputPrivacy = .maskAll
+            default:
+                srConfig.textAndInputPrivacy = .maskAll
+            }
             srConfig.sampleRate = 100
             FTRumSessionReplay.shared().start(with: srConfig)
         }
@@ -113,4 +129,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
 }
-

@@ -13,6 +13,8 @@ let  DEFAULT_DATAKIT_URL = "http://127.0.0.1:9529"
 let  DEFAULT_CLIENT_ID = "[Dataway Client Token]"
 let  DEFAULT_BASE_URL = "http://127.0.0.1:8000"
 let  DEFAULT_OTEL_URL = "http://10.0.0.1:9529/otel/v1/traces"
+let  DEFAULT_SR_IMAGE_PRIVACY = 1
+let  DEFAULT_SR_TOUCH_PRIVACY = 1
 let  DEFAULT_SR_TEXT_PRIVACY = 2
 
 let  DEFAULT_USER_ACCOUNT = "guance"
@@ -23,6 +25,8 @@ let  KEY_USER_INFO = "key_user_info"
 let  KEY_LOGIN = "key_login"
 let  KEY_IS_DATAKIT = "key_is_datakit"
 let  KEY_BASE_URL = "key_baseurl"
+let  KEY_SR_IMAGE_PRIVACY = "key_sr_image_privacy"
+let  KEY_SR_TOUCH_PRIVACY = "key_sr_touch_privacy"
 let  KEY_SR_TEXT_PRIVACY = "key_sr_text_privacy"
 let  KEY_SR_ENABLE = "key_sr_enable"
 let  KEY_USER_ACCOUNT = "key_user_account"
@@ -86,8 +90,12 @@ public extension UserDefaults {
     @UserDefaultsWrapper(key: KEY_IS_DATAKIT,defaultValue: true,storage: .shared)  static var isDataKit: Bool
     // Record whether SR (Session Replay) feature is enabled, default is off
     @UserDefaultsWrapper(key: KEY_SR_ENABLE,defaultValue: false,storage: .shared)  static var enableSessionReplay: Bool
-    // SR text privacy permission, default is off
-    @UserDefaultsWrapper(key: KEY_SR_TEXT_PRIVACY,defaultValue:DEFAULT_SR_TEXT_PRIVACY,storage: .shared)  static var sessionReplayPrivacy: Int
+    // SR image privacy permission
+    @UserDefaultsWrapper(key: KEY_SR_IMAGE_PRIVACY,defaultValue:DEFAULT_SR_IMAGE_PRIVACY,storage: .shared)  static var sessionReplayImagePrivacy: Int
+    // SR touch privacy permission
+    @UserDefaultsWrapper(key: KEY_SR_TOUCH_PRIVACY,defaultValue:DEFAULT_SR_TOUCH_PRIVACY,storage: .shared)  static var sessionReplayTouchPrivacy: Int
+    // SR text and input privacy permission
+    @UserDefaultsWrapper(key: KEY_SR_TEXT_PRIVACY,defaultValue:DEFAULT_SR_TEXT_PRIVACY,storage: .shared)  static var sessionReplayTextPrivacy: Int
 
     
     // Record the last entered username

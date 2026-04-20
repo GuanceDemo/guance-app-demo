@@ -10,12 +10,22 @@ import WebKit
 class WebViewController: UIViewController,WKNavigationDelegate,WKUIDelegate {
     var webView:WKWebView!
     var progressView: UIProgressView!
-    var website = NetworkEngine.shared.webView
+    var website: String
+
+    init(title: String = "WebView", website: String = NetworkEngine.shared.webView) {
+        self.website = website
+        super.init(nibName: nil, bundle: nil)
+        self.title = title
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .navigationBackgroundColor
-        title = "WebView"
         createUI()
     }
     func createUI(){

@@ -45,7 +45,7 @@ class ProductAdapter(
                 .placeholder(R.drawable.ic_android)
                 .error(R.drawable.ic_android)
                 .fit()
-                .centerInside()
+                .centerCrop()
                 .into(productImage)
 
             productTag.text = item.tag
