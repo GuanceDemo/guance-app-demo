@@ -240,7 +240,7 @@ private final class RealScenarioListViewController: UIViewController, UITableVie
         table.delegate = self
         table.dataSource = self
         table.register(ProductListCell.self, forCellReuseIdentifier: ProductListCell.reuseIdentifier)
-        table.rowHeight = 156
+        table.rowHeight = 176
         table.tableFooterView = UIView()
         table.separatorStyle = .none
         table.backgroundColor = .systemGroupedBackground
@@ -396,7 +396,7 @@ private final class ProductListCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textColor = .label
-        label.numberOfLines = 2
+        label.numberOfLines = 3
         return label
     }()
 
@@ -405,7 +405,7 @@ private final class ProductListCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 13)
         label.textColor = .secondaryLabel
-        label.numberOfLines = 2
+        label.numberOfLines = 1
         return label
     }()
 
@@ -473,7 +473,7 @@ private final class ProductListCell: UITableViewCell {
         textStack.addArrangedSubview(titleLabel)
         textStack.addArrangedSubview(subtitleLabel)
 
-        let priceRow = UIStackView(arrangedSubviews: [priceLabel, ratingLabel])
+        let priceRow = UIStackView(arrangedSubviews: [priceLabel, UIView(), ratingLabel])
         priceRow.axis = .horizontal
         priceRow.alignment = .center
         priceRow.spacing = 8
@@ -485,15 +485,15 @@ private final class ProductListCell: UITableViewCell {
             cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
 
-            productImageView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 14),
-            productImageView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 14),
-            productImageView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -14),
-            productImageView.widthAnchor.constraint(equalToConstant: 116),
-
             textStack.leadingAnchor.constraint(equalTo: productImageView.trailingAnchor, constant: 12),
             textStack.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -14),
             textStack.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 14),
-            textStack.bottomAnchor.constraint(lessThanOrEqualTo: cardView.bottomAnchor, constant: -14)
+            textStack.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -14),
+
+            productImageView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 14),
+            productImageView.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),
+            productImageView.widthAnchor.constraint(equalToConstant: 132),
+            productImageView.heightAnchor.constraint(equalTo: productImageView.widthAnchor, multiplier: 2.0 / 3.0)
         ])
     }
 
