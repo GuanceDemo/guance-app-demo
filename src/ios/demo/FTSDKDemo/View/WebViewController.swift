@@ -16,6 +16,7 @@ class WebViewController: UIViewController,WKNavigationDelegate,WKUIDelegate {
         self.website = website
         super.init(nibName: nil, bundle: nil)
         self.title = title
+        self.hidesBottomBarWhenPushed = true
     }
 
     @available(*, unavailable)
