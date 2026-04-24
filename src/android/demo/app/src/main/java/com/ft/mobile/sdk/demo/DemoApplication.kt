@@ -16,6 +16,7 @@ import com.ft.sdk.FTTraceConfig
 import com.ft.sdk.garble.utils.LogUtils
 import com.ft.sdk.sessionreplay.FTSessionReplayConfig
 import com.ft.sdk.sessionreplay.ImagePrivacy
+import com.ft.sdk.sessionreplay.compose.ComposeExtensionSupport
 import com.ft.sdk.sessionreplay.material.MaterialExtensionSupport
 import com.ft.sdk.sessionreplay.TextAndInputPrivacy
 import com.ft.sdk.sessionreplay.TouchPrivacy
@@ -117,6 +118,7 @@ open class DemoApplication : Application() {
                     .setTouchPrivacy(data.sessionReplayTouchPrivacy)
                     .setTextAndInputPrivacy(data.sessionReplayTextAndInputPrivacy)
                     .addExtensionSupport(MaterialExtensionSupport())
+                    .addExtensionSupport(ComposeExtensionSupport())
                 FTSdk.initSessionReplayConfig(sessionReplayConfig)
             }
         }

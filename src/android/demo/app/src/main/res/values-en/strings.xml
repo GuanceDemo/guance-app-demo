@@ -114,6 +114,7 @@
     <string name="technical_webview_entry_title">WebView Demo</string>
     <string name="technical_webview_entry_description">Open the standalone WebView test page to validate JS SDK setup and interaction tracking.</string>
     <string name="product_feed_intro">The product feed is loaded from Flask. Tap a product to open the native detail page, then continue into the H5 product page to validate list, detail, buttons, requests, and WebView coverage.</string>
+    <string name="real_scenario_compose_entry">Compose</string>
     <string name="real_scenario_empty_text">No product data available</string>
     <string name="real_scenario_load_failed">Load failed: %1$s</string>
     <string name="product_specs_prefix">Product Specs</string>

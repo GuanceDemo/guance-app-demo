@@ -2,6 +2,8 @@ package com.ft.mobile.sdk.demo
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -9,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ft.mobile.sdk.demo.adapter.ProductAdapter
+import com.ft.mobile.sdk.demo.compose.RealScenarioComposeListActivity
 import com.ft.mobile.sdk.demo.data.ProductItem
 import com.ft.mobile.sdk.demo.manager.SettingConfigManager
 import com.ft.mobile.sdk.demo.http.OkHttpClientInstance
@@ -54,6 +57,20 @@ class RealScenarioListActivity : BaseActivity(), ProductAdapter.OnItemClickListe
         }
 
         loadProducts(showLoading = true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.real_scenario_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_real_scenario_compose) {
+            FTRUMGlobalManager.get().startAction("open_compose_real_scenario", "click")
+            startActivity(Intent(this, RealScenarioComposeListActivity::class.java))
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun loadProducts(showLoading: Boolean) {

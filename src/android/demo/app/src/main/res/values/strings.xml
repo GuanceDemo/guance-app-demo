@@ -114,6 +114,7 @@
     <string name="technical_webview_entry_title">WebView Demo</string>
     <string name="technical_webview_entry_description">直接进入 WebView 测试页，验证 JS SDK 与页面交互采集</string>
     <string name="product_feed_intro">商品流由 Flask 提供真实列表数据。点击商品进入 Native 详情，再打开 H5 商品页，完整验证列表、详情、按钮、请求和 WebView 能力。</string>
+    <string name="real_scenario_compose_entry">Compose 版</string>
     <string name="real_scenario_empty_text">暂无商品数据</string>
     <string name="real_scenario_load_failed">加载失败：%1$s</string>
     <string name="product_specs_prefix">商品参数</string>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_real_scenario_compose"
+        android:icon="@drawable/ic_compose_24"
+        android:title="@string/real_scenario_compose_entry"
+        app:showAsAction="always" />
+</menu>
