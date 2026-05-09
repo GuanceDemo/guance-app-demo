@@ -4,7 +4,14 @@
     "pages/LoginPage",
     "pages/MainPage",
     "pages/SettingPage",
+    "pages/RealScenarioListPage",
+    "pages/RealScenarioDetailPage",
+    "pages/TechnicalVerificationPage",
     "pages/NativePage",
+    "pages/NativeArkUIDemoPage",
+    "pages/NativeArkUIDetailPage",
+    "pages/NativeSessionReplayPage",
+    "pages/NativeManualPage",
     "pages/WebViewPage"
   ]
 }

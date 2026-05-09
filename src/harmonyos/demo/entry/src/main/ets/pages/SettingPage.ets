@@ -16,6 +16,7 @@ import {
 } from '../constants/Constant';
 import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
 import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
+import { AppNavBar } from '../components/AppNavBar';
 
 // Clipboard configuration prefix
 const CONFIG_PREFIX = 'gc-demo://';
@@ -51,32 +52,13 @@ struct SettingPage {
 
   build() {
     Column() {
-      // Title bar
-      Row() {
-        // Back arrow
-        Image($r('app.media.arrow_left'))
-          .width(24)
-          .height(24)
-          .onClick(() => {
-            router.back();
-          })
-
-        Text('Edit Demo Config')
-          .fontSize(20)
-          .fontWeight(FontWeight.Bold)
-          .fontColor('#333333')
-          .layoutWeight(1)
-          .textAlign(TextAlign.Center)
-
-        // Placeholder to keep title centered
-        Row()
-          .width(24)
-          .height(24)
-      }
-      .width('100%')
-      .height(56)
-      .padding({ left: 16, right: 16 })
-      .backgroundColor('#FFFFFF')
+      AppNavBar({
+        title: '编辑 Demo 配置',
+        showBack: true,
+        onBack: () => {
+          router.back();
+        }
+      })
 
       Scroll() {
         Column() {

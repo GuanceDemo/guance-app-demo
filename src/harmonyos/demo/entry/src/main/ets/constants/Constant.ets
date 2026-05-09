@@ -17,6 +17,7 @@ export const DEFAULT_PASSWORD: string = 'admin';
 // API paths
 export const API_LOGIN: string = '/api/login';
 export const API_USER_INFO: string = '/api/user';
+export const API_PRODUCTS: string = '/api/products';
 export const API_CONNECT: string = '/connect';
 export const API_DATAKIT_PING: string = '/v1/ping';
 export const API_DATAWAY_CHECK_LOG: string = '/v1/write/logging?token=%s&to_headless=true';
@@ -37,3 +38,4 @@ export const KEY_API_ADDRESS: string = 'demoApiAddress';
 export const KEY_APP_ID: string = 'demoAppId';
 export const KEY_ENABLE_SESSION_REPLAY: string = 'demoEnableSessionReplay';
 export const KEY_SESSION_REPLAY_PRIVACY_TYPE: string = 'demoEnableSessionReplayPrivacyType';
+export const KEY_DYNAMIC_TAG: string = 'dynamic_tag';

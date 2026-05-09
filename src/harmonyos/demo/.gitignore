@@ -29,3 +29,4 @@ oh_modules/
 .hvigor/
 .local/
 oh-package-lock.json5
+build-profile.json5

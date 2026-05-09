@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig, AxiosHeaders } from '@ohos/axios';
 import { applyFTAxiosTrack } from '@guancecloud/ft_sdk/src/main/ets/components/network/FTHttpAutoTrack';
 import { UserData, JsonObject } from '../model/UserData';
+import { ProductDetail, ProductItem, ProductSpec } from '../model/ProductData';
 import { BaseData, ConnectData, ReturnResult } from './BaseData';
 import { Utils } from '../utils/Utils';
 import {
@@ -8,6 +9,7 @@ import {
   API_DATAKIT_PING,
   API_DATAWAY_CHECK_LOG,
   API_LOGIN,
+  API_PRODUCTS,
   API_USER_INFO
 } from '../constants/Constant';
 
@@ -77,6 +79,24 @@ export class HttpEngine {
     return new ConnectData(result);
   }
 
+  static async products(demoAPIUrl: string): Promise<ProductItem[]> {
+    const url = `${demoAPIUrl}${API_PRODUCTS}`;
+    const result = await HttpEngine.request(url, 'GET');
+    if (result.code !== 200 || !result.result) {
+      throw new Error(HttpEngine.buildErrorMessage(result));
+    }
+    return HttpEngine.parseProductList(result.result, demoAPIUrl);
+  }
+
+  static async productDetail(demoAPIUrl: string, productId: string): Promise<ProductDetail> {
+    const url = `${demoAPIUrl}${API_PRODUCTS}/${productId}`;
+    const result = await HttpEngine.request(url, 'GET');
+    if (result.code !== 200 || !result.result) {
+      throw new Error(HttpEngine.buildErrorMessage(result));
+    }
+    return HttpEngine.parseProductDetail(result.result, demoAPIUrl);
+  }
+
   private static async request(
     url: string,
     method: string,
@@ -125,5 +145,69 @@ export class HttpEngine {
     }
 
     return data;
+  }
+
+  private static parseProductList(jsonText: string, demoAPIUrl: string): ProductItem[] {
+    const items: ProductItem[] = [];
+    const array = JSON.parse(jsonText) as Array<Record<string, Object>>;
+    for (const item of array) {
+      items.push(HttpEngine.parseProductItem(item, demoAPIUrl));
+    }
+    return items;
+  }
+
+  private static parseProductDetail(jsonText: string, demoAPIUrl: string): ProductDetail {
+    const json = JSON.parse(jsonText) as Record<string, Object>;
+    const detail = new ProductDetail(HttpEngine.parseProductItem(json, demoAPIUrl));
+    detail.stock = HttpEngine.getString(json, 'stock');
+    detail.description = HttpEngine.getString(json, 'description');
+
+    const highlights = json['highlights'] as Array<Object> | undefined;
+    if (highlights) {
+      detail.highlights = highlights.map((value: Object): string => String(value));
+    }
+
+    const specs = json['specs'] as Record<string, Object> | undefined;
+    if (specs) {
+      detail.specs = Object.keys(specs).map((key: string): ProductSpec => {
+        return new ProductSpec(key, String(specs[key]));
+      });
+    }
+
+    return detail;
+  }
+
+  private static parseProductItem(json: Record<string, Object>, demoAPIUrl: string): ProductItem {
+    return new ProductItem(
+      HttpEngine.getString(json, 'id'),
+      HttpEngine.getString(json, 'title'),
+      HttpEngine.getString(json, 'subtitle'),
+      HttpEngine.resolveImageUrl(demoAPIUrl, HttpEngine.getString(json, 'image_url')),
+      HttpEngine.getString(json, 'price'),
+      HttpEngine.getString(json, 'rating'),
+      HttpEngine.getString(json, 'tag')
+    );
+  }
+
+  private static getString(json: Record<string, Object>, key: string): string {
+    const value = json[key];
+    if (value === undefined || value === null) {
+      return '';
+    }
+    return String(value);
+  }
+
+  private static resolveImageUrl(demoAPIUrl: string, imageUrl: string): string {
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+      return imageUrl;
+    }
+    return `${demoAPIUrl.replace(/\/$/, '')}/${imageUrl.replace(/^\//, '')}`;
+  }
+
+  private static buildErrorMessage(result: ReturnResult): string {
+    if (result.result) {
+      return `HTTP ${result.code}: ${result.result}`;
+    }
+    return `HTTP ${result.code}`;
   }
 }

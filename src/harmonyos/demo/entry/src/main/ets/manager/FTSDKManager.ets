@@ -2,6 +2,8 @@ import { Context, common } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
 import { AccessType } from '../constants/AccessType';
+import { PreferencesUtil } from '../utils/PreferencesUtil';
+import { KEY_DYNAMIC_TAG } from '../constants/Constant';
 import { FTSDK } from '@guancecloud/ft_sdk/src/main/ets/components/FTSDK';
 import { FTSDKConfig, FTRUMConfig, FTLoggerConfig, FTTraceConfig } from '@guancecloud/ft_sdk/src/main/ets/components/Configs';
 import { EnvType, SyncPageSize, DBCacheDiscard } from '@guancecloud/ft_sdk/src/main/ets/components/enum/Enums';
@@ -57,6 +59,7 @@ export class FTSDKManager {
 
     try {
       const setting = await SettingConfigManager.readSetting();
+      const dynamicTag = await PreferencesUtil.getString(KEY_DYNAMIC_TAG, 'not set');
 
       // 1. Configure FTSDKConfig
       let sdkConfig: FTSDKConfig;
@@ -114,6 +117,12 @@ export class FTSDKManager {
 
       FTSDK.installRUMConfig(rumConfig);
       hilog.info(DOMAIN, TAG, 'FTRUMConfig installed successfully');
+
+      const dynamicContext = new Map<string, string>();
+      dynamicContext.set(KEY_DYNAMIC_TAG, dynamicTag);
+      FTSDK.appendGlobalContext(dynamicContext);
+      FTSDK.appendRUMGlobalContext(dynamicContext);
+      hilog.info(DOMAIN, TAG, `Dynamic tag installed: ${dynamicTag}`);
 
       // 4. Configure FTTraceConfig (Trace configuration)
       const traceConfig: FTTraceConfig = new FTTraceConfig()

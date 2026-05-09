@@ -5,6 +5,8 @@ import { FTWebViewHandler } from '@guancecloud/ft_sdk/src/main/ets/components/we
 import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
 import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
 import { FTSDK } from '@guancecloud/ft_sdk/src/main/ets/components/FTSDK';
+import { AppColors } from '../constants/UIConstants';
+import { AppNavBar } from '../components/AppNavBar';
 
 /**
  * WebView page - Supports WebView RUM monitoring
@@ -36,42 +38,24 @@ struct WebViewPage {
 
   build() {
     Column() {
-      // Title bar
-      Row() {
-        // Back arrow
-        Image($r('app.media.arrow_left'))
-          .width(24)
-          .height(24)
-          .onClick(() => {
-            router.back();
-          })
-
-        Text(this.webTitle)
-          .fontSize(20)
-          .fontWeight(FontWeight.Bold)
-          .fontColor('#333333')
-          .layoutWeight(1)
-          .textAlign(TextAlign.Center)
-
-        // Refresh button
-        Text('\uE645')
-          .fontSize(24)
-          .fontColor('#FF6600')
-          .onClick(() => {
-            this.refresh();
-          })
-      }
-      .width('100%')
-      .height(56)
-      .padding({ left: 16, right: 16 })
-      .backgroundColor('#FFFFFF')
+      AppNavBar({
+        title: this.webTitle,
+        showBack: true,
+        rightText: '\uE645',
+        onBack: () => {
+          router.back();
+        },
+        onRightClick: () => {
+          this.refresh();
+        }
+      })
 
       // Progress bar
       if (this.isLoading) {
         Progress({ value: 50, total: 100 })
           .width('100%')
           .height(2)
-          .color('#FF6600')
+          .color(AppColors.PRIMARY)
       }
 
       // WebView
@@ -113,6 +97,18 @@ struct WebViewPage {
    */
   async loadUrl(): Promise<void> {
     try {
+      let params: Record<string, string> = {};
+      const routerParams = router.getParams();
+      if (routerParams) {
+        params = routerParams as Record<string, string>;
+      }
+      if (params['url']) {
+        this.url = params['url'];
+        this.webTitle = params['title'] ?? this.webTitle;
+        console.info('Loading WebView URL from params:', this.url);
+        return;
+      }
+
       const setting = await SettingConfigManager.readSetting();
       // Build URL with user information
       this.url = `${setting.demoApiAddress}?requestUrl=${setting.getUserInfoUrl()}`;

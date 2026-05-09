@@ -7,6 +7,7 @@ import { AccessType } from '../constants/AccessType';
 import { bundleManager } from '@kit.AbilityKit';
 import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
 import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
+import { AppNavBar } from '../components/AppNavBar';
 
 /**
  * User profile page
@@ -26,163 +27,146 @@ export struct MinePage {
   }
 
   build() {
-    Refresh({ refreshing: this.isRefreshing, friction: 100 }) {
-      Scroll() {
-        Column() {
-          // Title bar
-          Text('Mine')
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-            .fontColor('#333333')
-            .width('100%')
-            .padding({ top: 12, bottom: 12 })
-            .textAlign(TextAlign.Center)
-          // User info card
-          Row() {
-            // Avatar
-            if (this.userData.avatar) {
-              Image(this.userData.avatar)
-                .width(64)
-                .height(64)
-                .borderRadius(32)
-                .objectFit(ImageFit.Cover)
-                .border({ width: 2, color: '#FFFFFF' })
-                .shadow({ radius: 8, color: '#1A000000', offsetX: 0, offsetY: 2 })
-            } else {
-              Text('\uE43C')
-                .fontSize(64)
-                .fontColor('#CCCCCC')
-                .width(64)
-                .height(64)
-            }
-
-            // User info
-            Column() {
-              Text(this.userData.username || 'SomeOne')
-                .fontSize(18)
-                .fontWeight(FontWeight.Medium)
-                .fontColor('#333333')
-
-              Text(this.userData.email || 'someone@example.com')
-                .fontSize(14)
-                .fontColor('#999999')
-                .margin({ top: 4 })
-
-              Text('[Click user info box or pull down to refresh]')
-                .fontSize(12)
-                .fontColor('#FF6600')
-                .margin({ top: 6 })
-            }
-            .alignItems(HorizontalAlign.Start)
-            .layoutWeight(1)
-            .margin({ left: 16 })
-          }
-          .width('100%')
-          .alignItems(VerticalAlign.Center)
-          .padding(20)
-          .backgroundColor('#FFFFFF')
-          .borderRadius(12)
-          .shadow({ radius: 12, color: '#0D000000', offsetX: 0, offsetY: 2 })
-          .onClick(() => {
-            this.loadUserData();
-          })
-
-          // Settings card
+    Column() {
+      AppNavBar({ title: '我的' })
+      Refresh({ refreshing: this.isRefreshing, friction: 100 }) {
+        Scroll() {
           Column() {
-            // Edit configuration item
             Row() {
-              Text('\uE640')
-                .fontSize(22)
-                .fontColor('#FF6600')
-                .margin({ right: 12 })
+              if (this.userData.avatar) {
+                Image(this.userData.avatar)
+                  .width(100)
+                  .height(100)
+                  .borderRadius(50)
+                  .objectFit(ImageFit.Cover)
+              } else {
+                Text('\uE43C')
+                  .fontSize(100)
+                  .fontColor('#CCCCCC')
+                  .width(100)
+                  .height(100)
+              }
 
-              Text('Edit Demo Config')
+              Column() {
+                Text(this.userData.username || 'SomeOne')
+                  .fontSize(20)
+                  .fontColor('#c0c0c0')
+
+                Text(this.userData.email || 'someone@example.com')
+                  .fontSize(16)
+                  .fontColor('#c0c0c0')
+                  .margin({ top: 8 })
+
+                Text('[点击用户信息框或下拉进行刷新]')
+                  .fontSize(12)
+                  .fontColor('#FF6600')
+                  .margin({ top: 8 })
+              }
+              .height(100)
+              .justifyContent(FlexAlign.Center)
+              .alignItems(HorizontalAlign.Start)
+              .layoutWeight(1)
+              .margin({ left: 24 })
+            }
+            .width('100%')
+            .padding({ left: 20, top: 32, bottom: 32, right: 20 })
+            .backgroundColor('#FFFFFF')
+            .onClick(() => {
+              this.refreshUserInfo();
+            })
+
+            Divider()
+              .color('#CCCCCC')
+              .strokeWidth(0.5)
+
+            Divider()
+              .color('#CCCCCC')
+              .strokeWidth(0.5)
+              .margin({ top: 20 })
+
+            Row() {
+              Text('编辑 Demo 配置')
                 .fontSize(16)
-                .fontColor('#FF6600')
+                .fontColor('#000000')
                 .layoutWeight(1)
+                .margin({ left: 8 })
 
               Text(`Type: ${this.accessType}`)
-                .fontSize(14)
-                .fontColor('#999999')
-
-              Text('\uE63C')
                 .fontSize(16)
-                .fontColor('#CCCCCC')
-                .margin({ left: 8 })
+                .fontColor('#c0c0c0')
             }
             .width('100%')
-            .padding({ left: 16, right: 16, top: 16, bottom: 16 })
+            .padding(16)
+            .backgroundColor('#FFFFFF')
             .onClick(() => {
               router.pushUrl({ url: 'pages/SettingPage' });
             })
 
-            // Divider
             Divider()
-              .color('#F0F0F0')
-              .strokeWidth(1)
-              .margin({ left: 16, right: 16 })
+              .color('#2d2d2d')
+              .strokeWidth(0.5)
 
-            // Version number item
             Row() {
-              Text('\uE641')
-                .fontSize(22)
-                .fontColor('#FF6600')
-                .margin({ right: 12 })
-
-              Text('Version')
+              Text('版本号')
                 .fontSize(16)
-                .fontColor('#333333')
+                .fontColor('#000000')
                 .layoutWeight(1)
+                .margin({ left: 8 })
 
               Text(this.appVersion)
-                .fontSize(14)
-                .fontColor('#999999')
-
-              Text('\uE63C')
                 .fontSize(16)
-                .fontColor('#CCCCCC')
-                .margin({ left: 8 })
+                .fontColor('#c0c0c0')
             }
             .width('100%')
             .padding(16)
-          }
-          .width('100%')
-          .backgroundColor('#FFFFFF')
-          .borderRadius(12)
-          .margin({ top: 12 })
-          .shadow({ radius: 8, color: '#08000000', offsetX: 0, offsetY: 1 })
+            .backgroundColor('#FFFFFF')
 
-          // Logout button
-          Button('Logout')
+            Divider()
+              .color('#CCCCCC')
+              .strokeWidth(0.5)
+
+            Divider()
+              .color('#CCCCCC')
+              .strokeWidth(0.5)
+              .margin({ top: 20 })
+
+            Row() {
+              Text('退出登录')
+                .fontSize(16)
+                .fontColor('#FF6600')
+            }
             .width('100%')
-            .height(48)
-            .fontSize(16)
-            .fontWeight(FontWeight.Medium)
-            .backgroundColor('#FF6600')
-            .fontColor('#FFFFFF')
-            .borderRadius(12)
-            .margin({ top: 24, bottom: 24 })
-            .shadow({ radius: 8, color: '#33FF6600', offsetX: 0, offsetY: 2 })
+            .justifyContent(FlexAlign.Center)
+            .padding(16)
+            .backgroundColor('#FFFFFF')
             .onClick(() => {
               this.handleLogout();
             })
+
+            Divider()
+              .color('#CCCCCC')
+              .strokeWidth(0.5)
+          }
+          .width('100%')
+          .backgroundColor('#FFFFFF')
         }
         .width('100%')
-        .padding({ left: 16, right: 16 })
+        .height('100%')
+        .align(Alignment.Top)
+        .backgroundColor('#FFFFFF')
       }
+      .onStateChange((status: RefreshStatus) => {
+        if (status === RefreshStatus.Refresh) {
+          this.refreshUserInfo();
+        }
+      })
       .width('100%')
-      .height('100%')
-      .align(Alignment.Top)
-      .backgroundColor('#F5F5F5')
+      .layoutWeight(1)
+      .backgroundColor('#FFFFFF')
     }
-    .onStateChange((status: RefreshStatus) => {
-      if (status === RefreshStatus.Refresh) {
-        this.refreshUserInfo();
-      }
-    })
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F5F5')
+    .backgroundColor('#FFFFFF')
   }
 
   /**
@@ -192,7 +176,6 @@ export struct MinePage {
     const data = AccountManager.getUserData();
     if (data) {
       this.userData = data;
-      promptAction.showToast({ message: 'Refresh successful', duration: 1000 });
       // Log user data loading success
       FTLogger.logBackground('User data loaded successfully', Status.INFO);
     }
@@ -225,16 +208,15 @@ export struct MinePage {
     if (success) {
       const data = AccountManager.getUserData();
       if (data) {
-        console.info("datadatadata",JSON.stringify(data))
         this.userData = data;
       }
       // Log refresh success
       FTLogger.logBackground('User info refreshed successfully', Status.INFO);
-      promptAction.showToast({ message: 'Refresh successful', duration: 1500 });
+      promptAction.showToast({ message: 'Success', duration: 1500 });
     } else {
       // Log refresh failure
       FTLogger.logBackground('Failed to refresh user info', Status.ERROR);
-      promptAction.showToast({ message: 'Refresh failed', duration: 1500 });
+      promptAction.showToast({ message: 'Fail', duration: 1500 });
     }
   }
 
