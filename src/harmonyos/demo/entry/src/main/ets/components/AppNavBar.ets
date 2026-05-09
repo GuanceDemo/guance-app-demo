@@ -26,7 +26,7 @@ export struct AppNavBar {
         .fontWeight(FontWeight.Bold)
         .fontColor(AppColors.WHITE)
         .layoutWeight(1)
-        .textAlign(this.showBack ? TextAlign.Center :TextAlign.LEFT)
+        .textAlign(this.showBack ? TextAlign.Center : TextAlign.Start)
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
 
