@@ -22,6 +22,10 @@ import OpenTelemetry from 'otel_sdk';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
 import { API_USER_INFO } from '../constants/Constant';
 import { AppNavBar } from '../components/AppNavBar';
+import { FeatureCard } from '../components/FeatureCard';
+import { FormSection } from '../components/FormSection';
+import { ListCell } from '../components/ListCell';
+import { AppColors, Spacing, ToastDuration } from '../constants/UIConstants';
 
 /**
  * Property wrapper class - For ArkTS compatibility
@@ -95,69 +99,194 @@ struct NativeManualPage {
           }
         }
         .width('100%')
-        .padding({ top: 12, bottom: 16 })
+        .padding({
+          left: Spacing.SCREEN_HORIZONTAL,
+          right: Spacing.SCREEN_HORIZONTAL,
+          top: Spacing.SECTION_GAP,
+          bottom: Spacing.LG
+        })
       }
       .layoutWeight(1)
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F5F5')
+    .backgroundColor(AppColors.PAGE_BACKGROUND)
   }
 
   @Builder
   BusinessExperienceContent() {
     this.BusinessIntro()
 
-    this.SectionLabel('RUM View Test')
-    this.ActionButton('Custom View Tracking', '#4CAF50', () => {
-      this.handleCustomView();
+    FormSection({
+      title: 'RUM View Test'
     })
+    .margin({ bottom: Spacing.SM })
+    ListCell({
+      title: 'Custom View Tracking',
+      description: '开启自定义 View 并在 3 秒后结束。',
+      iconText: 'V',
+      iconColor: AppColors.SUCCESS,
+      iconBgColor: AppColors.SUCCESS_SOFT,
+      onTap: () => {
+        this.handleCustomView();
+      }
+    })
+    .margin({ bottom: Spacing.SECTION_GAP })
 
-    this.SectionLabel('RUM Action Test')
-    this.ActionButton('Add Custom Action', '#2196F3', () => {
-      this.handleCustomAction();
+    FormSection({
+      title: 'RUM Action Test'
     })
-    this.ActionButton('Action Start/Stop', '#2196F3', () => {
-      this.handleActionStartStop();
+    .margin({ bottom: Spacing.SM })
+    ListCell({
+      title: 'Add Custom Action',
+      description: '立即上报一次自定义点击 Action。',
+      iconText: 'A',
+      iconColor: AppColors.INFO,
+      iconBgColor: AppColors.INFO_SOFT,
+      onTap: () => {
+        this.handleCustomAction();
+      }
     })
+    .margin({ bottom: Spacing.SM })
+    ListCell({
+      title: 'Action Start/Stop',
+      description: '模拟一个持续 2 秒的自定义 Action。',
+      iconText: 'A',
+      iconColor: AppColors.INFO,
+      iconBgColor: AppColors.INFO_SOFT,
+      onTap: () => {
+        this.handleActionStartStop();
+      }
+    })
+    .margin({ bottom: Spacing.SECTION_GAP })
 
-    this.SectionLabel('RUM Error Test')
-    this.ActionButton('Add Custom Error', '#F44336', () => {
-      this.handleCustomError();
+    FormSection({
+      title: 'RUM Error Test'
     })
-    this.ActionButton('Crash Cpp', '#F44336', () => {
-      this.handleCppCrash();
+    .margin({ bottom: Spacing.SM })
+    ListCell({
+      title: 'Add Custom Error',
+      description: '手动上报一条自定义 RUM Error。',
+      iconText: 'E',
+      iconColor: AppColors.WARNING,
+      iconBgColor: AppColors.ERROR_SOFT,
+      onTap: () => {
+        this.handleCustomError();
+      }
     })
+    .margin({ bottom: Spacing.SM })
+    ListCell({
+      title: 'Crash Cpp',
+      description: '触发 Native C++ 崩溃，用于崩溃采集验证。',
+      iconText: 'C',
+      iconColor: AppColors.WARNING,
+      iconBgColor: AppColors.ERROR_SOFT,
+      onTap: () => {
+        this.handleCppCrash();
+      }
+    })
+    .margin({ bottom: Spacing.SECTION_GAP })
 
-    this.SectionLabel('RUM LongTask Test')
-    this.ActionButton('UIBlock(Longtask)', '#FF9800', () => {
-      this.handleLongTask();
+    FormSection({
+      title: 'RUM LongTask Test'
     })
+    .margin({ bottom: Spacing.SM })
+    ListCell({
+      title: 'UIBlock(LongTask)',
+      description: '阻塞主线程并手动上报 LongTask。',
+      iconText: 'L',
+      iconColor: AppColors.ORANGE,
+      iconBgColor: AppColors.WARNING_SOFT,
+      onTap: () => {
+        this.handleLongTask();
+      }
+    })
+    .margin({ bottom: Spacing.SECTION_GAP })
 
-    this.SectionLabel('Log Test')
-    this.ActionButton('Add Custom Log', '#9C27B0', () => {
-      this.handleCustomLog();
+    FormSection({
+      title: 'Log Test'
     })
+    .margin({ bottom: Spacing.SM })
+    ListCell({
+      title: 'Add Custom Log',
+      description: '上报 INFO、WARN、ERROR、DEBUG 和自定义属性日志。',
+      iconText: 'G',
+      iconColor: AppColors.PURPLE,
+      iconBgColor: AppColors.PURPLE_SOFT,
+      onTap: () => {
+        this.handleCustomLog();
+      }
+    })
+    .margin({ bottom: Spacing.SECTION_GAP })
 
-    this.SectionLabel('Global Tag Test')
-    this.ActionButton('Add Global Tag', '#00BCD4', () => {
-      this.handleGlobalTag();
+    FormSection({
+      title: 'Global Tag Test'
     })
+    .margin({ bottom: Spacing.SM })
+    ListCell({
+      title: 'Add Global Tag',
+      description: '追加全局 Context 与 RUM Context 标签。',
+      iconText: 'T',
+      iconColor: AppColors.CYAN,
+      iconBgColor: AppColors.CYAN_SOFT,
+      onTap: () => {
+        this.handleGlobalTag();
+      }
+    })
+    .margin({ bottom: Spacing.SECTION_GAP })
 
-    this.SectionLabel('Network Request Test (Auto Track)')
-    this.ActionButton('Send RCP Network Request', '#3F51B5', () => {
-      this.handleNetworkRequest();
+    FormSection({
+      title: 'Network Request Test',
+      description: '验证 RCP、NetworkKit HTTP 与 Axios 的自动 Resource/Trace 采集。'
     })
-    this.ActionButton('Send HTTP Interceptor Request', '#3F51B5', () => {
-      this.handleHttpInterceptorRequest();
+    .margin({ bottom: Spacing.SM })
+    ListCell({
+      title: 'Send RCP Network Request',
+      description: '使用 RCP Session 发起自动追踪请求。',
+      iconText: 'R',
+      iconColor: AppColors.INDIGO,
+      iconBgColor: AppColors.INDIGO_SOFT,
+      onTap: () => {
+        this.handleNetworkRequest();
+      }
     })
-    this.ActionButton('Send Axios Request', '#3F51B5', () => {
-      this.handleAxiosRequest();
+    .margin({ bottom: Spacing.SM })
+    ListCell({
+      title: 'Send HTTP Interceptor Request',
+      description: '使用 NetworkKit interceptor chain 验证 Resource。',
+      iconText: 'H',
+      iconColor: AppColors.INDIGO,
+      iconBgColor: AppColors.INDIGO_SOFT,
+      onTap: () => {
+        this.handleHttpInterceptorRequest();
+      }
     })
+    .margin({ bottom: Spacing.SM })
+    ListCell({
+      title: 'Send Axios Request',
+      description: '使用 Axios 自动追踪配置发起请求。',
+      iconText: 'X',
+      iconColor: AppColors.INDIGO,
+      iconBgColor: AppColors.INDIGO_SOFT,
+      onTap: () => {
+        this.handleAxiosRequest();
+      }
+    })
+    .margin({ bottom: Spacing.SECTION_GAP })
 
-    this.SectionLabel('链路关联请求')
-    this.ActionButton('发起链路关联请求', '#673AB7', () => {
-      this.handleCreateOtelSpan();
+    FormSection({
+      title: '链路关联请求'
+    })
+    .margin({ bottom: Spacing.SM })
+    ListCell({
+      title: '发起链路关联请求',
+      description: '读取 Demo API 与 OTEL 配置，发起一次链路关联验证。',
+      iconText: 'O',
+      iconColor: AppColors.DEEP_PURPLE,
+      iconBgColor: AppColors.DEEP_PURPLE_SOFT,
+      onTap: () => {
+        this.handleCreateOtelSpan();
+      }
     })
   }
 
@@ -165,136 +294,111 @@ struct NativeManualPage {
   ManualTrackingContent() {
     this.PageIntro()
 
-    this.ManualButton('手动 Action', '对应 Android manual_action_btn，手动添加一次 RUM Action。', '#2196F3', () => {
-      this.handleManualAction();
+    FeatureCard({
+      title: '手动 Action',
+      description: '对应 Android manual_action_btn，手动添加一次 RUM Action。',
+      actionText: '手动 Action',
+      accentColor: AppColors.INFO,
+      accentBgColor: AppColors.INFO_SOFT,
+      onTap: () => {
+        this.handleManualAction();
+      }
     })
+    .margin({ bottom: Spacing.SECTION_GAP })
 
-    this.ManualButton('手动网络设置', '对应 Android 手动 OKHttp 设置，使用 RCP 发起带 FT 自动追踪配置的请求。', '#3F51B5', () => {
-      this.handleNetworkRequest();
+    FeatureCard({
+      title: '手动网络设置',
+      description: '对应 Android 手动 OKHttp 设置，使用 RCP 发起带 FT 自动追踪配置的请求。',
+      actionText: '手动网络设置',
+      accentColor: AppColors.INDIGO,
+      accentBgColor: AppColors.INDIGO_SOFT,
+      onTap: () => {
+        this.handleNetworkRequest();
+      }
     })
+    .margin({ bottom: Spacing.SECTION_GAP })
 
-    this.ManualButton('自定义 EventListener Interceptor', '对应 Android OKHttp 自定义 EventListener Interceptor，使用 NetworkKit interceptor chain 验证 Resource 采集。', '#3F51B5', () => {
-      this.handleHttpInterceptorRequest();
+    FeatureCard({
+      title: '自定义 EventListener Interceptor',
+      description: '对应 Android OKHttp 自定义 EventListener Interceptor，使用 NetworkKit interceptor chain 验证 Resource 采集。',
+      actionText: '自定义 EventListener Interceptor',
+      accentColor: AppColors.INDIGO,
+      accentBgColor: AppColors.INDIGO_SOFT,
+      onTap: () => {
+        this.handleHttpInterceptorRequest();
+      }
     })
+    .margin({ bottom: Spacing.SECTION_GAP })
 
-    this.ManualButton('手动 Trace Resource 自定义', '对应 Android 手动 Trace Resource OkHttp 自定义，使用 Axios interceptor chain 验证 Trace/Resource 关联。', '#3F51B5', () => {
-      this.handleAxiosRequest();
+    FeatureCard({
+      title: '手动 Trace Resource 自定义',
+      description: '对应 Android 手动 Trace Resource OkHttp 自定义，使用 Axios interceptor chain 验证 Trace/Resource 关联。',
+      actionText: '手动 Trace Resource 自定义',
+      accentColor: AppColors.INDIGO,
+      accentBgColor: AppColors.INDIGO_SOFT,
+      onTap: () => {
+        this.handleAxiosRequest();
+      }
     })
+    .margin({ bottom: Spacing.SECTION_GAP })
 
-    this.ManualButton('手动 Trace Resource HTTP 自定义', '对应 Android HttpUrlConnection 自定义，使用 NetworkKit HTTP 请求验证 Resource 数据。', '#3F51B5', () => {
-      this.handleHttpInterceptorRequest();
+    FeatureCard({
+      title: '手动 Trace Resource HTTP 自定义',
+      description: '对应 Android HttpUrlConnection 自定义，使用 NetworkKit HTTP 请求验证 Resource 数据。',
+      actionText: '手动 Trace Resource HTTP 自定义',
+      accentColor: AppColors.INDIGO,
+      accentBgColor: AppColors.INDIGO_SOFT,
+      onTap: () => {
+        this.handleHttpInterceptorRequest();
+      }
     })
+    .margin({ bottom: Spacing.SECTION_GAP })
 
-    this.ManualButton('手动 Error', '对应 Android manual_error_btn，手动上报一条 RUM Error。', '#F44336', () => {
-      this.handleCustomError();
+    FeatureCard({
+      title: '手动 Error',
+      description: '对应 Android manual_error_btn，手动上报一条 RUM Error。',
+      actionText: '手动 Error',
+      accentColor: AppColors.WARNING,
+      accentBgColor: AppColors.ERROR_SOFT,
+      onTap: () => {
+        this.handleCustomError();
+      }
     })
+    .margin({ bottom: Spacing.SECTION_GAP })
 
-    this.ManualButton('手动 LongTask', '对应 Android manual_longtask_btn，手动上报 LongTask。', '#FF9800', () => {
-      this.handleLongTask();
+    FeatureCard({
+      title: '手动 LongTask',
+      description: '对应 Android manual_longtask_btn，手动上报 LongTask。',
+      actionText: '手动 LongTask',
+      accentColor: AppColors.ORANGE,
+      accentBgColor: AppColors.WARNING_SOFT,
+      onTap: () => {
+        this.handleLongTask();
+      }
     })
+    .margin({ bottom: Spacing.SECTION_GAP })
   }
 
   @Builder
   BusinessIntro() {
-    Column() {
-      Text('业务体验')
-        .fontSize(18)
-        .fontWeight(FontWeight.Bold)
-        .fontColor('#333333')
-        .width('100%')
-
-      Text('保留完整 Native 验证功能列表，用于集中验证 RUM、Trace、Resource、Error、Crash、LongTask、Log 与全局 Tag。')
-        .fontSize(13)
-        .fontColor('#666666')
-        .width('100%')
-        .margin({ top: 6 })
-    }
-    .alignItems(HorizontalAlign.Start)
-    .width('calc(100% - 32vp)')
-    .padding(12)
-    .margin({ left: 16, right: 16, bottom: 8 })
-    .backgroundColor('#FFFFFF')
-    .borderRadius(8)
-  }
-
-  @Builder
-  SectionLabel(title: string) {
-    Text(title)
-      .fontSize(14)
-      .fontColor('#666666')
-      .width('100%')
-      .margin({ top: 16, left: 16, bottom: 8 })
-  }
-
-  @Builder
-  ActionButton(title: string, color: string, onClick: () => void) {
-    Button(title)
-      .width('calc(100% - 32vp)')
-      .fontSize(16)
-      .backgroundColor(color)
-      .fontColor('#FFFFFF')
-      .borderRadius(8)
-      .margin({ top: 0, left: 16, right: 16, bottom: 12 })
-      .onClick(() => {
-        onClick();
-      })
+    FeatureCard({
+      title: '业务体验',
+      description: '保留完整 Native 验证功能列表，用于集中验证 RUM、Trace、Resource、Error、Crash、LongTask、Log 与全局 Tag。',
+      accentColor: AppColors.PRIMARY,
+      accentBgColor: AppColors.PRIMARY_SOFT
+    })
+    .margin({ bottom: Spacing.SECTION_GAP })
   }
 
   @Builder
   PageIntro() {
-    Column() {
-      Text('打开手动埋点示例')
-        .fontSize(18)
-        .fontWeight(FontWeight.Bold)
-        .fontColor('#333333')
-        .width('100%')
-
-      Text('参考 Android ManualActivity，集中验证手动 Action、Resource、Trace、Error 与 LongTask。')
-        .fontSize(13)
-        .fontColor('#666666')
-        .width('100%')
-        .margin({ top: 6 })
-    }
-    .alignItems(HorizontalAlign.Start)
-    .width('calc(100% - 32vp)')
-    .padding(12)
-    .margin({ left: 16, right: 16, bottom: 8 })
-    .backgroundColor('#FFFFFF')
-    .borderRadius(8)
-  }
-
-  @Builder
-  ManualButton(title: string, description: string, color: string, onClick: () => void) {
-    Column() {
-      Text(title)
-        .fontSize(16)
-        .fontWeight(FontWeight.Medium)
-        .fontColor('#333333')
-        .width('100%')
-
-      Text(description)
-        .fontSize(12)
-        .fontColor('#666666')
-        .width('100%')
-        .margin({ top: 4, bottom: 10 })
-
-      Button(title)
-        .width('100%')
-        .height(42)
-        .fontSize(15)
-        .backgroundColor(color)
-        .fontColor('#FFFFFF')
-        .borderRadius(8)
-        .onClick(() => {
-          onClick();
-        })
-    }
-    .alignItems(HorizontalAlign.Start)
-    .width('calc(100% - 32vp)')
-    .padding(12)
-    .margin({ left: 16, right: 16, top: 8 })
-    .backgroundColor('#FFFFFF')
-    .borderRadius(8)
+    FeatureCard({
+      title: '打开手动埋点示例',
+      description: '参考 Android ManualActivity，集中验证手动 Action、Resource、Trace、Error 与 LongTask。',
+      accentColor: AppColors.PRIMARY,
+      accentBgColor: AppColors.PRIMARY_SOFT
+    })
+    .margin({ bottom: Spacing.SECTION_GAP })
   }
 
   /**
@@ -306,12 +410,12 @@ struct NativeManualPage {
     property.set('page_id', 'native_page_001');
 
     FTRUMGlobalManager.getInstance().startView('CustomView', property.toObject());
-    promptAction.showToast({ message: 'Custom View tracking started', duration: 1500 });
+    promptAction.showToast({ message: 'Custom View tracking started', duration: ToastDuration.MEDIUM });
 
     // Stop after 3 seconds
     setTimeout(() => {
       FTRUMGlobalManager.getInstance().stopView();
-      promptAction.showToast({ message: 'View tracking stopped', duration: 1000 });
+      promptAction.showToast({ message: 'View tracking stopped', duration: ToastDuration.SHORT });
     }, 3000);
   }
 
@@ -324,7 +428,7 @@ struct NativeManualPage {
     property.set('android_reference', 'manual_action_btn');
 
     FTRUMGlobalManager.getInstance().addActionWithProperty('[action button]', 'click', property.toObject());
-    promptAction.showToast({ message: '手动 Action 已添加', duration: 1500 });
+    promptAction.showToast({ message: '手动 Action 已添加', duration: ToastDuration.MEDIUM });
   }
 
   /**
@@ -336,7 +440,7 @@ struct NativeManualPage {
     property.set('action_category', 'test');
 
     FTRUMGlobalManager.getInstance().addActionWithProperty('test_button_click', 'click', property.toObject());
-    promptAction.showToast({ message: 'Custom Action added', duration: 1500 });
+    promptAction.showToast({ message: 'Custom Action added', duration: ToastDuration.MEDIUM });
   }
 
   /**
@@ -344,12 +448,12 @@ struct NativeManualPage {
    */
   handleActionStartStop(): void {
     FTRUMGlobalManager.getInstance().startAction('long_operation', 'custom');
-    promptAction.showToast({ message: 'Action started', duration: 1000 });
+    promptAction.showToast({ message: 'Action started', duration: ToastDuration.SHORT });
 
     // Simulate time-consuming operation
     setTimeout(() => {
       FTRUMGlobalManager.getInstance().stopAction();
-      promptAction.showToast({ message: 'Action stopped', duration: 1500 });
+      promptAction.showToast({ message: 'Action stopped', duration: ToastDuration.MEDIUM });
     }, 2000);
   }
 
@@ -372,14 +476,14 @@ struct NativeManualPage {
       AppState.RUN,
       property.toObject()
     );
-    promptAction.showToast({ message: 'Custom Error added', duration: 1500 });
+    promptAction.showToast({ message: 'Custom Error added', duration: ToastDuration.MEDIUM });
   }
 
   /**
    * Handle C++ crash test
    */
   handleCppCrash(): void {
-    promptAction.showToast({ message: 'Triggering C++ crash...', duration: 1000 });
+    promptAction.showToast({ message: 'Triggering C++ crash...', duration: ToastDuration.SHORT });
 
     // Trigger C++ crash after a short delay
     setTimeout(() => {
@@ -396,7 +500,7 @@ struct NativeManualPage {
    * Handle long task test
    */
   handleLongTask(): void {
-    promptAction.showToast({ message: 'Starting long task execution...', duration: 1000 });
+    promptAction.showToast({ message: 'Starting long task execution...', duration: ToastDuration.SHORT });
 
     const startTime = Date.now();
 
@@ -416,7 +520,7 @@ struct NativeManualPage {
 
     FTRUMGlobalManager.getInstance().addLongTask('UI Block Task', duration, longTaskProperty);
 
-    promptAction.showToast({ message: 'Long task completed', duration: 1500 });
+    promptAction.showToast({ message: 'Long task completed', duration: ToastDuration.MEDIUM });
   }
 
   /**
@@ -435,7 +539,7 @@ struct NativeManualPage {
     property.set('log_source', new PropertyWrapper('native_page') as object);
     FTLogger.logBackground('Log with properties', Status.INFO, property);
 
-    promptAction.showToast({ message: 'Custom log added', duration: 1500 });
+    promptAction.showToast({ message: 'Custom log added', duration: ToastDuration.MEDIUM });
   }
 
   /**
@@ -455,14 +559,14 @@ struct NativeManualPage {
     rumContext.set('channel', 'official');
     FTSDK.appendRUMGlobalContext(rumContext);
 
-    promptAction.showToast({ message: 'Global tags added', duration: 1500 });
+    promptAction.showToast({ message: 'Global tags added', duration: ToastDuration.MEDIUM });
   }
 
   /**
    * Handle network request test (using RCP auto tracking)
    */
   async handleNetworkRequest(): Promise<void> {
-    promptAction.showToast({ message: 'Sending network request...', duration: 1000 });
+    promptAction.showToast({ message: 'Sending network request...', duration: ToastDuration.SHORT });
 
     try {
       const session = this.createRCPSession();
@@ -471,14 +575,14 @@ struct NativeManualPage {
       const response = await session.fetch(request);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        promptAction.showToast({ message: `Request successful: ${response.statusCode}`, duration: 1500 });
+        promptAction.showToast({ message: `Request successful: ${response.statusCode}`, duration: ToastDuration.MEDIUM });
       } else {
-        promptAction.showToast({ message: `Request failed: ${response.statusCode}`, duration: 1500 });
+        promptAction.showToast({ message: `Request failed: ${response.statusCode}`, duration: ToastDuration.MEDIUM });
       }
     } catch (error) {
       const err = error as BusinessError;
       console.error('Network request failed:', err.message || String(error));
-      promptAction.showToast({ message: 'Network request failed', duration: 1500 });
+      promptAction.showToast({ message: 'Network request failed', duration: ToastDuration.MEDIUM });
     }
   }
 
@@ -486,7 +590,7 @@ struct NativeManualPage {
    * Handle NetworkKit http request test (using interceptor chain auto tracking)
    */
   async handleHttpInterceptorRequest(): Promise<void> {
-    promptAction.showToast({ message: 'Sending http interceptor request...', duration: 1000 });
+    promptAction.showToast({ message: 'Sending http interceptor request...', duration: ToastDuration.SHORT });
 
     try {
       const response = await this.executeHttpRequest('https://httpbin.org/post', {
@@ -502,14 +606,14 @@ struct NativeManualPage {
       });
 
       if (response.responseCode >= 200 && response.responseCode < 300) {
-        promptAction.showToast({ message: `HTTP request successful: ${response.responseCode}`, duration: 1500 });
+        promptAction.showToast({ message: `HTTP request successful: ${response.responseCode}`, duration: ToastDuration.MEDIUM });
       } else {
-        promptAction.showToast({ message: `HTTP request failed: ${response.responseCode}`, duration: 1500 });
+        promptAction.showToast({ message: `HTTP request failed: ${response.responseCode}`, duration: ToastDuration.MEDIUM });
       }
     } catch (error) {
       const err = error as BusinessError;
       console.error('HTTP interceptor request failed:', err.message || String(error));
-      promptAction.showToast({ message: 'HTTP interceptor request failed', duration: 1500 });
+      promptAction.showToast({ message: 'HTTP interceptor request failed', duration: ToastDuration.MEDIUM });
     }
   }
 
@@ -517,7 +621,7 @@ struct NativeManualPage {
    * Handle axios request test (using interceptorChain adapter auto tracking)
    */
   async handleAxiosRequest(): Promise<void> {
-    promptAction.showToast({ message: 'Sending axios request...', duration: 1000 });
+    promptAction.showToast({ message: 'Sending axios request...', duration: ToastDuration.SHORT });
 
     try {
       const payload: AxiosStylePostData = {
@@ -526,11 +630,11 @@ struct NativeManualPage {
         timestamp: Date.now()
       };
       const responseText = await this.executeAxiosRequest('https://httpbin.org/post', payload);
-      promptAction.showToast({ message: `Axios request successful: ${responseText.length} chars`, duration: 1500 });
+      promptAction.showToast({ message: `Axios request successful: ${responseText.length} chars`, duration: ToastDuration.MEDIUM });
     } catch (error) {
       const err = error as BusinessError;
       console.error('Axios request failed:', err.message || String(error));
-      promptAction.showToast({ message: 'Axios request failed', duration: 1500 });
+      promptAction.showToast({ message: 'Axios request failed', duration: ToastDuration.MEDIUM });
     }
   }
 
@@ -539,7 +643,7 @@ struct NativeManualPage {
    * Similar to Android's createSpanWithOtel functionality
    */
   async handleCreateOtelSpan(): Promise<void> {
-    promptAction.showToast({ message: '正在发起链路关联请求...', duration: 1500 });
+    promptAction.showToast({ message: '正在发起链路关联请求...', duration: ToastDuration.MEDIUM });
 
     try {
       const session = this.createRCPSession();
@@ -547,7 +651,7 @@ struct NativeManualPage {
     } catch (error) {
       const errorObj: Error = error as Error;
       console.error('OTEL span creation failed:', errorObj.message);
-      promptAction.showToast({ message: '链路关联请求失败', duration: 1500 });
+      promptAction.showToast({ message: '链路关联请求失败', duration: ToastDuration.MEDIUM });
     }
   }
 
@@ -688,12 +792,12 @@ struct NativeManualPage {
           // End the span
           OpenTelemetry.endSpan(spanId);
 
-          promptAction.showToast({ message: '链路关联请求已完成', duration: 1500 });
+          promptAction.showToast({ message: '链路关联请求已完成', duration: ToastDuration.MEDIUM });
         } else {
-          promptAction.showToast({ message: '链路关联请求失败', duration: 1500 });
+          promptAction.showToast({ message: '链路关联请求失败', duration: ToastDuration.MEDIUM });
         }
       } else {
-        promptAction.showToast({ message: `Request failed: ${response.statusCode}`, duration: 1500 });
+        promptAction.showToast({ message: `Request failed: ${response.statusCode}`, duration: ToastDuration.MEDIUM });
       }
     } catch (error) {
       const errorObj: Error = error as Error;

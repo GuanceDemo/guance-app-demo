@@ -8,6 +8,17 @@ import { bundleManager } from '@kit.AbilityKit';
 import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
 import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
 import { AppNavBar } from '../components/AppNavBar';
+import { ListCell } from '../components/ListCell';
+import {
+  AppColors,
+  BorderRadius,
+  FontSizes,
+  Heights,
+  IconSizes,
+  Spacing,
+  StrokeWidths,
+  ToastDuration
+} from '../constants/UIConstants';
 
 /**
  * User profile page
@@ -29,131 +40,26 @@ export struct MinePage {
   build() {
     Column() {
       AppNavBar({ title: '我的' })
+
       Refresh({ refreshing: this.isRefreshing, friction: 100 }) {
         Scroll() {
           Column() {
-            Row() {
-              if (this.userData.avatar) {
-                Image(this.userData.avatar)
-                  .width(100)
-                  .height(100)
-                  .borderRadius(50)
-                  .objectFit(ImageFit.Cover)
-              } else {
-                Text('\uE43C')
-                  .fontSize(100)
-                  .fontColor('#CCCCCC')
-                  .width(100)
-                  .height(100)
-              }
-
-              Column() {
-                Text(this.userData.username || 'SomeOne')
-                  .fontSize(20)
-                  .fontColor('#c0c0c0')
-
-                Text(this.userData.email || 'someone@example.com')
-                  .fontSize(16)
-                  .fontColor('#c0c0c0')
-                  .margin({ top: 8 })
-
-                Text('[点击用户信息框或下拉进行刷新]')
-                  .fontSize(12)
-                  .fontColor('#FF6600')
-                  .margin({ top: 8 })
-              }
-              .height(100)
-              .justifyContent(FlexAlign.Center)
-              .alignItems(HorizontalAlign.Start)
-              .layoutWeight(1)
-              .margin({ left: 24 })
-            }
-            .width('100%')
-            .padding({ left: 20, top: 32, bottom: 32, right: 20 })
-            .backgroundColor('#FFFFFF')
-            .onClick(() => {
-              this.refreshUserInfo();
-            })
-
-            Divider()
-              .color('#CCCCCC')
-              .strokeWidth(0.5)
-
-            Divider()
-              .color('#CCCCCC')
-              .strokeWidth(0.5)
-              .margin({ top: 20 })
-
-            Row() {
-              Text('编辑 Demo 配置')
-                .fontSize(16)
-                .fontColor('#000000')
-                .layoutWeight(1)
-                .margin({ left: 8 })
-
-              Text(`Type: ${this.accessType}`)
-                .fontSize(16)
-                .fontColor('#c0c0c0')
-            }
-            .width('100%')
-            .padding(16)
-            .backgroundColor('#FFFFFF')
-            .onClick(() => {
-              router.pushUrl({ url: 'pages/SettingPage' });
-            })
-
-            Divider()
-              .color('#2d2d2d')
-              .strokeWidth(0.5)
-
-            Row() {
-              Text('版本号')
-                .fontSize(16)
-                .fontColor('#000000')
-                .layoutWeight(1)
-                .margin({ left: 8 })
-
-              Text(this.appVersion)
-                .fontSize(16)
-                .fontColor('#c0c0c0')
-            }
-            .width('100%')
-            .padding(16)
-            .backgroundColor('#FFFFFF')
-
-            Divider()
-              .color('#CCCCCC')
-              .strokeWidth(0.5)
-
-            Divider()
-              .color('#CCCCCC')
-              .strokeWidth(0.5)
-              .margin({ top: 20 })
-
-            Row() {
-              Text('退出登录')
-                .fontSize(16)
-                .fontColor('#FF6600')
-            }
-            .width('100%')
-            .justifyContent(FlexAlign.Center)
-            .padding(16)
-            .backgroundColor('#FFFFFF')
-            .onClick(() => {
-              this.handleLogout();
-            })
-
-            Divider()
-              .color('#CCCCCC')
-              .strokeWidth(0.5)
+            this.ProfileCard()
+            this.SettingCard()
+            this.LogoutButton()
           }
           .width('100%')
-          .backgroundColor('#FFFFFF')
+          .padding({
+            left: Spacing.SCREEN_HORIZONTAL,
+            right: Spacing.SCREEN_HORIZONTAL,
+            top: Spacing.SECTION_GAP,
+            bottom: Spacing.LG
+          })
         }
         .width('100%')
         .height('100%')
         .align(Alignment.Top)
-        .backgroundColor('#FFFFFF')
+        .backgroundColor(AppColors.PAGE_BACKGROUND)
       }
       .onStateChange((status: RefreshStatus) => {
         if (status === RefreshStatus.Refresh) {
@@ -162,11 +68,143 @@ export struct MinePage {
       })
       .width('100%')
       .layoutWeight(1)
-      .backgroundColor('#FFFFFF')
+      .backgroundColor(AppColors.PAGE_BACKGROUND)
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#FFFFFF')
+    .backgroundColor(AppColors.PAGE_BACKGROUND)
+  }
+
+  @Builder
+  ProfileCard() {
+    Column() {
+      Row() {
+        if (this.userData.avatar) {
+          Image(this.userData.avatar)
+            .width(IconSizes.AVATAR)
+            .height(IconSizes.AVATAR)
+            .borderRadius(IconSizes.AVATAR / 2)
+            .objectFit(ImageFit.Cover)
+        } else {
+          Text(this.getUserInitial())
+            .fontSize(FontSizes.HUGE)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(AppColors.PRIMARY)
+            .textAlign(TextAlign.Center)
+            .width(IconSizes.AVATAR)
+            .height(IconSizes.AVATAR)
+            .backgroundColor(AppColors.PRIMARY_SOFT)
+            .borderRadius(IconSizes.AVATAR / 2)
+        }
+
+        Column() {
+          Text(this.getDisplayName())
+            .fontSize(FontSizes.TITLE)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(AppColors.TEXT_PRIMARY)
+            .width('100%')
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+
+          Text(this.userData.email || 'someone@example.com')
+            .fontSize(FontSizes.NORMAL)
+            .fontColor(AppColors.TEXT_SECONDARY)
+            .width('100%')
+            .margin({ top: Spacing.XS })
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+        }
+        .alignItems(HorizontalAlign.Start)
+        .justifyContent(FlexAlign.Center)
+        .layoutWeight(1)
+        .height(IconSizes.AVATAR)
+        .margin({ left: Spacing.LG })
+      }
+      .width('100%')
+
+      Row() {
+        Text(this.isLoading ? '正在刷新用户信息...' : '点击卡片或下拉刷新用户信息')
+          .fontSize(FontSizes.CAPTION)
+          .fontColor(AppColors.PRIMARY)
+          .layoutWeight(1)
+
+        Text('刷新')
+          .fontSize(FontSizes.CAPTION)
+          .fontColor(AppColors.PRIMARY)
+          .fontWeight(FontWeight.Medium)
+      }
+      .width('100%')
+      .height(Heights.TOUCH_TARGET)
+      .padding({ left: Spacing.MD, right: Spacing.MD })
+      .margin({ top: Spacing.LG })
+      .backgroundColor(AppColors.PRIMARY_SOFT)
+      .borderRadius(BorderRadius.SMALL)
+    }
+    .width('100%')
+    .padding(Spacing.LG)
+    .backgroundColor(AppColors.SURFACE)
+    .borderRadius(BorderRadius.CARD)
+    .border({ width: StrokeWidths.HAIRLINE, color: AppColors.BORDER })
+    .margin({ bottom: Spacing.SECTION_GAP })
+    .onClick(() => {
+      this.refreshUserInfo();
+    })
+  }
+
+  @Builder
+  SettingCard() {
+    Column() {
+      Text('应用信息')
+        .fontSize(FontSizes.MEDIUM)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(AppColors.TEXT_PRIMARY)
+        .width('100%')
+        .margin({ bottom: Spacing.MD })
+
+      ListCell({
+        title: '编辑 Demo 配置',
+        description: '当前接入方式',
+        iconText: 'S',
+        iconColor: AppColors.PRIMARY,
+        iconBgColor: AppColors.PRIMARY_SOFT,
+        valueText: this.accessType,
+        onTap: () => {
+          router.pushUrl({ url: 'pages/SettingPage' });
+        }
+      })
+
+      ListCell({
+        title: '版本号',
+        description: this.appVersion || 'Unknown',
+        iconText: 'V',
+        iconColor: AppColors.INFO,
+        iconBgColor: AppColors.INFO_SOFT,
+        showChevron: false
+      })
+      .margin({ top: Spacing.SM })
+    }
+    .width('100%')
+    .padding(Spacing.LG)
+    .backgroundColor(AppColors.SURFACE)
+    .borderRadius(BorderRadius.CARD)
+    .border({ width: StrokeWidths.HAIRLINE, color: AppColors.BORDER })
+    .margin({ bottom: Spacing.SECTION_GAP })
+  }
+
+  @Builder
+  LogoutButton() {
+    Button('退出登录')
+      .width('100%')
+      .height(Heights.BUTTON)
+      .fontSize(FontSizes.MEDIUM)
+      .fontWeight(FontWeight.Medium)
+      .fontColor(AppColors.PRIMARY)
+      .backgroundColor(AppColors.SURFACE)
+      .border({ width: StrokeWidths.HAIRLINE, color: AppColors.PRIMARY })
+      .borderRadius(BorderRadius.SMALL)
+      .onClick(() => {
+        this.handleLogout();
+      })
   }
 
   /**
@@ -212,11 +250,11 @@ export struct MinePage {
       }
       // Log refresh success
       FTLogger.logBackground('User info refreshed successfully', Status.INFO);
-      promptAction.showToast({ message: 'Success', duration: 1500 });
+      promptAction.showToast({ message: 'Success', duration: ToastDuration.MEDIUM });
     } else {
       // Log refresh failure
       FTLogger.logBackground('Failed to refresh user info', Status.ERROR);
-      promptAction.showToast({ message: 'Fail', duration: 1500 });
+      promptAction.showToast({ message: 'Fail', duration: ToastDuration.MEDIUM });
     }
   }
 
@@ -242,5 +280,14 @@ export struct MinePage {
 
     await AccountManager.logout();
     router.replaceUrl({ url: 'pages/LoginPage' });
+  }
+
+  private getDisplayName(): string {
+    return this.userData.username || 'SomeOne';
+  }
+
+  private getUserInitial(): string {
+    const displayName = this.getDisplayName();
+    return displayName.substring(0, 1).toUpperCase();
   }
 }

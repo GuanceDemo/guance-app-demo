@@ -11,46 +11,62 @@ export struct AppNavBar {
 
   build() {
     Row() {
-      if (this.showBack) {
-        Text('‹')
-          .fontSize(28)
-          .fontColor(AppColors.WHITE)
-          .textAlign(TextAlign.Center)
-          .onClick(() => {
-            this.onBack();
-          })
+      Row() {
+        if (this.showBack) {
+          Text('‹')
+            .fontSize(IconSizes.NAV)
+            .fontColor(AppColors.TEXT_INVERSE)
+            .fontWeight(FontWeight.Medium)
+            .textAlign(TextAlign.Center)
+        }
       }
+      .width(this.showBack ? Heights.TOUCH_TARGET : 0)
+      .height(Heights.TOUCH_TARGET)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
+      .borderRadius(Heights.TOUCH_TARGET / 2)
+      .onClick(() => {
+        if (this.showBack) {
+          this.onBack();
+        }
+      })
 
       Text(this.title)
         .fontSize(FontSizes.TITLE)
         .fontWeight(FontWeight.Bold)
-        .fontColor(AppColors.WHITE)
+        .fontColor(AppColors.TEXT_INVERSE)
         .layoutWeight(1)
         .textAlign(this.showBack ? TextAlign.Center : TextAlign.Start)
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
 
-      if (this.rightText.length > 0) {
-        Text(this.rightText)
-          .fontSize(IconSizes.LARGE)
-          .fontColor(AppColors.WHITE)
-          .width(IconSizes.LARGE)
-          .height(32)
-          .textAlign(TextAlign.Center)
-          .onClick(() => {
-            this.onRightClick();
-          })
-      } else {
-        Row()
-          .width(IconSizes.LARGE)
-          .height(32)
+      Row() {
+        if (this.rightText.length > 0) {
+          Text(this.rightText)
+            .fontSize(FontSizes.MEDIUM)
+            .fontColor(AppColors.TEXT_INVERSE)
+            .fontWeight(FontWeight.Medium)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .textAlign(TextAlign.Center)
+        }
       }
+      .width(this.showBack || this.rightText.length > 0 ? Heights.TOUCH_TARGET : 0)
+      .height(Heights.TOUCH_TARGET)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
+      .borderRadius(Heights.TOUCH_TARGET / 2)
+      .onClick(() => {
+        if (this.rightText.length > 0) {
+          this.onRightClick();
+        }
+      })
     }
     .width('100%')
-    .height(Heights.TOOLBAR)
+    .height(Heights.NAV_BAR)
     .justifyContent(FlexAlign.Center)
     .alignItems(VerticalAlign.Center)
-    .padding({ left: Spacing.LG, right: Spacing.LG })
+    .padding({ left: Spacing.MD, right: Spacing.MD })
     .backgroundColor(AppColors.PRIMARY)
   }
 }
