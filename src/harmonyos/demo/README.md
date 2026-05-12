@@ -33,7 +33,7 @@ This demo currently uses:
 
 ## Prerequisites
 
-- DevEco Studio with HarmonyOS SDK `6.0.0(20)` available
+- DevEco Studio with HarmonyOS SDK `6.0.2(22)` available
 - `ohpm`
 - A reachable Demo API service
 - One of:
