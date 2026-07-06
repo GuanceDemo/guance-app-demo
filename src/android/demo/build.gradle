@@ -17,7 +17,7 @@ buildscript {
         mavenCentral()
         //Add FT SDK remote repository address
         maven {
-            url 'https://mvnrepo.jiagouyun.com/repository/maven-releases'
+            url 'https://mvnrepo.guance.com/repository/maven-releases'
         }
     }
     dependencies {
@@ -67,7 +67,7 @@ allprojects {
         mavenCentral()
         //Add FT SDK remote repository address
         maven {
-            url 'https://mvnrepo.jiagouyun.com/repository/maven-releases'
+            url 'https://mvnrepo.guance.com/repository/maven-releases'
         }
     }
 }
