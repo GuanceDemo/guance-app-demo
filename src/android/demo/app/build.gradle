@@ -167,15 +167,15 @@ dependencies {
     //FT-SDK dependency
 
     // RUM, Log, Trace，
-    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.7.0')
+    implementation('com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.7.4')
     // RUM Error Native Crash
-    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-native:1.1.2'
+    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-native:1.1.3'
     // Session Replay
-    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay:0.1.3'
+    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay:0.1.7'
     // Session Replay Material
-    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay-material:0.1.3'
+    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay-material:0.1.7'
     // Session Replay Compose
-    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay-compose:0.1.3'
+    implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-session-replay-compose:0.1.7'
 
     implementation 'com.google.code.gson:gson:2.8.5'
     // Add this dependency when you need to monitor network data to implement the network engine
