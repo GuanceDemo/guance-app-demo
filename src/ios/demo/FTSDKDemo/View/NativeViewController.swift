@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import FTMobileSDK
+import GuanceSDK
 
 class NativeViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
     var dataSource = Array<String>()

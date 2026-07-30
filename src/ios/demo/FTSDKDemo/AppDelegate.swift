@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import FTMobileSDK
+import GuanceSDK
 
 #if PRE
 let Track_id = "0000000001"
@@ -32,11 +32,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let dynamicTag:String? = UserDefaults.standard.value(forKey: "DYNAMIC_TAG") as? String
         
         // Base SDK Configure
-        var config:FTMobileConfig
+        var config:FTSDKConfig
         if UserDefaults.isDataKit{
-            config = FTMobileConfig.init(datakitUrl: UserDefaults.datakitURL)
+            config = FTSDKConfig.init(datakitUrl: UserDefaults.datakitURL)
         }else{
-            config = FTMobileConfig.init(datawayUrl: UserDefaults.dataWayURL, clientToken: UserDefaults.clientToken)
+            config = FTSDKConfig.init(datawayUrl: UserDefaults.dataWayURL, clientToken: UserDefaults.clientToken)
         }
         config.enableSDKDebugLog = true
         config.groupIdentifiers = [GroupIdentifier]

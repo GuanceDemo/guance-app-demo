@@ -7,7 +7,7 @@
 
 import WidgetKit
 import SwiftUI
-import FTMobileSDK
+import GuanceSDK
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
         SimpleEntry(date: Date())
