@@ -1,5 +1,5 @@
 import { router } from '@kit.ArkUI';
-import { FTRUMGlobalManager } from '@guancecloud/ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
+import { FTRUMGlobalManager } from '@guancecloud/ft_sdk';
 import { AppColors, BorderRadius, FontSizes, Spacing } from '../constants/UIConstants';
 import { AppNavBar } from '../components/AppNavBar';
 
@@ -82,7 +82,7 @@ struct NativeArkUIDetailPage {
             .fontColor(AppColors.WHITE)
             .borderRadius(BorderRadius.SMALL)
             .onClick(() => {
-              FTRUMGlobalManager.getInstance().addActionWithProperty(
+              FTRUMGlobalManager.getInstance().addAction(
                 `arkui_detail_${this.itemId}`,
                 'click',
                 {} as Record<string, object>

@@ -5,8 +5,8 @@ import { SettingConfigManager } from '../manager/SettingConfigManager';
 import { UserData } from '../model/UserData';
 import { AccessType } from '../constants/AccessType';
 import { bundleManager } from '@kit.AbilityKit';
-import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
-import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
+import { FTLogger } from '@guancecloud/ft_sdk';
+import { Status } from '@guancecloud/ft_sdk';
 import { AppNavBar } from '../components/AppNavBar';
 import { ListCell } from '../components/ListCell';
 import {

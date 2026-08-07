@@ -2,22 +2,22 @@ import { router } from '@kit.ArkUI';
 import { promptAction } from '@kit.ArkUI';
 import { BusinessError } from '@kit.BasicServicesKit';
 import * as ftcrash from 'libftcrash.so';
-import { FTRUMGlobalManager } from '@guancecloud/ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
-import { FTSDK } from '@guancecloud/ft_sdk/src/main/ets/components/FTSDK';
-import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
-import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
-import { ErrorType, AppState } from '@guancecloud/ft_sdk/src/main/ets/components/rum/enum/RUMEnums';
+import { FTRUMGlobalManager } from '@guancecloud/ft_sdk';
+import { FTSDK } from '@guancecloud/ft_sdk';
+import { FTLogger } from '@guancecloud/ft_sdk';
+import { Status } from '@guancecloud/ft_sdk';
+import { ErrorType, AppState } from '@guancecloud/ft_sdk';
 import { rcp } from '@kit.RemoteCommunicationKit';
 import { http } from '@kit.NetworkKit';
 import axios, { AxiosInstance, AxiosResponse } from '@ohos/axios';
 import {
   createFTRCPTrackConfig,
   applyFTAxiosTrack
-} from '@guancecloud/ft_sdk/src/main/ets/components/network/FTHttpAutoTrack';
+} from '@guancecloud/ft_sdk';
 import {
   applyFTHttpTrack,
   createFTHttpInterceptorChain
-} from '@guancecloud/ft_sdk_ext/src/main/ets/components/network/FTHttpAutoTrackExt';
+} from '@guancecloud/ft_sdk_ext';
 import OpenTelemetry from 'otel_sdk';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
 import { API_USER_INFO } from '../constants/Constant';
@@ -427,7 +427,7 @@ struct NativeManualPage {
     property.set('manual_source', 'NativeManualPage');
     property.set('android_reference', 'manual_action_btn');
 
-    FTRUMGlobalManager.getInstance().addActionWithProperty('[action button]', 'click', property.toObject());
+    FTRUMGlobalManager.getInstance().addAction('[action button]', 'click', property.toObject());
     promptAction.showToast({ message: '手动 Action 已添加', duration: ToastDuration.MEDIUM });
   }
 
@@ -439,7 +439,7 @@ struct NativeManualPage {
     property.set('button_name', 'custom_action');
     property.set('action_category', 'test');
 
-    FTRUMGlobalManager.getInstance().addActionWithProperty('test_button_click', 'click', property.toObject());
+    FTRUMGlobalManager.getInstance().addAction('test_button_click', 'click', property.toObject());
     promptAction.showToast({ message: 'Custom Action added', duration: ToastDuration.MEDIUM });
   }
 
@@ -447,12 +447,13 @@ struct NativeManualPage {
    * Handle Action start/stop
    */
   handleActionStartStop(): void {
-    FTRUMGlobalManager.getInstance().startAction('long_operation', 'custom');
+    const startTime: number = Date.now();
     promptAction.showToast({ message: 'Action started', duration: ToastDuration.SHORT });
 
     // Simulate time-consuming operation
     setTimeout(() => {
-      FTRUMGlobalManager.getInstance().stopAction();
+      const duration: number = (Date.now() - startTime) * 1000000;
+      FTRUMGlobalManager.getInstance().addAction('long_operation', 'custom', duration);
       promptAction.showToast({ message: 'Action stopped', duration: ToastDuration.MEDIUM });
     }, 2000);
   }

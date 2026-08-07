@@ -1,6 +1,6 @@
 import { router } from '@kit.ArkUI';
 import { promptAction } from '@kit.ArkUI';
-import { FTRUMGlobalManager } from '@guancecloud/ft_sdk/src/main/ets/components/rum/FTRUMGlobalManager';
+import { FTRUMGlobalManager } from '@guancecloud/ft_sdk';
 import { AppColors, BorderRadius, FontSizes, Spacing } from '../constants/UIConstants';
 import { AppNavBar } from '../components/AppNavBar';
 
@@ -532,6 +532,6 @@ struct NativeArkUIDemoPage {
   }
 
   private trackAction(actionName: string): void {
-    FTRUMGlobalManager.getInstance().addActionWithProperty(actionName, 'click', {} as Record<string, object>);
+    FTRUMGlobalManager.getInstance().addAction(actionName, 'click', {} as Record<string, object>);
   }
 }

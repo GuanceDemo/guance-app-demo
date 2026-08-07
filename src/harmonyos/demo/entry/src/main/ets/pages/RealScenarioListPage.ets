@@ -4,8 +4,8 @@ import { SettingConfigManager } from '../manager/SettingConfigManager';
 import { ProductItem } from '../model/ProductData';
 import { AppColors, FontSizes, Spacing, BorderRadius, Heights, ToastDuration } from '../constants/UIConstants';
 import { PageTrackingHelper } from '../utils/PageTrackingHelper';
-import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
-import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
+import { FTLogger } from '@guancecloud/ft_sdk';
+import { Status } from '@guancecloud/ft_sdk';
 import { AppNavBar } from '../components/AppNavBar';
 
 @Entry
