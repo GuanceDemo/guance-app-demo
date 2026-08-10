@@ -10,8 +10,8 @@ import {
 export struct FormTextInput {
   label: string = '';
   placeholder: string = '';
-  text: string = '';
-  error: string = '';
+  @Prop text: string = '';
+  @Prop error: string = '';
   onValueChange: (value: string) => void = () => {};
 
   build() {

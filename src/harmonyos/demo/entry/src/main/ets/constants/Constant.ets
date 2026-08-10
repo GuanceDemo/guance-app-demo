@@ -36,6 +36,5 @@ export const KEY_DATAWAY_CLIENT_TOKEN: string = 'datawayClientToken';
 export const KEY_APP_ACCESS_TYPE: string = 'appAccessType';
 export const KEY_API_ADDRESS: string = 'demoApiAddress';
 export const KEY_APP_ID: string = 'demoAppId';
-export const KEY_ENABLE_SESSION_REPLAY: string = 'demoEnableSessionReplay';
-export const KEY_SESSION_REPLAY_PRIVACY_TYPE: string = 'demoEnableSessionReplayPrivacyType';
+export const KEY_TRACE_URL: string = 'traceUrl';
 export const KEY_DYNAMIC_TAG: string = 'dynamic_tag';

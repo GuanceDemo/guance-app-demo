@@ -85,6 +85,7 @@ export class Heights {
   static readonly NAV_BAR = 56;
   static readonly INPUT = 44;
   static readonly INPUT_TALL = 50;
+  static readonly ACCESS_TYPE_OPTION = 88;
   static readonly LIST_ITEM = 64;
   static readonly LIST_CELL = 72;
   static readonly TEXT_AREA = 120;

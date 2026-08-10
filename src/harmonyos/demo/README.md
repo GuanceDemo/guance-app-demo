@@ -119,9 +119,12 @@ Supported parameter names:
 - `datawayUrl`
 - `clientToken`
 - `appId`
+- `webViewUrl` (Demo API and WebView base URL)
+- `traceUrl` (linked trace request URL)
 - `otelAddress`
-- `demoApiUrl`
 - `accessType`
+
+`demoApiUrl` remains supported as a legacy alias for `webViewUrl`.
 
 Code reference: [`entry/src/main/ets/entryability/EntryAbility.ets`](/Users/Brandon/Documents/workplace/working/StudioPlace/ft-sdk-app-demo/src/harmonyos/demo/entry/src/main/ets/entryability/EntryAbility.ets)
 
@@ -150,7 +153,7 @@ For this demo, the most meaningful validation path is:
 
 ## Notes About Current Implementation
 
-- Session Replay fields are persisted in the settings model, but the current `SettingPage` UI does not expose corresponding controls.
+- Session Replay is not included in this demo because the HarmonyOS integration is not implemented yet.
 - `FTSDKManager` always enables debug mode and full sampling in the current demo.
 - OTEL initialization is skipped when `otelAddress` is empty.
 - Native crash simulation is implemented through the C++ bridge under [`entry/src/main/cpp`](/Users/Brandon/Documents/workplace/working/StudioPlace/ft-sdk-app-demo/src/harmonyos/demo/entry/src/main/cpp).

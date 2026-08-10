@@ -16,8 +16,6 @@ interface ArkUIListItem {
 struct NativeArkUIDemoPage {
   @State selectedTab: number = 0;
   @State username: string = 'guance';
-  @State privateToken: string = 'client-token-demo';
-  @State remark: string = 'ArkUI Session Replay privacy mask demo';
   @State switchEnabled: boolean = true;
   @State checkboxSelected: boolean = true;
   @State progress: number = 36;
@@ -36,12 +34,6 @@ struct NativeArkUIDemoPage {
       description: '按钮、Tab、Switch、Checkbox 和列表点击都会写入 Action。',
       level: 'Action'
     },
-    {
-      id: 3,
-      title: 'Session Replay 隐私遮罩',
-      description: '密码输入框和敏感字段用于验证回放遮罩效果。',
-      level: 'Replay'
-    }
   ];
 
   aboutToAppear(): void {
@@ -67,11 +59,6 @@ struct NativeArkUIDemoPage {
           this.ControlDemo()
         }
         .tabBar('控件')
-
-        TabContent() {
-          this.ReplayDemo()
-        }
-        .tabBar('回放')
 
         TabContent() {
           this.DynamicListDemo()
@@ -113,16 +100,6 @@ struct NativeArkUIDemoPage {
               this.username = value;
             })
 
-          TextInput({ placeholder: '敏感 Token', text: this.privateToken })
-            .width('100%')
-            .height(44)
-            .margin({ top: Spacing.SM })
-            .backgroundColor(AppColors.INPUT_BG)
-            .borderRadius(BorderRadius.SMALL)
-            .type(InputType.Password)
-            .onChange((value: string) => {
-              this.privateToken = value;
-            })
         }
         .width('100%')
         .padding(Spacing.MD)
@@ -165,12 +142,12 @@ struct NativeArkUIDemoPage {
             })
 
           Column() {
-            Text('启用隐私遮罩验证')
+            Text('Checkbox 控件')
               .fontSize(FontSizes.NORMAL)
               .fontWeight(FontWeight.Medium)
               .fontColor(AppColors.TEXT_PRIMARY)
 
-            Text('用于观察密码框、TextArea 等敏感内容在回放中的表现')
+            Text('用于验证勾选状态变化与 Action 采集')
               .fontSize(FontSizes.SMALL)
               .fontColor(AppColors.TEXT_SECONDARY)
               .margin({ top: Spacing.XS })
@@ -222,78 +199,6 @@ struct NativeArkUIDemoPage {
           .onClick(() => {
             this.trackAction('arkui_control_confirm');
             promptAction.showToast({ message: `Action 已记录：${this.username}`, duration: 1500 });
-          })
-      }
-      .width('100%')
-      .padding(Spacing.MD)
-    }
-  }
-
-  @Builder
-  ReplayDemo() {
-    Scroll() {
-      Column() {
-        this.HeroPanel('Session Replay 验证', '观察图片、输入内容、隐私字段和弹出提示在回放中的表现。')
-        this.SectionTitle('图片与隐私字段')
-
-        Stack({ alignContent: Alignment.BottomStart }) {
-          Image($r('app.media.home_activity'))
-            .width('100%')
-            .height(176)
-            .objectFit(ImageFit.Cover)
-            .borderRadius(BorderRadius.SMALL)
-            .backgroundColor(AppColors.LIGHT_GRAY)
-
-          Text('ArkUI Image')
-            .fontSize(FontSizes.SMALL)
-            .fontColor(AppColors.WHITE)
-            .padding({ left: Spacing.SM, right: Spacing.SM, top: Spacing.XS, bottom: Spacing.XS })
-            .margin({ left: Spacing.SM, bottom: Spacing.SM })
-            .backgroundColor('#66000000')
-            .borderRadius(BorderRadius.SMALL)
-        }
-        .width('100%')
-
-        TextArea({ placeholder: '备注', text: this.remark })
-          .width('100%')
-          .height(104)
-          .margin({ top: Spacing.SM })
-          .backgroundColor(AppColors.WHITE)
-          .borderRadius(BorderRadius.SMALL)
-          .onChange((value: string) => {
-            this.remark = value;
-          })
-
-        Column() {
-          Row() {
-            this.Badge('View', AppColors.INFO)
-            this.Badge('Action', AppColors.PRIMARY)
-            this.Badge('Mask', AppColors.PURPLE)
-          }
-          .width('100%')
-
-          Text('本页包含图片、普通输入框、密码输入框、TextArea、Switch、Checkbox、Tab 和动态列表，可用于验证 ArkUI 原生组件的回放采集与敏感输入遮罩。')
-            .fontSize(FontSizes.SMALL)
-            .fontColor(AppColors.TEXT_SECONDARY)
-            .width('100%')
-            .margin({ top: Spacing.SM })
-        }
-        .width('100%')
-        .padding(Spacing.MD)
-        .margin({ top: Spacing.SM })
-        .backgroundColor(AppColors.WHITE)
-        .borderRadius(BorderRadius.SMALL)
-
-        Button('显示 Replay Toast')
-          .width('100%')
-          .height(44)
-          .margin({ top: Spacing.LG })
-          .backgroundColor(AppColors.PRIMARY)
-          .fontColor(AppColors.WHITE)
-          .borderRadius(BorderRadius.SMALL)
-          .onClick(() => {
-            this.trackAction('arkui_replay_toast');
-            promptAction.showToast({ message: 'Session Replay 交互已触发', duration: 1500 });
           })
       }
       .width('100%')
@@ -496,8 +401,8 @@ struct NativeArkUIDemoPage {
     this.dataList = [{
       id: nextId,
       title: `动态验证项 ${nextId}`,
-      description: `新增于 ${new Date().toLocaleTimeString()}，用于验证列表变化和 Session Replay 增量采集。`,
-      level: nextId % 2 === 0 ? 'Action' : 'Replay'
+      description: `新增于 ${new Date().toLocaleTimeString()}，用于验证列表变化和动态数据刷新。`,
+      level: nextId % 2 === 0 ? 'Action' : 'View'
     }, ...this.dataList];
     this.trackAction('arkui_dynamic_list_add');
   }
@@ -524,9 +429,6 @@ struct NativeArkUIDemoPage {
   private getLevelColor(level: string): string {
     if (level === 'View') {
       return AppColors.INFO;
-    }
-    if (level === 'Replay') {
-      return AppColors.PURPLE;
     }
     return AppColors.PRIMARY;
   }

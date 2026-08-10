@@ -20,7 +20,6 @@ import {
 } from '@guancecloud/ft_sdk_ext';
 import OpenTelemetry from 'otel_sdk';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
-import { API_USER_INFO } from '../constants/Constant';
 import { AppNavBar } from '../components/AppNavBar';
 import { FeatureCard } from '../components/FeatureCard';
 import { FormSection } from '../components/FormSection';
@@ -718,8 +717,8 @@ struct NativeManualPage {
       // Get OTEL address from settings
       const otelEndpoint = setting.otelAddress || 'http://localhost:4318/v1/traces';
 
-      // Build user info URL from Demo API address
-      const userInfoUrl = setting.demoApiAddress + API_USER_INFO;
+      // Use the configured trace URL, or derive it from the Demo API address.
+      const userInfoUrl = setting.getTraceUrl();
 
       console.info('OTEL Endpoint:', otelEndpoint);
       console.info('User Info URL:', userInfoUrl);

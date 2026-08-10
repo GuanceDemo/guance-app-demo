@@ -4,7 +4,6 @@ import { SettingData } from '../model/SettingData';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
 import { FTSDKManager } from '../manager/FTSDKManager';
 import { AccessType } from '../constants/AccessType';
-import { SessionReplayPrivacy } from '../constants/SessionReplayPrivacy';
 import { Utils } from '../utils/Utils';
 import { HttpEngine } from '../http/HttpEngine';
 import { FTLogger } from '@guancecloud/ft_sdk';
@@ -36,10 +35,9 @@ struct SettingPage {
   @State datawayClientToken: string = '';
   @State otelAddress: string = '';
   @State demoAPIAddress: string = '';
+  @State traceUrl: string = '';
   @State appId: string = '';
   @State accessType: AccessType = AccessType.DATAKIT;
-  @State enableSessionReplay: boolean = false;
-  @State sessionReplayPrivacy: SessionReplayPrivacy = SessionReplayPrivacy.ALLOW;
   @State isLoading: boolean = false;
   @State datakitAddressError: string = '';
   @State datawayAddressError: string = '';
@@ -69,7 +67,6 @@ struct SettingPage {
           this.AccessTypeSection()
           this.AccessEndpointSection()
           this.CommonConfigSection()
-          this.SessionReplaySection()
         }
         .width('100%')
         .padding({
@@ -133,6 +130,7 @@ struct SettingPage {
         .margin({ top: Spacing.XS })
     }
     .layoutWeight(1)
+    .height(Heights.ACCESS_TYPE_OPTION)
     .padding(Spacing.MD)
     .backgroundColor(this.accessType === type ? AppColors.PRIMARY_SOFT : AppColors.SURFACE_MUTED)
     .border({ width: StrokeWidths.HAIRLINE, color: this.accessType === type ? AppColors.PRIMARY : AppColors.BORDER })
@@ -243,69 +241,6 @@ struct SettingPage {
         this.otelAddress = value;
       }
     })
-  }
-
-  @Builder
-  SessionReplaySection() {
-    FormSection({
-      title: 'Session Replay',
-      description: '保存后重新初始化 SDK，配置才会生效。',
-      content: () => {
-        this.SessionReplayContent()
-      }
-    })
-    .margin({ bottom: Spacing.SECTION_GAP })
-  }
-
-  @Builder
-  SessionReplayContent() {
-    Row() {
-      Text('Enable Session Replay')
-        .fontSize(FontSizes.BODY)
-        .fontColor(AppColors.TEXT_PRIMARY)
-        .layoutWeight(1)
-
-      Toggle({ type: ToggleType.Switch, isOn: this.enableSessionReplay })
-        .selectedColor(AppColors.PRIMARY)
-        .onChange((isOn: boolean) => {
-          this.enableSessionReplay = isOn;
-        })
-    }
-    .width('100%')
-    .height(Heights.INPUT)
-
-    if (this.enableSessionReplay) {
-      Row() {
-        this.PrivacyOption('Allow', SessionReplayPrivacy.ALLOW)
-        Blank()
-          .width(Spacing.SM)
-        this.PrivacyOption('Mask', SessionReplayPrivacy.MASK)
-        Blank()
-          .width(Spacing.SM)
-        this.PrivacyOption('Mask Input', SessionReplayPrivacy.MASK_USER_INPUT)
-      }
-      .width('100%')
-      .margin({ top: Spacing.SM })
-    }
-  }
-
-  @Builder
-  PrivacyOption(title: string, value: number) {
-    Text(title)
-      .fontSize(FontSizes.SMALL)
-      .fontColor(this.sessionReplayPrivacy === value ? AppColors.PRIMARY : AppColors.TEXT_SECONDARY)
-      .textAlign(TextAlign.Center)
-      .layoutWeight(1)
-      .height(Heights.INPUT)
-      .backgroundColor(this.sessionReplayPrivacy === value ? AppColors.PRIMARY_SOFT : AppColors.SURFACE_MUTED)
-      .border({
-        width: StrokeWidths.HAIRLINE,
-        color: this.sessionReplayPrivacy === value ? AppColors.PRIMARY : AppColors.BORDER
-      })
-      .borderRadius(BorderRadius.SMALL)
-      .onClick(() => {
-        this.sessionReplayPrivacy = value as SessionReplayPrivacy;
-      })
   }
 
   @Builder
@@ -453,10 +388,9 @@ struct SettingPage {
     this.datawayClientToken = setting.datawayClientToken;
     this.otelAddress = setting.otelAddress;
     this.demoAPIAddress = setting.demoApiAddress;
+    this.traceUrl = setting.traceUrl;
     this.appId = setting.appId;
     this.accessType = setting.type;
-    this.enableSessionReplay = setting.enableSessionReplay;
-    this.sessionReplayPrivacy = setting.sessionReplayPrivacyType;
     console.info('SettingPage: UI updated with loaded settings');
   }
 
@@ -547,8 +481,7 @@ struct SettingPage {
       this.datawayClientToken,
       this.otelAddress,
       this.accessType,
-      this.enableSessionReplay,
-      this.sessionReplayPrivacy
+      this.traceUrl
     );
 
     await SettingConfigManager.saveSetting(settingData);
@@ -618,19 +551,20 @@ struct SettingPage {
     try {
       console.info('Starting to parse configuration');
 
-      if (!configText || configText.length === 0) {
+      const normalizedConfigText: string = configText.trim();
+      if (normalizedConfigText.length === 0) {
         promptAction.showToast({ message: 'Configuration is empty', duration: ToastDuration.MEDIUM });
         return false;
       }
 
       // Check if it starts with configuration prefix
-      if (!configText.startsWith(CONFIG_PREFIX)) {
+      if (!normalizedConfigText.startsWith(CONFIG_PREFIX)) {
         promptAction.showToast({ message: 'Invalid configuration format', duration: ToastDuration.LONG });
         return false;
       }
 
       // Remove prefix
-      const base64Str: string = configText.substring(CONFIG_PREFIX.length);
+      const base64Str: string = normalizedConfigText.substring(CONFIG_PREFIX.length);
       console.info('Base64 string length:', base64Str.length);
 
       // Base64 decode
@@ -649,11 +583,14 @@ struct SettingPage {
 
 
       // Fill configuration
-      if (jsonObj.demoHarmonyOSAppId) {
-        this.appId = jsonObj.demoHarmonyOSAppId;
+      // Accept the historical `demoHarmonyoSAppId` spelling as well.
+      const harmonyOSAppId: string = jsonObj.demoHarmonyOSAppId || jsonObj.demoHarmonyoSAppId;
+      if (harmonyOSAppId) {
+        this.appId = harmonyOSAppId;
       }
       if (jsonObj.demoApiAddress) {
         this.demoAPIAddress = jsonObj.demoApiAddress;
+        this.traceUrl = '';
       }
       if (jsonObj.datakitAddress) {
         this.datakitAddress = jsonObj.datakitAddress;
@@ -665,6 +602,9 @@ struct SettingPage {
       }
       if (jsonObj.otelAddress) {
         this.otelAddress = jsonObj.otelAddress;
+      }
+      if (jsonObj.traceUrl) {
+        this.traceUrl = jsonObj.traceUrl;
       }
 
       console.info('Configuration imported successfully');

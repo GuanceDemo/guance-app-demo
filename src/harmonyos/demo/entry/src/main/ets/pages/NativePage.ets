@@ -10,7 +10,7 @@ import { AppNavBar } from '../components/AppNavBar';
 import { PreferencesUtil } from '../utils/PreferencesUtil';
 import { FTSDKManager } from '../manager/FTSDKManager';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
-import { API_USER_INFO, KEY_DYNAMIC_TAG } from '../constants/Constant';
+import { KEY_DYNAMIC_TAG } from '../constants/Constant';
 
 interface NativeDemoItem {
   title: string;
@@ -24,13 +24,8 @@ struct NativePage {
   private businessItems: NativeDemoItem[] = [
     {
       title: 'ArkUI 原生控件演示',
-      description: '进入原生组件页，验证 View、Action 与 Session Replay 对控件状态的采集。',
+      description: '进入原生组件页，验证 View 与 Action 对控件状态的采集。',
       action: 'arkui'
-    },
-    {
-      title: 'Session Replay 示例',
-      description: '打开表单、列表、弹窗等典型原生控件页面，检查回放可视化效果。',
-      action: 'sessionReplay'
     },
     {
       title: '切换动态用户标签',
@@ -49,7 +44,7 @@ struct NativePage {
     },
     {
       title: '业务体验',
-      description: '打开完整 Native 验证功能列表，覆盖 RUM、Session Replay、Trace、Resource、Error、LongTask 等能力。',
+      description: '打开完整 Native 验证功能列表，覆盖 RUM、Trace、Resource、Error、LongTask 等能力。',
       action: 'businessExperience'
     }
   ];
@@ -162,9 +157,6 @@ struct NativePage {
       case 'arkui':
         router.pushUrl({ url: 'pages/NativeArkUIDemoPage' });
         break;
-      case 'sessionReplay':
-        router.pushUrl({ url: 'pages/NativeSessionReplayPage' });
-        break;
       case 'dynamicTag':
         this.handleDynamicTag();
         break;
@@ -213,7 +205,7 @@ struct NativePage {
     try {
       const setting = await SettingConfigManager.readSetting();
       const otelEndpoint = setting.otelAddress || 'http://localhost:4318/v1/traces';
-      const userInfoUrl = setting.demoApiAddress + API_USER_INFO;
+      const userInfoUrl = setting.getTraceUrl();
 
       OpenTelemetry.initialize(otelEndpoint, 'ft-sdk-demo');
 

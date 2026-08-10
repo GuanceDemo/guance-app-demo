@@ -11,7 +11,8 @@ import {
   KEY_APP_ID,
   KEY_OTEL_ADDRESS,
   KEY_APP_ACCESS_TYPE,
-  KEY_API_ADDRESS
+  KEY_API_ADDRESS,
+  KEY_TRACE_URL
 } from '../constants/Constant';
 
 const DOMAIN: number = 0x0000;
@@ -21,9 +22,9 @@ export default class EntryAbility extends UIAbility {
    *   1. Uninstall the app
    *   Command line：hdc shell bm uninstall -n com.example.demo
    *   Method 1: Configure DataKit mode
-               --ps datakitUrl http://...... --ps demoApiUrl http://...... --ps appId com_example_demo --pi accessType 0
+               --ps datakitUrl http://...... --ps webViewUrl http://...... --ps appId com_example_demo --ps traceUrl http://...... --ps otelAddress http://....../otel/v1/traces --pi accessType 0
        Method 1: Configure DataWay mode
-               --ps datawayUrl https://rum-openway.guance.com --ps clientToken 59153e0dd64a4edxxxxxxxxx --ps appId com_example_demo --ps demoApiUrl http://...... --pi accessType 1
+               --ps datawayUrl https://rum-openway.guance.com --ps clientToken 59153e0dd64a4edxxxxxxxxx --ps appId com_example_demo --ps webViewUrl http://...... --ps traceUrl http://...... --ps otelAddress http://....../otel/v1/traces --pi accessType 1
    */
   private initialWant: Want | null = null;
 
@@ -109,7 +110,9 @@ export default class EntryAbility extends UIAbility {
       await saveIfNotExists(KEY_DATAWAY_CLIENT_TOKEN, 'clientToken');
       await saveIfNotExists(KEY_APP_ID, 'appId');
       await saveIfNotExists(KEY_OTEL_ADDRESS, 'otelAddress');
+      await saveIfNotExists(KEY_API_ADDRESS, 'webViewUrl');
       await saveIfNotExists(KEY_API_ADDRESS, 'demoApiUrl');
+      await saveIfNotExists(KEY_TRACE_URL, 'traceUrl');
 
       // Handle access type (numeric value)
       const currentAccessType = await PreferencesUtil.getInt(KEY_APP_ACCESS_TYPE, -1);
