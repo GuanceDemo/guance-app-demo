@@ -26,7 +26,7 @@ class WebSocketActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        title = getString(R.string.technical_websocket_entry_title)
+        title = getString(R.string.native_websocket_entry_title)
         setContentView(R.layout.activity_websocket)
 
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)

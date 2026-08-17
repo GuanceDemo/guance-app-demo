@@ -77,6 +77,10 @@ class NativeActivity : BaseActivity() {
             startActivity(Intent(this@NativeActivity, SessionReplayActivity::class.java))
         }
 
+        findViewById<View>(R.id.native_websocket_demo_btn).setOnClickListener {
+            startActivity(Intent(this@NativeActivity, WebSocketActivity::class.java))
+        }
+
         findViewById<View>(R.id.native_dynamic_create_otel_data).setOnClickListener {
 
             GlobalScope.launch(Dispatchers.IO) {

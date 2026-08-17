@@ -107,14 +107,13 @@
     <string name="real_scenario_entry_title">真实场景</string>
     <string name="real_scenario_entry_description">模拟商品列表、商品详情与 H5 商品页，完整演示原生与 WebView 联动</string>
     <string name="technical_verification_entry_title">技术验证</string>
-    <string name="technical_verification_entry_description">集中查看 Native、WebView 与 WebSocket Demo，单点验证 SDK 行为</string>
-    <string name="technical_verification_intro">这里保留面向开发排查的验证入口，适合单独检查 Native、WebView 与 WebSocket 的采集效果。</string>
+    <string name="technical_verification_entry_description">集中查看 Native Demo 与 WebView Demo，单点验证 SDK 行为</string>
+    <string name="technical_verification_intro">这里保留面向开发排查的验证入口，适合单独检查 Native 与 WebView 的采集效果。</string>
     <string name="technical_native_entry_title">Native Demo</string>
     <string name="technical_native_entry_description">查看 Android 原生页面、异常触发与高级能力演示</string>
     <string name="technical_webview_entry_title">WebView Demo</string>
     <string name="technical_webview_entry_description">直接进入 WebView 测试页，验证 JS SDK 与页面交互采集</string>
-    <string name="technical_websocket_entry_title">WebSocket Demo</string>
-    <string name="technical_websocket_entry_description">验证 OkHttp WebSocket 握手成功、拒绝与失败的 RUM Resource 采集</string>
+    <string name="native_websocket_entry_title">WebSocket Demo</string>
     <string name="websocket_test_intro">地址由当前 Demo API 配置自动生成，HTTP 与 WebSocket 共用服务端口。每次操作都会调用 OkHttp newWebSocket；SDK 仅采集握手阶段，不采集消息内容或连接存活时长。</string>
     <string name="websocket_test_success">连接：有效 101 并回显消息</string>
     <string name="websocket_test_reject">连接：服务端拒绝 403</string>

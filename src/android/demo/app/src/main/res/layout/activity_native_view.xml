@@ -79,6 +79,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/manual_demo_story" />
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/native_websocket_demo_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/native_websocket_entry_title" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
