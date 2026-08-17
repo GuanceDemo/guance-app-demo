@@ -31,6 +31,11 @@ class TechnicalVerificationActivity : BaseActivity(), SimpleAdapter.OnItemClickL
                 getString(R.string.technical_webview_entry_title),
                 getString(R.string.technical_webview_entry_description),
                 R.drawable.ic_web
+            ),
+            ListItem(
+                getString(R.string.technical_websocket_entry_title),
+                getString(R.string.technical_websocket_entry_description),
+                R.drawable.ic_websocket
             )
         )
 
@@ -53,6 +58,10 @@ class TechnicalVerificationActivity : BaseActivity(), SimpleAdapter.OnItemClickL
 
             getString(R.string.technical_webview_entry_title) -> {
                 startActivity(Intent(this, WebViewActivity::class.java))
+            }
+
+            getString(R.string.technical_websocket_entry_title) -> {
+                startActivity(Intent(this, WebSocketActivity::class.java))
             }
         }
     }

@@ -1,9 +1,10 @@
 import json
 from pathlib import Path
 
-from flask import Flask, request, jsonify, render_template, url_for
+from flask import Flask, Response, request, jsonify, render_template, url_for
 from ddtrace import tracer, patch
 from flask_cors import CORS
+from flask_sock import Sock
 
 patch(flask=True)
 
@@ -14,6 +15,7 @@ PRODUCTS_PATH = BASE_DIR / "data" / "products.json"
 
 app = Flask(__name__)
 CORS(app)
+sock = Sock(app)
 
 
 def load_products():
@@ -68,6 +70,34 @@ def get_user():
 @app.route("/connect", methods=["GET"])
 def connect():
     return jsonify({"success": True}), 200
+
+
+@sock.route("/ws/echo")
+def websocket_echo(websocket):
+    while True:
+        message = websocket.receive()
+        if message is None:
+            break
+        websocket.send(message)
+
+
+# These routes must participate in WebSocket routing so Werkzeug dispatches
+# Upgrade requests to the view instead of raising WebsocketMismatch (400).
+@app.route("/ws/reject", methods=["GET"], websocket=True)
+def websocket_reject():
+    return jsonify({"error": "WebSocket handshake rejected for testing"}), 403
+
+
+@app.route("/ws/invalid-upgrade", methods=["GET"], websocket=True)
+def websocket_invalid_upgrade():
+    return Response(
+        status=101,
+        headers={
+            "Connection": "Upgrade",
+            "Upgrade": "websocket",
+            "Sec-WebSocket-Accept": "invalid-test-value",
+        },
+    )
 
 
 @app.route("/api/version", methods=["GET"])

@@ -1,0 +1,5 @@
+Flask
+flask-cors
+flask-sock
+ddtrace
+beautifulsoup4

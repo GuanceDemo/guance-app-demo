@@ -107,12 +107,20 @@
     <string name="real_scenario_entry_title">Real Scenario</string>
     <string name="real_scenario_entry_description">Simulate a product list, native product detail, and H5 product page to demonstrate a full native-to-WebView journey.</string>
     <string name="technical_verification_entry_title">Technical Verification</string>
-    <string name="technical_verification_entry_description">Open Native Demo and WebView Demo directly for focused SDK validation.</string>
-    <string name="technical_verification_intro">These entries are kept for engineering validation, so Native and WebView behaviors can be checked independently.</string>
+    <string name="technical_verification_entry_description">Open Native, WebView, and WebSocket demos for focused SDK validation.</string>
+    <string name="technical_verification_intro">These entries are kept for engineering validation, so Native, WebView, and WebSocket behaviors can be checked independently.</string>
     <string name="technical_native_entry_title">Native Demo</string>
     <string name="technical_native_entry_description">Verify Android native flows, crash triggers, and advanced SDK examples.</string>
     <string name="technical_webview_entry_title">WebView Demo</string>
     <string name="technical_webview_entry_description">Open the standalone WebView test page to validate JS SDK setup and interaction tracking.</string>
+    <string name="technical_websocket_entry_title">WebSocket Demo</string>
+    <string name="technical_websocket_entry_description">Validate RUM Resources for successful, rejected, and failed OkHttp WebSocket handshakes.</string>
+    <string name="websocket_test_intro">URLs are generated from the current Demo API setting, with HTTP and WebSocket sharing the same server port. Each action calls OkHttp newWebSocket; the SDK collects only the handshake, not message contents or connection lifetime.</string>
+    <string name="websocket_test_success">Connect: valid 101 and echo</string>
+    <string name="websocket_test_reject">Connect: rejected 403</string>
+    <string name="websocket_test_invalid_upgrade">Connect: invalid 101 upgrade</string>
+    <string name="websocket_test_close">Close active WebSocket</string>
+    <string name="websocket_test_configuration">success=%1$s\nrejected=%2$s\nfailed=%3$s</string>
     <string name="product_feed_intro">The product feed is loaded from Flask. Tap a product to open the native detail page, then continue into the H5 product page to validate list, detail, buttons, requests, and WebView coverage.</string>
     <string name="real_scenario_compose_entry">Compose</string>
     <string name="real_scenario_empty_text">No product data available</string>
