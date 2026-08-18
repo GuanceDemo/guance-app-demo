@@ -37,26 +37,36 @@
                 android:textColor="#666666"
                 android:textSize="14sp" />
 
-            <Button
+            <TextView
+                android:id="@+id/websocket_test_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="monospace"
+                android:textColor="#666666"
+                android:textIsSelectable="true"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/websocket_success_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/websocket_test_success" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/websocket_reject_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/websocket_test_reject" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/websocket_invalid_upgrade_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/websocket_test_invalid_upgrade" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/websocket_close_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

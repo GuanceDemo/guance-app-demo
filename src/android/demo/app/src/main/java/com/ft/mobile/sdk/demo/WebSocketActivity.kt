@@ -3,6 +3,7 @@ package com.ft.mobile.sdk.demo
 import android.os.Bundle
 import android.widget.TextView
 import com.ft.mobile.sdk.demo.http.OkHttpClientInstance
+import com.ft.mobile.sdk.demo.http.WebSocketTestConfig
 import com.ft.mobile.sdk.demo.manager.SettingConfigManager
 import com.ft.sdk.garble.utils.LogUtils
 import okhttp3.Request
@@ -33,27 +34,25 @@ class WebSocketActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         setupToolbar(toolbar)
 
-        resultView = findViewById(R.id.websocket_test_result)
-        val demoApiAddress = SettingConfigManager.readSetting(this).demoApiAddress
-        val successUrl = createWebSocketUrl(demoApiAddress, "/ws/echo")
-        val rejectUrl = createWebSocketUrl(demoApiAddress, "/ws/reject")
-        val invalidUpgradeUrl = createWebSocketUrl(demoApiAddress, "/ws/invalid-upgrade")
+        val setting = SettingConfigManager.readSetting(this)
+        val endpoints = WebSocketTestConfig.createEndpoints(setting.demoApiAddress)
 
-        resultView.text = getString(
+        findViewById<TextView>(R.id.websocket_test_address).text = getString(
             R.string.websocket_test_configuration,
-            successUrl,
-            rejectUrl,
-            invalidUpgradeUrl
+            endpoints.success,
+            endpoints.rejected,
+            endpoints.invalidUpgrade
         )
+        resultView = findViewById(R.id.websocket_test_result)
 
         findViewById<android.view.View>(R.id.websocket_success_btn).setOnClickListener {
-            startWebSocketTest("success", successUrl)
+            startWebSocketTest("success", endpoints.success)
         }
         findViewById<android.view.View>(R.id.websocket_reject_btn).setOnClickListener {
-            startWebSocketTest("rejected", rejectUrl)
+            startWebSocketTest("rejected", endpoints.rejected)
         }
         findViewById<android.view.View>(R.id.websocket_invalid_upgrade_btn).setOnClickListener {
-            startWebSocketTest("failed", invalidUpgradeUrl)
+            startWebSocketTest("failed", endpoints.invalidUpgrade)
         }
         findViewById<android.view.View>(R.id.websocket_close_btn).setOnClickListener {
             closeActiveWebSocket()
@@ -114,7 +113,11 @@ class WebSocketActivity : BaseActivity() {
         LogUtils.d(TAG, "WebSocket test: $message")
         runOnUiThread {
             if (!isDestroyed) {
-                resultView.append("\n$message")
+                if (resultView.text.isEmpty()) {
+                    resultView.text = message
+                } else {
+                    resultView.append("\n$message")
+                }
             }
         }
     }
@@ -140,19 +143,5 @@ class WebSocketActivity : BaseActivity() {
         private const val NORMAL_CLOSURE_STATUS = 1000
         private const val CLOSE_REASON = "test complete"
         private const val TEST_MESSAGE = "ft-sdk-websocket-handshake-test"
-
-        internal fun createWebSocketUrl(demoApiAddress: String, path: String): String {
-            val baseUrl = demoApiAddress.trim().trimEnd('/')
-            val webSocketBaseUrl = when {
-                baseUrl.startsWith("https://", ignoreCase = true) ->
-                    "wss://${baseUrl.substring(8)}"
-
-                baseUrl.startsWith("http://", ignoreCase = true) ->
-                    "ws://${baseUrl.substring(7)}"
-
-                else -> baseUrl
-            }
-            return "$webSocketBaseUrl$path"
-        }
     }
 }
