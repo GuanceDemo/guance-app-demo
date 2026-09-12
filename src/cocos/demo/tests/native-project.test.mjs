@@ -15,9 +15,13 @@ test('native app patches are repeatable and apply the requested iOS version/buil
     writeFileSync(manifest, '<manifest><application android:usesCleartextTraffic="false" /></manifest>');
     patchNative(root, 'android'); patchNative(root, 'android');
     assert.equal((readFileSync(manifest, 'utf8').match(/android:usesCleartextTraffic="true"/g) ?? []).length, 1);
+    assert.equal((readFileSync(manifest, 'utf8').match(/com\.guance\.cocos\.demo\.NativeGameActivity/g) ?? []).length, 1);
+    assert.match(readFileSync(manifest, 'utf8'), /android:exported="false"/);
+    assert.match(readFileSync(path.join(root, 'native/engine/android/app/src/com/guance/cocos/demo/NativeGameActivity.java'), 'utf8'), /extends Activity/);
     const rules = readFileSync(path.join(root, 'native/engine/android/app/proguard-rules.pro'), 'utf8');
     assert.equal((rules.match(/# DEMO_COCOS_BRIDGE/g) ?? []).length, 1);
     assert.match(rules, /-keep class com\.ft\.sdk\.cocos\.\*\*/);
+    assert.match(rules, /-keep class com\.guance\.cocos\.demo\.NativeGameBridge/);
     const plist = path.join(root, 'native/engine/ios/Info.plist');
     const cmake = path.join(root, 'native/engine/ios/CMakeLists.txt');
     writeFileSync(plist, '<plist><dict><key>CFBundleShortVersionString</key><string>1.0.0</string><key>CFBundleVersion</key><string>1.0</string></dict></plist>');
@@ -29,5 +33,8 @@ test('native app patches are repeatable and apply the requested iOS version/buil
     assert.match(result, /CFBundleVersion<\/key><string>102<\/string>/);
     assert.equal((result.match(/NSAppTransportSecurity/g) ?? []).length, 1);
     assert.equal((readFileSync(cmake, 'utf8').match(/# DEMO_XCODE26_ENOKI/g) ?? []).length, 1);
+    assert.equal((readFileSync(cmake, 'utf8').match(/# DEMO_NATIVE_PAGES/g) ?? []).length, 1);
+    assert.match(readFileSync(cmake, 'utf8'), /target_sources\(\$\{EXECUTABLE_NAME\} PRIVATE.*GCNativeGameBridge\.mm/);
+    assert.match(readFileSync(path.join(root, 'native/engine/ios/GCNativeGameBridge.mm'), 'utf8'), /GCNativeGameController : UIViewController/);
   } finally { rmSync(root, { recursive: true, force: true }); }
 });

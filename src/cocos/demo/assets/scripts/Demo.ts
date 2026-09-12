@@ -1,34 +1,43 @@
 import {
-  _decorator, Button, Camera, Canvas, Color, Component, EditBox, Label, Layers, Node,
-  ResolutionPolicy, UITransform, WebView, director, sys, view,
+  _decorator, Camera, Canvas, Color, Component, EditBox, Game, Label, Layers, Node,
+  ResolutionPolicy, director, game, profiler, sys, view,
 } from 'cc';
-import { Api, Product } from './Api';
-import { DemoConfig, endpoint, importConfig, isHttpUrl, readConfig, saveConfig, validateConfig } from './Config';
+import { Api } from './Api';
+import { DemoConfig, endpoint, importConfig, readConfig, saveConfig, validateConfig } from './Config';
 import { platform, sdk, Telemetry } from './Telemetry';
 import { box, button, Page, text, theme } from './UI';
+import { GameView } from './GameView';
+import { RoundResult } from './GameModel';
+import { NativePages, NativePayload } from './NativePages';
 
 const { ccclass } = _decorator;
+const BEST_KEY = 'gc_demo_crystal_dash_best_v1';
 
 @ccclass('GuanceCocosDemo')
 export class Demo extends Component {
   private root!: Node;
   private camera!: Camera;
+  private navigation!: Node;
   private page?: Page;
   private status!: Label;
   private telemetry = new Telemetry();
   private config = readConfig(sys.localStorage);
   private api = new Api(this.config.demoApiAddress, this.telemetry);
   private route = 0;
-  private username = '';
   private restartRequired = false;
-  private favorites = new Set<string>();
-  private cart = new Map<string, { product: Product; quantity: number }>();
   private replayProbe?: Node;
   private motionTime = 0;
-  private web?: Node;
+  private nativePages = new NativePages();
+  private nativePollTime = 0;
+  private lastNativePayload?: NativePayload;
+  private activeGame?: GameView;
+  private best = 0;
+  private readonly background = () => this.activeGame?.pause();
 
   start(): void {
+    profiler.hideStats();
     view.setDesignResolutionSize(720, 1280, ResolutionPolicy.SHOW_ALL);
+    try { this.best = Math.max(0, Number(sys.localStorage.getItem(BEST_KEY)) || 0); } catch { /* First run. */ }
     const scene = director.getScene()!;
     const cameraNode = box(scene, 'UICamera', 0, 0, 720, 1280);
     cameraNode.setPosition(0, 0, 1000);
@@ -38,20 +47,36 @@ export class Demo extends Component {
     const canvasNode = box(scene, 'Canvas', 0, 0, 720, 1280);
     const canvas = canvasNode.addComponent(Canvas); canvas.cameraComponent = this.camera;
     this.root = box(canvasNode, 'DemoUI', 0, 0, 720, 1280);
-    text(this.root, 'GUANCE  /  COCOS', -12, 558, 624, 52, 34);
-    text(this.root, 'Creator 3.8.8   ·   Android & iOS', -12, 515, 624, 34, 21, theme.muted);
-    this.status = text(this.root, '', 0, -497, 644, 58, 21, theme.muted);
+    text(this.root, 'GUANCE  /  ARCADE', -12, 558, 624, 52, 34);
+    text(this.root, 'CRYSTAL DASH   ·   Cocos Creator 3.8.8', -12, 515, 624, 34, 20, theme.muted);
+    this.status = text(this.root, '', 0, -497, 644, 58, 19, theme.muted);
+    this.navigation = box(this.root, 'Navigation', 0, -565, 664, 66);
     const entries: Array<[string, () => void]> = [
-      ['Home', () => this.home()], ['Explore', () => this.username ? this.products() : this.login()],
-      ['Lab', () => this.laboratory()], ['Profile', () => this.mine()],
+      ['Lobby', () => this.home()], ['Play', () => this.play()],
+      ['Lab', () => this.laboratory()], ['Settings', () => this.settings()],
     ];
-    entries.forEach(([title, handler], i) => button(this.root, title, -252 + i * 168, -565, 154, 66, handler));
+    entries.forEach(([title, handler], i) => button(this.navigation, title, -252 + i * 168, 0, 154, 66, handler));
+    game.on(Game.EVENT_HIDE, this.background);
     try { this.telemetry.start(this.config, this.camera); }
     catch { /* Invalid initial settings are handled by the configuration screen. */ }
     this.home();
   }
 
   update(dt: number): void {
+    this.nativePollTime += dt;
+    if (this.nativePollTime >= 0.12) {
+      this.nativePollTime = 0;
+      const action = this.nativePages.poll();
+      if (action) {
+        this.telemetry.action('native_navigation', { destination: action, demo_scenario: 'hybrid_native' });
+        if (action === 'play') this.play();
+        else if (action === 'lab') this.laboratory();
+        else if (action === 'settings') this.settings();
+        else if (action === 'unavailable') this.fallback(this.lastNativePayload!);
+        else this.home();
+      }
+    }
+    this.activeGame?.update(dt);
     if (this.replayProbe?.isValid) {
       this.motionTime += dt;
       this.replayProbe.setPosition(Math.sin(this.motionTime * 1.4) * 220, 0);
@@ -60,7 +85,8 @@ export class Demo extends Component {
 
   private show(name: string, scenario = 'navigation'): Page {
     ++this.route; this.api.cancel(); this.replayProbe = undefined;
-    if (this.web) { this.web.active = false; this.web.destroy(); this.web = undefined; }
+    this.activeGame?.destroy(); this.activeGame = undefined;
+    this.navigation.active = true;
     this.page?.destroy(); this.page = new Page(this.root);
     this.telemetry.view(name, scenario);
     this.setStatus(this.restartRequired ? 'Settings saved. Close and reopen the app to apply.' : this.telemetry.message);
@@ -81,17 +107,38 @@ export class Demo extends Component {
   }
 
   private home(): void {
-    const page = this.show('CocosHome');
-    page.heading('Start exploring', 'Browse products, then test data collection in the lab.');
-    const hero = page.row(174, 'Hero', theme.primary);
-    text(hero, 'One demo. Two platforms.', 0, 38, 588, 64, 36, theme.paper);
-    text(hero, 'RUM · Log · Trace · Session Replay\nShared backend and settings', 0, -36, 588, 82, 24, theme.paper);
-    page.action('Explore  →  Sign in and browse', () => this.username ? this.products() : this.login(), true);
-    page.action('Lab  →  Test SDK features', () => this.laboratory());
-    page.action('Demo settings', () => this.settings());
-    page.note(this.telemetry.message);
-    page.note('First run: open /import_helper on your server. Copy the gc-demo:// string, then paste and save it in Demo settings.', 112);
-    page.note('SDK 0.1.0-alpha.6 · npm integration\nAndroid: APK distribution · iOS: TestFlight', 100);
+    this.openNative({ page: 'lobby', best: this.best, sdkStatus: this.telemetry.message });
+  }
+  private openNative(payload: NativePayload): void {
+    const page = this.show(payload.page === 'lobby' ? 'NativeGameLobby' : 'NativeRoundResults', 'hybrid_native');
+    page.heading('Crystal Dash', 'Opening native screen…');
+    this.lastNativePayload = payload;
+    if (!this.nativePages.open(payload)) this.fallback(payload);
+  }
+  private fallback(payload: NativePayload): void {
+    const page = this.show('CocosPreviewLobby', 'preview');
+    page.heading(payload.page === 'results' ? 'Round complete' : 'Crystal Dash', 'Cocos preview · Native screens require a native build.');
+    if (payload.page === 'results') page.note(`Score: ${payload.score} · Gems: ${payload.gems} · Best: ${payload.best}`);
+    else page.note('Drag to fly. Collect green gems and dodge red meteors. 45 seconds, 3 shields. Build a streak for bonus points.', 124);
+    page.action(payload.page === 'results' ? 'Play again' : 'Play Crystal Dash', () => this.play(), true);
+    page.action('SDK experiments', () => this.laboratory());
+    page.action('Connection settings', () => this.settings());
+    if (sys.isNative) page.note('Native screen unavailable. Rebuild using npm run build:android or build:ios.', 112);
+  }
+  private play(): void {
+    const page = this.show('CocosCrystalDash', 'game'); page.destroy(); this.page = undefined;
+    this.navigation.active = false;
+    this.telemetry.action('game_start', { demo_scenario: 'game', round_seconds: 45 });
+    this.activeGame = new GameView(this.root, result => this.finishRound(result),
+      (name, attributes) => this.telemetry.action(name, { ...attributes, demo_scenario: 'game' }), () => this.home());
+    this.setStatus('Cocos gameplay · Touch, animation, collision and Replay');
+  }
+  private finishRound(result: RoundResult): void {
+    this.best = Math.max(this.best, result.score);
+    try { sys.localStorage.setItem(BEST_KEY, String(this.best)); } catch { /* The round still completes if storage is full. */ }
+    this.telemetry.action('game_finish', { ...result, demo_scenario: 'game' });
+    this.telemetry.log('Crystal Dash round completed', 'info', { ...result, best: this.best });
+    this.openNative({ page: 'results', ...result, best: this.best, sdkStatus: this.telemetry.message });
   }
 
   private settings(draft = readConfig(sys.localStorage)): void {
@@ -155,134 +202,12 @@ export class Demo extends Component {
     } catch (error) { if (route === this.route) this.setStatus((error as Error).message, true); }
   }
 
-  private login(): void {
-    const page = this.show('CocosLogin', 'real');
-    page.heading('Welcome back', 'Sign in with the Demo API to link your RUM user.');
-    if (!this.config.demoApiAddress) {
-      page.note('Set the Demo API URL and SDK connection first.');
-      page.action('Open settings', () => this.settings(), true); return;
-    }
-    const user = page.field('Username', 'guance');
-    const password = page.field('Password', 'admin', true);
-    this.telemetry.protect(password.node); this.telemetry.protect(user.node);
-    let submitting = false;
-    const submit = page.action('Sign in', () => {
-      if (submitting) return;
-      const username = user.string.trim();
-      if (!username || !password.string) { this.setStatus('Enter your username and password.', true); return; }
-      submitting = true; submit.getComponent(Button)!.interactable = false;
-      const route = this.route;
-      this.telemetry.action('login_submit', { demo_scenario: 'real' });
-      this.setStatus('Signing in…');
-      this.api.login(username, password.string).then(result => {
-        if (route !== this.route) return;
-        if (!result.success) throw new Error('Sign-in failed');
-        this.username = username; this.telemetry.bind(username);
-        this.telemetry.log('Demo login succeeded', 'info', { demo_scenario: 'real' });
-        this.products();
-      }).catch(error => { if (route === this.route) this.setStatus(error.message, true); })
-        .finally(() => { if (route === this.route) { submitting = false; submit.getComponent(Button)!.interactable = true; } });
-    }, true);
-    page.note('Test account: guance / admin\nSign-in lasts for this session. Passwords are not saved.', 98);
-    page.action('Demo settings', () => this.settings());
-  }
-
-  private products(): void {
-    const page = this.show('CocosProductList', 'real');
-    page.heading('Discover products', 'Browse images, refresh the feed and open product details.');
-    page.pair('Refresh', 'Cart', () => { this.telemetry.action('product_feed_refresh'); this.products(); }, () => this.cartPage());
-    const loading = page.note('Loading products…');
-    const route = this.route;
-    this.api.products().then(products => {
-      if (route !== this.route) return;
-      loading.string = products.length ? `${products.length} products · Tap to view details` : 'No products yet. Tap Refresh to try again.';
-      for (const product of products) {
-        const row = page.row(206, product.id, theme.paper);
-        page.image(row, this.imageUrl(product.image_url), -222, 8, 154, 150);
-        text(row, product.title, 84, 58, 390, 56, 28);
-        text(row, product.price + '   ·   ' + product.rating, 84, 6, 390, 40, 24, theme.primary);
-        button(row, 'View details  →', 84, -58, 388, 55, () => {
-          this.telemetry.action('product_open', { product_id: product.id }); this.detail(product.id);
-        });
-      }
-    }).catch(error => { if (route === this.route) { loading.string = 'Could not load: ' + error.message; this.setStatus('Tap Refresh to try again.', true); } });
-  }
-
-  private imageUrl(url: string): string {
-    return isHttpUrl(url) ? url : endpoint(this.config.demoApiAddress, url);
-  }
-
-  private detail(id: string): void {
-    const page = this.show('CocosProductDetail', 'real');
-    page.action('← Back to products', () => this.products());
-    const loading = page.note('Loading product details…');
-    const route = this.route;
-    this.api.product(id).then(product => {
-      if (route !== this.route) return;
-      loading.string = product.tag + '  ·  ' + (product.stock ?? '');
-      const image = page.row(310, 'ProductHero', theme.paper);
-      page.image(image, this.imageUrl(product.image_url), 0, 0, 500, 290);
-      page.heading(product.title, product.price + '   ·   ' + product.rating);
-      page.note(product.description ?? product.subtitle, 160);
-      if (product.highlights?.length) page.note(product.highlights.join('\n'), 180);
-      page.pair(this.favorites.has(id) ? 'Remove favorite' : 'Add favorite', 'Add to cart', () => {
-        if (this.favorites.has(id)) this.favorites.delete(id); else this.favorites.add(id);
-        this.telemetry.action('product_favorite', { product_id: id, favorited: this.favorites.has(id) });
-        this.setStatus(this.favorites.has(id) ? 'Added to favorites. Tap to remove.' : 'Removed from favorites');
-      }, () => {
-        const previous = this.cart.get(id); const quantity = (previous?.quantity ?? 0) + 1;
-        this.cart.set(id, { product, quantity });
-        this.telemetry.action('cart_add', { product_id: id, quantity });
-        this.setStatus('Added to demo cart. Quantity: ' + quantity);
-      });
-      page.action('Open product web page', () => this.webPage('/product/' + encodeURIComponent(id), () => this.detail(id)));
-      page.action('View cart', () => this.cartPage(), true);
-    }).catch(error => {
-      if (route !== this.route) return;
-      loading.string = 'Could not load: ' + error.message; page.action('Retry', () => this.detail(id));
-    });
-  }
-
-  private cartPage(): void {
-    const page = this.show('CocosCart', 'real');
-    page.heading('Demo cart', 'Test cart actions locally. No orders or payments are created.');
-    if (!this.cart.size) page.note('Your cart is empty. Browse products to add an item.');
-    for (const [id, { product, quantity }] of this.cart) {
-      page.note(product.title + '\n' + product.price + ' × ' + quantity, 98);
-      page.pair('Quantity −1', 'Quantity +1', () => {
-        if (quantity === 1) this.cart.delete(id); else this.cart.set(id, { product, quantity: quantity - 1 });
-        this.telemetry.action('cart_quantity_change', { product_id: id, quantity: quantity - 1 }); this.cartPage();
-      }, () => {
-        this.cart.set(id, { product, quantity: quantity + 1 });
-        this.telemetry.action('cart_quantity_change', { product_id: id, quantity: quantity + 1 }); this.cartPage();
-      });
-    }
-    page.action('Continue browsing', () => this.products(), true);
-  }
-
-  private mine(): void {
-    const page = this.show('CocosMine', 'real');
-    page.heading('Profile', this.username ? 'Signed in as: ' + this.username : 'Sign in to view your profile.');
-    this.telemetry.protect(page.node);
-    if (this.username) {
-      const profile = page.note('Loading profile…', 124);
-      const route = this.route;
-      this.api.user().then(user => {
-        if (route === this.route) profile.string = `${user.username}\n${user.email}\nFavorites: ${this.favorites.size}`;
-      }).catch(error => { if (route === this.route) profile.string = error.message; });
-      page.action('Refresh profile', () => { this.telemetry.action('profile_refresh'); this.mine(); });
-      page.action('Sign out', () => {
-        this.telemetry.action('logout'); this.telemetry.unbind(); this.username = ''; this.cart.clear(); this.favorites.clear(); this.login();
-      });
-    } else page.action('Sign in', () => this.login(), true);
-    page.action('Demo settings', () => this.settings());
-    page.note('Cocos Creator 3.8.8\nGuance SDK / Replay 0.1.0-alpha.6\nDemo 1.0.0', 140);
-  }
-
   private laboratory(): void {
     const page = this.show('CocosLaboratory', 'experimental');
-    page.heading('SDK lab', 'Run an experiment to test each SDK feature.');
-    page.note('Results show local calls or HTTP responses. Check Guance for collected data. Network tests use the same Demo API as Explore.', 110);
+    page.heading('SDK lab', 'Inspect gameplay, performance and telemetry.');
+    page.action('Play · Game events and Replay', () => this.play(), true);
+    page.note('Native lobby → Cocos game → native results. Each screen has its own RUM View. Cocos Replay captures the game; native screens are outside its camera.', 128);
+    page.note('Results show local calls or HTTP responses. Check Guance for collected data. Play a round to inspect game events and replay.', 110);
     page.action('RUM · Custom View and Action', () => this.customView());
     page.action('Log · Send all five levels', () => this.experiment('lab_logs', () => {
       for (const level of ['info', 'warning', 'error', 'critical', 'ok']) this.telemetry.log('Cocos demo log: ' + level, level, { demo_scenario: 'experimental' });
@@ -308,7 +233,7 @@ export class Demo extends Component {
     page.action('Network · Auto XHR (HTTP 404)', () => void this.networkProbe(false, true));
     page.action('Network · Manual Resource + Trace', () => void this.networkProbe(true, false));
     page.action('Session Replay · Motion and privacy', () => this.replayPage());
-    page.action('WebView · Demo web page', () => this.webPage('/', () => this.laboratory()));
+    page.action('Hybrid · Open native game lobby', () => this.home());
     page.note('Native Crash / ANR / UI Block collection is enabled. These Error and LongTask tests run in Cocos JS and do not crash the native process.', 110);
   }
 
@@ -350,19 +275,8 @@ export class Demo extends Component {
     page.action('Back to lab', () => this.laboratory());
   }
 
-  private webPage(path: string, back: () => void): void {
-    const page = this.show('CocosWebView', 'real');
-    page.heading('Web demo', 'Cocos tracks the View. The web page manages its own telemetry.');
-    page.action('← Back', back);
-    if (!this.config.demoApiAddress) { page.note('Set the Demo API URL first.'); return; }
-    // Native WebView is an overlay: keep it below the back button and above the tab bar.
-    this.web = box(this.root, 'NativeWebView', 0, -155, 640, 580);
-    const web = this.web.addComponent(WebView); const route = this.route;
-    this.web.on(WebView.EventType.LOADED, () => { if (route === this.route) this.setStatus('Web page loaded'); });
-    this.web.on(WebView.EventType.ERROR, () => { if (route === this.route) this.setStatus('Web page failed to load. Go back and check the URL.', true); });
-    web.url = endpoint(this.config.demoApiAddress, path);
-    this.setStatus('Loading web page. The native WebView is outside Replay capture.');
+  onDestroy(): void {
+    game.off(Game.EVENT_HIDE, this.background);
+    this.activeGame?.destroy(); this.api.cancel(); this.page?.destroy(); this.telemetry.close();
   }
-
-  onDestroy(): void { this.api.cancel(); this.page?.destroy(); this.telemetry.close(); }
 }

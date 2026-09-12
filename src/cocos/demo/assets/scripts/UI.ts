@@ -4,9 +4,9 @@ import {
 } from 'cc';
 
 export const theme = {
-  background: new Color(242, 245, 250), paper: new Color(255, 255, 255),
-  ink: new Color(24, 36, 57), muted: new Color(103, 119, 142), primary: new Color(44, 97, 240),
-  pale: new Color(231, 238, 255), line: new Color(222, 228, 238), danger: new Color(187, 52, 65),
+  background: new Color(9, 17, 33), paper: new Color(19, 34, 57),
+  ink: new Color(235, 242, 255), muted: new Color(143, 162, 189), primary: new Color(92, 242, 197),
+  pale: new Color(25, 40, 62), line: new Color(50, 76, 106), danger: new Color(255, 111, 131),
 };
 
 export function box(parent: Node, name: string, x: number, y: number, w: number, h: number, color?: Color): Node {
