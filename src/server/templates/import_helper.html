@@ -324,6 +324,14 @@
           <input id="demo-harmonyos-app-id" type="text" value="gc_app_harmonyos_demo"/>
         </div>
         <div class="form-group">
+          <label>Cocos Android App ID (optional, defaults to Android App ID):</label>
+          <input id="demo-cocos-android-app-id" type="text" value=""/>
+        </div>
+        <div class="form-group">
+          <label>Cocos iOS App ID (optional, defaults to iOS App ID):</label>
+          <input id="demo-cocos-ios-app-id" type="text" value=""/>
+        </div>
+        <div class="form-group">
           <label>OTEL URL:</label>
           <input id="demo-otel-url-input" type="text" value="http://10.100.64.166:9529/otel/v1/traces"/>
         </div>
@@ -371,6 +379,8 @@
       const demoAndroidAppId = document.getElementById('demo-android-app-id').value;
       const demoIosAppId = document.getElementById('demo-ios-app-id').value;
       const demoHarmonyosAppId = document.getElementById('demo-harmonyos-app-id').value;
+      const demoCocosAndroidAppId = document.getElementById('demo-cocos-android-app-id').value;
+      const demoCocosIOSAppId = document.getElementById('demo-cocos-ios-app-id').value;
       const demoOtelUrl = document.getElementById('demo-otel-url-input').value;
 
       // Construct JSON object
@@ -395,6 +405,9 @@
           otelAddress: demoOtelUrl,
         };
       }
+
+      if (demoCocosAndroidAppId.trim()) importData.demoCocosAndroidAppId = demoCocosAndroidAppId.trim();
+      if (demoCocosIOSAppId.trim()) importData.demoCocosIOSAppId = demoCocosIOSAppId.trim();
 
       // Convert JSON object to string
       const jsonString = JSON.stringify(importData);
@@ -427,7 +440,7 @@
       makeCode();
     });
 
-    $("#dataway-client-token-input,#dataway-address-input,#datakit-address-input,#demo-api-address-input,#demo-android-app-id,#demo-ios-app-id,#demo-harmonyos-app-id,#demo-otel-url-input").
+    $("#dataway-client-token-input,#dataway-address-input,#datakit-address-input,#demo-api-address-input,#demo-android-app-id,#demo-ios-app-id,#demo-harmonyos-app-id,#demo-cocos-android-app-id,#demo-cocos-ios-app-id,#demo-otel-url-input").
     on("blur", function() {
       makeCode();
     }).

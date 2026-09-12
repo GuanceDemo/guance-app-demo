@@ -3,6 +3,7 @@
 * [Android](./src/android/demo)
 * [iOS](./src/ios/demo)
 * [HarmonyOS](./src/harmonyos/demo)
+* [Cocos Creator 3.8.8 (Android / iOS)](./src/cocos/demo)
 
 # 
 # Guance Cloud Demo Usage and Deployment Instructions

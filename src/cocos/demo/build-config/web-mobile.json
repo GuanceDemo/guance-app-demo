@@ -1,0 +1,14 @@
+{
+  "name": "GuanceCocosDemo",
+  "platform": "web-mobile",
+  "buildPath": "project://build",
+  "debug": true,
+  "startScene": "dfb26b90-bd3f-4326-98a0-3f82bd2d6842",
+  "scenes": [
+    {
+      "url": "db://assets/scenes/Demo.scene",
+      "uuid": "dfb26b90-bd3f-4326-98a0-3f82bd2d6842"
+    }
+  ],
+  "outputName": "web-mobile"
+}

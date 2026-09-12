@@ -87,3 +87,7 @@ logs/
 *.tmp
 *.temp
 *.cache
+
+# Python runtime cache
+__pycache__/
+*.pyc

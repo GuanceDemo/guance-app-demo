@@ -1,0 +1,50 @@
+{
+  "name": "GuanceCocosDemo",
+  "platform": "android",
+  "buildPath": "project://build",
+  "debug": true,
+  "mainBundleCompressionType": "merge_dep",
+  "startScene": "dfb26b90-bd3f-4326-98a0-3f82bd2d6842",
+  "outputName": "android",
+  "taskName": "android",
+  "scenes": [
+    {
+      "url": "db://assets/scenes/Demo.scene",
+      "uuid": "dfb26b90-bd3f-4326-98a0-3f82bd2d6842"
+    }
+  ],
+  "packages": {
+    "android": {
+      "packageName": "com.guance.cocos.demo",
+      "orientation": {
+        "portrait": true,
+        "upsideDown": false,
+        "landscapeRight": false,
+        "landscapeLeft": false
+      },
+      "apiLevel": 34,
+      "appABIs": [
+        "arm64-v8a"
+      ],
+      "isSoFileCompressed": true,
+      "useDebugKeystore": true,
+      "appBundle": false,
+      "androidInstant": false,
+      "inputSDK": false,
+      "remoteUrl": "",
+      "swappy": false,
+      "renderBackEnd": {
+        "vulkan": false,
+        "gles3": true,
+        "gles2": false
+      }
+    },
+    "native": {
+      "encrypted": false,
+      "xxteaKey": "",
+      "compressZip": false,
+      "JobSystem": "none",
+      "__version__": "1.0.2"
+    }
+  }
+}

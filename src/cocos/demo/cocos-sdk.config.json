@@ -1,0 +1,8 @@
+{
+  "ios": {
+    "dependencyManager": "cocoapods"
+  },
+  "replay": {
+    "enabled": true
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "guance-cocos-demo",
+  "version": "1.0.0",
+  "private": true,
+  "uuid": "a4e8db4f-9176-4e3d-9584-8c2e4048a43a",
+  "creator": {
+    "version": "3.8.8"
+  },
+  "scripts": {
+    "sdk:install": "guance-cocos install --project . --creator 3 --replay",
+    "setup": "npm ci && npm run sdk:install",
+    "typecheck": "node scripts/typecheck.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "build:android": "node scripts/build.mjs android",
+    "build:ios": "node scripts/build.mjs ios",
+    "build:preview": "node scripts/build.mjs web-mobile",
+    "release:android": "node scripts/release.mjs android",
+    "release:ios": "node scripts/release.mjs ios"
+  },
+  "dependencies": {
+    "@cloudcare/cocos-sdk": "0.1.0-alpha.6",
+    "@cloudcare/cocos-session-replay": "0.1.0-alpha.6"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}

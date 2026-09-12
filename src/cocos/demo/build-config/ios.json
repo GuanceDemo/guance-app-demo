@@ -1,0 +1,47 @@
+{
+  "name": "GuanceCocosDemo",
+  "platform": "ios",
+  "buildPath": "project://build",
+  "debug": true,
+  "mainBundleCompressionType": "merge_dep",
+  "startScene": "dfb26b90-bd3f-4326-98a0-3f82bd2d6842",
+  "outputName": "ios",
+  "taskName": "ios",
+  "scenes": [
+    {
+      "url": "db://assets/scenes/Demo.scene",
+      "uuid": "dfb26b90-bd3f-4326-98a0-3f82bd2d6842"
+    }
+  ],
+  "packages": {
+    "ios": {
+      "executableName": "",
+      "packageName": "com.guance.cocos.demo",
+      "renderBackEnd": {
+        "gles2": false,
+        "gles3": false,
+        "metal": true
+      },
+      "skipUpdateXcodeProject": false,
+      "orientation": {
+        "portrait": true,
+        "upsideDown": false,
+        "landscapeRight": false,
+        "landscapeLeft": false
+      },
+      "osTarget": {
+        "iphoneos": true,
+        "simulator": false
+      },
+      "targetVersion": "12.0",
+      "__version__": "1.0.1"
+    },
+    "native": {
+      "encrypted": false,
+      "xxteaKey": "",
+      "compressZip": false,
+      "JobSystem": "none",
+      "__version__": "1.0.2"
+    }
+  }
+}
