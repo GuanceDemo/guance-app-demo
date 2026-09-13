@@ -50,6 +50,14 @@ export function patchNative(root, platform, metadata = {}) {
     if (!value.includes('<key>NSLocalNetworkUsageDescription</key>')) value = value.replace(/<dict>/,
       '<dict>\n\t<key>NSLocalNetworkUsageDescription</key><string>Connect to the configured local Demo API and DataKit collector.</string>');
     writeFileSync(plist, value);
+    // Xcode generates the required iPhone/iPad sizes from Creator's existing app icon.
+    const iconRoot = path.join(root, 'native/engine/ios/Images.xcassets/AppIcon.appiconset');
+    if (existsSync(path.join(iconRoot, '1024.png'))) {
+      writeFileSync(path.join(iconRoot, 'Contents.json'), JSON.stringify({
+        images: [{ filename: '1024.png', idiom: 'universal', platform: 'ios', size: '1024x1024' }],
+        info: { author: 'xcode', version: 1 }
+      }, null, 2) + '\n');
+    }
     const cmakePath = path.join(root, 'native/engine/ios/CMakeLists.txt');
     let cmake = readFileSync(cmakePath, 'utf8');
     copyFileSync(path.join(platforms, 'ios/GCNativeGameBridge.mm'), path.join(root, 'native/engine/ios/GCNativeGameBridge.mm'));
