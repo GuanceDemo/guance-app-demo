@@ -5,6 +5,8 @@ import { DemoConfig, sdkConnection, validateConfig } from './Config';
 
 export const sdk = withSessionReplay(baseSdk);
 export const platform = () => sys.os === sys.OS.IOS ? 'ios' as const : 'android' as const;
+// Reuse on resume: start() without config restores the SDK's hidden-touch default.
+const replayConfig = { sampleRate: 1, captureFps: 1, maxImageDimension: 720, touchPrivacy: 'show' as const };
 
 export class Telemetry {
   ready = false;
@@ -31,7 +33,7 @@ export class Telemetry {
         // One Cocos scene hosts multiple pages: give each page a meaningful manual View/Action.
         // XHR collection belongs to Cocos only, to avoid duplicate native Resources.
         autoTrack: { scenes: false, actions: false, network: true, errors: true, console: false },
-        ...(config.enableSessionReplay ? { replay: { sampleRate: 1, captureFps: 1, maxImageDimension: 720, touchPrivacy: 'hide' as const } } : {}),
+        ...(config.enableSessionReplay ? { replay: replayConfig } : {}),
       });
       this.ready = true;
       this.replayEnabled = config.enableSessionReplay;
@@ -62,7 +64,7 @@ export class Telemetry {
   protect(node: Node): void { sdk.replay.setPrivacy(node, 'mask'); }
   replay(start: boolean): void {
     if (!this.ready || !this.replayEnabled) throw new Error('Enable Replay in settings, then restart the app.');
-    if (start) sdk.replay.start(); else sdk.replay.stop();
+    if (start) sdk.replay.start(replayConfig); else sdk.replay.stop();
   }
   close(): void {
     if (!this.ready) return;

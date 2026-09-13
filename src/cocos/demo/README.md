@@ -75,9 +75,22 @@ The lab remains available from the native lobby, native results and Cocos naviga
 | LongTask | Bounded ~250ms JS blocking, reported in nanoseconds |
 | Network | Automatic XHR success / HTTP 404, manual Resource and correlated ddTrace headers |
 | Replay | Game motion and particles, public text, masked test input, pause/resume |
+| Multi-touch Replay | Up to five independent colored touch trails, IDs and counters; two-finger card translation, pinch and rotation |
 | Native screens | Open the real platform lobby from the lab |
 
 Native Crash / Android ANR / UI Block capture is enabled. JS Error / LongTask experiments do not deliberately crash the native process. Automatic native View/Action/Resource and native Trace are disabled to avoid duplication with Cocos collection. Calls succeeding locally do not prove ingestion; check the configured Guance workspace. Server Trace linkage requires the existing Demo Server to run through `ddtrace-run` in the same workspace.
+
+### Multi-touch Replay verification
+
+Open **Lab → Session Replay · Multi-touch playground** (also linked from the Replay privacy page). The fixed touch arena supports up to five fingers without scrolling. Each active touch has its own color, engine touch ID and bounded trail; the last five completed trails remain dimmed until reset. The oldest two active fingers control the card. Other fingers draw independently. The HUD shows active/peak touches and down/up/cancel counts.
+
+1. Enable Session Replay in settings and restart the native app. This demo uses `touchPrivacy: 'show'` across Replay-enabled pages, including after pause/resume; configuration and private inputs retain their masks.
+2. Hold two fingers, move them in opposite directions, cross their paths, then pinch and rotate. Hold each pose for at least one second to compare with the 1 FPS canvas capture.
+3. Add a third to fifth finger. Lift one while continuing to move the others, then touch again. Verify IDs remain attached to the correct fingers, active counts decrease, and replacing a gesture finger does not jump the card.
+4. Drag outside the arena, reset while another finger is held, navigate away and return, and background/foreground the app while touching. Active markers must clear on cancellation, reset, navigation and backgrounding; a new touch starts tracking again.
+5. In Guance, find the `CocosMultiTouchReplay` View (`demo_scenario: multitouch_replay`) and compare the canvas trails/card with Replay touch indicators. Actions `multitouch_start`, `multitouch_end`, `multitouch_cancel` and `multitouch_reset` help locate the interaction; moves do not emit per-frame RUM Actions.
+
+The pinned Replay SDK `0.1.0-alpha.6` records pointer down/up (cancel becomes up), but does not emit continuous pointer-move records. Colored trails and card transforms are canvas content captured at 1 FPS, not proof of continuous pointer-event playback. Validate native recording and ingestion on a physical Android/iOS multi-touch device; desktop mouse preview only checks single-pointer interaction.
 
 ## Build and verify
 

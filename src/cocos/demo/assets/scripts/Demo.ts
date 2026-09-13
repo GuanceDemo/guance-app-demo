@@ -7,6 +7,7 @@ import { DemoConfig, endpoint, importConfig, readConfig, saveConfig, validateCon
 import { platform, sdk, Telemetry } from './Telemetry';
 import { box, button, Page, text, theme } from './UI';
 import { GameView } from './GameView';
+import { MultiTouchView } from './MultiTouchView';
 import { RoundResult } from './GameModel';
 import { NativePages, NativePayload } from './NativePages';
 
@@ -31,8 +32,9 @@ export class Demo extends Component {
   private nativePollTime = 0;
   private lastNativePayload?: NativePayload;
   private activeGame?: GameView;
+  private activeMultiTouch?: MultiTouchView;
   private best = 0;
-  private readonly background = () => this.activeGame?.pause();
+  private readonly background = () => { this.activeGame?.pause(); this.activeMultiTouch?.cancelActive(); };
 
   start(): void {
     profiler.hideStats();
@@ -86,6 +88,7 @@ export class Demo extends Component {
   private show(name: string, scenario = 'navigation'): Page {
     ++this.route; this.api.cancel(); this.replayProbe = undefined;
     this.activeGame?.destroy(); this.activeGame = undefined;
+    this.activeMultiTouch?.destroy(); this.activeMultiTouch = undefined;
     this.navigation.active = true;
     this.page?.destroy(); this.page = new Page(this.root);
     this.telemetry.view(name, scenario);
@@ -206,6 +209,7 @@ export class Demo extends Component {
     const page = this.show('CocosLaboratory', 'experimental');
     page.heading('SDK lab', 'Inspect gameplay, performance and telemetry.');
     page.action('Play · Game events and Replay', () => this.play(), true);
+    page.action('Session Replay · Multi-touch playground', () => this.multiTouchPage());
     page.note('Native lobby → Cocos game → native results. Each screen has its own RUM View. Cocos Replay captures the game; native screens are outside its camera.', 128);
     page.note('Results show local calls or HTTP responses. Check Guance for collected data. Play a round to inspect game events and replay.', 110);
     page.action('RUM · Custom View and Action', () => this.customView());
@@ -259,6 +263,7 @@ export class Demo extends Component {
   private replayPage(): void {
     const page = this.show('CocosReplayExperiment', 'experimental');
     page.heading('Replay and privacy', 'Compare motion, text and masks with the recorded replay.');
+    page.action('Open multi-touch playground', () => this.multiTouchPage());
     page.note('With Replay enabled, the blue block and public text stay visible. The red test data and input field should be masked.', 110);
     const row = page.row(128, 'ReplayMotion', theme.paper);
     this.replayProbe = box(row, 'MovingBlock', 0, 0, 80, 80, theme.primary);
@@ -275,8 +280,16 @@ export class Demo extends Component {
     page.action('Back to lab', () => this.laboratory());
   }
 
+  private multiTouchPage(): void {
+    const page = this.show('CocosMultiTouchReplay', 'multitouch_replay'); page.destroy(); this.page = undefined;
+    this.activeMultiTouch = new MultiTouchView(this.root,
+      (name, attributes) => this.telemetry.action(name, { ...attributes, demo_scenario: 'multitouch_replay' }),
+      () => this.laboratory());
+  }
+
   onDestroy(): void {
     game.off(Game.EVENT_HIDE, this.background);
+    this.activeMultiTouch?.destroy();
     this.activeGame?.destroy(); this.api.cancel(); this.page?.destroy(); this.telemetry.close();
   }
 }
