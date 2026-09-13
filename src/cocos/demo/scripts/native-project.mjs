@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const platforms = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../platforms');
 
-/** Apply app-owned HTTP/version settings to Creator-generated native projects. SDK linking is owned by its npm extension. */
+/** Apply app-owned HTTP/version/export compliance settings to Creator-generated native projects. SDK linking is owned by its npm extension. */
 export function patchNative(root, platform, metadata = {}) {
   if (platform === 'android') {
     const manifest = path.join(root, 'native/engine/android/app/AndroidManifest.xml');
@@ -37,6 +37,13 @@ export function patchNative(root, platform, metadata = {}) {
     if (!/^\d+\.\d+\.\d+$/.test(version) || !/^[1-9]\d*$/.test(buildNumber)) throw new Error('Invalid iOS version/build number.');
     value = value.replace(/(<key>CFBundleShortVersionString<\/key>\s*<string>)[^<]*(<\/string>)/, (_, before, after) => before + version + after);
     value = value.replace(/(<key>CFBundleVersion<\/key>\s*<string>)[^<]*(<\/string>)/, (_, before, after) => before + buildNumber + after);
+    // This demo does not use non-exempt encryption; include the declaration for TestFlight.
+    if (!value.includes('<key>ITSAppUsesNonExemptEncryption</key>')) {
+      value = value.replace(/<dict>/, '<dict>\n\t<key>ITSAppUsesNonExemptEncryption</key>\n\t<false/>');
+    }
+    // Creator requires an accelerometer by default, but this demo uses touch input only.
+    value = value.replace(/(<key>UIRequiredDeviceCapabilities<\/key>\s*<dict>)([\s\S]*?)(<\/dict>)/,
+      (_, before, capabilities, after) => before + capabilities.replace(/\s*<key>accelerometer<\/key>\s*<(?:true|false)\s*\/>/g, '') + after);
     if (!value.includes('<key>NSAppTransportSecurity</key>')) {
       value = value.replace(/<dict>/, '<dict>\n\t<key>NSAppTransportSecurity</key>\n\t<dict><key>NSAllowsArbitraryLoads</key><true/></dict>');
     }
