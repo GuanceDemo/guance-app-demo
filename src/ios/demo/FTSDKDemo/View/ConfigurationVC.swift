@@ -11,7 +11,7 @@ import Toast_Swift
 import MBProgressHUD
 import RxSwift
 import RxCocoa
-import FTMobileSDK
+import GuanceSDK
 enum CellInfoType{
     case rum,dataKit,dataWay,clientToken,demoAPI,otel
 }

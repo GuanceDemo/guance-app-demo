@@ -113,6 +113,13 @@
     <string name="technical_native_entry_description">Verify Android native flows, crash triggers, and advanced SDK examples.</string>
     <string name="technical_webview_entry_title">WebView Demo</string>
     <string name="technical_webview_entry_description">Open the standalone WebView test page to validate JS SDK setup and interaction tracking.</string>
+    <string name="native_websocket_entry_title">WebSocket Demo</string>
+    <string name="websocket_test_intro">URLs are generated from the current Demo API setting using fixed server test paths. Each action calls OkHttp newWebSocket; the SDK collects only the handshake, not message contents or connection lifetime.</string>
+    <string name="websocket_test_success">Connect: valid 101 and echo</string>
+    <string name="websocket_test_reject">Connect: rejected 403</string>
+    <string name="websocket_test_invalid_upgrade">Connect: invalid 101 upgrade</string>
+    <string name="websocket_test_close">Close active WebSocket</string>
+    <string name="websocket_test_configuration">Test URLs:\nsuccess=%1$s\nrejected=%2$s\nfailed=%3$s</string>
     <string name="product_feed_intro">The product feed is loaded from Flask. Tap a product to open the native detail page, then continue into the H5 product page to validate list, detail, buttons, requests, and WebView coverage.</string>
     <string name="real_scenario_compose_entry">Compose</string>
     <string name="real_scenario_empty_text">No product data available</string>

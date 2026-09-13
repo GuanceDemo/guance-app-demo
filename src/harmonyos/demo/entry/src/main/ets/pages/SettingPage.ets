@@ -4,18 +4,22 @@ import { SettingData } from '../model/SettingData';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
 import { FTSDKManager } from '../manager/FTSDKManager';
 import { AccessType } from '../constants/AccessType';
-import { SessionReplayPrivacy } from '../constants/SessionReplayPrivacy';
 import { Utils } from '../utils/Utils';
 import { HttpEngine } from '../http/HttpEngine';
+import { FTLogger } from '@guancecloud/ft_sdk';
+import { Status } from '@guancecloud/ft_sdk';
+import { AppNavBar } from '../components/AppNavBar';
+import { FormSection } from '../components/FormSection';
+import { FormTextInput } from '../components/FormTextInput';
 import {
-  DEFAULT_DATAKIT_ADDRESS,
-  DEFAULT_DATAWAY_ADDRESS,
-  DEFAULT_DATAWAY_CLIENT_TOKEN,
-  DEFAULT_API_ADDRESS,
-  DEFAULT_OTEL_ADDRESS
-} from '../constants/Constant';
-import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
-import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
+  AppColors,
+  BorderRadius,
+  FontSizes,
+  Heights,
+  Spacing,
+  StrokeWidths,
+  ToastDuration
+} from '../constants/UIConstants';
 
 // Clipboard configuration prefix
 const CONFIG_PREFIX = 'gc-demo://';
@@ -31,10 +35,9 @@ struct SettingPage {
   @State datawayClientToken: string = '';
   @State otelAddress: string = '';
   @State demoAPIAddress: string = '';
+  @State traceUrl: string = '';
   @State appId: string = '';
   @State accessType: AccessType = AccessType.DATAKIT;
-  @State enableSessionReplay: boolean = false;
-  @State sessionReplayPrivacy: SessionReplayPrivacy = SessionReplayPrivacy.ALLOW;
   @State isLoading: boolean = false;
   @State datakitAddressError: string = '';
   @State datawayAddressError: string = '';
@@ -51,302 +54,252 @@ struct SettingPage {
 
   build() {
     Column() {
-      // Title bar
-      Row() {
-        // Back arrow
-        Image($r('app.media.arrow_left'))
-          .width(24)
-          .height(24)
-          .onClick(() => {
-            router.back();
-          })
-
-        Text('Edit Demo Config')
-          .fontSize(20)
-          .fontWeight(FontWeight.Bold)
-          .fontColor('#333333')
-          .layoutWeight(1)
-          .textAlign(TextAlign.Center)
-
-        // Placeholder to keep title centered
-        Row()
-          .width(24)
-          .height(24)
-      }
-      .width('100%')
-      .height(56)
-      .padding({ left: 16, right: 16 })
-      .backgroundColor('#FFFFFF')
+      AppNavBar({
+        title: '编辑 Demo 配置',
+        showBack: true,
+        onBack: () => {
+          router.back();
+        }
+      })
 
       Scroll() {
         Column() {
-          // Access type selection
-          Column() {
-            Row() {
-              Radio({ value: 'DataKit', group: 'accessType' })
-                .checked(this.accessType === AccessType.DATAKIT)
-                .onChange((isChecked: boolean) => {
-                  if (isChecked) {
-                    this.accessType = AccessType.DATAKIT;
-                  }
-                })
-
-              Text('Local Deployment (DataKit)')
-                .fontSize(16)
-                .fontColor('#333333')
-                .margin({ left: 8 })
-                .onClick(() => {
-                  this.accessType = AccessType.DATAKIT;
-                })
-            }
-            .width('100%')
-
-            Row() {
-              Radio({ value: 'DataWay', group: 'accessType' })
-                .checked(this.accessType === AccessType.DATAWAY)
-                .onChange((isChecked: boolean) => {
-                  if (isChecked) {
-                    this.accessType = AccessType.DATAWAY;
-                  }
-                })
-
-              Text('Use Public DataWay')
-                .fontSize(16)
-                .fontColor('#333333')
-                .margin({ left: 8 })
-                .onClick(() => {
-                  this.accessType = AccessType.DATAWAY;
-                })
-            }
-            .width('100%')
-            .margin({ top: 12 })
-          }
-          .width('100%')
-          .padding(16)
-          .backgroundColor('#FFFFFF')
-          .borderRadius(8)
-          .margin({ top: 16, left: 16, right: 16 })
-
-          // DataKit configuration
-          if (this.accessType === AccessType.DATAKIT) {
-            Column() {
-              Text('Datakit Address')
-                .fontSize(14)
-                .fontColor('#666666')
-                .width('100%')
-                .margin({ bottom: 8 })
-
-              TextInput({ placeholder: 'Datakit Address', text: this.datakitAddress })
-                .width('100%')
-                .height(44)
-                .backgroundColor('#F5F5F5')
-                .borderRadius(8)
-                .onChange((value: string) => {
-                  this.datakitAddress = value;
-                  this.datakitAddressError = '';
-                })
-
-              // Error message
-              if (this.datakitAddressError) {
-                Text(this.datakitAddressError)
-                  .fontSize(12)
-                  .fontColor('#FF0000')
-                  .width('100%')
-                  .margin({ top: 4 })
-              }
-            }
-            .width('100%')
-            .padding(16)
-            .backgroundColor('#FFFFFF')
-            .borderRadius(8)
-            .margin({ top: 16, left: 16, right: 16 })
-          }
-
-          // DataWay configuration
-          if (this.accessType === AccessType.DATAWAY) {
-            Column() {
-              Text('Dataway Address')
-                .fontSize(14)
-                .fontColor('#666666')
-                .width('100%')
-                .margin({ bottom: 8 })
-
-              TextInput({ placeholder: 'Dataway Address', text: this.datawayAddress })
-                .width('100%')
-                .height(44)
-                .backgroundColor('#F5F5F5')
-                .borderRadius(8)
-                .onChange((value: string) => {
-                  this.datawayAddress = value;
-                  this.datawayAddressError = '';
-                })
-
-              // DataWay error message
-              if (this.datawayAddressError) {
-                Text(this.datawayAddressError)
-                  .fontSize(12)
-                  .fontColor('#FF0000')
-                  .width('100%')
-                  .margin({ top: 4 })
-              }
-
-              Text('Dataway Token')
-                .fontSize(14)
-                .fontColor('#666666')
-                .width('100%')
-                .margin({ top: 16, bottom: 8 })
-
-              TextInput({ placeholder: 'Dataway Token', text: this.datawayClientToken })
-                .width('100%')
-                .height(44)
-                .backgroundColor('#F5F5F5')
-                .borderRadius(8)
-                .onChange((value: string) => {
-                  this.datawayClientToken = value;
-                  this.datawayClientTokenError = '';
-                })
-
-              // Client Token error message
-              if (this.datawayClientTokenError) {
-                Text(this.datawayClientTokenError)
-                  .fontSize(12)
-                  .fontColor('#FF0000')
-                  .width('100%')
-                  .margin({ top: 4 })
-              }
-            }
-            .width('100%')
-            .padding(16)
-            .backgroundColor('#FFFFFF')
-            .borderRadius(8)
-            .margin({ top: 16, left: 16, right: 16 })
-          }
-
-          // Common configuration
-          Column() {
-            // App ID
-            Text('AppId')
-              .fontSize(14)
-              .fontColor('#666666')
-              .width('100%')
-              .margin({ bottom: 8 })
-
-            TextInput({ placeholder: 'AppId', text: this.appId })
-              .width('100%')
-              .height(44)
-              .backgroundColor('#F5F5F5')
-              .borderRadius(8)
-              .onChange((value: string) => {
-                this.appId = value;
-              })
-
-            // Demo API address
-            Text('Demo API Address')
-              .fontSize(14)
-              .fontColor('#666666')
-              .width('100%')
-              .margin({ top: 16, bottom: 8 })
-
-            TextInput({ placeholder: 'Demo API Address', text: this.demoAPIAddress })
-              .width('100%')
-              .height(44)
-              .backgroundColor('#F5F5F5')
-              .borderRadius(8)
-              .onChange((value: string) => {
-                this.demoAPIAddress = value;
-                this.demoAPIAddressError = '';
-              })
-
-            // Demo API error message
-            if (this.demoAPIAddressError) {
-              Text(this.demoAPIAddressError)
-                .fontSize(12)
-                .fontColor('#FF0000')
-                .width('100%')
-                .margin({ top: 4 })
-            }
-
-            // OTEL address
-            Text('Otel API Address (optional)')
-              .fontSize(14)
-              .fontColor('#666666')
-              .width('100%')
-              .margin({ top: 16, bottom: 8 })
-
-            TextInput({ placeholder: 'Otel API Address (optional)', text: this.otelAddress })
-              .width('100%')
-              .height(44)
-              .backgroundColor('#F5F5F5')
-              .borderRadius(8)
-              .onChange((value: string) => {
-                this.otelAddress = value;
-              })
-
-          }
-          .width('100%')
-          .padding(16)
-          .backgroundColor('#FFFFFF')
-          .borderRadius(8)
-          .margin({ top: 16, left: 16, right: 16 })
-
-          // Action buttons
-          Row() {
-            // Import configuration button
-            Button('Import Configuration')
-              .width('100%')
-              .height(44)
-              .fontSize(16)
-              .backgroundColor('#FFFFFF')
-              .fontColor('#FF6B00')
-              .border({ width: 1, color: '#FF6B00' })
-              .borderRadius(8)
-              .onClick(() => {
-                this.importFromClipboard();
-              })
-          }
-          .width('100%')
-          .padding({ left: 16, right: 16 })
-          .margin({ top: 16 })
-
-          Row() {
-            Button('Test Connection')
-              .width('100%')
-              .height(44)
-              .fontSize(16)
-              .backgroundColor('#FFFFFF')
-              .fontColor('#FF6600')
-              .border({ width: 1, color: '#FF6600' })
-              .borderRadius(8)
-              .onClick(() => {
-                this.testConnection();
-              })
-          }
-          .width('100%')
-          .padding({ left: 16, right: 16 })
-          .margin({ top: 16 })
-
-          Button('Save')
-            .width('calc(100% - 32vp)')
-            .height(44)
-            .fontSize(16)
-            .backgroundColor('#FF6600')
-            .fontColor('#FFFFFF')
-            .borderRadius(8)
-            .margin({ top: 12, left: 16, right: 16, bottom: 16 })
-            .onClick(() => {
-              this.saveConfig();
-            })
+          this.AccessTypeSection()
+          this.AccessEndpointSection()
+          this.CommonConfigSection()
         }
+        .width('100%')
+        .padding({
+          left: Spacing.SCREEN_HORIZONTAL,
+          right: Spacing.SCREEN_HORIZONTAL,
+          top: Spacing.SECTION_GAP,
+          bottom: Spacing.SECTION_GAP
+        })
       }
       .layoutWeight(1)
       .width('100%')
+
+      this.BottomActionBar()
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F5F5')
+    .backgroundColor(AppColors.PAGE_BACKGROUND)
     .bindContentCover(this.showConfigDialog, this.configDialogBuilder(), {
       modalTransition: ModalTransition.NONE
     })
+  }
+
+  @Builder
+  AccessTypeSection() {
+    FormSection({
+      title: '接入方式',
+      description: '选择 SDK 数据上报目标，表单会只展示当前方式需要的字段。',
+      content: () => {
+        this.AccessTypeContent()
+      }
+    })
+    .margin({ bottom: Spacing.SECTION_GAP })
+  }
+
+  @Builder
+  AccessTypeContent() {
+    Row() {
+      this.AccessTypeOption('Local Deployment', 'DataKit', AccessType.DATAKIT)
+
+      Blank()
+        .width(Spacing.SM)
+
+      this.AccessTypeOption('Public DataWay', 'DataWay', AccessType.DATAWAY)
+    }
+    .width('100%')
+  }
+
+  @Builder
+  AccessTypeOption(title: string, subtitle: string, type: number) {
+    Column() {
+      Text(title)
+        .fontSize(FontSizes.BODY)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.accessType === type ? AppColors.PRIMARY : AppColors.TEXT_PRIMARY)
+        .width('100%')
+
+      Text(subtitle)
+        .fontSize(FontSizes.SMALL)
+        .fontColor(this.accessType === type ? AppColors.PRIMARY : AppColors.TEXT_SECONDARY)
+        .width('100%')
+        .margin({ top: Spacing.XS })
+    }
+    .layoutWeight(1)
+    .height(Heights.ACCESS_TYPE_OPTION)
+    .padding(Spacing.MD)
+    .backgroundColor(this.accessType === type ? AppColors.PRIMARY_SOFT : AppColors.SURFACE_MUTED)
+    .border({ width: StrokeWidths.HAIRLINE, color: this.accessType === type ? AppColors.PRIMARY : AppColors.BORDER })
+    .borderRadius(BorderRadius.CARD)
+    .onClick(() => {
+      this.accessType = type as AccessType;
+    })
+  }
+
+  @Builder
+  AccessEndpointSection() {
+    if (this.accessType === AccessType.DATAKIT) {
+      FormSection({
+        title: 'DataKit 配置',
+        description: '本地部署模式需要保证真机可以访问 DataKit 地址。',
+        content: () => {
+          this.DataKitConfigContent()
+        }
+      })
+      .margin({ bottom: Spacing.SECTION_GAP })
+    } else {
+      FormSection({
+        title: 'DataWay 配置',
+        description: '公网 DataWay 模式需要填写服务地址和 Client Token。',
+        content: () => {
+          this.DataWayConfigContent()
+        }
+      })
+      .margin({ bottom: Spacing.SECTION_GAP })
+    }
+  }
+
+  @Builder
+  DataKitConfigContent() {
+    FormTextInput({
+      label: 'DataKit Address',
+      placeholder: 'http://host:9529',
+      text: this.datakitAddress,
+      error: this.datakitAddressError,
+      onValueChange: (value: string) => {
+        this.datakitAddress = value;
+        this.datakitAddressError = '';
+      }
+    })
+  }
+
+  @Builder
+  DataWayConfigContent() {
+    FormTextInput({
+      label: 'DataWay Address',
+      placeholder: 'https://rum-openway.guance.com',
+      text: this.datawayAddress,
+      error: this.datawayAddressError,
+      onValueChange: (value: string) => {
+        this.datawayAddress = value;
+        this.datawayAddressError = '';
+      }
+    })
+    FormTextInput({
+      label: 'DataWay Token',
+      placeholder: 'Client Token',
+      text: this.datawayClientToken,
+      error: this.datawayClientTokenError,
+      onValueChange: (value: string) => {
+        this.datawayClientToken = value;
+        this.datawayClientTokenError = '';
+      }
+    })
+  }
+
+  @Builder
+  CommonConfigSection() {
+    FormSection({
+      title: '公共配置',
+      description: 'AppId 用于 RUM 应用标识，Demo API 用于登录和真实场景数据。',
+      content: () => {
+        this.CommonConfigContent()
+      }
+    })
+    .margin({ bottom: Spacing.SECTION_GAP })
+  }
+
+  @Builder
+  CommonConfigContent() {
+    FormTextInput({
+      label: 'AppId',
+      placeholder: 'HarmonyOS App ID',
+      text: this.appId,
+      onValueChange: (value: string) => {
+        this.appId = value;
+      }
+    })
+    FormTextInput({
+      label: 'Demo API Address',
+      placeholder: 'http://host:8000',
+      text: this.demoAPIAddress,
+      error: this.demoAPIAddressError,
+      onValueChange: (value: string) => {
+        this.demoAPIAddress = value;
+        this.demoAPIAddressError = '';
+      }
+    })
+    FormTextInput({
+      label: 'Otel API Address (optional)',
+      placeholder: 'http://host:4318/v1/traces',
+      text: this.otelAddress,
+      onValueChange: (value: string) => {
+        this.otelAddress = value;
+      }
+    })
+  }
+
+  @Builder
+  BottomActionBar() {
+    Column() {
+      Row() {
+        Button('Import')
+          .layoutWeight(1)
+          .height(Heights.BUTTON)
+          .fontSize(FontSizes.NORMAL)
+          .fontColor(AppColors.PRIMARY)
+          .backgroundColor(AppColors.SURFACE)
+          .border({ width: StrokeWidths.HAIRLINE, color: AppColors.PRIMARY })
+          .borderRadius(BorderRadius.SMALL)
+          .onClick(() => {
+            this.importFromClipboard();
+          })
+
+        Blank()
+          .width(Spacing.SM)
+
+        Button(this.isLoading ? 'Testing...' : 'Test')
+          .layoutWeight(1)
+          .height(Heights.BUTTON)
+          .fontSize(FontSizes.NORMAL)
+          .fontColor(AppColors.PRIMARY)
+          .backgroundColor(AppColors.SURFACE)
+          .border({ width: StrokeWidths.HAIRLINE, color: AppColors.PRIMARY })
+          .borderRadius(BorderRadius.SMALL)
+          .enabled(!this.isLoading)
+          .opacity(this.isLoading ? 0.6 : 1)
+          .onClick(() => {
+            this.testConnection();
+          })
+      }
+      .width('100%')
+
+      Button('Save')
+        .width('100%')
+        .height(Heights.BUTTON)
+        .fontSize(FontSizes.MEDIUM)
+        .fontWeight(FontWeight.Medium)
+        .fontColor(AppColors.TEXT_INVERSE)
+        .backgroundColor(AppColors.PRIMARY)
+        .borderRadius(BorderRadius.SMALL)
+        .margin({ top: Spacing.SM })
+        .onClick(() => {
+          this.saveConfig();
+        })
+    }
+    .width('100%')
+    .padding({
+      left: Spacing.SCREEN_HORIZONTAL,
+      right: Spacing.SCREEN_HORIZONTAL,
+      top: Spacing.SM,
+      bottom: Spacing.MD
+    })
+    .backgroundColor(AppColors.SURFACE)
+    .border({ width: StrokeWidths.HAIRLINE, color: AppColors.BORDER })
   }
 
   /**
@@ -358,24 +311,24 @@ struct SettingPage {
       Column() {
         // Dialog title
         Text('Import Configuration')
-          .fontSize(18)
+          .fontSize(FontSizes.LARGE)
           .fontWeight(FontWeight.Bold)
-          .fontColor('#333333')
+          .fontColor(AppColors.TEXT_PRIMARY)
           .width('100%')
-          .margin({ bottom: 16 })
+          .margin({ bottom: Spacing.LG })
 
         // Dialog content
         Text('Please paste the gc-demo:// configuration string:')
-          .fontSize(14)
-          .fontColor('#666666')
+          .fontSize(FontSizes.NORMAL)
+          .fontColor(AppColors.TEXT_SECONDARY)
           .width('100%')
-          .margin({ bottom: 8 })
+          .margin({ bottom: Spacing.SM })
 
         TextArea({ placeholder: 'gc-demo://...', text: this.configInputText })
           .width('100%')
-          .height(120)
-          .backgroundColor('#F5F5F5')
-          .borderRadius(8)
+          .height(Heights.TEXT_AREA)
+          .backgroundColor(AppColors.INPUT_BG)
+          .borderRadius(BorderRadius.SMALL)
           .onChange((value: string) => {
             this.configInputText = value;
           })
@@ -383,41 +336,44 @@ struct SettingPage {
         // Dialog buttons
         Row() {
           Button('Cancel')
-            .width('48%')
-            .height(40)
-            .fontSize(16)
-            .backgroundColor('#FFFFFF')
-            .fontColor('#666666')
-            .border({ width: 1, color: '#CCCCCC' })
-            .borderRadius(8)
+            .layoutWeight(1)
+            .height(Heights.BUTTON)
+            .fontSize(FontSizes.MEDIUM)
+            .backgroundColor(AppColors.SURFACE)
+            .fontColor(AppColors.TEXT_SECONDARY)
+            .border({ width: StrokeWidths.HAIRLINE, color: AppColors.TEXT_DISABLED })
+            .borderRadius(BorderRadius.SMALL)
             .onClick(() => {
               this.showConfigDialog = false;
             })
 
+          Blank()
+            .width(Spacing.SM)
+
           Button('Confirm')
-            .width('48%')
-            .height(40)
-            .fontSize(16)
-            .backgroundColor('#FF6600')
-            .fontColor('#FFFFFF')
-            .borderRadius(8)
+            .layoutWeight(1)
+            .height(Heights.BUTTON)
+            .fontSize(FontSizes.MEDIUM)
+            .backgroundColor(AppColors.PRIMARY)
+            .fontColor(AppColors.TEXT_INVERSE)
+            .borderRadius(BorderRadius.SMALL)
             .onClick(() => {
               this.confirmImportConfig();
             })
         }
         .width('100%')
-        .margin({ top: 16 })
+        .margin({ top: Spacing.LG })
       }
       .width('100%')
-      .padding(20)
-      .backgroundColor('#FFFFFF')
-      .borderRadius(12)
+      .padding(Spacing.XL)
+      .backgroundColor(AppColors.SURFACE)
+      .borderRadius(BorderRadius.MEDIUM)
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('rgba(0, 0, 0, 0.5)')
+    .backgroundColor(AppColors.OVERLAY)
     .justifyContent(FlexAlign.Center)
-    .padding({ left: 32, right: 32 })
+    .padding({ left: Spacing.XXL, right: Spacing.XXL })
   }
 
   /**
@@ -432,10 +388,9 @@ struct SettingPage {
     this.datawayClientToken = setting.datawayClientToken;
     this.otelAddress = setting.otelAddress;
     this.demoAPIAddress = setting.demoApiAddress;
+    this.traceUrl = setting.traceUrl;
     this.appId = setting.appId;
     this.accessType = setting.type;
-    this.enableSessionReplay = setting.enableSessionReplay;
-    this.sessionReplayPrivacy = setting.sessionReplayPrivacyType;
     console.info('SettingPage: UI updated with loaded settings');
   }
 
@@ -454,7 +409,7 @@ struct SettingPage {
     }
 
     this.isLoading = true;
-    promptAction.showToast({ message: 'Testing...', duration: 1000 });
+    promptAction.showToast({ message: 'Testing...', duration: ToastDuration.SHORT });
 
     try {
       // Test DataKit/DataWay connection
@@ -498,15 +453,15 @@ struct SettingPage {
       this.isLoading = false;
 
       if (connectResult && this.demoAPIAddressError === '') {
-        promptAction.showToast({ message: 'Connection successful', duration: 1500 });
+        promptAction.showToast({ message: 'Connection successful', duration: ToastDuration.MEDIUM });
       } else {
-        promptAction.showToast({ message: 'Some connections failed, please check configuration', duration: 2000 });
+        promptAction.showToast({ message: 'Some connections failed, please check configuration', duration: ToastDuration.LONG });
       }
     } catch (err) {
       this.isLoading = false;
       console.error('Test connection failed:', JSON.stringify(err));
       FTLogger.logBackground(`Test connection error: ${JSON.stringify(err)}`, Status.ERROR);
-      promptAction.showToast({ message: 'Connection failed: ' + JSON.stringify(err), duration: 2000 });
+      promptAction.showToast({ message: 'Connection failed: ' + JSON.stringify(err), duration: ToastDuration.LONG });
     }
   }
 
@@ -526,8 +481,7 @@ struct SettingPage {
       this.datawayClientToken,
       this.otelAddress,
       this.accessType,
-      this.enableSessionReplay,
-      this.sessionReplayPrivacy
+      this.traceUrl
     );
 
     await SettingConfigManager.saveSetting(settingData);
@@ -540,7 +494,7 @@ struct SettingPage {
 
     promptAction.showToast({
       message: 'Settings saved and SDK re-initialized',
-      duration: 2000
+      duration: ToastDuration.LONG
     });
 
     setTimeout(() => {
@@ -553,28 +507,28 @@ struct SettingPage {
    */
   validateInputs(): boolean {
     if (!this.appId) {
-      promptAction.showToast({ message: 'Please enter App ID', duration: 1500 });
+      promptAction.showToast({ message: 'Please enter App ID', duration: ToastDuration.MEDIUM });
       return false;
     }
 
     if (!Utils.isValidHttpUrl(this.demoAPIAddress)) {
-      promptAction.showToast({ message: 'Invalid Demo API address', duration: 1500 });
+      promptAction.showToast({ message: 'Invalid Demo API address', duration: ToastDuration.MEDIUM });
       return false;
     }
 
     if (this.accessType === AccessType.DATAKIT) {
       if (!Utils.isValidHttpUrl(this.datakitAddress)) {
-        promptAction.showToast({ message: 'Invalid DataKit address', duration: 1500 });
+        promptAction.showToast({ message: 'Invalid DataKit address', duration: ToastDuration.MEDIUM });
         return false;
       }
     } else {
       if (!Utils.isValidHttpUrl(this.datawayAddress)) {
-        promptAction.showToast({ message: 'Invalid DataWay address', duration: 1500 });
+        promptAction.showToast({ message: 'Invalid DataWay address', duration: ToastDuration.MEDIUM });
         return false;
       }
 
       if (!this.datawayClientToken) {
-        promptAction.showToast({ message: 'Please enter Client Token', duration: 1500 });
+        promptAction.showToast({ message: 'Please enter Client Token', duration: ToastDuration.MEDIUM });
         return false;
       }
     }
@@ -597,19 +551,20 @@ struct SettingPage {
     try {
       console.info('Starting to parse configuration');
 
-      if (!configText || configText.length === 0) {
-        promptAction.showToast({ message: 'Configuration is empty', duration: 1500 });
+      const normalizedConfigText: string = configText.trim();
+      if (normalizedConfigText.length === 0) {
+        promptAction.showToast({ message: 'Configuration is empty', duration: ToastDuration.MEDIUM });
         return false;
       }
 
       // Check if it starts with configuration prefix
-      if (!configText.startsWith(CONFIG_PREFIX)) {
-        promptAction.showToast({ message: 'Invalid configuration format', duration: 2000 });
+      if (!normalizedConfigText.startsWith(CONFIG_PREFIX)) {
+        promptAction.showToast({ message: 'Invalid configuration format', duration: ToastDuration.LONG });
         return false;
       }
 
       // Remove prefix
-      const base64Str: string = configText.substring(CONFIG_PREFIX.length);
+      const base64Str: string = normalizedConfigText.substring(CONFIG_PREFIX.length);
       console.info('Base64 string length:', base64Str.length);
 
       // Base64 decode
@@ -617,7 +572,7 @@ struct SettingPage {
       console.info('Decoded string:', decodedStr);
 
       if (!decodedStr) {
-        promptAction.showToast({ message: 'Configuration parsing failed', duration: 1500 });
+        promptAction.showToast({ message: 'Configuration parsing failed', duration: ToastDuration.MEDIUM });
         return false;
       }
 
@@ -628,11 +583,14 @@ struct SettingPage {
 
 
       // Fill configuration
-      if (jsonObj.demoHarmonyOSAppId) {
-        this.appId = jsonObj.demoHarmonyOSAppId;
+      // Accept the historical `demoHarmonyoSAppId` spelling as well.
+      const harmonyOSAppId: string = jsonObj.demoHarmonyOSAppId || jsonObj.demoHarmonyoSAppId;
+      if (harmonyOSAppId) {
+        this.appId = harmonyOSAppId;
       }
       if (jsonObj.demoApiAddress) {
         this.demoAPIAddress = jsonObj.demoApiAddress;
+        this.traceUrl = '';
       }
       if (jsonObj.datakitAddress) {
         this.datakitAddress = jsonObj.datakitAddress;
@@ -645,15 +603,18 @@ struct SettingPage {
       if (jsonObj.otelAddress) {
         this.otelAddress = jsonObj.otelAddress;
       }
+      if (jsonObj.traceUrl) {
+        this.traceUrl = jsonObj.traceUrl;
+      }
 
       console.info('Configuration imported successfully');
       FTLogger.logBackground('Configuration imported successfully', Status.INFO);
-      promptAction.showToast({ message: 'Configuration imported successfully', duration: 1500 });
+      promptAction.showToast({ message: 'Configuration imported successfully', duration: ToastDuration.MEDIUM });
       return true;
     } catch (err) {
       console.error('Parse configuration failed:', JSON.stringify(err));
       FTLogger.logBackground(`Parse configuration failed: ${JSON.stringify(err)}`, Status.ERROR);
-      promptAction.showToast({ message: 'Configuration parsing failed', duration: 1500 });
+      promptAction.showToast({ message: 'Configuration parsing failed', duration: ToastDuration.MEDIUM });
       return false;
     }
   }

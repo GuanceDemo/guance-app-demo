@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import FTMobileSDK
-/// Extension example for custom log API usage based on FTMobileSDK.
+import GuanceSDK
+/// Extension example for custom log API usage based on GuanceSDK.
 /// Add file name, method name, and line number to custom logs.
 /// - Parameters:
 ///   - content: Log content

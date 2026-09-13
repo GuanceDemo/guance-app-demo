@@ -1,7 +1,6 @@
 import { SettingData } from '../model/SettingData';
 import { PreferencesUtil } from '../utils/PreferencesUtil';
 import { AccessType } from '../constants/AccessType';
-import { SessionReplayPrivacy } from '../constants/SessionReplayPrivacy';
 import {
   DEFAULT_API_ADDRESS,
   DEFAULT_DATAKIT_ADDRESS,
@@ -15,9 +14,8 @@ import {
   KEY_DATAWAY_ADDRESS,
   KEY_DATAWAY_CLIENT_TOKEN,
   KEY_DATAKIT_ADDRESS,
-  KEY_ENABLE_SESSION_REPLAY,
   KEY_OTEL_ADDRESS,
-  KEY_SESSION_REPLAY_PRIVACY_TYPE
+  KEY_TRACE_URL
 } from '../constants/Constant';
 
 /**
@@ -40,8 +38,7 @@ export class SettingConfigManager {
       await PreferencesUtil.putString(KEY_DATAWAY_CLIENT_TOKEN, settingData.datawayClientToken);
       await PreferencesUtil.putString(KEY_OTEL_ADDRESS, settingData.otelAddress);
       await PreferencesUtil.putInt(KEY_APP_ACCESS_TYPE, settingData.type);
-      await PreferencesUtil.putBoolean(KEY_ENABLE_SESSION_REPLAY, settingData.enableSessionReplay);
-      await PreferencesUtil.putInt(KEY_SESSION_REPLAY_PRIVACY_TYPE, settingData.sessionReplayPrivacyType);
+      await PreferencesUtil.putString(KEY_TRACE_URL, settingData.traceUrl);
       console.info('SettingConfigManager: All settings saved successfully');
     } catch (err) {
       console.error('SettingConfigManager: Failed to save setting:', JSON.stringify(err));
@@ -68,8 +65,7 @@ export class SettingConfigManager {
       const otelAddress = await PreferencesUtil.getString(KEY_OTEL_ADDRESS, DEFAULT_OTEL_ADDRESS);
       // Use DataKit by default (aligned with Android)
       const accessType = await PreferencesUtil.getInt(KEY_APP_ACCESS_TYPE, AccessType.DATAKIT);
-      const enableSessionReplay = await PreferencesUtil.getBoolean(KEY_ENABLE_SESSION_REPLAY, false);
-      const privacyType = await PreferencesUtil.getInt(KEY_SESSION_REPLAY_PRIVACY_TYPE, SessionReplayPrivacy.ALLOW);
+      const traceUrl = await PreferencesUtil.getString(KEY_TRACE_URL, '');
 
       SettingConfigManager.data = new SettingData(
         datakitAddress,
@@ -79,8 +75,7 @@ export class SettingConfigManager {
         datawayClientToken,
         otelAddress,
         accessType,
-        enableSessionReplay,
-        privacyType
+        traceUrl
       );
 
       console.info('SettingConfigManager: Settings loaded successfully');
@@ -96,8 +91,7 @@ export class SettingConfigManager {
         PUBLIC_DATAWAY_CLIENT_TOKEN,
         DEFAULT_OTEL_ADDRESS,
         AccessType.DATAKIT,
-        false,
-        SessionReplayPrivacy.ALLOW
+        ''
       );
     }
   }

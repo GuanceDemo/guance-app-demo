@@ -37,8 +37,8 @@
 /* Line number */
 "line_number" = "Line number";
 
-/* Extension example for custom log API usage based on FTMobileSDK */
-"logger_extension_description" = "Extension example for custom log API usage based on FTMobileSDK";
+/* Extension example for custom log API usage based on GuanceSDK */
+"logger_extension_description" = "Extension example for custom log API usage based on GuanceSDK";
 
 /* Add file name, method name, and line number to custom logs */
 "logger_extension_detail" = "Add file name, method name, and line number to custom logs";

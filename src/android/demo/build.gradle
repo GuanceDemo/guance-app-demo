@@ -17,13 +17,13 @@ buildscript {
         mavenCentral()
         //Add FT SDK remote repository address
         maven {
-            url 'https://mvnrepo.jiagouyun.com/repository/maven-releases'
+            url 'https://mvnrepo.guance.com/repository/maven-releases'
         }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.5.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.cloudcare.ft.mobile.sdk.tracker.plugin:ft-plugin:1.3.7-alpha02'
+        classpath 'com.cloudcare.ft.mobile.sdk.tracker.plugin:ft-plugin:1.3.8-beta01'
 //        classpath files('../ft-plugin/build/libs/ft-plugin-1.2.1-beta01.jar')
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -67,7 +67,7 @@ allprojects {
         mavenCentral()
         //Add FT SDK remote repository address
         maven {
-            url 'https://mvnrepo.jiagouyun.com/repository/maven-releases'
+            url 'https://mvnrepo.guance.com/repository/maven-releases'
         }
     }
 }

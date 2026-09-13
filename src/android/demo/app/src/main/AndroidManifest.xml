@@ -47,6 +47,9 @@
         <activity 
             android:name=".WebViewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".WebSocketActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity 
             android:name=".SettingActivity"
             android:theme="@style/AppTheme.NoActionBar" />

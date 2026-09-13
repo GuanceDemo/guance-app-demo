@@ -2,14 +2,16 @@ import { Context, common } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { SettingConfigManager } from '../manager/SettingConfigManager';
 import { AccessType } from '../constants/AccessType';
-import { FTSDK } from '@guancecloud/ft_sdk/src/main/ets/components/FTSDK';
-import { FTSDKConfig, FTRUMConfig, FTLoggerConfig, FTTraceConfig } from '@guancecloud/ft_sdk/src/main/ets/components/Configs';
-import { EnvType, SyncPageSize, DBCacheDiscard } from '@guancecloud/ft_sdk/src/main/ets/components/enum/Enums';
-import { TraceType } from '@guancecloud/ft_sdk/src/main/ets/components/trace/TraceType';
-import { FTLogger } from '@guancecloud/ft_sdk/src/main/ets/components/log/FTLogger';
-import { Status } from '@guancecloud/ft_sdk/src/main/ets/components/bean/Status';
-import { ErrorMonitorType } from '@guancecloud/ft_sdk/src/main/ets/components/rum/enum/ErrorMonitorType';
-import { DeviceMetricsMonitorType } from '@guancecloud/ft_sdk/src/main/ets/components/rum/enum/DeviceMetricsMonitorType';
+import { PreferencesUtil } from '../utils/PreferencesUtil';
+import { KEY_DYNAMIC_TAG } from '../constants/Constant';
+import { FTSDK } from '@guancecloud/ft_sdk';
+import { FTSDKConfig, FTRUMConfig, FTLoggerConfig, FTTraceConfig } from '@guancecloud/ft_sdk';
+import { EnvType, SyncPageSize, DBCacheDiscard } from '@guancecloud/ft_sdk';
+import { TraceType } from '@guancecloud/ft_sdk';
+import { FTLogger } from '@guancecloud/ft_sdk';
+import { Status } from '@guancecloud/ft_sdk';
+import { ErrorMonitorType } from '@guancecloud/ft_sdk';
+import { DeviceMetricsMonitorType } from '@guancecloud/ft_sdk';
 import OpenTelemetry from 'otel_sdk';
 
 const DOMAIN: number = 0x0000;
@@ -57,6 +59,7 @@ export class FTSDKManager {
 
     try {
       const setting = await SettingConfigManager.readSetting();
+      const dynamicTag = await PreferencesUtil.getString(KEY_DYNAMIC_TAG, 'not set');
 
       // 1. Configure FTSDKConfig
       let sdkConfig: FTSDKConfig;
@@ -74,7 +77,7 @@ export class FTSDKManager {
         .setAutoSync(true)
         .setSyncPageSize(SyncPageSize.LARGE) // Increase page size for faster upload
         .setDbCacheLimit(10 * 1024 * 1024) // 10MB database cache limit
-        .setDBCacheDiscard(DBCacheDiscard.DISCARD_OLDEST);
+        .setDbCacheDiscard(DBCacheDiscard.DISCARD_OLDEST);
 
       await FTSDK.install(sdkConfig, this.context);
       hilog.info(DOMAIN, TAG, 'FTSDK installed successfully');
@@ -114,6 +117,12 @@ export class FTSDKManager {
 
       FTSDK.installRUMConfig(rumConfig);
       hilog.info(DOMAIN, TAG, 'FTRUMConfig installed successfully');
+
+      const dynamicContext = new Map<string, string>();
+      dynamicContext.set(KEY_DYNAMIC_TAG, dynamicTag);
+      FTSDK.appendGlobalContext(dynamicContext);
+      FTSDK.appendRUMGlobalContext(dynamicContext);
+      hilog.info(DOMAIN, TAG, `Dynamic tag installed: ${dynamicTag}`);
 
       // 4. Configure FTTraceConfig (Trace configuration)
       const traceConfig: FTTraceConfig = new FTTraceConfig()

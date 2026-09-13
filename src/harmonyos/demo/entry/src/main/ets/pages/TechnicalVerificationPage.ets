@@ -1,22 +1,41 @@
 import { router } from '@kit.ArkUI';
 import { MenuItem } from '../model/ListItem';
 import { AppColors, FontSizes, Spacing } from '../constants/UIConstants';
+import { PageTrackingHelper } from '../utils/PageTrackingHelper';
 import { AppNavBar } from '../components/AppNavBar';
 
-/**
- * Home page - Feature list page
- */
-@Preview
+@Entry
 @Component
-export struct HomePage {
+struct TechnicalVerificationPage {
   private dataList: MenuItem[] = [
-    new MenuItem('真实场景', '模拟商品列表、商品详情与 H5 商品页，完整演示原生与 WebView 联动', $r('app.media.ohos')),
-    new MenuItem('技术验证', '集中查看 Native Demo 与 WebView Demo，单点验证 SDK 行为', $r('app.media.ic_web'))
+    new MenuItem('Native Demo', '查看 HarmonyOS 原生页面、异常触发与高级能力演示', $r('app.media.ohos')),
+    new MenuItem('WebView Demo', '直接进入 WebView 测试页，验证 JS SDK 与页面交互采集', $r('app.media.ic_web'))
   ];
+
+  aboutToAppear(): void {
+    PageTrackingHelper.trackPageAppear('TechnicalVerificationPage');
+  }
+
+  aboutToDisappear(): void {
+    PageTrackingHelper.trackPageDisappear();
+  }
 
   build() {
     Column() {
-      AppNavBar({ title: '首页' })
+      AppNavBar({
+        title: '技术验证',
+        showBack: true,
+        onBack: () => {
+          router.back();
+        }
+      })
+
+      Text('这里保留面向开发排查的验证入口，适合单独检查 Native 与 WebView 的采集效果。')
+        .width('100%')
+        .fontSize(FontSizes.NORMAL)
+        .fontColor(AppColors.TEXT_SECONDARY)
+        .padding({ left: Spacing.LG, right: Spacing.LG, top: Spacing.LG, bottom: Spacing.SM })
+        .backgroundColor(AppColors.WHITE)
 
       List() {
         ForEach(this.dataList, (item: MenuItem, index: number) => {
@@ -27,7 +46,8 @@ export struct HomePage {
       }
       .width('100%')
       .layoutWeight(1)
-      .backgroundColor('#F5F5F5')
+      .backgroundColor(AppColors.WHITE)
+      .divider({ strokeWidth: 1, color: AppColors.DIVIDER })
     }
     .width('100%')
     .height('100%')
@@ -65,16 +85,14 @@ export struct HomePage {
     })
   }
 
-  /**
-   * Handle list item click
-   */
   handleItemClick(item: MenuItem): void {
+    PageTrackingHelper.trackAction(`technical_${item.title.replace(' ', '_').toLowerCase()}`, 'click');
     switch (item.title) {
-      case '真实场景':
-        router.pushUrl({ url: 'pages/RealScenarioListPage' });
+      case 'Native Demo':
+        router.pushUrl({ url: 'pages/NativePage' });
         break;
-      case '技术验证':
-        router.pushUrl({ url: 'pages/TechnicalVerificationPage' });
+      case 'WebView Demo':
+        router.pushUrl({ url: 'pages/WebViewPage' });
         break;
     }
   }

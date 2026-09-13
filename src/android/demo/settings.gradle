@@ -4,7 +4,7 @@
 //        mavenCentral()
 //        gradlePluginPortal()
 //        maven {
-//            url('https://mvnrepo.jiagouyun.com/repository/maven-releases')
+//            url('https://mvnrepo.guance.com/repository/maven-releases')
 //        }
 //    }
 //}
@@ -14,7 +14,7 @@
 //        google()
 //        mavenCentral()
 //        maven {
-//            url('https://mvnrepo.jiagouyun.com/repository/maven-releases')
+//            url('https://mvnrepo.guance.com/repository/maven-releases')
 //        }
 //    }
 //}

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import FTMobileSDK
+import GuanceSDK
 
 
 class UserManager {

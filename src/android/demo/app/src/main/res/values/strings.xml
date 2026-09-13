@@ -113,6 +113,13 @@
     <string name="technical_native_entry_description">查看 Android 原生页面、异常触发与高级能力演示</string>
     <string name="technical_webview_entry_title">WebView Demo</string>
     <string name="technical_webview_entry_description">直接进入 WebView 测试页，验证 JS SDK 与页面交互采集</string>
+    <string name="native_websocket_entry_title">WebSocket Demo</string>
+    <string name="websocket_test_intro">地址由当前 Demo API 配置自动生成，服务端测试路径固定。每次操作都会调用 OkHttp newWebSocket；SDK 仅采集握手阶段，不采集消息内容或连接存活时长。</string>
+    <string name="websocket_test_success">连接：有效 101 并回显消息</string>
+    <string name="websocket_test_reject">连接：服务端拒绝 403</string>
+    <string name="websocket_test_invalid_upgrade">连接：无效 101 升级</string>
+    <string name="websocket_test_close">关闭当前 WebSocket</string>
+    <string name="websocket_test_configuration">测试链接：\nsuccess=%1$s\nrejected=%2$s\nfailed=%3$s</string>
     <string name="product_feed_intro">商品流由 Flask 提供真实列表数据。点击商品进入 Native 详情，再打开 H5 商品页，完整验证列表、详情、按钮、请求和 WebView 能力。</string>
     <string name="real_scenario_compose_entry">Compose 版</string>
     <string name="real_scenario_empty_text">暂无商品数据</string>

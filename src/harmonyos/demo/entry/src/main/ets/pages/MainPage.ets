@@ -34,17 +34,18 @@ struct MainPage {
       TabContent() {
         HomePage()
       }
-      .tabBar(this.TabBuilder('Home', 0, 'home'))
+      .tabBar(this.TabBuilder('首页', 0, 'home'))
 
       // Mine Tab
       TabContent() {
         MinePage()
       }
-      .tabBar(this.TabBuilder('Mine', 1, 'mine'))
+      .tabBar(this.TabBuilder('我的', 1, 'mine'))
     }
     .width('100%')
     .height('100%')
     .barHeight(Heights.TOOLBAR)
+    .backgroundColor(AppColors.WHITE)
     .onChange((index: number) => {
       // Log tab switch action
       const tabName = index === 0 ? 'Home' : 'Mine';
@@ -66,11 +67,12 @@ struct MainPage {
 
       Text(title)
         .fontSize(FontSizes.SMALL)
-        .fontColor(this.currentTabIndex === index ? AppColors.PRIMARY : AppColors.TEXT_HINT)
+        .fontColor(this.currentTabIndex === index ? AppColors.PRIMARY : AppColors.TEXT_SECONDARY)
         .margin({ top: Spacing.XS })
     }
     .width('100%')
     .height('100%')
+    .backgroundColor(AppColors.WHITE)
     .justifyContent(FlexAlign.Center)
   }
 }
