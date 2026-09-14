@@ -15,6 +15,16 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Switch;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.text.InputType;
+import android.view.WindowManager;
+import org.json.JSONArray;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.json.JSONObject;
 
 /** Real Android UI, displayed above the paused Cocos Activity. */
@@ -23,6 +33,11 @@ public final class NativeGameActivity extends Activity {
     private JSONObject payload;
     private LinearLayout content;
     private boolean completed;
+    private JSONObject draft;
+    private EditText importInput;
+    private final Map<String, View> inputs = new LinkedHashMap<>();
+    private final Map<String, View> rows = new LinkedHashMap<>();
+    private final Map<String, JSONArray> choices = new LinkedHashMap<>();
     private int dp(float value) { return Math.round(value * getResources().getDisplayMetrics().density); }
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -35,6 +50,19 @@ public final class NativeGameActivity extends Activity {
         content = new LinearLayout(this); content.setOrientation(LinearLayout.VERTICAL);
         content.setPadding(dp(26), dp(28), dp(26), dp(30));
         scroll.addView(content, new ScrollView.LayoutParams(-1, -2)); setContentView(scroll);
+        if ("settings".equals(payload.optString("page"))) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            try {
+                draft = state != null && state.containsKey("draft") ? new JSONObject(state.getString("draft")) : payload.getJSONObject("config");
+                settings();
+                if (state != null) importInput.setText(state.getString("import", ""));
+            } catch (Exception error) {
+                label("Settings could not be loaded. Return and try again.", 16, ink, 12);
+                action("Back to lobby", "lobby", false);
+            }
+            return;
+        }
         boolean results = "results".equals(payload.optString("page"));
         label("GUANCE  /  ARCADE", 13, mint, 8);
         label(results ? "ROUND COMPLETE" : "ANDROID NATIVE  /  GAME LOBBY", 11, muted, 18);
@@ -76,6 +104,97 @@ public final class NativeGameActivity extends Activity {
         label(payload.optString("sdkStatus", "SDK not configured"), 12, muted, 8);
         label("NATIVE UI → COCOS GAME → NATIVE RESULTS", 10, muted, 0);
     }
+    private void settings() throws Exception {
+        label("ANDROID NATIVE  /  SDK SETTINGS", 12, mint, 12);
+        label("SDK settings", 34, ink, 12);
+        label("Android App ID is used on this device. Save changes, then close and reopen the app if the SDK is already running.", 14, muted, 12);
+        String message = payload.optString("settingsMessage");
+        if (!message.isEmpty()) card("STATUS", message);
+        label("Import gc-demo:// or JSON", 14, muted, 4);
+        importInput = new EditText(this); importInput.setTextColor(ink); importInput.setHintTextColor(muted);
+        importInput.setHint("Paste shared settings"); importInput.setMinLines(3);
+        importInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        importInput.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(32768)});
+        content.addView(importInput, new LinearLayout.LayoutParams(-1, -2));
+        action("Import settings", "settings-import", false);
+        JSONArray fields = payload.getJSONArray("fields");
+        for (int i = 0; i < fields.length(); i++) {
+            JSONObject field = fields.getJSONObject(i); String key = field.getString("key"), kind = field.getString("kind");
+            LinearLayout row = new LinearLayout(this); row.setOrientation(LinearLayout.VERTICAL); row.setPadding(0, dp(8), 0, dp(12));
+            content.addView(row, new LinearLayout.LayoutParams(-1, -2)); rows.put(key, row);
+            TextView title = new TextView(this); title.setText(field.getString("label")); title.setTextColor(muted); title.setTextSize(14);
+            row.addView(title);
+            View input;
+            if ("toggle".equals(kind)) {
+                Switch toggle = new Switch(this); toggle.setText("Enabled"); toggle.setTextColor(ink);
+                toggle.setChecked(draft.optBoolean(key)); input = toggle;
+                toggle.setOnCheckedChangeListener((button, checked) -> updateDependencies());
+            } else if ("choice".equals(kind)) {
+                JSONArray options = field.getJSONArray("options"); choices.put(key, options);
+                String[] labels = new String[options.length()]; int selected = 0;
+                for (int j = 0; j < options.length(); j++) {
+                    labels[j] = options.getJSONObject(j).getString("label");
+                    if (options.getJSONObject(j).get("value").toString().equals(draft.optString(key))) selected = j;
+                }
+                Spinner spinner = new Spinner(this); ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, labels);
+                spinner.setAdapter(adapter); spinner.setSelection(selected); input = spinner;
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { updateDependencies(); }
+                    public void onNothingSelected(AdapterView<?> parent) {}
+                });
+            } else {
+                EditText edit = new EditText(this); edit.setTextColor(ink); edit.setSingleLine(true);
+                edit.setInputType(InputType.TYPE_CLASS_TEXT | ("secret".equals(kind) ? InputType.TYPE_TEXT_VARIATION_PASSWORD : InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS));
+                edit.setText(draft.optString(key)); edit.setSelectAllOnFocus(false); input = edit;
+            }
+            input.setContentDescription(field.getString("label")); input.setMinimumHeight(dp(48));
+            row.addView(input, new LinearLayout.LayoutParams(-1, -2)); inputs.put(key, input);
+        }
+        updateDependencies();
+        card("SESSION REPLAY", "1–5 FPS controls capture frequency, not game rendering. Quality presets control resolution, compression and traffic budget. Adaptive capture may reduce the actual frame rate.");
+        action("Check connection", "settings-check", false);
+        action("Save settings", "settings-save", true);
+        action("Cancel / Back to lobby", "lobby", false);
+    }
+    private JSONObject collectSettings() throws Exception {
+        JSONObject result = new JSONObject(draft.toString());
+        for (Map.Entry<String, View> entry : inputs.entrySet()) {
+            View input = entry.getValue(); Object value;
+            if (input instanceof Switch) value = ((Switch) input).isChecked();
+            else if (input instanceof Spinner) value = choices.get(entry.getKey()).getJSONObject(((Spinner) input).getSelectedItemPosition()).get("value");
+            else value = ((EditText) input).getText().toString().trim();
+            result.put(entry.getKey(), value);
+        }
+        return result;
+    }
+    private void updateDependencies() {
+        if (!inputs.containsKey("replayQuality")) return;
+        boolean sdk = ((Switch) inputs.get("enableSdk")).isChecked();
+        boolean replay = sdk && ((Switch) inputs.get("enableSessionReplay")).isChecked();
+        for (Map.Entry<String, View> entry : inputs.entrySet()) {
+            String key = entry.getKey();
+            boolean enabled = key.equals("enableSdk") || key.equals("demoApiAddress") || sdk;
+            if (key.equals("replayFps") || key.equals("replayQuality")) enabled = replay;
+            entry.getValue().setEnabled(enabled); rows.get(key).setAlpha(enabled ? 1 : .45f);
+        }
+        boolean datakit = ((Spinner) inputs.get("accessType")).getSelectedItemPosition() == 0;
+        rows.get("datakitAddress").setVisibility(datakit ? View.VISIBLE : View.GONE);
+        rows.get("datawayAddress").setVisibility(datakit ? View.GONE : View.VISIBLE);
+        rows.get("datawayClientToken").setVisibility(datakit ? View.GONE : View.VISIBLE);
+    }
+    @Override protected void onResume() {
+        super.onResume();
+        if (payload != null) NativeTelemetry.startNativeView(payload.optString("page"));
+    }
+    @Override protected void onPause() {
+        NativeTelemetry.stopNativeView();
+        super.onPause();
+    }
+    @Override protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        if (draft != null) try { state.putString("draft", collectSettings().toString()); state.putString("import", importInput.getText().toString()); }
+        catch (Exception ignored) { /* Never log settings. */ }
+    }
     private void label(String value, int size, int color, int bottom) {
         TextView text = new TextView(this); text.setText(value); text.setTextSize(size); text.setTextColor(color);
         text.setTypeface(Typeface.create("sans-serif", size >= 30 ? Typeface.BOLD : Typeface.NORMAL));
@@ -90,8 +209,13 @@ public final class NativeGameActivity extends Activity {
         button.setBackground(background); LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, dp(52));
         params.bottomMargin = dp(12); content.addView(button, params);
         button.setOnClickListener(view -> {
-            if (completed) return; completed = true;
-            NativeGameBridge.complete(payload.optInt("requestId"), value); finish();
+            if (completed) return;
+            if (value.startsWith("settings-")) {
+                try { NativeGameBridge.complete(payload.optInt("requestId"), value, collectSettings(), importInput.getText().toString()); }
+                catch (Exception error) { label("Unable to read settings. Please try again.", 14, ink, 8); return; }
+            } else NativeGameBridge.complete(payload.optInt("requestId"), value);
+            NativeTelemetry.action(value);
+            completed = true; finish();
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
     }

@@ -50,15 +50,22 @@ export class GameView {
     const panel = this.pauseOverlay = box(this.node, 'PauseOverlay', 0, 20, 610, 360, theme.paper);
     text(panel, exit ? 'Leave this round?' : 'Round paused', 0, 105, 540, 64, 34);
     text(panel, 'Your timer is paused.', 0, 40, 540, 48, 23, theme.muted);
-    button(panel, 'Resume game', 0, -40, 530, 64, () => {
-      panel.destroy(); this.pauseOverlay = undefined; this.model.paused = false;
-      this.onAction('game_resume', { score: this.model.score });
-    }, true);
+    button(panel, 'Resume game', 0, -40, 530, 64, () => this.resume(), true);
     button(panel, 'Back to native lobby', 0, -120, 530, 60, () => {
       this.onAction('game_abandon', { score: this.model.score }); this.onExit();
     });
     // Prevent touches on the modal background from reaching the game arena.
     panel.on(Node.EventType.TOUCH_START, (event: EventTouch) => { event.propagationStopped = true; });
+  }
+  back(): void {
+    if (this.pauseOverlay) this.resume();
+    else this.pause(true);
+  }
+  private resume(): void {
+    if (!this.pauseOverlay) return;
+    this.pauseOverlay.active = false;
+    this.pauseOverlay.destroy(); this.pauseOverlay = undefined; this.model.paused = false;
+    this.onAction('game_resume', { score: this.model.score });
   }
   update(dt: number): void {
     if (this.finished) return;

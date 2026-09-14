@@ -8,13 +8,72 @@ export interface DemoConfig {
   demoAndroidAppId: string;
   demoIOSAppId: string;
   enableSessionReplay: boolean;
+  enableSdk: boolean;
+  debug: boolean;
+  enableNativeCrash: boolean;
+  enableNativeAnr: boolean;
+  enableNativeUiBlock: boolean;
+  enableAutoResource: boolean;
+  enableAutoError: boolean;
+  replayFps: number;
+  replayQuality: 'low' | 'medium' | 'high';
 }
 
 export const CONFIG_KEY = 'gc_demo_cocos_setting_v1';
 export const defaultConfig = (): DemoConfig => ({
   accessType: 'datakit', datakitAddress: '', datawayAddress: '', datawayClientToken: '',
   demoApiAddress: '', demoAndroidAppId: '', demoIOSAppId: '', enableSessionReplay: true,
+  enableSdk: true, debug: false, enableNativeCrash: true, enableNativeAnr: true,
+  enableNativeUiBlock: true, enableAutoResource: true, enableAutoError: true,
+  replayFps: 1, replayQuality: 'medium',
 });
+
+export const toggleKeys = ['enableSdk', 'debug', 'enableSessionReplay', 'enableNativeCrash',
+  'enableNativeAnr', 'enableNativeUiBlock', 'enableAutoResource', 'enableAutoError'] as const;
+
+export function validateSdkOptions(config: DemoConfig): void {
+  for (const key of toggleKeys) if (typeof config[key] !== 'boolean') throw new Error(`${key} must be a boolean.`);
+  if (!Number.isInteger(config.replayFps) || config.replayFps < 1 || config.replayFps > 5) throw new Error('Replay FPS must be an integer from 1 to 5.');
+  if (!['low', 'medium', 'high'].includes(config.replayQuality)) throw new Error('Select Low, Medium or High replay quality.');
+}
+
+/** Send only the current platform ID across the SDK bridge. Never fall back to the other platform. */
+export function sdkAppId(config: DemoConfig, platform: Platform) {
+  const appId = (platform === 'android' ? config.demoAndroidAppId : config.demoIOSAppId).trim();
+  if (!appId) throw new Error(`Enter the ${platform === 'android' ? 'Android' : 'iOS'} App ID.`);
+  return platform === 'android' ? { androidAppId: appId } : { iosAppId: appId };
+}
+
+export function sdkReplay(config: DemoConfig) {
+  return { captureFps: config.replayFps,
+    imagePolicy: { quality: config.replayQuality }, touchPrivacy: 'show' as const };
+}
+
+export interface SettingField {
+  key: keyof DemoConfig; label: string; kind: 'text' | 'secret' | 'toggle' | 'choice';
+  options?: Array<{ label: string; value: string | number }>;
+}
+export function settingFields(platform: Platform): SettingField[] {
+  return [
+    { key: 'enableSdk', label: 'Enable SDK', kind: 'toggle' },
+    { key: platform === 'android' ? 'demoAndroidAppId' : 'demoIOSAppId', label: `${platform === 'android' ? 'Android' : 'iOS'} App ID (this device)`, kind: 'text' },
+    { key: 'accessType', label: 'Collector', kind: 'choice', options: [{ label: 'DataKit', value: 'datakit' }, { label: 'DataWay', value: 'dataway' }] },
+    { key: 'datakitAddress', label: 'DataKit URL', kind: 'text' },
+    { key: 'datawayAddress', label: 'DataWay URL', kind: 'text' },
+    { key: 'datawayClientToken', label: 'DataWay Client Token', kind: 'secret' },
+    { key: 'demoApiAddress', label: 'Demo API URL', kind: 'text' },
+    { key: 'enableSessionReplay', label: 'Session Replay', kind: 'toggle' },
+    { key: 'replayFps', label: 'Replay capture FPS', kind: 'choice', options: [1, 2, 3, 4, 5].map(value => ({ label: `${value} FPS`, value })) },
+    { key: 'replayQuality', label: 'Replay image quality', kind: 'choice', options: [
+      { label: 'Low · 480 px', value: 'low' }, { label: 'Medium · 720 px', value: 'medium' }, { label: 'High · 960 px', value: 'high' }] },
+    { key: 'enableNativeCrash', label: 'Native crash collection', kind: 'toggle' },
+    ...(platform === 'android' ? [{ key: 'enableNativeAnr', label: 'Android ANR collection', kind: 'toggle' } as SettingField] : []),
+    { key: 'enableNativeUiBlock', label: 'Native UI block collection', kind: 'toggle' },
+    { key: 'enableAutoResource', label: 'Automatic Cocos network collection', kind: 'toggle' },
+    { key: 'enableAutoError', label: 'Automatic JavaScript error collection', kind: 'toggle' },
+    { key: 'debug', label: 'SDK debug logging', kind: 'toggle' },
+  ];
+}
 
 // JSB does not guarantee browser atob/TextDecoder globals.
 function decodeBase64(text: string): string {
@@ -38,8 +97,9 @@ export function isHttpUrl(value: string): boolean {
 }
 
 export function validateConfig(config: DemoConfig, platform: Platform): void {
-  const appId = platform === 'ios' ? config.demoIOSAppId : config.demoAndroidAppId;
-  if (!appId.trim()) throw new Error(`Enter the ${platform === 'ios' ? 'iOS' : 'Android'} App ID.`);
+  validateSdkOptions(config);
+  if (!config.enableSdk) return;
+  sdkAppId(config, platform);
   if (!isHttpUrl(config.demoApiAddress)) throw new Error('Demo API URL must be a valid HTTP(S) URL.');
   if (config.accessType === 'datakit') {
     if (!isHttpUrl(config.datakitAddress)) throw new Error('Enter a valid DataKit URL.');
@@ -71,11 +131,25 @@ export function importConfig(input: string, previous = defaultConfig()): DemoCon
   config.demoIOSAppId = get('demoCocosIOSAppId') || config.demoIOSAppId;
   if (get('datakitAddress')) config.accessType = 'datakit';
   else if (get('datawayAddress') && get('datawayClientToken')) config.accessType = 'dataway';
-  if (data.enableSessionReplay !== undefined) {
-    if (typeof data.enableSessionReplay !== 'boolean') throw new Error('enableSessionReplay must be a boolean.');
-    config.enableSessionReplay = data.enableSessionReplay;
+  for (const key of toggleKeys) {
+    if (data[key] === undefined) continue;
+    if (typeof data[key] !== 'boolean') throw new Error(`${key} must be a boolean.`);
+    config[key] = data[key] as boolean;
   }
+  if (data.replayFps !== undefined) config.replayFps = data.replayFps as number;
+  if (data.replayQuality !== undefined) config.replayQuality = data.replayQuality as DemoConfig['replayQuality'];
+  validateSdkOptions(config);
   return config;
+}
+
+/** Native form round-trip preserves the explicit collector and ignores unknown fields. */
+export function formConfig(value: unknown): DemoConfig {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Invalid settings form.');
+  const data = value as Record<string, unknown>;
+  const result = importConfig(JSON.stringify(data));
+  if (data.accessType !== 'datakit' && data.accessType !== 'dataway') throw new Error('Select DataKit or DataWay.');
+  result.accessType = data.accessType;
+  return result;
 }
 
 export interface ConfigStorage { getItem(key: string): string | null; setItem(key: string, value: string): void; }

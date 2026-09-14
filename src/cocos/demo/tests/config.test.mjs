@@ -55,3 +55,32 @@ test('failed validation never overwrites a saved configuration', () => {
 test('endpoint joining handles a backend mounted below a path', () => {
   assert.equal(config.endpoint('https://demo.example.com/demo/', '/api/products'), 'https://demo.example.com/demo/api/products');
 });
+
+test('platform routing never sends or falls back to the other platform App ID', () => {
+  const value = config.importConfig(encoded({ ...payload, demoCocosAndroidAppId: 'cocos-android', demoCocosIOSAppId: 'cocos-ios' }));
+  assert.deepEqual(config.sdkAppId(value, 'android'), { androidAppId: 'cocos-android' });
+  assert.deepEqual(config.sdkAppId(value, 'ios'), { iosAppId: 'cocos-ios' });
+  assert.throws(() => config.sdkAppId({ ...value, demoAndroidAppId: '' }, 'android'), /Android/);
+  assert.throws(() => config.sdkAppId({ ...value, demoIOSAppId: '' }, 'ios'), /iOS/);
+  assert.equal(config.settingFields('android').some(f => f.key === 'demoIOSAppId'), false);
+  assert.equal(config.settingFields('ios').some(f => f.key === 'demoAndroidAppId'), false);
+});
+test('old settings gain defaults; native drafts retain explicit mode, FPS, quality and switches', () => {
+  const old = config.readConfig({ getItem: () => JSON.stringify(payload) });
+  assert.equal(old.enableSdk, true); assert.equal(old.replayFps, 1); assert.equal(old.replayQuality, 'medium');
+  const draft = { ...old, accessType: 'dataway', datawayAddress: 'https://dataway.example.com', datawayClientToken: 'test',
+    enableNativeCrash: false, enableAutoResource: false, debug: true, replayFps: 5, replayQuality: 'high' };
+  const form = config.formConfig(draft);
+  assert.deepEqual(form, draft);
+  let saved;
+  config.saveConfig({ setItem: (_, value) => { saved = value; } }, form, 'android');
+  assert.deepEqual(config.readConfig({ getItem: () => saved }), draft);
+  assert.deepEqual(config.sdkReplay(form), { captureFps: 5, imagePolicy: { quality: 'high' }, touchPrivacy: 'show' });
+});
+test('disabled SDK can be saved before connection setup; invalid options never persist', () => {
+  assert.doesNotThrow(() => config.validateConfig({ ...config.defaultConfig(), enableSdk: false }, 'android'));
+  for (const changes of [{ replayFps: 0 }, { replayFps: 6 }, { replayFps: 1.5 }, { replayFps: '5' }, { replayQuality: 'ultra' }, { enableSdk: 'false' }, { debug: null }]) {
+    assert.throws(() => config.importConfig(JSON.stringify(changes)));
+  }
+  for (const value of [null, [], 42, { ...config.defaultConfig(), accessType: 'invalid' }]) assert.throws(() => config.formConfig(value));
+});

@@ -5,13 +5,18 @@ import android.content.Intent;
 import com.cocos.lib.GlobalObject;
 import org.json.JSONObject;
 
-/** App-owned navigation bridge. Only non-sensitive round data crosses this boundary. */
+/** App-owned navigation bridge. Settings drafts stay inside this app and are never logged. */
 public final class NativeGameBridge {
     private static String action = "";
+    private static boolean backRequested;
+    static synchronized void requestBack() { backRequested = true; }
+    public static synchronized boolean consumeBack() {
+        boolean result = backRequested; backRequested = false; return result;
+    }
     public static void show(String payload) {
         Activity host = GlobalObject.getActivity();
         if (host == null) throw new IllegalStateException("Cocos Activity is unavailable");
-        synchronized (NativeGameBridge.class) { action = ""; }
+        synchronized (NativeGameBridge.class) { action = ""; backRequested = false; }
         host.runOnUiThread(() -> {
             try {
                 Intent intent = new Intent(host, NativeGameActivity.class);
@@ -25,7 +30,11 @@ public final class NativeGameBridge {
         });
     }
     static synchronized void complete(int requestId, String value) {
-        try { action = new JSONObject().put("requestId", requestId).put("action", value).toString(); }
+        complete(requestId, value, null, null);
+    }
+    static synchronized void complete(int requestId, String value, JSONObject config, String importText) {
+        try { action = new JSONObject().put("requestId", requestId).put("action", value)
+            .put("config", config).put("importText", importText).toString(); }
         catch (Exception ignored) { action = ""; }
     }
     public static synchronized String consumeAction() { String result = action; action = ""; return result; }
