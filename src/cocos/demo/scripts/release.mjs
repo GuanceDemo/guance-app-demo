@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const packageInfo = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'));
 const platform = process.argv[2];
 if (!['android', 'ios'].includes(platform)) throw new Error('Usage: node scripts/release.mjs android|ios');
 const env = process.env;
@@ -88,6 +89,6 @@ if (platform === 'android') {
 const sha256 = createHash('sha256').update(readFileSync(artifact)).digest('hex');
 writeFileSync(artifact + '.sha256', `${sha256}  ${path.basename(artifact)}\n`);
 writeFileSync(path.join(output, 'release.json'), JSON.stringify({ platform, version: env.DEMO_VERSION,
-  buildNumber: env.DEMO_BUILD_NUMBER, packageName: env.DEMO_PACKAGE_NAME, creator: '3.8.8', sdk: '0.1.0-alpha.6',
+  buildNumber: env.DEMO_BUILD_NUMBER, packageName: env.DEMO_PACKAGE_NAME, creator: '3.8.8', sdk: packageInfo.dependencies['@cloudcare/cocos-sdk'],
   artifact: path.basename(artifact), sha256, preparedAt: new Date().toISOString() }, null, 2) + '\n');
 console.log(`Prepared ${artifact}. No upload performed.`);

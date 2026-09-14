@@ -54,3 +54,17 @@ test('Android Back mailbox consumes once and is not read for native pages or oth
   sys.isNative = true; fail = true;
   try { assert.equal(pages.consumeBack(), false); } finally { fail = false; }
 });
+
+test('settings responses carry typed drafts once and cannot leak into the next request', () => {
+  sys.os = 'Android'; calls.length = 0;
+  const pages = new NativePages(); pages.open({ ...payload, page: 'settings' });
+  const { requestId } = JSON.parse(calls[0][3]);
+  const config = { enableSdk: false, replayFps: 3, replayQuality: 'low' };
+  reply = JSON.stringify({ requestId: requestId - 1, action: 'settings-save', config });
+  assert.equal(pages.poll(), undefined); assert.equal(pages.settingsResult, undefined);
+  reply = JSON.stringify({ requestId, action: 'settings-import', config, importText: 'gc-demo://test' });
+  assert.equal(pages.poll(), 'settings-import');
+  assert.deepEqual(pages.settingsResult, { config, importText: 'gc-demo://test' });
+  assert.equal(pages.poll(), undefined);
+  pages.open(payload); assert.equal(pages.settingsResult, undefined);
+});

@@ -18,8 +18,8 @@
     "release:ios": "node scripts/release.mjs ios"
   },
   "dependencies": {
-    "@cloudcare/cocos-sdk": "0.1.0-alpha.6",
-    "@cloudcare/cocos-session-replay": "0.1.0-alpha.6"
+    "@cloudcare/cocos-sdk": "0.1.0-alpha.7",
+    "@cloudcare/cocos-session-replay": "0.1.0-alpha.7"
   },
   "devDependencies": {
     "typescript": "5.9.3"

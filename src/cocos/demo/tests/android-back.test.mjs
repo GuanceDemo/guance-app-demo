@@ -13,7 +13,7 @@ class Page {
 }
 class Telemetry {
   message = '';
-  view() {} protect() {}
+  view() {} protect() {} leave() {}
 }
 class MultiTouchView {
   constructor(_root, _action, back) { this.back = back; }
@@ -47,6 +47,7 @@ const gameView = compile('GameView', { cc: engine, './UI': ui, './GameModel': ga
 const { GameView } = await import(gameView);
 const { Demo } = await import(compile('Demo', {
   cc: engine, './UI': ui, './GameView': gameView,
+  './NativeHost': url('export const configStorage = {};'),
   './Api': url('export class Api { cancel() {} }'),
   './Config': url('export const readConfig = () => ({}), endpoint = () => {}, formConfig = () => {}, importConfig = () => {}, saveConfig = () => {}, settingFields = () => [], validateConfig = () => {};'),
   './Telemetry': url('export const { Telemetry } = globalThis.__androidBackTest; export const platform = () => "android", sdk = {};'),
@@ -96,4 +97,31 @@ test('game Back pauses for confirmation, then cancels the dialog without abandon
   back(value); assert.equal(round.model.paused, false); assert.equal(round.pauseOverlay, undefined);
   assert.equal(overlay.destroyed, true); assert.equal(overlay.active, false);
   assert.deepEqual(events, ['game_pause', 'game_resume']);
+});
+
+test('native presentation releases Cocos before opening and fallback re-enters a Cocos View', () => {
+  const value = demo(), events = [];
+  value.telemetry.leave = () => events.push('leave');
+  value.telemetry.view = name => events.push(name);
+  value.nativePages.open = () => { events.push('open'); return true; };
+  value.home();
+  assert.deepEqual(events, ['leave', 'open']);
+  assert.equal(value.cocosView, undefined);
+  events.length = 0;
+  value.nativePages.open = () => { events.push('unavailable'); return false; };
+  value.home();
+  assert.deepEqual(events, ['leave', 'unavailable', 'CocosPreviewLobby']);
+});
+
+test('component visibility restores only visible Cocos pages and never steals a pending native View', () => {
+  const value = demo(), events = [];
+  value.telemetry.leave = () => events.push('leave');
+  value.telemetry.view = name => events.push(name);
+  value.show('Game', 'game'); value.onDisable(); value.onEnable();
+  assert.deepEqual(events, ['Game', 'leave', 'Game']);
+  events.length = 0;
+  value.nativePages.pending = true; value.onEnable();
+  assert.deepEqual(events, []);
+  value.cocosView = undefined; value.nativePages.pending = false; value.onEnable();
+  assert.deepEqual(events, []);
 });
