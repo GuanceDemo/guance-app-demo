@@ -7,6 +7,12 @@ export interface NativePayload { page: NativePage; best: number; sdkStatus: stri
 export class NativePages {
   private request = 0;
   pending = false;
+  consumeBack(): boolean {
+    if (this.pending || !sys.isNative || sys.os !== sys.OS.ANDROID) return false;
+    try {
+      return native.reflection.callStaticMethod('com/guance/cocos/demo/NativeGameBridge', 'consumeBack', '()Z') === true;
+    } catch { return false; }
+  }
   private call(method: 'show' | 'consumeAction', value?: string): unknown {
     if (sys.os === sys.OS.ANDROID) return method === 'show'
       ? native.reflection.callStaticMethod('com/guance/cocos/demo/NativeGameBridge', 'show', '(Ljava/lang/String;)V', value!)

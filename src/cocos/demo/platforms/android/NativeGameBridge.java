@@ -8,10 +8,15 @@ import org.json.JSONObject;
 /** App-owned navigation bridge. Only non-sensitive round data crosses this boundary. */
 public final class NativeGameBridge {
     private static String action = "";
+    private static boolean backRequested;
+    static synchronized void requestBack() { backRequested = true; }
+    public static synchronized boolean consumeBack() {
+        boolean result = backRequested; backRequested = false; return result;
+    }
     public static void show(String payload) {
         Activity host = GlobalObject.getActivity();
         if (host == null) throw new IllegalStateException("Cocos Activity is unavailable");
-        synchronized (NativeGameBridge.class) { action = ""; }
+        synchronized (NativeGameBridge.class) { action = ""; backRequested = false; }
         host.runOnUiThread(() -> {
             try {
                 Intent intent = new Intent(host, NativeGameActivity.class);

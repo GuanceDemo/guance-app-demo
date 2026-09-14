@@ -10,6 +10,8 @@ Drag the ship around the arena, collect green gems and avoid red meteors. Each r
 
 Gameplay works without a backend or SDK configuration. Configure Guance to inspect gameplay telemetry and Session Replay. The optional network experiments use the existing Demo Server.
 
+Android system Back returns from Cocos lab subpages to their parent and from the lab to the native lobby. During a round, Back pauses and opens the leave confirmation; Back again dismisses it and resumes the round. Choose **Back to native lobby** to abandon the round. Native screens keep their own Back handling.
+
 ## Native / Cocos boundaries
 
 | Screen | Android | iOS |
@@ -22,6 +24,12 @@ Gameplay works without a backend or SDK configuration. Configure Guance to inspe
 Native pages receive only round results, personal best and a credential-free SDK status. Reflection opens the platform screen; a one-shot mailbox returns a navigation action to Cocos. SDK credentials stay in the existing app configuration and are not passed to these pages.
 
 App-owned native source lives in `platforms/android` and `platforms/ios`. `scripts/native-project.mjs` copies it into Creator-generated projects, registers the Android Activity, preserves reflection entry points for R8 and adds the Objective-C++ file to the iOS target. Generated `native/`, `build/` and SDK extensions remain ignored. Always use the build scripts to apply these integrations.
+
+Android launches `NativeCocosActivity`, a subclass of Creator's `AppActivity`. It forwards system Back through the native mailbox, including Android 13+ back callbacks, while leaving text-editing keys to the engine. The generated manifest preserves Creator's launcher settings and opts this Activity into the system back callback.
+
+Android builds also apply `ft-plugin:1.3.9-alpha01`, paired with the Cocos SDK's Android Agent `1.7.6-alpha03` in its Hybrid host. The native patch script adds the Maven classpath and plugin configuration after each Creator build, including HTTPURLConnection instrumentation. Runtime native collection switches still follow the demo's telemetry configuration.
+
+The same script sets `max-page-size=16384` and `common-page-size=16384` when linking `libcocos.so`, so Creator's NDK 22 produces 16 KB-aligned LOAD segments and GNU_RELRO boundaries. This applies to Debug and Release. Check every packaged `.so` again when upgrading native dependencies; these link flags do not change prebuilt libraries. ELF/ZIP alignment checks do not replace testing on a device with a 16 KB page size.
 
 Browser builds show an explicitly labeled **Cocos preview** of the lobby and results. Real platform pages require a native build. The Cocos Replay camera captures the game and Cocos lab; it does **not** capture the Android Activity or UIKit screens. Each native/Cocos destination receives a distinct manual RUM View.
 

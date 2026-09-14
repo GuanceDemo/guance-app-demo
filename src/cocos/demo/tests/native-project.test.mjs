@@ -9,14 +9,46 @@ test('native app patches are repeatable and apply the requested iOS version/buil
   const root = mkdtempSync(path.join(tmpdir(), 'cocos-native-test-'));
   try {
     mkdirSync(path.join(root, 'native/engine/android/app'), { recursive: true });
+    mkdirSync(path.join(root, 'build/android/proj'), { recursive: true });
     mkdirSync(path.join(root, 'native/engine/ios'), { recursive: true });
+    const gradleRoots = ['build/android/proj/build.gradle', 'native/engine/android/build.gradle'];
+    for (const file of gradleRoots) writeFileSync(path.join(root, file), "buildscript {\n dependencies { classpath 'com.android.tools.build:gradle:8.10.1' }\n}\n");
+    const appGradle = path.join(root, 'native/engine/android/app/build.gradle');
+    const androidCmake = path.join(root, 'native/engine/android/CMakeLists.txt');
+    const androidCmakeTemplate = 'set(CC_LIB_NAME cocos)\nadd_library(${CC_LIB_NAME} SHARED ${CC_ALL_SOURCES})\n';
+    writeFileSync(androidCmake, androidCmakeTemplate);
+    writeFileSync(appGradle, "apply plugin: 'com.android.application'\n/* COCOS_SDK_BEGIN */\ndependencies { implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.7.6-alpha03' }\n/* COCOS_SDK_END */\n");
     writeFileSync(path.join(root, 'package.json'), '{"version":"1.0.0"}');
     const manifest = path.join(root, 'native/engine/android/app/AndroidManifest.xml');
-    writeFileSync(manifest, '<manifest><application android:usesCleartextTraffic="false" /></manifest>');
+    writeFileSync(manifest, '<manifest><application android:usesCleartextTraffic="false"><activity android:name="com.cocos.game.AppActivity" android:exported="true"><intent-filter /></activity></application></manifest>');
     patchNative(root, 'android'); patchNative(root, 'android');
+    const linkedCmake = readFileSync(androidCmake, 'utf8');
+    assert.equal((linkedCmake.match(/# DEMO_ANDROID_16KB/g) ?? []).length, 1);
+    assert.match(linkedCmake, /set_property\(TARGET \$\{CC_LIB_NAME\} APPEND_STRING PROPERTY LINK_FLAGS/);
+    assert.match(linkedCmake, /-Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384/);
+    for (const file of gradleRoots) {
+      const gradle = readFileSync(path.join(root, file), 'utf8');
+      assert.equal((gradle.match(/classpath 'com\.cloudcare\.ft\.mobile\.sdk\.tracker\.plugin:ft-plugin:1\.3\.9-alpha01'/g) ?? []).length, 1);
+      assert.match(gradle, /buildscript\s*\{\s*\/\/ DEMO_FT_PLUGIN_BEGIN/);
+      assert.match(gradle, /com\.android\.tools\.build:gradle:8\.10\.1/);
+    }
+    const gradle = readFileSync(appGradle, 'utf8');
+    assert.equal((gradle.match(/apply plugin: 'ft-plugin'/g) ?? []).length, 1);
+    assert.match(gradle, /instrumentHttpURLConnection = true/);
+    assert.match(gradle, /ft-sdk:1\.7\.6-alpha03/);
+    // Creator regenerates the build entry point while retaining the native app.
+    writeFileSync(path.join(root, gradleRoots[0]), 'buildscript {\n}\n');
+    writeFileSync(androidCmake, androidCmakeTemplate);
+    patchNative(root, 'android');
+    assert.equal(readFileSync(androidCmake, 'utf8'), linkedCmake);
+    assert.match(readFileSync(path.join(root, gradleRoots[0]), 'utf8'), /ft-plugin:1\.3\.9-alpha01/);
+    assert.equal(readFileSync(appGradle, 'utf8'), gradle);
     assert.equal((readFileSync(manifest, 'utf8').match(/android:usesCleartextTraffic="true"/g) ?? []).length, 1);
     assert.equal((readFileSync(manifest, 'utf8').match(/com\.guance\.cocos\.demo\.NativeGameActivity/g) ?? []).length, 1);
     assert.match(readFileSync(manifest, 'utf8'), /android:exported="false"/);
+    assert.equal((readFileSync(manifest, 'utf8').match(/com\.guance\.cocos\.demo\.NativeCocosActivity/g) ?? []).length, 1);
+    assert.match(readFileSync(manifest, 'utf8'), /android:enableOnBackInvokedCallback="true"/);
+    assert.match(readFileSync(path.join(root, 'native/engine/android/app/src/com/guance/cocos/demo/NativeCocosActivity.java'), 'utf8'), /extends AppActivity/);
     assert.match(readFileSync(path.join(root, 'native/engine/android/app/src/com/guance/cocos/demo/NativeGameActivity.java'), 'utf8'), /extends Activity/);
     const rules = readFileSync(path.join(root, 'native/engine/android/app/proguard-rules.pro'), 'utf8');
     assert.equal((rules.match(/# DEMO_COCOS_BRIDGE/g) ?? []).length, 1);

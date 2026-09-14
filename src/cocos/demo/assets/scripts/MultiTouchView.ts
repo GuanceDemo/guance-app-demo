@@ -37,7 +37,7 @@ export class MultiTouchView {
     button(this.node, 'Reset', -166, -426, 308, 64, () => {
       this.cancelActive(); this.model.reset(); this.render(); this.onAction('multitouch_reset', {});
     });
-    button(this.node, 'Back to lab', 166, -426, 308, 64, onExit);
+    button(this.node, 'Back', 166, -426, 308, 64, onExit);
     this.render();
   }
   private point(event: EventTouch): TouchPoint {
