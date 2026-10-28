@@ -1,0 +1,16 @@
+library/
+local/
+temp/
+profiles/
+settings/services.json
+build/
+packages/
+node_modules/
+creator.d.ts
+jsb.d.ts
+assets/guance-cocos-sdk/
+assets/guance-cocos-sdk.meta
+artifacts/
+*.local.json
+/docs/
+!package-lock.json

@@ -1,0 +1,10 @@
+import { copyFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { creatorPath } from './creator.mjs';
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const resources = process.env.COCOS_RESOURCES || path.resolve(path.dirname(creatorPath()), '../Resources');
+copyFileSync(path.join(resources, 'utils/api/creator.d.ts'), path.join(root, 'creator.d.ts'));
+const result = spawnSync(process.execPath, [path.join(root, 'node_modules/typescript/bin/tsc'), '-p', root], { stdio: 'inherit' });
+process.exit(result.status ?? 1);

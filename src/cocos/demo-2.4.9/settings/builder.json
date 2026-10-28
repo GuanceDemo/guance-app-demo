@@ -1,0 +1,34 @@
+{
+  "title": "GuanceCocosDemo249",
+  "packageName": "com.guance.cocos.demo249",
+  "startScene": "76584d2e-f358-4c67-bd63-9fae1d123835",
+  "excludeScenes": [],
+  "orientation": {
+    "portrait": true,
+    "upsideDown": false,
+    "landscapeLeft": false,
+    "landscapeRight": false
+  },
+  "webOrientation": "portrait",
+  "inlineSpriteFrames": true,
+  "inlineSpriteFrames_native": true,
+  "renderMode": "webgl",
+  "debug": true,
+  "sourceMaps": false,
+  "md5Cache": false,
+  "encryptJs": false,
+  "zipCompressJs": false,
+  "template": "link",
+  "android-instant": false,
+  "apiLevel": "android-34",
+  "appABIs": [
+    "arm64-v8a"
+  ],
+  "ios": {
+    "packageName": "com.guance.cocos.demo249"
+  },
+  "android": {
+    "packageName": "com.guance.cocos.demo249",
+    "REMOTE_SERVER_ROOT": ""
+  }
+}
