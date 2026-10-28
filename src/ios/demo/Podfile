@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '13.0'
+platform :ios, '15.0'
 
 target 'FTSDKDemo' do
  # Comment the next line if you don't want to use dynamic frameworks
@@ -9,9 +9,9 @@ target 'FTSDKDemo' do
   pod 'SDWebImage'
   pod 'MBProgressHUD', '~> 1.2.0'
   # RUM, Log ,Trace
-  pod 'GuanceSDK', '1.6.6'
+  pod 'GuanceSDK', '1.6.8'
   # Session Replay Configure
-  pod 'GuanceSDK/SessionReplay', '1.6.6'
+  pod 'GuanceSDK/SessionReplay', '1.6.8'
 
   pod 'Toast-Swift', '~> 5.0.1'
   pod 'RxSwift'
@@ -23,15 +23,17 @@ end
 target 'FTSDKWidgetDemo' do
   use_modular_headers!
   # RUM, Log ,Trace in Extension
-  pod 'GuanceSDK/WidgetExtension', '1.6.6'
+  pod 'GuanceSDK/WidgetExtension', '1.6.8'
 end
-# Solve the issue of not finding the static library libarclite_iphonesimulator.a/libarclite_iphoneos.a
-#post_install do |installer|
-#   installer.generated_projects.each do |project|
-#    project.targets.each do |target|
-#        target.build_configurations.each do |config|
-#            config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '10.0'
-#         end
-#    end
-#  end
-#end
+# Align older pods with the app's minimum iOS version for current Xcode SDKs.
+post_install do |installer|
+  minimum_ios_version = Gem::Version.new('15.0')
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      deployment_target = config.build_settings['IPHONEOS_DEPLOYMENT_TARGET']
+      if deployment_target && Gem::Version.new(deployment_target) < minimum_ios_version
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = minimum_ios_version.to_s
+      end
+    end
+  end
+end
