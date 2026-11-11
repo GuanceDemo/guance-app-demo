@@ -4,11 +4,15 @@ import { readFileSync } from 'node:fs';
 import ts from 'typescript';
 
 const sys = { isNative: true, os: 'Android', OS: { ANDROID: 'Android' }, localStorage: {} };
-const node = () => ({ active: true, destroy() { this.destroyed = true; }, on() {} });
+const node = () => ({ children: [], active: true, destroy() { this.destroyed = true; }, on() {} });
 class Page {
   node = node();
   heading() {} note() {} action() {} pair() {} destroy() {}
-  row() { return node(); }
+  rows = [];
+  scrollOffset = 0;
+  fixedHeader() { return node(); }
+  restoreScroll(offset) { this.restoredOffset = offset; }
+  row() { const row = node(); this.rows.push(row); return row; }
   field() { return { node: node() }; }
 }
 class Telemetry {
@@ -32,7 +36,7 @@ const engine = url(`
 `);
 const ui = url(`
   export const { Page } = globalThis.__androidBackTest;
-  export const box = () => globalThis.__androidBackTest.node(), text = () => ({}), button = () => {};
+  export const box = () => globalThis.__androidBackTest.node(), text = () => ({}), button = (parent, title, _x, _y, _w, _h, click) => { const value = { title, click }; parent.children.push(value); return value; };
   export const theme = {};
 `);
 const compile = (name, imports) => {
@@ -47,14 +51,16 @@ const gameView = compile('GameView', { './Engine': engine, './UI': ui, './GameMo
 const { GameView } = await import(gameView);
 const { Demo } = await import(compile('Demo', {
   './Engine': engine, './UI': ui, './GameView': gameView,
+  './Navigation': url('export const layoutNavigation = () => {};'),
+  './NavigationModel': compile('NavigationModel', {}),
   './NativeHost': url('export const configStorage = {};'),
   './Api': url('export class Api { cancel() {} }'),
   './Config': url('export const readConfig = () => ({}), endpoint = () => {}, formConfig = () => {}, importConfig = () => {}, saveConfig = () => {}, settingFields = () => [], validateConfig = () => {};'),
   './Telemetry': url('export const { Telemetry } = globalThis.__androidBackTest; export const platform = () => "android", sdk = {};'),
-  './NativePages': url('export class NativePages { pending = false; back = false; poll() {} consumeBack() { const result = this.back; this.back = false; return result; } }'),
+  './NativePages': url('export class NativePages { pending = false; back = false; rotations = []; setControlsRotation(enabled) { this.rotations.push(enabled); } poll() {} consumeBack() { const result = this.back; this.back = false; return result; } }'),
   './MultiTouchView': url('export const { MultiTouchView } = globalThis.__androidBackTest;'),
   './coverage/CoverageCatalog': compile('coverage/CoverageCatalog', {}),
-  './coverage/CoverageHost': url('export class CoverageHost { async open() {} pause() {} resume() {} destroy() { this.destroyed = true; } }'),
+  './coverage/CoverageHost': url('export class CoverageHost { galleryScrollOffset; gallery(data) { this.data=data; this.galleryScrollOffset=data.offset; } async open() {} update() {} pause() {} resume() {} destroy() { this.destroyed = true; } }'),
 }));
 
 const back = value => { value.nativePages.back = true; value.update(0.12); };
@@ -129,15 +135,26 @@ test('component visibility restores only visible Cocos pages and never steals a 
 });
 
 
-test('system Back exits coverage, restores its category and then returns to the lab', async () => {
-  const value = demo(); let destination;
-  const menu = value.coverageMenu.bind(value);
-  value.coverageMenu = category => { destination = category ?? 'categories'; menu(category); };
-  value.laboratory = () => { destination = 'lab'; };
-  await value.openCoverage('basic', 'ui');
-  const coverage = value.activeCoverage;
-  back(value);
-  assert.equal(destination, 'ui'); assert.equal(coverage.destroyed, true); assert.equal(value.activeCoverage, undefined);
-  back(value); assert.equal(destination, 'categories');
-  back(value); assert.equal(destination, 'lab');
+test('the standalone Controls entry limits rotation to fixtures and Back restores its gallery', async () => {
+  const value=demo();let destination;value.home=()=>destination='lobby';
+  value.nativePages.poll=()=> 'controls';value.update(.12);value.nativePages.poll=()=>undefined;
+  assert.equal(value.activeCoverage.data.entries.length,11);assert.equal(value.navigation.active,false);
+  value.activeCoverage.data.selectFilter('ui');value.activeCoverage.galleryScrollOffset=48;
+  assert.equal(value.nativePages.rotations.at(-1),false);
+  const gallery=value.activeCoverage;await gallery.data.open(gallery.data.entries.find(entry=>entry.id==='input'));
+  assert.equal(gallery.destroyed,true);const coverage=value.activeCoverage;assert.equal(value.nativePages.rotations.at(-1),true);
+  back(value);assert.equal(value.nativePages.rotations.at(-1),false);assert.equal(coverage.destroyed,true);assert.equal(value.coverageFilter,'ui');assert.equal(value.activeCoverage.data.offset,48);
+  value.activeCoverage.data.selectFilter('3d');assert.equal(value.activeCoverage.data.offset,0);
+  back(value);assert.equal(destination,'lobby');
+});
+
+
+test('every route retains its owning tab, including Lab children and Settings', () => {
+  const value=demo();
+  for(const [name,scenario,tab] of [
+    ['CocosLaboratory','experimental','Lab'],['CocosReplayExperiment','experimental','Lab'],
+    ['CocosMultiTouchReplay','multitouch_replay','Lab'],['CocosControls','component_coverage','Controls'],
+    ['NativeSdkSettings','hybrid_native','Settings'],['CocosSettingsPreview','configuration','Settings'],
+    ['NativeGameLobby','hybrid_native','Lobby'],['CocosPreviewLobby','preview','Lobby']
+  ]) {value.show(name,scenario);assert.equal(value.activeTab,tab);}
 });

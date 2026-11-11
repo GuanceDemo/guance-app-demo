@@ -27,8 +27,8 @@
       "orientation": {
         "portrait": true,
         "upsideDown": false,
-        "landscapeRight": false,
-        "landscapeLeft": false
+        "landscapeRight": true,
+        "landscapeLeft": true
       },
       "osTarget": {
         "iphoneos": true,

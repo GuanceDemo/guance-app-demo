@@ -49,7 +49,40 @@ public final class NativeGameActivity extends Activity {
         scroll.setBackgroundColor(Color.rgb(9, 17, 33));
         content = new LinearLayout(this); content.setOrientation(LinearLayout.VERTICAL);
         content.setPadding(dp(26), dp(28), dp(26), dp(30));
-        scroll.addView(content, new ScrollView.LayoutParams(-1, -2)); setContentView(scroll);
+        scroll.addView(content, new ScrollView.LayoutParams(-1, -2));
+        LinearLayout screen = new LinearLayout(this); screen.setOrientation(LinearLayout.VERTICAL); screen.setBackgroundColor(Color.rgb(9,17,33));
+        screen.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
+        LinearLayout navigation = new LinearLayout(this); navigation.setPadding(dp(12), dp(8), dp(12), dp(8));
+        String[] titles = {"Lobby", "Lab", "Settings"}, actions = {"lobby", "lab", "settings"};
+        String selected = "settings".equals(payload.optString("page")) ? "settings" : "lobby";
+        for (int i = 0; i < titles.length; i++) {
+            Button tab = new Button(this); tab.setText(titles[i]); tab.setAllCaps(false); tab.setTextSize(12); boolean active = actions[i].equals(selected); tab.setSelected(active); tab.setTextColor(active ? Color.rgb(19,34,57) : mint);
+            tab.setPadding(0,0,0,0); tab.setMinWidth(0); tab.setMinimumWidth(0); tab.setSingleLine(true);
+            tab.setBackgroundTintList(null); tab.setStateListAnimator(null); tab.setElevation(0); tab.setIncludeFontPadding(false);
+            tab.setTypeface(Typeface.create("sans-serif",Typeface.NORMAL));
+            tab.setOnTouchListener((view,event) -> {
+                int action = event.getActionMasked();
+                float scale = action == android.view.MotionEvent.ACTION_DOWN ? 0.97f : 1f;
+                if (action == android.view.MotionEvent.ACTION_DOWN || action == android.view.MotionEvent.ACTION_UP || action == android.view.MotionEvent.ACTION_CANCEL) { view.setScaleX(scale); view.setScaleY(scale); }
+                return false;
+            });
+            GradientDrawable background = new GradientDrawable(); background.setColor(active ? mint : Color.rgb(25,40,62)); background.setCornerRadius(dp(10)); tab.setBackground(background);
+            LinearLayout.LayoutParams item = new LinearLayout.LayoutParams(0, dp(48), 1); item.setMargins(dp(3), 0, dp(3), 0); navigation.addView(tab, item);
+            final String action = actions[i]; tab.setOnClickListener(view -> finishAction(action));
+        }
+        screen.addView(navigation, new LinearLayout.LayoutParams(-1, -2)); setContentView(screen);
+        screen.addOnLayoutChangeListener((view,left,top,right,bottom,oldLeft,oldTop,oldRight,oldBottom) -> {
+            if (right-left == oldRight-oldLeft && bottom-top == oldBottom-oldTop) return;
+            float unit = Math.min(right-left,bottom-top) / 720f;
+            navigation.setPadding(Math.round(10*unit),Math.round(16*unit),Math.round(10*unit),Math.round(16*unit));
+            for (int i = 0; i < navigation.getChildCount(); i++) {
+                Button tab = (Button) navigation.getChildAt(i);
+                tab.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX,26*unit);
+                ((GradientDrawable)tab.getBackground()).setCornerRadius(12*unit);
+                LinearLayout.LayoutParams item = (LinearLayout.LayoutParams)tab.getLayoutParams(); item.height = Math.round(76*unit);
+                item.setMargins(Math.round(6*unit),0,Math.round(6*unit),0); tab.setLayoutParams(item);
+            }
+        });
         if ("settings".equals(payload.optString("page"))) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -98,6 +131,7 @@ public final class NativeGameActivity extends Activity {
             card("45 SECONDS  ·  3 SHIELDS", "Drag to fly. Collect green gems and dodge red meteors. Build a streak for bonus points.");
             label("PERSONAL BEST   " + payload.optInt("best"), 13, mint, 12);
             action("Play Crystal Dash", "play", true);
+            action("Controls coverage", "controls", false);
             action("SDK experiments", "lab", false);
             action("Connection settings", "settings", false);
         }
@@ -208,16 +242,16 @@ public final class NativeGameActivity extends Activity {
         GradientDrawable background = new GradientDrawable(); background.setColor(primary ? mint : Color.rgb(25, 40, 62)); background.setCornerRadius(dp(14));
         button.setBackground(background); LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, dp(52));
         params.bottomMargin = dp(12); content.addView(button, params);
-        button.setOnClickListener(view -> {
-            if (completed) return;
-            if (value.startsWith("settings-")) {
-                try { NativeGameBridge.complete(payload.optInt("requestId"), value, collectSettings(), importInput.getText().toString()); }
-                catch (Exception error) { label("Unable to read settings. Please try again.", 14, ink, 8); return; }
-            } else NativeGameBridge.complete(payload.optInt("requestId"), value);
-            NativeTelemetry.action(value);
-            completed = true; finish();
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        });
+        button.setOnClickListener(view -> finishAction(value));
+    }
+    private void finishAction(String value) {
+        if (completed) return;
+        if (value.startsWith("settings-")) {
+            try { NativeGameBridge.complete(payload.optInt("requestId"), value, collectSettings(), importInput.getText().toString()); }
+            catch (Exception error) { label("Unable to read settings. Please try again.", 14, ink, 8); return; }
+        } else NativeGameBridge.complete(payload.optInt("requestId"), value);
+        NativeTelemetry.action(value); completed = true; finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
     @Override public void onBackPressed() {
         if ("lobby".equals(payload.optString("page"))) { moveTaskToBack(true); return; }

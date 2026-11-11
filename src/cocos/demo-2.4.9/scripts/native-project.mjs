@@ -1,4 +1,4 @@
-import { adoptIosScenes, addIosSceneManifest, useSceneApplication } from './ios-scenes.mjs';
+import { adoptIosScenes, addIosSceneManifest, useSceneApplication, enableIosRotation } from './ios-scenes.mjs';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
@@ -67,6 +67,9 @@ export function patchNative(buildRoot, platform) {
       if (!host.test(source)) throw new Error('Missing Creator 2 AppActivity.');
       source = source.replace(host, tag => {
         tag = tag.replace('org.cocos2dx.javascript.AppActivity', 'com.guance.cocos.demo.NativeCocosActivity');
+        tag = tag.includes('android:screenOrientation=')
+          ? tag.replace(/android:screenOrientation="[^"]*"/, 'android:screenOrientation="portrait"')
+          : tag.replace('<activity', '<activity android:screenOrientation="portrait"');
         if (!tag.includes('android:exported=')) tag = tag.replace('<activity', '<activity android:exported="true"');
         return tag.includes('android:enableOnBackInvokedCallback=') ? tag.replace(/android:enableOnBackInvokedCallback="[^"]*"/, 'android:enableOnBackInvokedCallback="true"') : tag.replace('<activity', '<activity android:enableOnBackInvokedCallback="true"');
       });
@@ -117,7 +120,7 @@ export function patchNative(buildRoot, platform) {
       if (!source.includes('<key>NSAppTransportSecurity</key>')) source = source.replace('<dict>', '<dict>\n<key>NSAppTransportSecurity</key><dict><key>NSAllowsArbitraryLoads</key><true/></dict>');
       if (!source.includes('<key>NSLocalNetworkUsageDescription</key>')) source = source.replace('<dict>', '<dict>\n<key>NSLocalNetworkUsageDescription</key><string>Connect to the local Demo API and DataKit collector.</string>');
       source = source.replace(/(<key>CFBundleDisplayName<\/key>\s*<string>)[^<]*(<\/string>)/, '$1Cocos 2.4.9$2');
-      return addIosSceneManifest(source);
+      return enableIosRotation(addIosSceneManifest(source));
     });
     const xcode = readdirSync(project).filter(name => name.endsWith('.xcodeproj'));
     if (xcode.length !== 1) throw new Error('Expected one generated Xcode project.');

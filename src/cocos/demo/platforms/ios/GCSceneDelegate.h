@@ -7,4 +7,6 @@
 
 @interface GCSceneDelegate : UIResponder <UIWindowSceneDelegate>
 @property(nonatomic, strong) UIWindow *window;
++ (UIInterfaceOrientationMask)controlsOrientationMask;
++ (void)setControlsRotation:(NSString *)enabled;
 @end

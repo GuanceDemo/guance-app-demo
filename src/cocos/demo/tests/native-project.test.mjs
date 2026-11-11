@@ -20,7 +20,7 @@ test('native app patches are repeatable and apply the requested iOS version/buil
     writeFileSync(appGradle, "apply plugin: 'com.android.application'\n/* COCOS_SDK_BEGIN */\ndependencies { implementation 'com.cloudcare.ft.mobile.sdk.tracker.agent:ft-sdk:1.7.6-alpha03' }\n/* COCOS_SDK_END */\n");
     writeFileSync(path.join(root, 'package.json'), '{"version":"1.0.0"}');
     const manifest = path.join(root, 'native/engine/android/app/AndroidManifest.xml');
-    writeFileSync(manifest, '<manifest><application android:usesCleartextTraffic="false"><activity android:name="com.cocos.game.AppActivity" android:exported="true"><intent-filter /></activity></application></manifest>');
+    writeFileSync(manifest, '<manifest><application android:usesCleartextTraffic="false"><activity android:name="com.cocos.game.AppActivity" android:screenOrientation="portrait" android:exported="true"><intent-filter /></activity></application></manifest>');
     patchNative(root, 'android'); patchNative(root, 'android');
     const linkedCmake = readFileSync(androidCmake, 'utf8');
     assert.equal((linkedCmake.match(/# DEMO_ANDROID_16KB/g) ?? []).length, 1);
@@ -78,6 +78,8 @@ test('native app patches are repeatable and apply the requested iOS version/buil
     ]);
     assert.deepEqual(readFileSync(path.join(iconRoot, '1024.png')), originalIcon);
     const result = readFileSync(plist, 'utf8');
+    for (const orientation of ['Portrait', 'LandscapeLeft', 'LandscapeRight']) assert.ok(result.includes('UIInterfaceOrientation' + orientation));
+    assert.match(readFileSync(manifest, 'utf8'), /android:screenOrientation="portrait"/);
     assert.equal((readFileSync(delegate, 'utf8').match(/\[GCNativeTelemetry boot\];/g) ?? []).length, 1);
     assert.ok(readFileSync(delegate, 'utf8').indexOf('[GCNativeTelemetry boot];') < readFileSync(delegate, 'utf8').indexOf('startCocos();'));
     assert.equal((readFileSync(cmake, 'utf8').match(/# DEMO_NATIVE_SDK_HOST/g) ?? []).length, 1);

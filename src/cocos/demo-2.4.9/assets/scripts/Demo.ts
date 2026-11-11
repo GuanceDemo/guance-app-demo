@@ -1,5 +1,5 @@
 import {
-  _decorator, Camera, Canvas, Color, Component, EditBox, Game, Label, Node,
+  _decorator, Camera, Canvas, Color, Component, EditBox, Game, Graphics, Label, Node,
   ResolutionPolicy, director, game, profiler, sys, view,
 } from './Engine';
 import { Api } from './Api';
@@ -11,8 +11,10 @@ import { GameView } from './GameView';
 import { MultiTouchView } from './MultiTouchView';
 import { RoundResult } from './GameModel';
 import { NativePages, NativePayload } from './NativePages';
+import { layoutNavigation } from './Navigation';
+import { navigationGeometry, navigationTab, NavigationTab } from './NavigationModel';
 import { CoverageHost } from './coverage/CoverageHost';
-import { CoverageCategory, CoverageKind, coverageCategories, coverageFor } from './coverage/CoverageCatalog';
+import { CoverageCategory, CoverageKind, coverageFor } from './coverage/CoverageCatalog';
 
 const { ccclass } = _decorator;
 const BEST_KEY = 'gc_demo_crystal_dash_best_v1';
@@ -22,6 +24,9 @@ export class Demo extends Component {
   private root!: Node;
   private camera!: Camera;
   private navigation!: Node;
+  private navigationButtons: Node[] = [];
+  private activeTab: NavigationTab = 'Lobby';
+  private navigationGeometryKey = '';
   private page?: Page;
   private status!: Label;
   private telemetry = new Telemetry();
@@ -38,6 +43,8 @@ export class Demo extends Component {
   private activeMultiTouch?: MultiTouchView;
   private activeCoverage?: CoverageHost;
   private coverageCamera?: Camera;
+  private coverageFilter: CoverageCategory | 'all' = 'all';
+  private coverageScroll = 0;
   private best = 0;
   private backTarget = () => this.home();
   private cocosView?: { name: string; scenario: string };
@@ -74,10 +81,11 @@ export class Demo extends Component {
     this.status = text(this.root, '', 0, -497, 644, 58, 19, theme.muted);
     this.navigation = box(this.root, 'Navigation', 0, -565, 664, 66);
     const entries: Array<[string, () => void]> = [
-      ['Lobby', () => this.home()], ['Play', () => this.play()],
+      ['Lobby', () => this.home()],
       ['Lab', () => this.laboratory()], ['Settings', () => this.settings()],
     ];
-    entries.forEach(([title, handler], i) => button(this.navigation, title, -252 + i * 168, 0, 154, 66, handler));
+    this.navigationButtons=entries.map(([title,handler],i)=>button(this.navigation,title,-252+i*168,0,154,66,handler));
+    view.on('canvas-resize',this.fitNavigation);this.fitNavigation();
     game.on(Game.EVENT_HIDE, this.background);
     game.on(Game.EVENT_SHOW, this.foreground);
     try { this.telemetry.start(this.config, this.camera); }
@@ -95,11 +103,14 @@ export class Demo extends Component {
         if (action.startsWith('settings-')) void this.handleNativeSettings(action);
         else if (action === 'play') this.play();
         else if (action === 'lab') this.laboratory();
+        else if (action === 'controls') this.coverageMenu();
         else if (action === 'settings') this.settings();
         else if (action === 'unavailable') this.fallback(this.lastNativePayload!);
         else this.home();
       }
     }
+    this.fitNavigation();
+    this.activeCoverage?.update();
     this.activeGame?.update(dt);
     if (this.replayProbe?.isValid) {
       this.motionTime += dt;
@@ -107,13 +118,34 @@ export class Demo extends Component {
     }
   }
 
+  private readonly fitNavigation = (): void => {
+    if (!this.navigationButtons.length || !this.navigation.active) return;
+    const frame=view.getFrameSize(),design=view.getDesignResolutionSize(),pixelRatio=view.getDevicePixelRatio();
+    let safe=sys.getSafeAreaRect();
+    // Creator 2 browser safe areas cover only the letterboxed design rectangle.
+    if (!sys.isNative) {
+      const width=frame.width*pixelRatio/view.getScaleX(),height=frame.height*pixelRatio/view.getScaleY();
+      safe={x:(design.width-width)/2,y:(design.height-height)/2,width,height} as cc.Rect;
+    }
+    const geometry=navigationGeometry(frame,design,safe,view.getScaleY(),pixelRatio);
+    if (!(geometry.scale>0 && geometry.width>36)) return;
+    const key=[geometry.x,geometry.y,geometry.scale,geometry.width,this.activeTab].join(',');
+    if (key===this.navigationGeometryKey) return;
+    this.navigationGeometryKey=key;
+    this.navigation.setPosition(geometry.x,geometry.y);
+    this.navigation.setScale(geometry.scale,geometry.scale);
+    layoutNavigation(this.navigation,this.navigationButtons,geometry.width,this.activeTab);
+  };
+
   private show(name: string, scenario = 'navigation', back = () => this.home(), nativePage = false): Page {
+    this.nativePages.setControlsRotation(false);
     this.activeCoverage?.destroy(); this.activeCoverage = undefined;
     this.backTarget = back;
     ++this.route; this.api.cancel(); this.replayProbe = undefined;
     this.activeGame?.destroy(); this.activeGame = undefined;
     this.activeMultiTouch?.destroy(); this.activeMultiTouch = undefined;
-    this.navigation.active = true;
+    this.activeTab=navigationTab(name,scenario);
+    this.navigation.active = true;this.fitNavigation();
     this.page?.destroy(); this.page = new Page(this.root);
     this.cocosView = nativePage ? undefined : { name, scenario };
     if (nativePage) this.telemetry.leave(); else this.telemetry.view(name, scenario);
@@ -150,6 +182,7 @@ export class Demo extends Component {
     if (payload.page === 'results') page.note(`Score: ${payload.score} · Gems: ${payload.gems} · Best: ${payload.best}`);
     else page.note('Drag to fly. Collect green gems and dodge red meteors. 45 seconds, 3 shields. Build a streak for bonus points.', 124);
     page.action(payload.page === 'results' ? 'Play again' : 'Play Crystal Dash', () => this.play(), true);
+    if (payload.page === 'lobby') page.action('Controls coverage', () => this.coverageMenu());
     page.action('SDK experiments', () => this.laboratory());
     page.action('Connection settings', () => this.settings());
     if (sys.isNative) page.note('Native screen unavailable. Rebuild using npm run build:android or build:ios.', 112);
@@ -257,7 +290,6 @@ export class Demo extends Component {
     const page = this.show('CocosLaboratory', 'experimental');
     page.heading('SDK lab', 'Inspect gameplay, performance and telemetry.');
     page.action('Play · Game events and Replay', () => this.play(), true);
-    page.action('Session Replay · Full component coverage', () => this.coverageMenu());
     page.action('Session Replay · Multi-touch playground', () => this.multiTouchPage());
     page.note('Native lobby → Cocos game → native results. Each screen has its own RUM View. Cocos Replay captures the game; native screens are outside its camera.', 128);
     page.note('Results show local calls or HTTP responses. Check Guance for collected data. Play a round to inspect game events and replay.', 110);
@@ -326,33 +358,28 @@ export class Demo extends Component {
     page.action('Back to lab', () => this.laboratory());
   }
 
-  private coverageMenu(category?: CoverageCategory): void {
-    const page = this.show(category ? `CocosControls/${category}` : 'CocosControls', 'component_coverage',
-      category ? () => this.coverageMenu() : () => this.laboratory());
-    page.heading('Full component coverage', 'Real controls and assets from the SDK Hybrid acceptance suite.');
-    if (!category) {
-      for (const group of coverageCategories) page.action(group.title, () => this.coverageMenu(group.id));
-      page.note('Each page supports the original interactions, privacy checks and reset controls. Coverage uses the original 960 × 640 canvas; Back returns here.', 140);
-      page.action('Back to SDK lab', () => this.laboratory());
-    } else {
-      const group = coverageCategories.find(group => group.id === category)!;
-      page.note(group.title, 60);
-      for (const entry of coverageFor(2, category)) {
-        page.action(entry.title, () => void this.openCoverage(entry.id, category));
-        page.note(entry.description, 76);
-      }
-      page.action('Back to coverage categories', () => this.coverageMenu());
-    }
+  private createCoverageHost(exit: () => void, track: (caseId:string,stage:string)=>void, backTitle = 'Back to Controls'): CoverageHost {
+    return new CoverageHost(this.root,this.camera,camera=>{
+      this.coverageCamera=camera===this.camera?undefined:camera;this.telemetry.setReplayCamera(camera);
+    },exit,track,[[backTitle,exit]]);
+  }
+  private coverageMenu(filter: CoverageCategory | 'all' = this.coverageFilter): void {
+    const offset=this.activeCoverage?.galleryScrollOffset??this.coverageScroll;
+    this.coverageScroll=filter===this.coverageFilter?offset:0;this.coverageFilter=filter;
+    const page=this.show('CocosControls','component_coverage');page.destroy();this.page=undefined;
+    this.navigation.active=false;
+    const host=this.createCoverageHost(()=>this.home(),()=>{},'Back to Lobby');this.activeCoverage=host;
+    host.gallery({entries:coverageFor(2),filter,offset:this.coverageScroll,
+      selectFilter:value=>this.coverageMenu(value),open:entry=>void this.openCoverage(entry.id)});
   }
 
-  private async openCoverage(kind: CoverageKind, category: CoverageCategory): Promise<void> {
-    const page = this.show(`CocosControls/${kind}`, 'component_coverage', () => this.coverageMenu(category));
+  private async openCoverage(kind: CoverageKind): Promise<void> {
+    this.coverageScroll = this.activeCoverage?.galleryScrollOffset ?? this.coverageScroll;
+    const page = this.show(`CocosControls/${kind}`, 'component_coverage', () => this.coverageMenu());
     page.destroy(); this.page = undefined;
     this.navigation.active = false;
-    const host = new CoverageHost(this.root, this.camera, camera => {
-      this.coverageCamera = camera === this.camera ? undefined : camera;
-      this.telemetry.setReplayCamera(camera);
-    }, () => this.coverageMenu(category), (caseId, stage) => {
+    this.nativePages.setControlsRotation(true);
+    const host = this.createCoverageHost(() => this.coverageMenu(), (caseId, stage) => {
       // Only fixed case IDs/phases are recorded, never EditBox contents or settings.
       this.telemetry.action(`replay_${kind}_case`, { demo_scenario: 'component_coverage', case_id: caseId, stage });
     });
@@ -360,7 +387,7 @@ export class Demo extends Component {
     try { await host.open(kind, this.config.demoApiAddress); }
     catch (error) {
       if (this.activeCoverage !== host) return;
-      this.coverageMenu(category);
+      this.coverageMenu();
       this.setStatus(`Unable to open coverage: ${error instanceof Error ? error.message : String(error)}`, true);
     }
   }
@@ -376,6 +403,7 @@ export class Demo extends Component {
   onDisable(): void { this.background(); }
 
   onDestroy(): void {
+    view.off('canvas-resize',this.fitNavigation);
     game.off(Game.EVENT_HIDE, this.background);
     game.off(Game.EVENT_SHOW, this.foreground);
     this.activeCoverage?.destroy();

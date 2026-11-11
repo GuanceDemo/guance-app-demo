@@ -1,6 +1,6 @@
 /** Retain Creator's engine startup while moving its window into the UIKit scene. */
 export function adoptIosScenes(source) {
-  if (source.includes('// DEMO_UIKIT_SCENE_LIFECYCLE')) return source;
+  if (source.includes('// DEMO_UIKIT_SCENE_LIFECYCLE')) return applyControlsOrientation(source);
   const implementation = source.match(/@implementation\s+(\w+)/)?.[1];
   const launch = /-\s*\(BOOL\)application:\(UIApplication\s*\*\)\s*(\w+)\s+didFinishLaunchingWithOptions:\(NSDictionary\s*\*\)\s*(\w+)\s*\{/.exec(source);
   if (!implementation || !launch) throw new Error('Missing Creator iOS application delegate for scene migration.');
@@ -47,7 +47,7 @@ ${body}
 @end
 
 @implementation ${implementation}`);
-  return '#import "GCSceneDelegate.h"\n' + source;
+  return applyControlsOrientation('#import "GCSceneDelegate.h"\n' + source);
 }
 
 export function addIosSceneManifest(source) {
@@ -72,4 +72,26 @@ export function useSceneApplication(source) {
   const entry = /(UIApplicationMain\(argc,\s*(?:\(char\*\*\))?argv,\s*)nil,/;
   if (!entry.test(source)) throw new Error('Missing Creator UIApplicationMain entry point.');
   return source.replace(entry, '$1@"GCCocosApplication",');
+}
+
+/** Retained native projects must pick up the same rotation support as fresh builds. */
+export function enableIosRotation(source) {
+  const orientations = '<array><string>UIInterfaceOrientationPortrait</string><string>UIInterfaceOrientationLandscapeLeft</string><string>UIInterfaceOrientationLandscapeRight</string></array>';
+  const supported = /(<key>UISupportedInterfaceOrientations(?:~iphone|~ipad)?<\/key>\s*)<array>[\s\S]*?<\/array>/g;
+  source = source.replace(supported, (_, key) => key + orientations);
+  if (!source.includes('<key>UISupportedInterfaceOrientations</key>')) {
+    source = source.replace('<dict>', '<dict>\n<key>UISupportedInterfaceOrientations</key>' + orientations);
+  }
+  return source;
+}
+
+/** The app stays portrait until a concrete Controls fixture opts into rotation. */
+function applyControlsOrientation(source) {
+  if (source.includes('// DEMO_CONTROLS_ORIENTATION')) return source;
+  const end=source.lastIndexOf('@end');
+  return source.slice(0,end)+`// DEMO_CONTROLS_ORIENTATION
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    return [GCSceneDelegate controlsOrientationMask];
+}
+`+source.slice(end);
 }

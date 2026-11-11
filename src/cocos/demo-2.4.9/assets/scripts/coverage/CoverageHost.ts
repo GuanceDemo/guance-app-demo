@@ -1,3 +1,5 @@
+import { CoverageSurface, CoverageNavigation } from './CoverageSurface';
+import { coverageViewport } from './CoverageLayoutModel';
 import { CoverageKind } from './CoverageCatalog';
 import { ReplayBasicScene } from './ReplayBasicScene';
 import { ReplayInputScene } from './ReplayInputScene';
@@ -26,6 +28,10 @@ export class CoverageHost {
   private camera: cc.Camera;
   private node: cc.Node;
   private disposed = false;
+  private surface?: CoverageSurface;
+  private directory = false;
+  private resizing = false;
+  private readonly resize = () => this.layout();
   private previousResolution = cc.view.getDesignResolutionSize();
   private previousPolicy = cc.view.getResolutionPolicy();
   private restorePhysics = snapshotPhysics();
@@ -33,7 +39,7 @@ export class CoverageHost {
   private audio: cc.AudioSource[] = [];
 
   constructor(private root: cc.Node, private mainCamera: cc.Camera,
-    private selectCamera: (camera: cc.Camera) => void, private exit: () => void, private track: Track) {
+    private selectCamera: (camera: cc.Camera) => void, private exit: () => void, private track: Track, private navigation: CoverageNavigation = [['Controls', exit]]) {
     root.active = false;
     mainCamera.enabled = false;
     this.canvas = root.parent!.getComponent(cc.Canvas)!;
@@ -56,6 +62,7 @@ export class CoverageHost {
     this.node.setContentSize(960, 640);
     this.canvas.node.addChild(this.node);
     this.selectCamera(this.camera);
+    cc.view.on('canvas-resize',this.resize);
   }
 
   async open(kind: CoverageKind, webUrl: string): Promise<void> {
@@ -69,6 +76,44 @@ export class CoverageHost {
       if (kind === 'native') this.camera.ortho = false;
       await this.node.addComponent(Scene).initialize(back, track);
     }
+    if(this.disposed)return;
+    this.surface=new CoverageSurface(this.node,kind,this.navigation);this.layout();
+  }
+
+  get galleryScrollOffset(): number | undefined { return this.directory?this.surface?.scrollOffset:undefined; }
+  get scrollOffset(): number { return this.surface?.scrollOffset ?? 0; }
+  gallery(data: Parameters<CoverageSurface['showGallery']>[0]): void {
+    this.directory=true;
+    this.surface = new CoverageSurface(this.node, 'gallery', this.navigation);
+    this.surface.showGallery(data); this.layout();
+  }
+  update(): void { this.layout(false); this.surface?.update(); }
+
+  private geometryKey = '';
+  private currentGeometryKey(): string {
+    const frame=cc.view.getFrameSize(),design=cc.view.getDesignResolutionSize(),safe=cc.sys.getSafeAreaRect();
+    return [frame.width,frame.height,design.width,design.height,safe.x,safe.y,safe.width,safe.height].join(',');
+  }
+
+  private layout(force = true): void {
+    if(this.disposed||this.resizing||!this.surface)return;
+    // iOS publishes the final safe area after canvas-resize, when rotation completes.
+    if(!force && this.geometryKey===this.currentGeometryKey())return;
+    this.resizing=true;
+    try {
+      const frame=cc.view.getFrameSize(),viewport=coverageViewport(frame.width,frame.height);
+      const current=cc.view.getDesignResolutionSize();
+      if(current.width!==viewport.width||current.height!==viewport.height){
+        this.canvas.designResolution=cc.size(viewport.width,viewport.height);
+        cc.view.setDesignResolutionSize(viewport.width,viewport.height,cc.ResolutionPolicy.EXACT_FIT);
+      }
+      this.canvas.node.setPosition(viewport.width/2,viewport.height/2);
+      this.canvas.node.setContentSize(viewport.width,viewport.height);
+      this.camera.node.setPosition(this.canvas.node.x,this.canvas.node.y,1000);
+      const safe=cc.sys.getSafeAreaRect();
+      this.surface.resize(viewport,{x:safe.x,y:safe.y,width:safe.width,height:safe.height});
+      this.geometryKey=this.currentGeometryKey();
+    } finally {this.resizing=false;}
   }
 
   pause(): void {
@@ -84,6 +129,7 @@ export class CoverageHost {
   resume(): void {
     if (this.disposed) return;
     this.resumePhysics?.(); this.resumePhysics = undefined;
+    this.layout();
     this.audio.forEach(audio => { if (audio.isValid && audio.node.activeInHierarchy) audio.play(); });
     this.audio = [];
   }
@@ -91,6 +137,7 @@ export class CoverageHost {
   destroy(): void {
     if (this.disposed) return;
     this.disposed = true;
+    cc.view.off('canvas-resize',this.resize);this.surface?.destroy();
     this.audio = []; this.resumePhysics = undefined;
     this.selectCamera(this.mainCamera);
     this.node.active = false; this.node.destroy();

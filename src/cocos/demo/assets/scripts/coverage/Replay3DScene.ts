@@ -1,7 +1,7 @@
 import {
   _decorator, Button, Camera, Canvas, Color, Component, DirectionalLight, Graphics,
-  Input, Label, Layers, Material, Mesh, MeshRenderer, Node, PointLight, SphereLight, SpotLight, UITransform, Vec3, director,
-  input, primitives, resources, utils, view,
+  Label, Layers, Material, Mesh, MeshRenderer, Node, PointLight, SphereLight, SpotLight, UITransform, Vec3, director,
+  primitives, resources, utils, view,
 } from 'cc';
 
 import ReplayPrivacy, { ReplayPrivacyMode } from '../../guance-cocos-sdk/ReplayPrivacy';
@@ -86,7 +86,7 @@ export class Replay3DScene extends Component {
     this.box('BlueRearTower', new Vec3(0.4, 0.3, -2.2), new Vec3(1.1, 2.8, 1.1), new Color(65, 115, 245));
     this.createHud();
     this.setPose(0);
-    input.on(Input.EventType.TOUCH_END, this.handleTouch, this);
+
   }
 
   update(dt: number): void {
@@ -103,18 +103,19 @@ export class Replay3DScene extends Component {
 
   setPaused(paused: boolean): void { this.paused = paused; }
   setHudVisible(visible: boolean): void {
-    this.hud.active = visible;
+    if (this.hudBanner) this.hudBanner.node.active = visible;
     if (visible && this.hudBanner) {
       // Native Graphics geometry must be uploaded again after reactivation.
       this.hudBanner.clear();
-      this.hudBanner.rect(-380, -36, 760, 72);
+      const size=this.hudBanner.node.getComponent(UITransform)!.contentSize;
+      this.hudBanner.rect(-size.width/2,-size.height/2,size.width,size.height);
       this.hudBanner.fill();
     }
   }
   returnTo2D(): void { this.onBack?.(); }
 
   onDestroy(): void {
-    input.off(Input.EventType.TOUCH_END, this.handleTouch, this);
+
     if (this.previousAmbient !== undefined) {
       const scene = director.getScene();
       if (scene) scene.globals.ambient.skyIllum = this.previousAmbient;
@@ -122,14 +123,6 @@ export class Replay3DScene extends Component {
     this.trackLight = undefined;
     this.meshes.forEach((mesh) => mesh.destroy());
     this.materials.forEach((material) => material.destroy());
-  }
-
-  private handleTouch(event: { getLocation(): { x: number } }): void {
-    // Physical screen thirds stay stable with SHOW_ALL's side margins.
-    const x = event.getLocation().x / view.getFrameSize().width;
-    if (x < 1 / 3) this.returnTo2D();
-    else if (x < 2 / 3) this.setHudVisible(!this.hud.active);
-    else this.setPaused(!this.paused);
   }
 
   private child(name: string): Node {
@@ -196,7 +189,7 @@ export class Replay3DScene extends Component {
     banner.addChild(text);
     text.addComponent(UITransform).setContentSize(744, 68);
     const label = text.addComponent(Label);
-    label.string = '3D REPLAY · INDEPENDENT HUD\nTap left: Back   |   middle: HUD on/off   |   right: Pause';
+    label.string = '3D REPLAY · INDEPENDENT HUD\nUse the fixed controls to pause, reset or hide this HUD';
     if (this.lightCoverage) this.lightLegend = label;
     label.fontSize = 19;
     label.lineHeight = 28;
@@ -240,6 +233,20 @@ export class Replay3DScene extends Component {
         label.horizontalAlign = Label.HorizontalAlign.CENTER;
         label.verticalAlign = Label.VerticalAlign.CENTER;
         label.overflow = Label.Overflow.SHRINK;
+      });
+    } else {
+      const commands: Array<[string, () => void]> = [
+        ['Pause / resume',()=>this.setPaused(!this.paused)],
+        ['HUD on / off',()=>this.setHudVisible(!this.hudBanner?.node.active)],
+        ['Reset pose',()=>this.setPose(0)],
+      ];
+      commands.forEach(([caption,click],index)=>{
+        const node=new Node('SceneCommand'+index);node.layer=Layers.Enum.UI_2D;canvasNode.addChild(node);
+        node.setPosition(-230+index*230,-270);node.addComponent(UITransform).setContentSize(218,44);
+        const graphics=node.addComponent(Graphics);graphics.fillColor=new Color(27,39,64);graphics.rect(-109,-22,218,44);graphics.fill();
+        node.addComponent(Button).transition=Button.Transition.NONE;node.on('click',click);
+        const text=new Node('Caption');text.layer=Layers.Enum.UI_2D;node.addChild(text);text.addComponent(UITransform).setContentSize(206,40);
+        const label=text.addComponent(Label);label.string=caption;label.fontSize=20;label.lineHeight=26;label.horizontalAlign=Label.HorizontalAlign.CENTER;label.verticalAlign=Label.VerticalAlign.CENTER;label.overflow=Label.Overflow.SHRINK;
       });
     }
   }

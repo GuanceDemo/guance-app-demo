@@ -19,7 +19,7 @@ class Node {
   removeFromParent(){this.parent.children=this.parent.children.filter(n=>n!==this);this.parent=undefined;}
   destroy(){state.destroy.push(this);}
 }
-class Camera extends Component {enabled=true;}
+class Camera extends Component {enabled=true;fov=45;}
 class Canvas extends Component {designResolution={width:720,height:1280};fitWidth=true;fitHeight=true;}
 class UITransform extends Component {setContentSize(){}}
 class AudioSource extends Component {
@@ -32,15 +32,15 @@ const two={enable:true,enabled:true,gravity:new Vec(0,-10),autoSimulation:true,e
 const three={enable:true,enabled:true,gravity:new Vec(0,-9,0),autoSimulation:true};
 const collision={enabled:false};
 const engine={Node,Camera,Canvas,Component,UITransform,AudioSource,VideoPlayer,Color:class {},color:()=>({}),size:(width,height)=>({width,height}),
-  Director:{EVENT_AFTER_DRAW:'draw'},Layers:{Enum:{UI_2D:1}},ResolutionPolicy:{SHOW_ALL:'show-all'},
+  Director:{EVENT_AFTER_DRAW:'draw'},Layers:{Enum:{UI_2D:1}},ResolutionPolicy:{SHOW_ALL:'show-all',EXACT_FIT:'fill'},Rect:class {constructor(x,y,width,height){Object.assign(this,{x,y,width,height});}},sys:{getSafeAreaRect:()=>state.safe??({x:0,y:0,...state.resolution})},
   PhysicsSystem2D:{instance:two},PhysicsSystem:{instance:three},
-  view:{getDesignResolutionSize:()=>({...state.resolution}),getResolutionPolicy:()=>state.policy,
+  view:{getFrameSize:()=>state.frame,on:(_event,callback)=>state.resize=callback,off:(_event,callback)=>{if(state.resize===callback)state.resize=undefined;},getDesignResolutionSize:()=>({...state.resolution}),getResolutionPolicy:()=>state.policy,
     setDesignResolutionSize:(width,height,policy)=>{state.resolution={width,height};state.policy=policy;}},
   director:{getScene:()=>state.scene,once:(_event,callback)=>state.after.push(callback),getPhysicsManager:()=>two,getPhysics3DManager:()=>three,getCollisionManager:()=>collision},
 };
 Camera.ProjectionType={ORTHO:1};Camera.ClearFlags={COLOR:1,DEPTH:2,STENCIL:4};
 globalThis.__coverageEngine=engine;globalThis.cc=engine;
-const bridge=url('const e=globalThis.__coverageEngine;export const {Node,Camera,Canvas,Component,UITransform,AudioSource,VideoPlayer,Color,Director,Layers,ResolutionPolicy,PhysicsSystem2D,PhysicsSystem,view,director}=e;');
+const bridge=url('const e=globalThis.__coverageEngine;export const {Node,Camera,Canvas,Component,UITransform,AudioSource,VideoPlayer,Color,Director,Layers,ResolutionPolicy,PhysicsSystem2D,PhysicsSystem,view,director,sys,Rect}=e;');
 const names=['ReplayBasicScene','ReplayInputScene','ReplayScrollScene','ReplayLayoutScene','ReplayEffectsScene','ReplayMotionScene','ReplayAssetScene','WebViewValidationScene','ReplayRenderScene','ReplayGeometryScene','ReplayRigScene','ReplayEvidenceScene','ReplaySupportScene','ReplayOptionalScene','Replay3DScene','ReplayPostProcessScene','ReplayNativeScene','ReplayVersionDiffScene'];
 class FakeScene extends Component {
   async initialize(exit,track){
@@ -56,9 +56,13 @@ engine.FakeScene=FakeScene;
 const scenes=url('const C=globalThis.__coverageEngine.FakeScene;'+names.map(n=>`export const ${n}=C;`).join(''));
 let code=ts.transpileModule(readFileSync(new URL('../assets/scripts/coverage/CoverageHost.ts',import.meta.url),'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2020,module:ts.ModuleKind.ES2020}}).outputText;
 code=code.replace(/from ['"]cc['"]/g,`from '${bridge}'`).replace(/from ['"]\.\/(?:Replay\w+|WebViewValidationScene)['"]/g,`from '${scenes}'`);
+const modelCode=ts.transpileModule(readFileSync(new URL('../assets/scripts/coverage/CoverageLayoutModel.ts',import.meta.url),'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2020,module:ts.ModuleKind.ES2020}}).outputText;
+const modelUrl=url(modelCode);const {coverageRegions}=await import(modelUrl);engine.coverageRegions=coverageRegions;
+const surface=url(`export class CoverageSurface { constructor(root,kind){this.kind=kind;} get scrollOffset(){return 0;} update(){} destroy(){} showGallery(){} resize(viewport,safe){const regions=globalThis.__coverageEngine.coverageRegions(viewport,safe,this.kind==='perspective'?3:7);globalThis.__coverageRegions=regions;return regions;} }`);
+code=code.replace("'./CoverageSurface'",JSON.stringify(surface)).replace("'./CoverageLayoutModel'",JSON.stringify(modelUrl));
 const {CoverageHost}=await import(url(code));
 function fixture(){
- state={resolution:{width:720,height:1280},policy:{name:'portrait'},scene:new Node('Scene'),destroy:[],after:[],paused:0,played:0,audio:[new AudioSource()]};
+ state={frame:{width:1280,height:720},resolution:{width:720,height:1280},policy:{name:'portrait'},scene:new Node('Scene'),destroy:[],after:[],paused:0,played:0,audio:[new AudioSource()]};
  Object.assign(two,{enable:true,enabled:true,gravity:new Vec(0,-10),autoSimulation:true,enabledAccumulator:false});
  Object.assign(three,{enable:true,enabled:true,gravity:new Vec(0,-9,0),autoSimulation:true});collision.enabled=false;
  const canvas=new Node('AppCanvas');canvas.setPosition(360,640);canvas.addComponent(Canvas);const root=new Node('DemoUI');canvas.addChild(root);const camera=new Node('MainCamera').addComponent(Camera),selected=[],events=[];let exits=0;
@@ -72,7 +76,7 @@ function flush(){
 
 test('coverage pause/resume and disposal restore camera, portrait resolution and global physics',async()=>{
  const f=fixture(),originalPolicy={name:'portrait'};await f.host.open('basic','');
- assert.equal(f.root.active,false);assert.equal(f.camera.enabled,false);assert.deepEqual(state.resolution,{width:960,height:640});
+ assert.equal(f.root.active,false);assert.equal(f.camera.enabled,false);assert.deepEqual(state.resolution,{width:1280,height:720});
  if(generation===2){assert.equal(f.selected.at(-1).node.x,f.root.parent.x);assert.equal(f.selected.at(-1).node.y,f.root.parent.y);}
  f.host.pause();assert.equal(two[generation===3?'enable':'enabled'],false);assert.equal(state.paused,1);
  f.host.resume();assert.equal(two[generation===3?'enable':'enabled'],true);assert.equal(state.played,1);
@@ -100,4 +104,17 @@ test('failed asset initialization can be cleaned up without leaving a hidden dem
  f.host.destroy();flush();
  assert.equal(f.root.active,true);assert.equal(f.camera.enabled,true);assert.equal(f.selected.at(-1),f.camera);
  assert.deepEqual(state.resolution,{width:720,height:1280});
+});
+
+test('late safe-area updates after rotation restore full portrait width without a second resize event', async()=>{
+ const f=fixture();await f.host.open('basic','');
+ for(let i=0;i<5;i++){
+  state.frame={width:852,height:393};state.safe=undefined;state.resize();
+  state.frame={width:393,height:852};state.safe={x:90,y:0,width:540,height:1560};state.resize();
+  assert.equal(globalThis.__coverageRegions.navigation.width,508);
+  // UIKit publishes final safe-area insets after its window-size event.
+  state.safe={x:0,y:34,width:720,height:1500};f.host.update();
+  assert.equal(globalThis.__coverageRegions.navigation.width,688);
+ }
+ f.host.destroy();flush();
 });

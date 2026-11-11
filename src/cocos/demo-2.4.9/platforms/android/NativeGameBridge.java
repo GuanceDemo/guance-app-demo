@@ -13,6 +13,11 @@ public final class NativeGameBridge {
     public static synchronized boolean consumeBack() {
         boolean result = backRequested; backRequested = false; return result;
     }
+    public static void setControlsRotation(boolean enabled) {
+        Activity host = (Activity) Cocos2dxActivity.getContext();
+        if (host != null) host.runOnUiThread(() -> host.setRequestedOrientation(enabled
+            ? android.content.pm.ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR : android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT));
+    }
     public static void show(String payload) {
         Activity host = (Activity) Cocos2dxActivity.getContext();
         if (host == null) throw new IllegalStateException("Cocos Activity is unavailable");

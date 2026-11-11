@@ -17,6 +17,8 @@
 @property(nonatomic, strong) NSMutableDictionary<NSString *, UIView *> *rows;
 @property(nonatomic, strong) NSMutableDictionary<NSString *, NSArray *> *choices;
 @property(nonatomic, strong) UITextView *importInput;
+@property(nonatomic, strong) UIStackView *navigation;
+@property(nonatomic, strong) NSArray<NSLayoutConstraint *> *navigationConstraints;
 @end
 
 @implementation GCNativeGameController
@@ -39,7 +41,7 @@
     [button addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.stack addArrangedSubview:button];
 }
-- (void)tapped:(UIButton *)sender {
+- (void)tapped:(UIControl *)sender {
     if (self.completed) return;
     [self.view endEditing:YES];
     NSString *action = sender.accessibilityIdentifier;
@@ -59,17 +61,64 @@
     [GCNativeTelemetry stopNativeView];
     [super viewWillDisappear:animated];
 }
+- (void)navigationPressed:(UIControl *)tab { tab.transform = CGAffineTransformMakeScale(0.97, 0.97); }
+- (void)navigationReleased:(UIControl *)tab { tab.transform = CGAffineTransformIdentity; }
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    CGFloat unit = MIN(self.view.bounds.size.width, self.view.bounds.size.height) / 720.0;
+    if (unit <= 0 || self.navigationConstraints.count != 4) return;
+    self.navigation.spacing = 12 * unit;
+    self.navigationConstraints[0].constant = 16 * unit;
+    self.navigationConstraints[1].constant = -16 * unit;
+    self.navigationConstraints[2].constant = -16 * unit;
+    self.navigationConstraints[3].constant = 76 * unit;
+    for (UIControl *tab in self.navigation.arrangedSubviews) {
+        UILabel *label = (UILabel *)tab.subviews.firstObject;
+        label.font = [UIFont fontWithName:@"Arial" size:26 * unit]; tab.layer.cornerRadius = 12 * unit;
+    }
+}
 - (void)viewDidLoad {
     [super viewDidLoad]; self.view.backgroundColor = [UIColor colorWithRed:0.035 green:0.067 blue:0.13 alpha:1];
     UIScrollView *scroll = [UIScrollView new]; scroll.translatesAutoresizingMaskIntoConstraints = NO; [self.view addSubview:scroll];
     scroll.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     NSLayoutYAxisAnchor *bottom = self.view.safeAreaLayoutGuide.bottomAnchor;
     if (@available(iOS 15.0, *)) bottom = self.view.keyboardLayoutGuide.topAnchor;
+    UIStackView *navigation = [UIStackView new]; navigation.axis = UILayoutConstraintAxisHorizontal;
+    navigation.distribution = UIStackViewDistributionFillEqually; self.navigation = navigation;
+    navigation.translatesAutoresizingMaskIntoConstraints = NO; [self.view addSubview:navigation];
+    NSArray *titles = @[@"Lobby", @"Lab", @"Settings"];
+    NSArray *actions = @[@"lobby", @"lab", @"settings"];
+    NSString *selected = [self.payload[@"page"] isEqual:@"settings"] ? @"settings" : @"lobby";
+    for (NSUInteger i = 0; i < titles.count; i++) {
+        // A plain UIControl avoids UIKit button selection and hover decorations.
+        UIControl *tab = [UIControl new]; tab.accessibilityIdentifier = actions[i];
+        BOOL active = [actions[i] isEqual:selected];
+        tab.isAccessibilityElement = YES; tab.accessibilityLabel = titles[i];
+        tab.accessibilityTraits = UIAccessibilityTraitButton | (active ? UIAccessibilityTraitSelected : 0);
+        tab.backgroundColor = active ? self.mint : [UIColor colorWithRed:0.098 green:0.157 blue:0.243 alpha:1];
+        UILabel *label = [UILabel new]; label.text = titles[i]; label.textAlignment = NSTextAlignmentCenter;
+        label.textColor = active ? [UIColor colorWithRed:0.075 green:0.133 blue:0.224 alpha:1] : self.mint;
+        label.numberOfLines = 1; label.adjustsFontSizeToFitWidth = YES; label.translatesAutoresizingMaskIntoConstraints = NO;
+        [tab addSubview:label];
+        [NSLayoutConstraint activateConstraints:@[
+            [label.leadingAnchor constraintEqualToAnchor:tab.leadingAnchor constant:3],
+            [label.trailingAnchor constraintEqualToAnchor:tab.trailingAnchor constant:-3],
+            [label.centerYAnchor constraintEqualToAnchor:tab.centerYAnchor]]];
+        [tab addTarget:self action:@selector(navigationPressed:) forControlEvents:UIControlEventTouchDown | UIControlEventTouchDragEnter];
+        [tab addTarget:self action:@selector(navigationReleased:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventTouchCancel | UIControlEventTouchDragExit];
+        [tab addTarget:self action:@selector(tapped:) forControlEvents:UIControlEventTouchUpInside]; [navigation addArrangedSubview:tab];
+    }
+    self.navigationConstraints = @[
+        [navigation.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:16],
+        [navigation.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-16],
+        [navigation.bottomAnchor constraintEqualToAnchor:bottom constant:-8],
+        [navigation.heightAnchor constraintEqualToConstant:48]];
+    [NSLayoutConstraint activateConstraints:self.navigationConstraints];
     self.stack = [UIStackView new]; self.stack.axis = UILayoutConstraintAxisVertical; self.stack.spacing = 15;
     self.stack.translatesAutoresizingMaskIntoConstraints = NO; [scroll addSubview:self.stack];
     [NSLayoutConstraint activateConstraints:@[
         [scroll.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
-        [scroll.bottomAnchor constraintEqualToAnchor:bottom],
+        [scroll.bottomAnchor constraintEqualToAnchor:navigation.topAnchor constant:-8],
         [scroll.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor], [scroll.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
         [self.stack.topAnchor constraintEqualToAnchor:scroll.contentLayoutGuide.topAnchor constant:26],
         [self.stack.bottomAnchor constraintEqualToAnchor:scroll.contentLayoutGuide.bottomAnchor constant:-26],
@@ -101,7 +150,8 @@
         [self label:@"Drag to fly. Collect green gems and dodge red meteors. Build a streak for bonus points." size:16 color:self.muted];
         [self label:[NSString stringWithFormat:@"PERSONAL BEST   %@", self.payload[@"best"]] size:13 color:self.mint];
         [self button:@"Play Crystal Dash" action:@"play" primary:YES];
-        [self button:@"SDK experiments" action:@"lab" primary:NO];
+        if (!results) [self button:@"Controls coverage" action:@"controls" primary:NO];
+    [self button:@"SDK experiments" action:@"lab" primary:NO];
         [self button:@"Connection settings" action:@"settings" primary:NO];
     }
     [self label:self.payload[@"sdkStatus"] ?: @"SDK not configured" size:12 color:self.muted];

@@ -1,4 +1,4 @@
-import { adoptIosScenes, addIosSceneManifest, useSceneApplication } from './ios-scenes.mjs';
+import { adoptIosScenes, addIosSceneManifest, useSceneApplication, enableIosRotation } from './ios-scenes.mjs';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -75,6 +75,9 @@ export function patchNative(root, platform, metadata = {}) {
     if (!host.test(value)) throw new Error(`Missing Cocos host Activity: ${manifest}`);
     value = value.replace(host, tag => {
       tag = tag.replace('com.cocos.game.AppActivity', 'com.guance.cocos.demo.NativeCocosActivity');
+      tag = tag.includes('android:screenOrientation=')
+        ? tag.replace(/android:screenOrientation="[^"]*"/, 'android:screenOrientation="portrait"')
+        : tag.replace('<activity', '<activity android:screenOrientation="portrait"');
       return tag.includes('android:enableOnBackInvokedCallback=')
         ? tag.replace(/android:enableOnBackInvokedCallback="[^"]*"/, 'android:enableOnBackInvokedCallback="true"')
         : tag.replace('<activity', '<activity android:enableOnBackInvokedCallback="true"');
@@ -122,7 +125,7 @@ export function patchNative(root, platform, metadata = {}) {
     }
     if (!value.includes('<key>NSLocalNetworkUsageDescription</key>')) value = value.replace(/<dict>/,
       '<dict>\n\t<key>NSLocalNetworkUsageDescription</key><string>Connect to the configured local Demo API and DataKit collector.</string>');
-    writeFileSync(plist, value);
+    writeFileSync(plist, enableIosRotation(value));
     // Xcode generates the required iPhone/iPad sizes from Creator's existing app icon.
     const iconRoot = path.join(root, 'native/engine/ios/Images.xcassets/AppIcon.appiconset');
     if (existsSync(path.join(iconRoot, '1024.png'))) {

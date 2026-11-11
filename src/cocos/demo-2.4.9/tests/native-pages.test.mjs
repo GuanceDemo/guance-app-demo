@@ -68,3 +68,29 @@ test('settings responses carry typed drafts once and cannot leak into the next r
   assert.equal(pages.poll(), undefined);
   pages.open(payload); assert.equal(pages.settingsResult, undefined);
 });
+
+test('native gallery entry crosses both platform mailboxes as a direct navigation action', () => {
+  for (const os of ['Android', 'iOS']) {
+    sys.os = os; calls.length = 0;
+    const pages = new NativePages(); pages.open(payload);
+    const request = JSON.parse(calls[0][os === 'Android' ? 3 : 2]);
+    reply = JSON.stringify({ requestId: request.requestId, action: 'controls' });
+    assert.equal(pages.poll(), 'controls'); assert.equal(pages.pending, false);
+    assert.equal(pages.poll(), undefined);
+  }
+});
+
+
+test('only concrete Controls fixtures opt into rotation; returning locks portrait once',()=>{
+  sys.isNative=true;
+  for(const os of ['Android','iOS']) {
+    sys.os=os;calls.length=0;const pages=new NativePages();
+    pages.setControlsRotation(false);assert.equal(calls.length,0);
+    pages.setControlsRotation(true);pages.setControlsRotation(true);
+    pages.setControlsRotation(false);pages.setControlsRotation(false);
+    assert.equal(calls.length,2);
+    assert.deepEqual(calls.map(call=>call.at(-1)),os==='Android'?[true,false]:['true','false']);
+    assert.equal(calls[0][1],os==='Android'?'setControlsRotation':'setControlsRotation:');
+  }
+  sys.isNative=false;calls.length=0;new NativePages().setControlsRotation(true);assert.equal(calls.length,0);sys.isNative=true;
+});

@@ -6,10 +6,10 @@
   "orientation": {
     "portrait": true,
     "upsideDown": false,
-    "landscapeLeft": false,
-    "landscapeRight": false
+    "landscapeLeft": true,
+    "landscapeRight": true
   },
-  "webOrientation": "portrait",
+  "webOrientation": "auto",
   "inlineSpriteFrames": true,
   "inlineSpriteFrames_native": true,
   "renderMode": "webgl",

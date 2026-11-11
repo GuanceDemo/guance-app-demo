@@ -25,7 +25,7 @@ test('Creator 2 native integration survives regeneration and does not duplicate 
   const android = 'frameworks/runtime-src/proj.android-studio';
   const ios = 'frameworks/runtime-src/proj.ios_mac';
   try {
-    put(`${android}/app/AndroidManifest.xml`, '<manifest><application><activity android:name="org.cocos2dx.javascript.AppActivity"><intent-filter /></activity></application></manifest>');
+    put(`${android}/app/AndroidManifest.xml`, '<manifest><application><activity android:name="org.cocos2dx.javascript.AppActivity" android:screenOrientation="portrait"><intent-filter /></activity></application></manifest>');
     put(`${android}/build.gradle`, "buildscript { dependencies { classpath 'com.android.tools.build:gradle:4.2.2' } }");
     put(`${android}/app/build.gradle`, "apply plugin: 'com.android.application'\narguments '-j' + Runtime.runtime.availableProcessors()\n/* COCOS_SDK_BEGIN */ SDK_BRIDGE /* COCOS_SDK_END */");
     put(`${android}/gradle.properties`, 'PROP_COMPILE_SDK_VERSION=30\nPROP_TARGET_SDK_VERSION=30\norg.gradle.jvmargs=-Xmx4096m\n');
@@ -50,6 +50,8 @@ test('Creator 2 native integration survives regeneration and does not duplicate 
     const iosFirst = iosFiles.map(read); patchNative(root, 'ios'); assert.deepEqual(iosFiles.map(read), iosFirst);
     assert.ok(iosFirst[0].indexOf('[GCNativeTelemetry boot];') < iosFirst[0].indexOf('startCocos();'));
     assert.match(iosFirst[1], /NSAppTransportSecurity/);
+    for (const orientation of ['Portrait', 'LandscapeLeft', 'LandscapeRight']) assert.ok(iosFirst[1].includes('UIInterfaceOrientation' + orientation));
+    assert.match(first[0], /android:screenOrientation="portrait"/);
     assert.match(iosFirst[1], /UIApplicationSceneManifest/);
     assert.match(iosFirst[1], /UISceneDelegateClassName<\/key><string>GCSceneDelegate<\/string>/);
     const [processLaunch, sceneStartup] = iosFirst[0].split('- (void)gcConnectWindowScene:');
@@ -59,6 +61,10 @@ test('Creator 2 native integration survives regeneration and does not duplicate 
     assert.match(read(`${ios}/ios/main.m`), /UIApplicationMain.*@"GCCocosApplication"/);
     assert.ok(processLaunch.includes('[GCNativeTelemetry boot];'));
     assert.match(iosFirst[2], /GCSceneDelegate\.mm in Sources/);
+    const scene=read(`${ios}/ios/GCSceneDelegate.mm`);
+    assert.equal(scene,readFileSync(new URL('../platforms/ios/GCSceneDelegate.mm',import.meta.url),'utf8'));
+    assert.match(scene,/didUpdateEffectiveGeometry:/); assert.match(scene,/didUpdateCoordinateSpace:/);
+    assert.match(scene,/app->updateViewSize\(width, height\)/);
 
     assert.match(iosFirst[2], /COMPILER_FLAGS = "-fobjc-arc"/);
     assert.match(read(`${ios}/ios/GCNativeGameBridge.mm`), /GCNativeGameController : UIViewController/);
