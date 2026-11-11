@@ -1,3 +1,4 @@
+import { safeAreaRect } from '../SafeArea';
 import { CoverageSurface, CoverageNavigation } from './CoverageSurface';
 import { coverageViewport } from './CoverageLayoutModel';
 import { CoverageKind } from './CoverageCatalog';
@@ -91,7 +92,7 @@ export class CoverageHost {
 
   private geometryKey = '';
   private currentGeometryKey(): string {
-    const frame=cc.view.getFrameSize(),design=cc.view.getDesignResolutionSize(),safe=cc.sys.getSafeAreaRect();
+    const frame=cc.view.getFrameSize(),design=cc.view.getDesignResolutionSize(),safe=safeAreaRect();
     return [frame.width,frame.height,design.width,design.height,safe.x,safe.y,safe.width,safe.height].join(',');
   }
 
@@ -110,7 +111,7 @@ export class CoverageHost {
       this.canvas.node.setPosition(viewport.width/2,viewport.height/2);
       this.canvas.node.setContentSize(viewport.width,viewport.height);
       this.camera.node.setPosition(this.canvas.node.x,this.canvas.node.y,1000);
-      const safe=cc.sys.getSafeAreaRect();
+      const safe=safeAreaRect();
       this.surface.resize(viewport,{x:safe.x,y:safe.y,width:safe.width,height:safe.height});
       this.geometryKey=this.currentGeometryKey();
     } finally {this.resizing=false;}

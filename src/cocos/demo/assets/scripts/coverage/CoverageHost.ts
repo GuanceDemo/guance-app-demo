@@ -1,3 +1,4 @@
+import { safeAreaRect } from '../SafeArea';
 import { CoverageSurface, CoverageNavigation } from './CoverageSurface';
 import { coverageViewport } from './CoverageLayoutModel';
 import {
@@ -131,7 +132,7 @@ export class CoverageHost {
 
   private geometryKey = '';
   private currentGeometryKey(): string {
-    const frame=view.getFrameSize(),design=view.getDesignResolutionSize(),safe=sys.getSafeAreaRect(false);
+    const frame=view.getFrameSize(),design=view.getDesignResolutionSize(),safe=safeAreaRect();
     return [frame.width,frame.height,design.width,design.height,safe.x,safe.y,safe.width,safe.height].join(',');
   }
 
@@ -146,7 +147,7 @@ export class CoverageHost {
       const current=view.getDesignResolutionSize();
       if(current.width!==viewport.width||current.height!==viewport.height)view.setDesignResolutionSize(viewport.width,viewport.height,ResolutionPolicy.EXACT_FIT);
       this.canvas.getComponent(UITransform)!.setContentSize(viewport.width,viewport.height);
-      const safe=sys.getSafeAreaRect(false);
+      const safe=safeAreaRect();
       const regions=this.surface.resize(viewport,{x:safe.x,y:safe.y,width:safe.width,height:safe.height});
       if(this.sceneCamera){
         const body=regions.body;

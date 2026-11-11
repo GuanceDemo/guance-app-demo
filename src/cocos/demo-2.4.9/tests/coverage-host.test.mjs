@@ -60,6 +60,8 @@ const modelCode=ts.transpileModule(readFileSync(new URL('../assets/scripts/cover
 const modelUrl=url(modelCode);const {coverageRegions}=await import(modelUrl);engine.coverageRegions=coverageRegions;
 const surface=url(`export class CoverageSurface { constructor(root,kind){this.kind=kind;} get scrollOffset(){return 0;} update(){} destroy(){} showGallery(){} resize(viewport,safe){const regions=globalThis.__coverageEngine.coverageRegions(viewport,safe,this.kind==='perspective'?3:7);globalThis.__coverageRegions=regions;return regions;} }`);
 code=code.replace("'./CoverageSurface'",JSON.stringify(surface)).replace("'./CoverageLayoutModel'",JSON.stringify(modelUrl));
+const safeArea=url('export const safeAreaRect=()=>globalThis.__coverageEngine.sys.getSafeAreaRect();');
+code=code.replace("'../SafeArea'",JSON.stringify(safeArea));
 const {CoverageHost}=await import(url(code));
 function fixture(){
  state={frame:{width:1280,height:720},resolution:{width:720,height:1280},policy:{name:'portrait'},scene:new Node('Scene'),destroy:[],after:[],paused:0,played:0,audio:[new AudioSource()]};

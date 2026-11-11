@@ -51,6 +51,7 @@ const gameView = compile('GameView', { cc: engine, './UI': ui, './GameModel': ga
 const { GameView } = await import(gameView);
 const { Demo } = await import(compile('Demo', {
   cc: engine, './UI': ui, './GameView': gameView,
+  './SafeArea': url('export const safeAreaRect = () => ({});'),
   './Navigation': url('export const layoutNavigation = () => {};'),
   './NavigationModel': compile('NavigationModel', {}),
   './NativeHost': url('export const configStorage = {};'),

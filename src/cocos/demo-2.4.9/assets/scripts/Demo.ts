@@ -1,3 +1,4 @@
+import { safeAreaRect } from './SafeArea';
 import {
   _decorator, Camera, Canvas, Color, Component, EditBox, Game, Graphics, Label, Node,
   ResolutionPolicy, director, game, profiler, sys, view,
@@ -121,7 +122,7 @@ export class Demo extends Component {
   private readonly fitNavigation = (): void => {
     if (!this.navigationButtons.length || !this.navigation.active) return;
     const frame=view.getFrameSize(),design=view.getDesignResolutionSize(),pixelRatio=view.getDevicePixelRatio();
-    let safe=sys.getSafeAreaRect();
+    let safe=safeAreaRect();
     // Creator 2 browser safe areas cover only the letterboxed design rectangle.
     if (!sys.isNative) {
       const width=frame.width*pixelRatio/view.getScaleX(),height=frame.height*pixelRatio/view.getScaleY();

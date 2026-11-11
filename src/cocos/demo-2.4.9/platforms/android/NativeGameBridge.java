@@ -13,6 +13,7 @@ public final class NativeGameBridge {
     public static synchronized boolean consumeBack() {
         boolean result = backRequested; backRequested = false; return result;
     }
+    public static String safeArea() { return NativeCocosActivity.safeArea(); }
     public static void setControlsRotation(boolean enabled) {
         Activity host = (Activity) Cocos2dxActivity.getContext();
         if (host != null) host.runOnUiThread(() -> host.setRequestedOrientation(enabled

@@ -1,3 +1,4 @@
+import { safeAreaRect } from './SafeArea';
 import {
   _decorator, Camera, Canvas, Color, Component, EditBox, Game, Graphics, Label, Layers, Node, UITransform,
   ResolutionPolicy, director, game, profiler, sys, view,
@@ -120,7 +121,7 @@ export class Demo extends Component {
   private readonly fitNavigation = (): void => {
     if (!this.navigationButtons.length || !this.navigation.active) return;
     const frame=view.getFrameSize(),design=view.getDesignResolutionSize(),pixelRatio=view.getDevicePixelRatio();
-    let safe=sys.getSafeAreaRect(false);
+    let safe=safeAreaRect();
     const geometry=navigationGeometry(frame,design,safe,view.getScaleY(),pixelRatio);
     if (!(geometry.scale>0 && geometry.width>36)) return;
     const key=[geometry.x,geometry.y,geometry.scale,geometry.width,this.activeTab].join(',');
