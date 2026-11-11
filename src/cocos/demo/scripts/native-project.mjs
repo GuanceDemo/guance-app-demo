@@ -1,10 +1,11 @@
+import { adoptIosScenes, addIosSceneManifest, useSceneApplication } from './ios-scenes.mjs';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const platforms = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../platforms');
 
-// Matches the Cocos SDK Hybrid host's Android Agent 1.7.6-alpha03 pairing.
+// Android instrumentation version used by this demo's Hybrid host.
 const ftPluginVersion = '1.3.9-alpha01';
 
 function patchAndroidPlugin(root) {
@@ -108,6 +109,7 @@ export function patchNative(root, platform, metadata = {}) {
     if (!/^\d+\.\d+\.\d+$/.test(version) || !/^[1-9]\d*$/.test(buildNumber)) throw new Error('Invalid iOS version/build number.');
     value = value.replace(/(<key>CFBundleShortVersionString<\/key>\s*<string>)[^<]*(<\/string>)/, (_, before, after) => before + version + after);
     value = value.replace(/(<key>CFBundleVersion<\/key>\s*<string>)[^<]*(<\/string>)/, (_, before, after) => before + buildNumber + after);
+    value = value.replace(/(<key>CFBundleDisplayName<\/key>\s*<string>)[^<]*(<\/string>)/, '$1Cocos 3.8.8$2');
     // This demo does not use non-exempt encryption; include the declaration for TestFlight.
     if (!value.includes('<key>ITSAppUsesNonExemptEncryption</key>')) {
       value = value.replace(/<dict>/, '<dict>\n\t<key>ITSAppUsesNonExemptEncryption</key>\n\t<false/>');
@@ -132,8 +134,9 @@ export function patchNative(root, platform, metadata = {}) {
     const cmakePath = path.join(root, 'native/engine/ios/CMakeLists.txt');
     let cmake = readFileSync(cmakePath, 'utf8');
     copyFileSync(path.join(platforms, 'ios/GCNativeGameBridge.mm'), path.join(root, 'native/engine/ios/GCNativeGameBridge.mm'));
-    for (const name of ['GCNativeTelemetry.h', 'GCNativeTelemetry.mm'])
+    for (const name of ['GCNativeTelemetry.h', 'GCNativeTelemetry.mm', 'GCSceneDelegate.h', 'GCSceneDelegate.mm'])
       copyFileSync(path.join(platforms, 'ios', name), path.join(root, 'native/engine/ios', name));
+    copyFileSync(path.join(platforms, 'ios/RepairWebP.cmake'), path.join(root, 'native/engine/ios/RepairWebP.cmake'));
     const delegatePath = path.join(root, 'native/engine/ios/AppDelegate.mm');
     let delegate = readFileSync(delegatePath, 'utf8');
     if (!delegate.includes('#import "GCNativeTelemetry.h"')) delegate = '#import "GCNativeTelemetry.h"\n' + delegate;
@@ -142,7 +145,10 @@ export function patchNative(root, platform, metadata = {}) {
       if (!launch.test(delegate)) throw new Error('Missing AppDelegate launch callback for native SDK initialization.');
       delegate = delegate.replace(launch, '$1\n    [GCNativeTelemetry boot];');
     }
-    writeFileSync(delegatePath, delegate);
+    writeFileSync(delegatePath, adoptIosScenes(delegate));
+    const main = path.join(root, 'native/engine/ios/main.mm');
+    writeFileSync(main, useSceneApplication(readFileSync(main, 'utf8')));
+    writeFileSync(plist, addIosSceneManifest(readFileSync(plist, 'utf8')));
     if (!cmake.includes('# DEMO_NATIVE_SDK_HOST')) {
       cmake += '\n# DEMO_NATIVE_SDK_HOST\n'
         + 'target_sources(${EXECUTABLE_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/GCNativeTelemetry.mm)\n'
@@ -157,6 +163,14 @@ export function patchNative(root, platform, metadata = {}) {
       cmake += '\n# DEMO_XCODE26_ENOKI: Creator 3.8.8 bundles legacy Enoki std trait specializations.\n'
         + 'if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 17)\n'
         + '    target_compile_options(cocos_engine PRIVATE -Wno-invalid-specialization)\nendif()\n';
+    }
+    if (!cmake.includes('# DEMO_UIKIT_SCENE_LIFECYCLE')) {
+      cmake += '\n# DEMO_UIKIT_SCENE_LIFECYCLE\n'
+        + 'target_sources(${EXECUTABLE_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/GCSceneDelegate.mm)\n'
+        + 'set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/GCSceneDelegate.mm PROPERTIES COMPILE_FLAGS "-fobjc-arc")\n';
+    }
+    if (!cmake.includes('# DEMO_IOS_WEBP_ALIGNMENT')) {
+      cmake += '\n# DEMO_IOS_WEBP_ALIGNMENT\ninclude(${CMAKE_CURRENT_LIST_DIR}/RepairWebP.cmake)\n';
     }
     writeFileSync(cmakePath, cmake);
   }

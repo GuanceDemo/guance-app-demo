@@ -53,6 +53,8 @@ const { Demo } = await import(compile('Demo', {
   './Telemetry': url('export const { Telemetry } = globalThis.__androidBackTest; export const platform = () => "android", sdk = {};'),
   './NativePages': url('export class NativePages { pending = false; back = false; poll() {} consumeBack() { const result = this.back; this.back = false; return result; } }'),
   './MultiTouchView': url('export const { MultiTouchView } = globalThis.__androidBackTest;'),
+  './coverage/CoverageCatalog': compile('coverage/CoverageCatalog', {}),
+  './coverage/CoverageHost': url('export class CoverageHost { async open() {} pause() {} resume() {} destroy() { this.destroyed = true; } }'),
 }));
 
 const back = value => { value.nativePages.back = true; value.update(0.12); };
@@ -124,4 +126,18 @@ test('component visibility restores only visible Cocos pages and never steals a 
   assert.deepEqual(events, []);
   value.cocosView = undefined; value.nativePages.pending = false; value.onEnable();
   assert.deepEqual(events, []);
+});
+
+
+test('system Back exits coverage, restores its category and then returns to the lab', async () => {
+  const value = demo(); let destination;
+  const menu = value.coverageMenu.bind(value);
+  value.coverageMenu = category => { destination = category ?? 'categories'; menu(category); };
+  value.laboratory = () => { destination = 'lab'; };
+  await value.openCoverage('basic', 'ui');
+  const coverage = value.activeCoverage;
+  back(value);
+  assert.equal(destination, 'ui'); assert.equal(coverage.destroyed, true); assert.equal(value.activeCoverage, undefined);
+  back(value); assert.equal(destination, 'categories');
+  back(value); assert.equal(destination, 'lab');
 });

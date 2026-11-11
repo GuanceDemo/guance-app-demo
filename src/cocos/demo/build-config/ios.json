@@ -3,6 +3,7 @@
   "platform": "ios",
   "buildPath": "project://build",
   "debug": true,
+  "sourceMaps": true,
   "mainBundleCompressionType": "merge_dep",
   "startScene": "dfb26b90-bd3f-4326-98a0-3f82bd2d6842",
   "outputName": "ios",
@@ -33,7 +34,7 @@
         "iphoneos": true,
         "simulator": false
       },
-      "targetVersion": "12.0",
+      "targetVersion": "15.0",
       "__version__": "1.0.1"
     },
     "native": {

@@ -7,7 +7,15 @@
     "lib": [
       "ES2020",
       "DOM"
-    ]
+    ],
+    "paths": {
+      "db://assets/*": [
+        "./assets/*"
+      ],
+      "db://internal/default_renderpipeline/builtin-dof-pass": [
+        "./types/cocos-internal.d.ts"
+      ]
+    }
   },
   "include": [
     "assets/**/*.ts"

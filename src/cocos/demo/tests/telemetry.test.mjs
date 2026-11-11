@@ -15,7 +15,7 @@ const transport = { platform: 'android', invoke(method, payload) {
   if (method === 'hybrid.attach' && (!initialized || failAttach)) throw Error('host unavailable');
 } };
 let sdk;
-const sys = { isNative: true, os: 'Android', OS: { ANDROID: 'Android', IOS: 'iOS' } };
+const sys = { isNative: false, os: 'Android', OS: { ANDROID: 'Android', IOS: 'iOS' } };
 const nativeHost = {
   initialize(config) { record('host.initialize')(config); initialized = true; },
   disable() { record('host.disable')(); const wasInitialized = initialized; initialized = false; return wasInitialized; },
@@ -29,7 +29,7 @@ const configUrl = url(compile('Config'));
 const { defaultConfig } = await import(configUrl);
 const baseSource = compile('Telemetry').replace("'cc'", JSON.stringify(url('export const {sys} = globalThis.__telemetryTest;')))
   .replace("'@cloudcare/cocos-sdk/creator3'", JSON.stringify(url('export const guanceSdk = new Proxy({}, {get: (_, key) => { const value = globalThis.__telemetryTest.sdk[key]; return typeof value === "function" ? value.bind(globalThis.__telemetryTest.sdk) : value; }});')))
-  .replace("'@cloudcare/cocos-session-replay/creator3'", JSON.stringify(url('export const withSessionReplay = sdk => sdk;')))
+  .replace("'@cloudcare/cocos-session-replay/creator3'", JSON.stringify(url('export const withSessionReplay = sdk => { if (!globalThis.__telemetryTest.sys.isNative) throw new Error("Native Replay runtime unavailable"); return sdk; };')))
   .replace("'./NativeHost'", JSON.stringify(url('export const {nativeHost} = globalThis.__telemetryTest;')))
   .replace("'./Config'", JSON.stringify(configUrl));
 const { Telemetry } = await import(url(baseSource));
@@ -51,6 +51,13 @@ function reset() {
 }
 const valid = () => ({ ...defaultConfig(), demoAndroidAppId: 'android-only', demoIOSAppId: 'ios-only',
   demoApiAddress: 'https://demo.example.com', datakitAddress: 'https://collector.example.com' });
+
+test('editor/browser imports and privacy do not require a native Replay runtime', () => {
+  reset(); sys.isNative = false;
+  const telemetry = new Telemetry();
+  telemetry.protect({}); telemetry.start(defaultConfig(), {});
+  assert.equal(telemetry.ready, false); assert.deepEqual(calls, []);
+});
 
 test('host initialization precedes attach; attach contains only capture and automatic tracking options', () => {
   for (const os of ['Android', 'iOS']) {
@@ -109,4 +116,17 @@ test('Replay FPS/quality and Cocos switches reach attach; Replay disabled omits 
   assert.equal('replay' in calls.find(c => c[0] === 'attach')[1], false);
   withoutReplay.view('Game', 'game'); withoutReplay.leave();
   assert.equal(calls.some(c => c[0] === 'hybrid.setExternalRecorderActive'), false);
+});
+
+
+test('coverage camera selection is native-attachment guarded and can restore the main camera', () => {
+  reset();
+  const telemetry = new Telemetry();
+  telemetry.setReplayCamera({ name: 'unattached' });
+  assert.deepEqual(calls, []);
+  telemetry.start(valid(), { name: 'main' });
+  calls.length = 0;
+  telemetry.setReplayCamera({ name: 'coverage' });
+  telemetry.setReplayCamera({ name: 'main' });
+  assert.deepEqual(calls, [['camera', { name: 'coverage' }], ['camera', { name: 'main' }]]);
 });

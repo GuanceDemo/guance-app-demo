@@ -28,7 +28,7 @@ App-owned native source lives in `platforms/android` and `platforms/ios`. `scrip
 
 Android launches `NativeCocosActivity`, a subclass of Creator's `AppActivity`. It forwards system Back through the native mailbox, including Android 13+ back callbacks, while leaving text-editing keys to the engine. The generated manifest preserves Creator's launcher settings and opts this Activity into the system back callback.
 
-Android builds also apply `ft-plugin:1.3.9-alpha01`, paired with the Cocos SDK's Android Agent `1.7.6-alpha03` in its Hybrid host. The native patch script adds the Maven classpath and plugin configuration after each Creator build, including HTTPURLConnection instrumentation. Runtime native collection switches still follow the demo's telemetry configuration.
+Android builds also apply `ft-plugin`, using a version compatible with the Cocos SDK's Android Agent in its Hybrid host. The native patch script adds the Maven classpath and plugin configuration after each Creator build, including HTTPURLConnection instrumentation. Runtime native collection switches still follow the demo's telemetry configuration.
 
 The same script sets `max-page-size=16384` and `common-page-size=16384` when linking `libcocos.so`, so Creator's NDK 22 produces 16 KB-aligned LOAD segments and GNU_RELRO boundaries. This applies to Debug and Release. Check every packaged `.so` again when upgrading native dependencies; these link flags do not change prebuilt libraries. ELF/ZIP alignment checks do not replace testing on a device with a 16 KB page size.
 
@@ -54,7 +54,9 @@ npm run setup
 
 Open this directory in Creator **3.8.8**. The entry scene is `assets/scenes/Demo.scene`. Reopen Creator after the first SDK extension installation.
 
-`npm ci` installs the committed lockfile: `@cloudcare/cocos-sdk@0.1.0-alpha.7` and `@cloudcare/cocos-session-replay@0.1.0-alpha.7`. Keep these packages on the same exact version. The demo does not depend on a local SDK source checkout.
+SDK `0.1.1-alpha.5` requires iOS **15.0 or newer**. The iOS build configuration and SDK-generated native projects use that minimum deployment target.
+
+`npm ci` installs `@cloudcare/cocos-sdk` and `@cloudcare/cocos-session-replay` from the committed lockfile. SDK versions are updated as needed; refer to `package.json` and `package-lock.json` for the configured versions, and keep the packages compatible when updating them. The demo does not depend on a local SDK source checkout.
 
 ## Configure telemetry
 
@@ -107,6 +109,10 @@ The lab remains available from the native lobby, native results and Cocos naviga
 
 Native Crash / Android ANR / UI Block capture is enabled by default and can be changed in settings. JS Error / LongTask experiments do not deliberately crash the native process. Native automatic View/Action tracking is disabled because native pages report their own Views/Actions. Android keeps the Resource master switch on for host traffic but disables HttpURLConnection Resource capture. On iOS, NSURLSession and NSURLConnection Resource capture are disabled because Creator 3.8.8 XHR is collected by Cocos. Native automatic Trace injection is off on both platforms, preserving Cocos headers and untracked connection probes. Calls succeeding locally do not prove ingestion; check the configured Guance workspace. Server Trace linkage requires the existing Demo Server to run through `ddtrace-run` in the same workspace.
 
+### Full component coverage
+
+Open **Lab → Session Replay · Full component coverage** for real UI components, 3D and engine-specific diagnostics migrated from the `ft-sdk-cocos` Hybrid samples. Creator 3.8.8 has **17 entries**; Creator 2.4.9 has **11 entries** with the same shared UI suites. Scenes retain their original 960 × 640 layout and restore the portrait demo on exit. WebView uses the configured Demo API URL; media fixtures are bundled locally. Optional features keep their engine availability messages.
+
 ### Hybrid navigation verification
 
 On Android and iOS, repeat **native lobby → Cocos game/lab → native lobby** at least three times. Verify a single active View, continuous native/Cocos Replay without stale frames, and no repeated initialization errors. Cover and restore Cocos, background/foreground it, and verify that native settings remain masked. Disabling Replay omits Cocos capture without disabling RUM; disabling the SDK stops it through the native host. Unit tests and native compilation do not replace these device and ingestion checks.
@@ -121,7 +127,7 @@ Open **Lab → Session Replay · Multi-touch playground** (also linked from the 
 4. Drag outside the arena, reset while another finger is held, navigate away and return, and background/foreground the app while touching. Active markers must clear on cancellation, reset, navigation and backgrounding; a new touch starts tracking again.
 5. In Guance, find the `CocosMultiTouchReplay` View and compare the canvas trails/card with Replay touch indicators. Actions `multitouch_start`, `multitouch_end`, `multitouch_cancel` and `multitouch_reset` help locate the interaction; moves do not emit per-frame RUM Actions.
 
-The pinned Replay SDK `0.1.0-alpha.7` records pointer down/up (cancel becomes up), but does not emit continuous pointer-move records. Colored trails and card transforms are canvas content captured at the configured FPS (default 1), not proof of continuous pointer-event playback. Validate native recording and ingestion on a physical Android/iOS multi-touch device; desktop mouse preview only checks single-pointer interaction.
+Pointer-event recording support depends on the installed Replay SDK version; verify down/up, cancellation and continuous pointer-move behavior when updating it. Colored trails and card transforms are canvas content captured at the configured FPS (default 1), not proof of continuous pointer-event playback. Validate native recording and ingestion on a physical Android/iOS multi-touch device; desktop mouse preview only checks single-pointer interaction.
 
 ## Build and verify
 
@@ -135,12 +141,18 @@ npm run build:android
 npm run build:ios
 ```
 
+Source Maps are enabled with `sourceMaps: true` in `build-config/*.json`. iOS outputs include the application map at `build/ios/data/assets/main/index.js.map` and SDK/engine maps alongside their JavaScript bundles.
+
 Creator generates the engine declarations used by typecheck. The build scripts accept Creator success exit code 36 and apply the native page integration after generation.
 
 - Android: open `build/android/proj` in Android Studio, or run `./gradlew --no-daemon --max-workers=2 assembleDebug` there. The APK is under `build/android/proj/build/GuanceCocosDemo/outputs/apk/debug/`.
 - iOS: run `pod install` in `build/ios/proj`, open `GuanceCocosDemo.xcworkspace` and use the `GuanceCocosDemo-mobile` scheme. SDK extensions manage native Agent/Replay dependencies.
 - Xcode 26 / AppleClang 17+: the demo applies `-Wno-invalid-specialization` to the generated `cocos_engine` target for Creator 3.8.8 Enoki compatibility. The Creator installation is not modified.
+- iOS 27 SDK: native integration adopts the UIKit Scene lifecycle, creates the engine window in the scene, and forwards active/background events to Creator. `GCCocosApplication` maps legacy engine orientation queries to scene geometry, with the declared launch orientation as the initial fallback.
+- Current Xcode linkers also require aligned offsets in Creator's universal WebP archive. `RepairWebP.cmake` reassembles unchanged architecture slices locally and redirects the imported `webp` target.
 - On memory-constrained machines, run one platform simulator at a time and limit native compilation to two workers.
+
+SDK / Replay `0.1.1-alpha.5` has passed iOS arm64 compilation, signing, installation and launch on an iPhone 17 Pro with the Scene/orientation fixes. The 2.4.9 edition can remain running alongside it. Gameplay, native/Cocos navigation and Replay ingestion still require the acceptance checks below.
 
 ### Acceptance route
 

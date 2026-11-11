@@ -11,6 +11,8 @@ import { GameView } from './GameView';
 import { MultiTouchView } from './MultiTouchView';
 import { RoundResult } from './GameModel';
 import { NativePages, NativePayload } from './NativePages';
+import { CoverageHost } from './coverage/CoverageHost';
+import { CoverageCategory, CoverageKind, coverageCategories, coverageFor } from './coverage/CoverageCatalog';
 
 const { ccclass } = _decorator;
 const BEST_KEY = 'gc_demo_crystal_dash_best_v1';
@@ -34,13 +36,17 @@ export class Demo extends Component {
   private lastNativePayload?: NativePayload;
   private activeGame?: GameView;
   private activeMultiTouch?: MultiTouchView;
+  private activeCoverage?: CoverageHost;
+  private coverageCamera?: Camera;
   private best = 0;
   private backTarget = () => this.home();
   private cocosView?: { name: string; scenario: string };
   private readonly background = () => {
-    this.activeGame?.pause(); this.activeMultiTouch?.cancelActive(); this.telemetry.leave();
+    this.activeGame?.pause(); this.activeMultiTouch?.cancelActive(); this.activeCoverage?.pause(); this.telemetry.leave();
   };
   private readonly foreground = () => {
+    this.activeCoverage?.resume();
+    if (this.coverageCamera) this.telemetry.setReplayCamera(this.coverageCamera);
     if (this.cocosView && !this.nativePages.pending) this.telemetry.view(this.cocosView.name, this.cocosView.scenario);
   };
   private systemBack(): void {
@@ -102,6 +108,7 @@ export class Demo extends Component {
   }
 
   private show(name: string, scenario = 'navigation', back = () => this.home(), nativePage = false): Page {
+    this.activeCoverage?.destroy(); this.activeCoverage = undefined;
     this.backTarget = back;
     ++this.route; this.api.cancel(); this.replayProbe = undefined;
     this.activeGame?.destroy(); this.activeGame = undefined;
@@ -250,6 +257,7 @@ export class Demo extends Component {
     const page = this.show('CocosLaboratory', 'experimental');
     page.heading('SDK lab', 'Inspect gameplay, performance and telemetry.');
     page.action('Play · Game events and Replay', () => this.play(), true);
+    page.action('Session Replay · Full component coverage', () => this.coverageMenu());
     page.action('Session Replay · Multi-touch playground', () => this.multiTouchPage());
     page.note('Native lobby → Cocos game → native results. Each screen has its own RUM View. Cocos Replay captures the game; native screens are outside its camera.', 128);
     page.note('Results show local calls or HTTP responses. Check Guance for collected data. Play a round to inspect game events and replay.', 110);
@@ -318,6 +326,45 @@ export class Demo extends Component {
     page.action('Back to lab', () => this.laboratory());
   }
 
+  private coverageMenu(category?: CoverageCategory): void {
+    const page = this.show(category ? `CocosControls/${category}` : 'CocosControls', 'component_coverage',
+      category ? () => this.coverageMenu() : () => this.laboratory());
+    page.heading('Full component coverage', 'Real controls and assets from the SDK Hybrid acceptance suite.');
+    if (!category) {
+      for (const group of coverageCategories) page.action(group.title, () => this.coverageMenu(group.id));
+      page.note('Each page supports the original interactions, privacy checks and reset controls. Coverage uses the original 960 × 640 canvas; Back returns here.', 140);
+      page.action('Back to SDK lab', () => this.laboratory());
+    } else {
+      const group = coverageCategories.find(group => group.id === category)!;
+      page.note(group.title, 60);
+      for (const entry of coverageFor(2, category)) {
+        page.action(entry.title, () => void this.openCoverage(entry.id, category));
+        page.note(entry.description, 76);
+      }
+      page.action('Back to coverage categories', () => this.coverageMenu());
+    }
+  }
+
+  private async openCoverage(kind: CoverageKind, category: CoverageCategory): Promise<void> {
+    const page = this.show(`CocosControls/${kind}`, 'component_coverage', () => this.coverageMenu(category));
+    page.destroy(); this.page = undefined;
+    this.navigation.active = false;
+    const host = new CoverageHost(this.root, this.camera, camera => {
+      this.coverageCamera = camera === this.camera ? undefined : camera;
+      this.telemetry.setReplayCamera(camera);
+    }, () => this.coverageMenu(category), (caseId, stage) => {
+      // Only fixed case IDs/phases are recorded, never EditBox contents or settings.
+      this.telemetry.action(`replay_${kind}_case`, { demo_scenario: 'component_coverage', case_id: caseId, stage });
+    });
+    this.activeCoverage = host;
+    try { await host.open(kind, this.config.demoApiAddress); }
+    catch (error) {
+      if (this.activeCoverage !== host) return;
+      this.coverageMenu(category);
+      this.setStatus(`Unable to open coverage: ${error instanceof Error ? error.message : String(error)}`, true);
+    }
+  }
+
   private multiTouchPage(back = () => this.laboratory()): void {
     const page = this.show('CocosMultiTouchReplay', 'multitouch_replay', back); page.destroy(); this.page = undefined;
     this.activeMultiTouch = new MultiTouchView(this.root,
@@ -331,6 +378,7 @@ export class Demo extends Component {
   onDestroy(): void {
     game.off(Game.EVENT_HIDE, this.background);
     game.off(Game.EVENT_SHOW, this.foreground);
+    this.activeCoverage?.destroy();
     this.activeMultiTouch?.destroy();
     this.activeGame?.destroy(); this.api.cancel(); this.page?.destroy(); this.telemetry.close();
   }

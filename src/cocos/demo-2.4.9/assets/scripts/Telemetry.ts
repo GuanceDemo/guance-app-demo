@@ -4,7 +4,14 @@ import { withSessionReplay } from '@cloudcare/cocos-session-replay/creator2';
 import { DemoConfig, sdkReplay, validateConfig } from './Config';
 import { nativeHost } from './NativeHost';
 
-export const sdk = withSessionReplay(baseSdk);
+// Creator's asset exporter imports scene scripts without a native SDK runtime.
+// Compose Replay on native use so editor imports keep the Demo component valid.
+export let sdk: ReturnType<typeof withSessionReplay>;
+function nativeSdk(): ReturnType<typeof withSessionReplay> {
+  if (!sys.isNative) throw new Error('Native telemetry requires an Android or iOS build.');
+  if (!sdk) sdk = withSessionReplay(baseSdk);
+  return sdk;
+}
 export const platform = () => sys.os === sys.OS_IOS ? 'ios' as const : 'android' as const;
 
 export class Telemetry {
@@ -21,8 +28,9 @@ export class Telemetry {
     try {
       // Usually initialized at native app launch. This also handles first setup / migration.
       nativeHost.initialize(config);
-      sdk.setReplayCamera(camera);
-      sdk.attach({
+      const attached = nativeSdk();
+      attached.setReplayCamera(camera);
+      attached.attach({
         autoTrack: { scenes: false, actions: false, network: config.enableAutoResource,
           errors: config.enableAutoError, console: false },
         ...(config.enableSessionReplay ? { replay: sdkReplay(config) } : {}),
@@ -53,6 +61,10 @@ export class Telemetry {
     this.entered = false; this.currentView = '';
   }
 
+  setReplayCamera(camera: Camera): void {
+    if (this.ready) sdk.setReplayCamera(camera);
+  }
+
   action(name: string, attributes: FTAttributes = {}): void {
     if (this.ready) sdk.rum.addAction(name, 'click', attributes);
   }
@@ -63,7 +75,7 @@ export class Telemetry {
     if (this.ready) sdk.mobile.bindUser({ userId: username, userName: username });
   }
   unbind(): void { if (this.ready) sdk.mobile.unbindUser(); }
-  protect(node: Node): void { sdk.replay.setPrivacy(node, 'mask'); }
+  protect(node: Node): void { if (sys.isNative) nativeSdk().replay.setPrivacy(node, 'mask'); }
   /** Disposing Cocos releases capture and hooks; the native SDK keeps running. */
   close(): void { this.leave(); }
   disable(): boolean {

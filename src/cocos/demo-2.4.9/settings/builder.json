@@ -14,7 +14,7 @@
   "inlineSpriteFrames_native": true,
   "renderMode": "webgl",
   "debug": true,
-  "sourceMaps": false,
+  "sourceMaps": true,
   "md5Cache": false,
   "encryptJs": false,
   "zipCompressJs": false,

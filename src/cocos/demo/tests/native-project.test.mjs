@@ -62,7 +62,9 @@ test('native app patches are repeatable and apply the requested iOS version/buil
     writeFileSync(plist, '<plist><dict><key>CFBundleShortVersionString</key><string>1.0.0</string><key>CFBundleVersion</key><string>1.0</string></dict></plist>');
     writeFileSync(cmake, 'project(Demo)\n');
     const delegate = path.join(root, 'native/engine/ios/AppDelegate.mm');
-    writeFileSync(delegate, '- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {\n    startCocos();\n    return YES;\n}');
+    const main = path.join(root, 'native/engine/ios/main.mm');
+    writeFileSync(main, 'UIApplicationMain(argc, (char**)argv, nil, @"AppDelegate");');
+    writeFileSync(delegate, '@implementation AppDelegate\n- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {\n    self.window = [[UIWindow alloc] initWithFrame:bounds];\n    startCocos();\n    return YES;\n}\n@end');
     const iconRoot = path.join(root, 'native/engine/ios/Images.xcassets/AppIcon.appiconset');
     mkdirSync(iconRoot, { recursive: true });
     const originalIcon = Buffer.from('existing Creator icon');
@@ -82,6 +84,18 @@ test('native app patches are repeatable and apply the requested iOS version/buil
     assert.match(readFileSync(cmake, 'utf8'), /target_sources\(\$\{EXECUTABLE_NAME\} PRIVATE.*GCNativeTelemetry\.mm/);
     assert.match(result, /CFBundleShortVersionString<\/key><string>2.3.4<\/string>/);
     assert.match(result, /CFBundleVersion<\/key><string>102<\/string>/);
+    assert.match(result, /UIApplicationSceneManifest/);
+    assert.match(result, /UISceneDelegateClassName<\/key><string>GCSceneDelegate<\/string>/);
+    const migrated = readFileSync(delegate, 'utf8');
+    const [processLaunch, sceneStartup] = migrated.split('- (void)gcConnectWindowScene:');
+    assert.match(processLaunch, /self.gcLaunchOptions = launchOptions/);
+    assert.doesNotMatch(processLaunch, /startCocos\(\)|UIWindow alloc/);
+    assert.match(sceneStartup, /initWithWindowScene:scene/);
+    assert.match(readFileSync(main, 'utf8'), /UIApplicationMain.*@"GCCocosApplication"/);
+    assert.match(sceneStartup, /if \(self.window\)/);
+    assert.ok(processLaunch.includes('[GCNativeTelemetry boot];'));
+    assert.match(readFileSync(cmake, 'utf8'), /target_sources.*GCSceneDelegate\.mm/);
+
     assert.equal((result.match(/NSAppTransportSecurity/g) ?? []).length, 1);
     assert.equal((readFileSync(cmake, 'utf8').match(/# DEMO_XCODE26_ENOKI/g) ?? []).length, 1);
     assert.equal((readFileSync(cmake, 'utf8').match(/# DEMO_NATIVE_PAGES/g) ?? []).length, 1);

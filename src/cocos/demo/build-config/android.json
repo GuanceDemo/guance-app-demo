@@ -3,6 +3,7 @@
   "platform": "android",
   "buildPath": "project://build",
   "debug": true,
+  "sourceMaps": true,
   "mainBundleCompressionType": "merge_dep",
   "startScene": "dfb26b90-bd3f-4326-98a0-3f82bd2d6842",
   "outputName": "android",

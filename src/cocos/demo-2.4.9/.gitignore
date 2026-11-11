@@ -10,6 +10,8 @@ creator.d.ts
 jsb.d.ts
 assets/guance-cocos-sdk/
 assets/guance-cocos-sdk.meta
+assets/guance-cocos-sdk-runtime/
+assets/guance-cocos-sdk-runtime.meta
 artifacts/
 *.local.json
 /docs/

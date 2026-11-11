@@ -1,5 +1,7 @@
+import { adoptIosScenes, addIosSceneManifest, useSceneApplication } from './ios-scenes.mjs';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 const platforms = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../platforms');
@@ -11,10 +13,45 @@ function marked(source, name, content) {
   return source.includes(begin) ? source.replace(new RegExp(`${begin}[\\s\\S]*?${end}`, 'g'), block) : `${source}\n${block}\n`;
 }
 
+function alignIosWebP(ios) {
+  const config = path.join(ios, 'UserConfigIOS.debug.xcconfig');
+  if (process.platform !== 'darwin' || !existsSync(config)) return;
+  const include = readFileSync(config, 'utf8').match(/^#include\s+"([^"\n]*CCModuleConfigIOS\.debug\.xcconfig)"/m)?.[1];
+  if (!include) return;
+  const engine = path.resolve(ios, path.dirname(include), '../../..');
+  const original = path.join(engine, 'external/ios/libs/libwebp.a');
+  const directory = path.resolve(ios, 'demo-webp');
+  mkdirSync(directory, { recursive: true });
+  const lipo = args => {
+    const result = spawnSync('xcrun', ['lipo', ...args], { encoding: 'utf8', maxBuffer: 65536 });
+    if (result.error || result.status !== 0) throw new Error(`Cannot align Creator's WebP archive: ${String(result.error || result.stderr).slice(0, 1500)}`);
+    return result.stdout.trim();
+  };
+  const info = lipo(['-info', original]);
+  const architectures = info.match(/are: ([^\r\n]+)/)?.[1].trim().split(/\s+/);
+  if (!architectures) return; // Thin archives do not have a universal slice-offset problem.
+  const slices = architectures.map(architecture => {
+    const slice = path.join(directory, `${architecture}.a`);
+    lipo([original, '-thin', architecture, '-output', slice]);
+    return slice;
+  });
+  const alignments = architectures.filter(architecture => ['arm64', 'arm64e', 'x86_64'].includes(architecture))
+    .flatMap(architecture => ['-segalign', architecture, '0x8']);
+  lipo(['-create', ...slices, ...alignments, '-output', path.join(directory, 'libwebp.a')]);
+  for (const mode of ['debug', 'release']) edit(path.join(ios, `UserConfigIOS.${mode}.xcconfig`), source =>
+    marked(source, 'DEMO_IOS_WEBP_ALIGNMENT', `LIBRARY_SEARCH_PATHS = "${directory}" $(inherited)`));
+}
+
 // Native files live in frameworks/runtime-src in Creator 2, unlike Creator 3's native/engine.
 export function patchNative(buildRoot, platform) {
   if (!['android', 'ios'].includes(platform)) throw new Error('Expected android or ios.');
   const runtime = path.join(buildRoot, 'frameworks/runtime-src');
+  // Both editions can stay alive on one device; their JS inspectors need distinct ports.
+  edit(path.join(runtime, 'Classes/AppDelegate.cpp'), source => {
+    const next = source.replace(/jsb_enable_debugger\("0\.0\.0\.0",\s*6086,/, 'jsb_enable_debugger("0.0.0.0", 6087,');
+    if (!next.includes('jsb_enable_debugger("0.0.0.0", 6087,')) throw new Error('Missing Creator 2 JS debugger configuration.');
+    return next;
+  });
   if (platform === 'android') {
     const project = path.join(runtime, 'proj.android-studio');
     const app = path.join(project, 'app');
@@ -64,6 +101,7 @@ export function patchNative(buildRoot, platform) {
     });
   } else {
     const project = path.join(runtime, 'proj.ios_mac'), ios = path.join(project, 'ios');
+    alignIosWebP(ios);
     for (const name of readdirSync(path.join(platforms, 'ios'))) copyFileSync(path.join(platforms, 'ios', name), path.join(ios, name));
     edit(path.join(ios, 'AppController.mm'), source => {
       if (!source.includes('#import "GCNativeTelemetry.h"')) source = '#import "GCNativeTelemetry.h"\n' + source;
@@ -72,12 +110,14 @@ export function patchNative(buildRoot, platform) {
         if (!launch.test(source)) throw new Error('Missing AppController launch callback.');
         source = source.replace(launch, '$1\n    [GCNativeTelemetry boot];');
       }
-      return source;
+      return adoptIosScenes(source);
     });
+    edit(path.join(ios, 'main.m'), useSceneApplication);
     edit(path.join(ios, 'Info.plist'), source => {
       if (!source.includes('<key>NSAppTransportSecurity</key>')) source = source.replace('<dict>', '<dict>\n<key>NSAppTransportSecurity</key><dict><key>NSAllowsArbitraryLoads</key><true/></dict>');
       if (!source.includes('<key>NSLocalNetworkUsageDescription</key>')) source = source.replace('<dict>', '<dict>\n<key>NSLocalNetworkUsageDescription</key><string>Connect to the local Demo API and DataKit collector.</string>');
-      return source;
+      source = source.replace(/(<key>CFBundleDisplayName<\/key>\s*<string>)[^<]*(<\/string>)/, '$1Cocos 2.4.9$2');
+      return addIosSceneManifest(source);
     });
     const xcode = readdirSync(project).filter(name => name.endsWith('.xcodeproj'));
     if (xcode.length !== 1) throw new Error('Expected one generated Xcode project.');
@@ -89,12 +129,22 @@ export function addIosSources(source) {
   // Attach to the same group and source phase as AppController, leaving the Mac target alone.
   const controller = source.match(/([A-F0-9]{24}) \/\* AppController\.mm in Sources \*\/ = \{isa = PBXBuildFile; fileRef = ([A-F0-9]{24})/);
   if (!controller) throw new Error('Missing AppController Xcode build entry.');
-  for (const name of ['GCNativeGameBridge.mm', 'GCNativeTelemetry.mm']) {
-    if (source.includes(`/* ${name} in Sources */ =`)) continue;
+  const controllerRef = source.match(new RegExp(`${controller[2]} /\\* AppController\\.mm \\*/ = \\{([^}]+)\\};`))?.[1];
+  const controllerPath = controllerRef?.match(/\bpath\s*=\s*("[^"]+"|[^;]+);/)?.[1].replace(/^"|"$/g, '').trim();
+  if (!controllerPath) throw new Error('Missing AppController Xcode file path.');
+  const sourceTree = controllerRef.match(/\bsourceTree\s*=\s*([^;]+);/)?.[1] ?? '"<group>"';
+  for (const name of ['GCNativeGameBridge.mm', 'GCNativeTelemetry.mm', 'GCSceneDelegate.mm']) {
     const id = suffix => createHash('sha256').update(`demo249:${name}:${suffix}`).digest('hex').slice(0, 24).toUpperCase();
     const file = id('file'), build = id('build');
+    const relativePath = path.posix.join(path.posix.dirname(controllerPath), name);
+    const reference = `${file} /* ${name} */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ${name}; path = "${relativePath}"; sourceTree = ${sourceTree}; };`;
+    if (source.includes(`/* ${name} in Sources */ =`)) {
+      // Repair projects generated with the old root-relative bridge paths too.
+      source = source.replace(new RegExp(`${file} /\\*[^*]+\\*/ = \\{[^}]+\\};`), reference);
+      continue;
+    }
     source = source.replace('/* End PBXBuildFile section */', `\t\t${build} /* ${name} in Sources */ = {isa = PBXBuildFile; fileRef = ${file} /* ${name} */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };\n/* End PBXBuildFile section */`);
-    source = source.replace('/* End PBXFileReference section */', `\t\t${file} /* ${name} */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ${name}; sourceTree = "<group>"; };\n/* End PBXFileReference section */`);
+    source = source.replace('/* End PBXFileReference section */', `\t\t${reference}\n/* End PBXFileReference section */`);
     const group = `${controller[2]} /* AppController.mm */,`;
     const phase = `${controller[1]} /* AppController.mm in Sources */,`;
     if (!source.includes(group) || !source.includes(phase)) throw new Error('Missing AppController group or source phase.');
