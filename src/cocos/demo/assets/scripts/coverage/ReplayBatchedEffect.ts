@@ -1,3 +1,9 @@
+// SPDX-License-Identifier: Apache-2.0 AND MIT
+// Copyright (c) 2013-2016 Chukong Technologies Inc.
+// Copyright (c) 2017-2020 Xiamen Yaji Software Co., Ltd.
+// Copyright (c) 2017-2023 Xiamen Yaji Software Co., Ltd.
+// License text and source mapping: src/cocos/THIRD_PARTY_NOTICES.
+// Preserve these notices when regenerating the compiled effect.
 import { EffectAsset, cclegacy } from 'cc';
 void cclegacy;
 // Generated from the unchanged official batched-unlit reference with Creator's compiler.

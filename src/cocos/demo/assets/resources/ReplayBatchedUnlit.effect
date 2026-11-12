@@ -1,4 +1,6 @@
 // Copyright (c) 2017-2020 Xiamen Yaji Software Co., Ltd.
+// SPDX-License-Identifier: MIT
+// License text and source mapping: src/cocos/THIRD_PARTY_NOTICES.
 CCEffect %{
   techniques:
   - name: opaque

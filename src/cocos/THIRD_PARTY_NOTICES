@@ -1,0 +1,267 @@
+THIRD-PARTY SOFTWARE NOTICES
+============================
+
+Scope and redistribution
+------------------------
+Demo-owned source is licensed under the repository's Apache License 2.0
+(../../LICENSE). The third-party material described below retains its own
+license and copyright notices.
+
+Keep this file with redistributed copies of the listed source files and with
+documentation or other materials accompanying built artifacts that include
+them. Retain the additional notices supplied by the engine, SDKs and other
+components actually included in a build. When regenerating compiled effects,
+preserve their attribution headers and update this source mapping as needed.
+
+1. Cocos Engine 3.8.8 shaders (MIT)
+----------------------------------
+Project: https://github.com/cocos/cocos-engine/tree/v3.8.8
+License: https://github.com/cocos/cocos-engine/blob/v3.8.8/LICENSE.md
+The upstream MIT license is reproduced in full below.
+
+Paths in this list are relative to src/cocos. Upstream shader paths are
+relative to the Cocos Engine 3.8.8 editor/assets/effects directory.
+
+* demo/assets/resources/ReplayBatchedUnlit.effect
+  Source: util/batched-unlit.effect.
+  Shader content is unchanged; this demo adds attribution comments.
+* demo/assets/scripts/coverage/ReplayBatchedEffect.ts
+  Compiled with Creator 3.8.8 from ReplayBatchedUnlit.effect, with engine
+  shader includes expanded by the compiler.
+* demo/assets/resources/ReplayPostTint.effect
+  Adapted from pipeline/post-process/blit-screen.effect: the vertex shader
+  include is inlined and the fragment output applies a BGRA swizzle.
+* demo/assets/scripts/coverage/ReplayPostEffects.ts
+  Contains Creator-compiled effects from the following upstream files:
+    pipeline/post-process/blit-screen.effect
+    pipeline/post-process/bloom.effect
+    pipeline/post-process/color-grading.effect
+    pipeline/post-process/dof.effect
+    pipeline/post-process/fsr.effect
+    pipeline/post-process/fxaa-hq.effect
+    pipeline/post-process/hbao.effect
+    pipeline/post-process/taa.effect
+    pipeline/post-process/post-final.effect
+    pipeline/float-output-process.effect
+    pipeline/ssss-blur.effect
+  It also contains the compiled local ReplayPostTint.effect listed above.
+  Compiled shader data includes expanded Cocos chunks, including
+  editor/assets/chunks/post-process/pipeline.chunk, which carries:
+  Copyright (c) 2017-2024 Xiamen Yaji Software Co., Ltd.
+
+The original shader files also carry:
+Copyright (c) 2017-2020 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2017-2023 Xiamen Yaji Software Co., Ltd.
+
+--- BEGIN COCOS ENGINE LICENSE ---
+MIT License
+
+Copyright (c) 2013-2016 Chukong Technologies Inc.
+Copyright (c) 2017-2023 Xiamen Yaji Software Co., Ltd.
+
+http://www.cocos.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+--- END COCOS ENGINE LICENSE ---
+
+2. AMD FidelityFX Super Resolution (MIT)
+----------------------------------------
+ReplayPostEffects.ts includes the FSR EASU/RCAS implementation expanded from
+Cocos editor/assets/effects/pipeline/post-process/chunks/fsr.chunk.
+The FsrEasuCon/FsrEasuTapF and FsrRcasF functions derive from AMD FSR 1.
+
+Project: https://github.com/GPUOpen-Effects/FidelityFX-FSR
+License: https://github.com/GPUOpen-Effects/FidelityFX-FSR/blob/master/license.txt
+
+--- BEGIN AMD FSR LICENSE ---
+Copyright (c) 2021 Advanced Micro Devices, Inc. All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+--- END AMD FSR LICENSE ---
+
+3. NVIDIA FXAA (BSD-3-Clause)
+----------------------------
+ReplayPostEffects.ts includes the FxaaPixelShader implementation expanded
+from Cocos editor/assets/chunks/post-process/fxaa-hq.chunk.
+FXAA 3.11 was developed by Timothy Lottes at NVIDIA.
+The NVIDIA notice below is preserved in the FXAA header distributed with
+Intel's CMAA2 sample:
+https://github.com/GameTechDev/CMAA2/blob/master/Projects/CMAA2/FXAA/Fxaa3_11.h
+
+--- BEGIN NVIDIA FXAA LICENSE ---
+Copyright (c) 2014, NVIDIA CORPORATION. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+ * Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+ * Neither the name of NVIDIA CORPORATION nor the names of its
+   contributors may be used to endorse or promote products derived
+   from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+--- END NVIDIA FXAA LICENSE ---
+
+4. Spine runtimes supplied by Creator
+------------------------------------
+The asset coverage scene in both demos uses the engine's sp.Skeleton and
+sp.SkeletonData APIs. Its generated skeleton JSON and textures do not grant
+rights to the Spine runtimes supplied by Creator.
+
+Project: https://github.com/EsotericSoftware/spine-runtimes
+Runtime terms: https://esotericsoftware.com/spine-runtimes-license
+Editor terms: https://esotericsoftware.com/spine-editor-license
+
+Integration and redistribution are subject to the applicable Spine license.
+Confirm the project owner's authorization for the selected runtime before
+distributing builds that include Spine, and include the applicable notices
+with those builds. The repository's Apache-2.0 license does not grant Spine
+runtime rights. This file records notices, not evidence of authorization.
+
+The following texts are preserved from the matching Creator installations:
+
+* Creator 3.8.8: engine/licenses/LICENSE_spine.txt (May 1, 2019).
+* Creator 2.4.9: engine/extensions/spine/lib/LICENSE (v2.5).
+  Its adjacent spine.js identifies itself as runtime 3.8; the older license
+  label is retained exactly as shipped, not selected as the governing terms.
+* Native Spine 3.8 in both editions: the opening license header in
+  Creator 3.8.8 engine/native/cocos/editor-support/spine/3.8/spine/Skeleton.h
+  and Creator 2.4.9 cocos2d-x/cocos/editor-support/spine/Skeleton.h
+  (January 1, 2020). Comment delimiters are removed below.
+
+Verify the terms for the runtime/platform actually distributed when preparing
+an artifact or changing Creator versions.
+
+--- BEGIN CREATOR 3.8.8 SPINE NOTICE ---
+Spine Runtimes License Agreement
+Last updated May 1, 2019. Replaces all prior versions.
+
+Copyright (c) 2013-2019, Esoteric Software LLC
+
+Integration of the Spine Runtimes into software or otherwise creating
+derivative works of the Spine Runtimes is permitted under the terms and
+conditions of Section 2 of the Spine Editor License Agreement:
+http://esotericsoftware.com/spine-editor-license
+
+Otherwise, it is permitted to integrate the Spine Runtimes into software
+or otherwise create derivative works of the Spine Runtimes (collectively,
+"Products"), provided that each user of the Products must obtain their own
+Spine Editor license and redistribution of the Products in any form must
+include this license and copyright notice.
+
+THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY EXPRESS
+OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS
+INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+--- END CREATOR 3.8.8 SPINE NOTICE ---
+
+--- BEGIN CREATOR 2.4.9 SPINE WEB NOTICE ---
+Spine Runtimes Software License v2.5
+
+Copyright (c) 2013-2016, Esoteric Software
+All rights reserved.
+
+You are granted a perpetual, non-exclusive, non-sublicensable, and
+non-transferable license to use, install, execute, and perform the Spine
+Runtimes software and derivative works solely for personal or internal
+use. Without the written permission of Esoteric Software (see Section 2 of
+the Spine Software License Agreement), you may not (a) modify, translate,
+adapt, or develop new applications using the Spine Runtimes or otherwise
+create derivative works or improvements of the Spine Runtimes or (b) remove,
+delete, alter, or obscure any trademarks or any copyright, trademark, patent,
+or other intellectual property or proprietary rights notices on or in the
+Software, including any copy thereof. Redistributions in binary or source
+form must include this license and terms.
+
+THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE "AS IS" AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+EVENT SHALL ESOTERIC SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS INTERRUPTION, OR LOSS OF
+USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+--- END CREATOR 2.4.9 SPINE WEB NOTICE ---
+
+--- BEGIN NATIVE SPINE 3.8 NOTICE ---
+Spine Runtimes License Agreement
+Last updated January 1, 2020. Replaces all prior versions.
+
+Copyright (c) 2013-2020, Esoteric Software LLC
+
+Integration of the Spine Runtimes into software or otherwise creating
+derivative works of the Spine Runtimes is permitted under the terms and
+conditions of Section 2 of the Spine Editor License Agreement:
+http://esotericsoftware.com/spine-editor-license
+
+Otherwise, it is permitted to integrate the Spine Runtimes into software
+or otherwise create derivative works of the Spine Runtimes (collectively,
+"Products"), provided that each user of the Products must obtain their own
+Spine Editor license and redistribution of the Products in any form must
+include this license and copyright notice.
+
+THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
+BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+--- END NATIVE SPINE 3.8 NOTICE ---

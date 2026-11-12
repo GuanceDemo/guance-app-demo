@@ -1,5 +1,7 @@
 # Guance Cocos Creator 2.4.9 Demo
 
+Demo-owned code uses the repository's [Apache-2.0 license](../../../LICENSE). See [third-party notices](../THIRD_PARTY_NOTICES) for the engine-provided Spine runtime terms. Preserve those notices with source and artifact distributions, and confirm applicable Spine authorization before distributing builds that include it.
+
 Creator **2.4.9** edition of the [3.8.8 demo](../demo/README.md), with the same English interface, 720 × 1280 layout and features:
 
 - Crystal Dash: drag the ship, collect gems, dodge meteors, combos, particles, shields, 45-second rounds, pause/leave confirmation and saved best score.

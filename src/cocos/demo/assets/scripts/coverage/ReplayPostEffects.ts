@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: Apache-2.0 AND MIT AND BSD-3-Clause
+// Copyright (c) 2013-2016 Chukong Technologies Inc.
+// Copyright (c) 2017-2020 Xiamen Yaji Software Co., Ltd.
+// Copyright (c) 2017-2023 Xiamen Yaji Software Co., Ltd.
+// Copyright (c) 2017-2024 Xiamen Yaji Software Co., Ltd.
+// Copyright (c) 2021 Advanced Micro Devices, Inc. All rights reserved.
+// Copyright (c) 2014, NVIDIA CORPORATION. All rights reserved.
+// License texts and source mapping: src/cocos/THIRD_PARTY_NOTICES.
+// Preserve these notices when regenerating the compiled effects.
 import { EffectAsset } from 'cc';
 // Generated with the installed Creator compiler from unchanged official effects.
 let loaded:EffectAsset[]|undefined;

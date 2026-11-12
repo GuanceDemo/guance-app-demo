@@ -125,19 +125,9 @@ After the server is deployed, you can quickly import the configuration by visiti
 
 ### Troubleshooting
 On the "Edit Demo" configuration page, you can perform "Address Check" for App access. You can find the entrance to "Edit Demo Configuration" on the "Login page" and the "Mine" page of the main interface.
- 
 
+## License
 
+This project is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE).
 
-
-
-
-
-
-
-
-
-
-
-
-
+Third-party components are subject to their respective licenses and copyright notices.

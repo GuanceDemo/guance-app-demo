@@ -56,6 +56,7 @@ export class ReplayAssetScene extends Component {
     const tile = tileLayer.getTiledTileAt(3, 0, true)!;
     const tileText = this.label(group, '', 330, ys[1]!, 245, 50, 16);
 
+    // Spine runtime terms and authorization requirements: src/cocos/THIRD_PARTY_NOTICES.
     const spineNode = this.child(nodes[2]!, 'GeneratedSpine', 0, 0, 40, 40);
     spineNode.active = false; spineNode.setScale(4, 1.2, 1);
     const skeleton = spineNode.addComponent(sp.Skeleton);

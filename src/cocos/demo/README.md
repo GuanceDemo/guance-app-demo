@@ -1,5 +1,7 @@
 # Guance Cocos Game Demo
 
+Demo-owned code uses the repository's [Apache-2.0 license](../../../LICENSE). See [third-party notices](../THIRD_PARTY_NOTICES) for the Cocos shaders, embedded FSR/FXAA code, and Spine runtime terms. Preserve those notices with source and artifact distributions, and confirm applicable Spine authorization before distributing builds that include it.
+
 An interactive **Cocos Creator 3.8.8** game with real Android and iOS native screens, plus a separate SDK laboratory. The interface is in English. Both platforms use `com.guance.cocos.demo` by default.
 
 ## Play Crystal Dash

@@ -1,4 +1,8 @@
 // Copyright (c) 2017-2020 Xiamen Yaji Software Co., Ltd.
+// SPDX-License-Identifier: Apache-2.0 AND MIT
+// Adapted from Cocos Engine 3.8.8 blit-screen.effect; vertex code is inlined
+// and the fragment output uses a BGRA swizzle.
+// License text and source mapping: src/cocos/THIRD_PARTY_NOTICES.
 
 CCEffect %{
   techniques:
